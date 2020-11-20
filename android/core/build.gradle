@@ -1,4 +1,30 @@
-apply plugin: 'java-library'
+apply plugin: 'com.android.library'
+apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-android-extensions'
+
+
+android {
+    def Deps = rootProject.ext
+
+    compileSdkVersion Deps.targetSdk
+    buildToolsVersion Deps.buildTools
+
+    defaultConfig {
+        minSdkVersion Deps.minSdk
+        targetSdkVersion Deps.targetSdk
+        versionCode Deps.versionCode
+        versionName Deps.versionName
+
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+}
 
 
 dependencies {
@@ -6,4 +32,6 @@ dependencies {
 
     implementation fileTree(dir: "libs", include: ["*.jar"])
     implementation Deps.libKotlin
+
+    implementation project(":core")
 }

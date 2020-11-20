@@ -1,8 +1,9 @@
-package by.zenkevich_churun.findcell.app
+package by.zenkevich_churun.findcell.prisonee.ui
 
 import android.app.Activity
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import by.zenkevich_churun.findcell.core.R
 import by.zenkevich_churun.findcell.core.entity.Prisoner
 
 
