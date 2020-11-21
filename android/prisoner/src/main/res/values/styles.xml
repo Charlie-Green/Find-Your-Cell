@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="prisoner_textinput_hint_textappear">
+        <item name="android:textSize">14sp</item>
+        <item name="android:textStyle">normal</item>
+    </style>
+
+    <!-- colorAccent: line in the bottom of EditText when it's selected. -->
+    <!-- textColorHint: color of the hint when it's collapsed -->
+    <style name="prisoner_textinput_theme">
+        <item name="colorAccent">?colorPrimary</item>
+        <item name="android:textColorHint">?android:textColorSecondary</item>
+    </style>
+
+</resources>
