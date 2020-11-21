@@ -1,7 +1,6 @@
 package by.zenkevich_churun.findcell.prisoner.ui.profile.fragm
 
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import androidx.fragment.app.Fragment
 import by.zenkevich_churun.findcell.core.entity.Contact

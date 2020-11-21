@@ -36,5 +36,8 @@ dependencies {
     implementation Deps.libAppCompat
     implementation Deps.libMaterial
 
+    implementation Deps.libViewModel
+    implementation Deps.libLiveData
+
     implementation project(":core")
 }

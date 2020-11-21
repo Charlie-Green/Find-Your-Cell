@@ -31,6 +31,8 @@
         android:layout_weight="1"
         android:layout_marginTop="16dp" >
 
+        <!-- One ContactView per each existing contact. -->
+
         <by.zenkevich_churun.findcell.prisoner.util.view.add_contact.ContactTypesScrollView
             android:id="@+id/addContactView"
             android:layout_width="match_parent"
