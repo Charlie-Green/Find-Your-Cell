@@ -1,0 +1,16 @@
+<manifest
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    package="by.zenkevich_churun.findcell.prisoner">
+
+    <application>
+
+        <activity android:name="by.zenkevich_churun.findcell.prisoner.ui.root.activity.PrisonerActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+
+    </application>
+
+</manifest>
