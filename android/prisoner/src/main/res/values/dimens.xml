@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <dimen name="added_contact_size">54dp</dimen>
+    <dimen name="added_contact_size">42dp</dimen>
     <dimen name="added_contact_margin">6dp</dimen>
 
 </resources>

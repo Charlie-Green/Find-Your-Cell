@@ -11,9 +11,13 @@ import kotlinx.android.synthetic.main.add_contact_view.view.*
 
 /** A compound [View] the user may use to add a [Contact].
   * This is a [HorizontalScrollView] filled with icons for different [Contact] types. **/
-class AddContactView: FrameLayout {
+class ContactTypesScrollView: FrameLayout {
 
     private val hlltContactIcons: LinearLayout
+    private val imgSize: Int
+    private val imgMargin: Int
+
+    private var onContactTypeSelected: ((Contact.Type) -> Unit)? = null
 
 
     constructor(context: Context):
@@ -24,33 +28,43 @@ class AddContactView: FrameLayout {
         super(context, attrs, defStyleAttr)
 
     init {
+        imgSize = resources.getDimensionPixelSize(R.dimen.added_contact_size)
+        imgMargin = resources.getDimensionPixelSize(R.dimen.added_contact_margin)
+
         val v = View.inflate(context, R.layout.add_contact_view, this)
         hlltContactIcons = v.hlltContactIcons
     }
 
 
-    fun set(icons: List<Int>) {
-        for(j in icons.indices) {
+    fun setContent(types: List<Contact.Type>) {
+        for(j in types.indices) {
             val existingImageView = hlltContactIcons.getChildAt(j) as? ImageView
             val imgv = existingImageView ?: createImageView()
-            imgv.setImageResource(icons[j])
+
+            imgv.setOnClickListener {
+                onContactTypeSelected?.invoke(types[j])
+            }
+
+            imgv.setImageResource(types[j].iconRes)
         }
 
-        if(childCount > icons.size) {
-            removeViews(icons.size, childCount-icons.size)
+        if(childCount > types.size) {
+            removeViews(types.size, childCount-types.size)
         }
+    }
+
+    fun setContactTypeSelectedListener(listener: ((Contact.Type) -> Unit)?) {
+        onContactTypeSelected = listener
     }
 
 
     private fun createImageView(): ImageView {
-        val size = resources.getDimensionPixelSize(R.dimen.added_contact_size)
-        val margin = resources.getDimensionPixelSize(R.dimen.added_contact_margin)
-
         val imgv = ImageView(context)
-        val params = FrameLayout.LayoutParams(size, size).apply {
-            leftMargin = margin
-            rightMargin = margin
+        val params = FrameLayout.LayoutParams(imgSize, imgSize).apply {
+            leftMargin = imgMargin
+            rightMargin = imgMargin
         }
+
         hlltContactIcons.addView(imgv, params)
 
         return imgv

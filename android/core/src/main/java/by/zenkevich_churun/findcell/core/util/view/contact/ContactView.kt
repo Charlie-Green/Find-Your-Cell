@@ -32,7 +32,7 @@ class ContactView: LinearLayout {
 
 
     fun show(what: Contact) {
-        imgv.setImageResource(what.iconRes)
+        imgv.setImageResource(what.type.iconRes)
         txtv.text = what.data
     }
 }
