@@ -5,10 +5,12 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import by.zenkevich_churun.findcell.prisoner.R
 import by.zenkevich_churun.findcell.core.entity.Prisoner
+import dagger.hilt.android.AndroidEntryPoint
 
 
 /** This [Activity] combines screens that set up
   * [Prisoner]'s schedule and profile. **/
+@AndroidEntryPoint
 class PrisonerActivity: AppCompatActivity(R.layout.prisoner_activity) {
 
     override fun onCreate(savedInstanceState: Bundle?) {

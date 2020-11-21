@@ -5,6 +5,7 @@ import android.view.View
 import androidx.fragment.app.Fragment
 import by.zenkevich_churun.findcell.core.entity.Contact
 import by.zenkevich_churun.findcell.prisoner.R
+import by.zenkevich_churun.findcell.prisoner.ui.profile.vm.ProfileViewModel
 import kotlinx.android.synthetic.main.profile_fragm.*
 
 
@@ -25,5 +26,8 @@ class ProfileFragment: Fragment(R.layout.profile_fragm) {
         addContactView.setContactTypeSelectedListener { type ->
             // ...
         }
+
+        val appContext = requireContext().applicationContext
+        val vm = ProfileViewModel.get(appContext, this)
     }
 }
