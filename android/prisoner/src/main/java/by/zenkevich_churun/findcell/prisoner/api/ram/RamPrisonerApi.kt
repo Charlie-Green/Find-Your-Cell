@@ -2,7 +2,8 @@ package by.zenkevich_churun.findcell.prisoner.api.ram
 
 import by.zenkevich_churun.findcell.core.entity.Contact
 import by.zenkevich_churun.findcell.core.entity.Prisoner
-import by.zenkevich_churun.findcell.core.repo.PrisonerApi
+import by.zenkevich_churun.findcell.core.api.LogInResponse
+import by.zenkevich_churun.findcell.core.api.PrisonerApi
 import java.util.Random
 
 
@@ -25,15 +26,28 @@ class RamPrisonerApi: PrisonerApi {
     )
 
 
-    override fun logIn(username: String, passwordHash: ByteArray): Prisoner? {
+    override fun logIn(username: String, passwordHash: ByteArray): LogInResponse {
         simulateNetworkRequest(800L, 1500L)
 
-        synchronized(prisoners) {
-            return prisoners.find { prisoner ->
+        val prisoner = synchronized(prisoners) {
+            prisoners.find { prisoner ->
                 prisoner.username == username &&
                     prisoner.passwordHash.contentEquals(passwordHash)
             }
         }
+
+        if(prisoner != null) {
+            return LogInResponse.Success(prisoner)
+        }
+
+        val usernameExists = synchronized(this) {
+            prisoners.find { prisoner ->
+                prisoner.username == username
+            } != null
+        }
+
+        return if(usernameExists) LogInResponse.WrongPassword
+            else LogInResponse.WrongUsername
     }
 
     override fun signUp(

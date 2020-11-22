@@ -1,15 +1,14 @@
-package by.zenkevich_churun.findcell.core.repo
+package by.zenkevich_churun.findcell.core.api
 
 import by.zenkevich_churun.findcell.core.entity.Prisoner
 
 
-/** Performs remote CRUD of [Prisoner] data **/
+/** Performs remote CRUD of [Prisoner] data.
+  * All calls should be wrapped with try-catch. **/
 interface PrisonerApi {
 
-    /** @return - [Prisoner] entity with full information about the user,
-      *         if log in was successful.
-      *         - null, if such combination of username and password hash doesn't exist. **/
-    fun logIn(username: String, passwordHash: ByteArray): Prisoner?
+    /** Gets information about the user. **/
+    fun logIn(username: String, passwordHash: ByteArray): LogInResponse
 
     /** Creates a new [Prisoner] on the server.
       * @return id the server assigned to the [Prisoner],

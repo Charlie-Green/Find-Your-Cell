@@ -1,4 +1,4 @@
-package by.zenkevich_churun.findcell.prisoner.ui.profile.vm
+package by.zenkevich_churun.findcell.prisoner.ui.auth.vm
 
 import android.content.Context
 import androidx.lifecycle.ViewModel
@@ -9,31 +9,31 @@ import dagger.hilt.android.EntryPointAccessors
 import dagger.hilt.android.components.ApplicationComponent
 
 
-internal class ProfileVMFactory private constructor(
+internal class AuthorizationVMFactory(
     private val appContext: Context
 ): ViewModelProvider.Factory {
 
     @EntryPoint
     @InstallIn(ApplicationComponent::class)
-    interface ProfileVMEntryPoint {
-        val viewModel: ProfileViewModel
+    interface AuthorizationEntryPoint {
+        val viewModel: AuthorizationViewModel
     }
 
 
     @Suppress("UNCHECKED_CAST")
     override fun <T : ViewModel?> create(modelClass: Class<T>): T {
-        val entryClass = ProfileVMEntryPoint::class.java
+        val entryClass = AuthorizationEntryPoint::class.java
         val accessor = EntryPointAccessors.fromApplication(appContext, entryClass)
         return accessor.viewModel as T
     }
 
 
     companion object {
-        private var instance: ProfileVMFactory? = null
+        private var instance: AuthorizationVMFactory? = null
 
-        fun get(appContext: Context): ProfileVMFactory {
+        fun get(appContext: Context): AuthorizationVMFactory {
             return instance ?: synchronized(this) {
-                instance ?: ProfileVMFactory(appContext).also {
+                instance ?: AuthorizationVMFactory(appContext).also {
                     instance = it
                 }
             }
