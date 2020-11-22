@@ -4,7 +4,7 @@ import by.zenkevich_churun.findcell.core.R
 
 
 /** Ways [Prisoner]s can contact each other. **/
-class Contact(
+sealed class Contact(
 
     /** Which messenger it is, or it is a phone number, or what. **/
     val type: Contact.Type,
@@ -27,4 +27,14 @@ class Contact(
         FACEBOOK(R.drawable.ic_contact_fb),
         INSTAGRAM(R.drawable.ic_contact_insta)
     }
+
+
+    class Phone(number: String):   Contact(Type.PHONE, number)
+    class Telegram(data: String):  Contact(Type.TELEGRAM, data)
+    class Viber(data: String):     Contact(Type.VIBER, data)
+    class WhatsApp(data: String):  Contact(Type.WHATSAPP, data)
+    class Skype(data: String):     Contact(Type.SKYPE, data)
+    class VK(data: String):        Contact(Type.VK, data)
+    class Facebook(data: String):  Contact(Type.FACEBOOK, data)
+    class Instagram(data: String): Contact(Type.INSTAGRAM, data)
 }

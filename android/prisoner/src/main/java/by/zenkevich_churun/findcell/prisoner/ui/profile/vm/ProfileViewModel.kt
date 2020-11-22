@@ -10,6 +10,9 @@ class ProfileViewModel @Inject constructor(
     private val repo: PrisonerRepository
 ): ViewModel() {
 
+
+
+
     companion object {
 
         fun get(appContext: Context, storeOwner: ViewModelStoreOwner): ProfileViewModel {

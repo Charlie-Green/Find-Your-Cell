@@ -28,6 +28,7 @@ abstract class Prisoner {
 
 
     companion object {
+        const val INVALID_ID   = 0
         const val MAX_NAME_LEN = 48
         const val MAX_INFO_LEN = 1024
     }
