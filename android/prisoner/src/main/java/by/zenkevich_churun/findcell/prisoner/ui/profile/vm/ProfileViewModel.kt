@@ -11,10 +11,8 @@ class ProfileViewModel @Inject constructor(
     private val repo: PrisonerRepository
 ): ViewModel() {
 
-    private val mldPrisoner = MutableLiveData<Prisoner>()
-
     val prisonerLD: LiveData<Prisoner>
-        get() = mldPrisoner
+        get() = repo.prisoneeLD
 
 
     companion object {

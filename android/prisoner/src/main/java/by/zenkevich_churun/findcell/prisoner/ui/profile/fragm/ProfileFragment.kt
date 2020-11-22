@@ -3,7 +3,9 @@ package by.zenkevich_churun.findcell.prisoner.ui.profile.fragm
 import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.Fragment
-import by.zenkevich_churun.findcell.core.entity.Contact
+import androidx.lifecycle.Observer
+import androidx.recyclerview.widget.LinearLayoutManager
+import by.zenkevich_churun.findcell.core.entity.Prisoner
 import by.zenkevich_churun.findcell.prisoner.R
 import by.zenkevich_churun.findcell.prisoner.ui.profile.vm.ProfileViewModel
 import kotlinx.android.synthetic.main.profile_fragm.*
@@ -12,22 +14,26 @@ import kotlinx.android.synthetic.main.profile_fragm.*
 class ProfileFragment: Fragment(R.layout.profile_fragm) {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        // conv.show( Contact.Telegram("@my_telegram") )
-        addContactView.setContent( listOf(
-            Contact.Type.FACEBOOK,
-            Contact.Type.TELEGRAM,
-            Contact.Type.VIBER,
-            Contact.Type.INSTAGRAM,
-            Contact.Type.VK,
-            Contact.Type.PHONE,
-            Contact.Type.WHATSAPP
-        ) )
+        prepareRecycler()
+        val vm = getViewModel()
 
-        addContactView.setContactTypeSelectedListener { type ->
-            // ...
-        }
+        vm.prisonerLD.observe(viewLifecycleOwner, Observer { prisoner ->
+            displayPrisoner(prisoner)
+        })
+    }
 
+
+    private fun prepareRecycler() {
+        recyclerView.layoutManager = LinearLayoutManager(requireContext())
+    }
+
+    private fun getViewModel(): ProfileViewModel {
         val appContext = requireContext().applicationContext
-        val vm = ProfileViewModel.get(appContext, this)
+        return ProfileViewModel.get(appContext, this)
+    }
+
+    private fun displayPrisoner(prisoner: Prisoner) {
+        tietName.setText(prisoner.name)
+        recyclerView.adapter = ProfileRecyclerAdapter(prisoner)
     }
 }

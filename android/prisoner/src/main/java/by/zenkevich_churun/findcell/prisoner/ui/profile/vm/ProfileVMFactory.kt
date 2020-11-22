@@ -16,7 +16,7 @@ internal class ProfileVMFactory private constructor(
     @EntryPoint
     @InstallIn(ApplicationComponent::class)
     interface ProfileVMEntryPoint {
-        val viewModel: ProfileViewModel
+        val profileViewModel: ProfileViewModel
     }
 
 
@@ -24,7 +24,7 @@ internal class ProfileVMFactory private constructor(
     override fun <T : ViewModel?> create(modelClass: Class<T>): T {
         val entryClass = ProfileVMEntryPoint::class.java
         val accessor = EntryPointAccessors.fromApplication(appContext, entryClass)
-        return accessor.viewModel as T
+        return accessor.profileViewModel as T
     }
 
 

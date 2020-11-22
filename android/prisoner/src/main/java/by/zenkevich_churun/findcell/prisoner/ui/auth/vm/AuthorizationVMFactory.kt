@@ -16,7 +16,7 @@ internal class AuthorizationVMFactory(
     @EntryPoint
     @InstallIn(ApplicationComponent::class)
     interface AuthorizationEntryPoint {
-        val viewModel: AuthorizationViewModel
+        val authorizationViewModel: AuthorizationViewModel
     }
 
 
@@ -24,7 +24,7 @@ internal class AuthorizationVMFactory(
     override fun <T : ViewModel?> create(modelClass: Class<T>): T {
         val entryClass = AuthorizationEntryPoint::class.java
         val accessor = EntryPointAccessors.fromApplication(appContext, entryClass)
-        return accessor.viewModel as T
+        return accessor.authorizationViewModel as T
     }
 
 

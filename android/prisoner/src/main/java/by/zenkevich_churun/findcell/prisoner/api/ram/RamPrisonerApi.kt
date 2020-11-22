@@ -5,10 +5,13 @@ import by.zenkevich_churun.findcell.core.entity.Prisoner
 import by.zenkevich_churun.findcell.core.api.LogInResponse
 import by.zenkevich_churun.findcell.core.api.PrisonerApi
 import java.util.Random
+import javax.inject.Inject
+import javax.inject.Singleton
 
 
 /** Fake implementation of [PrisonerApi], which stores data in RAM. **/
-class RamPrisonerApi: PrisonerApi {
+@Singleton
+class RamPrisonerApi @Inject constructor(): PrisonerApi {
 
     private val random = Random()
     private val prisoners = mutableListOf(

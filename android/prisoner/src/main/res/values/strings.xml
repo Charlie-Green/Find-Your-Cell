@@ -3,4 +3,7 @@
 
     <string name="add_contact">Добавить контакт</string>
 
+    <string name="prisoner_name_label">Имя</string>
+    <string name="prisoner_info_label">Любая другая информация:</string>
+
 </resources>

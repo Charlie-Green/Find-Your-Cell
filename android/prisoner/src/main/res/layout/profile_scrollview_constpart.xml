@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- For Profile screen.
+     The Views within the scroll view which are always present,
+     regardless of the number of Contacts. -->
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content" >
+
+    <by.zenkevich_churun.findcell.prisoner.util.view.add_contact.ContactTypesScrollView
+        android:id="@+id/addContactView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:textSize="12sp"
+        android:text="@string/prisoner_info_label" />
+
+    <EditText
+        android:id="@+id/etInfo"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="14sp" />
+
+</LinearLayout>

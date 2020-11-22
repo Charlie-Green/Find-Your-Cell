@@ -42,6 +42,7 @@ ext {
     libAndroidX  = "androidx.core:core-ktx:1.3.2"
     libAppCompat = "androidx.appcompat:appcompat:1.2.0"
     libMaterial  = "com.google.android.material:material:1.2.1"
+    libRecycler  = "androidx.recyclerview:recyclerview:1.1.0"
 
     def lifecycleVersion = "2.2.0"
     libViewModel  = "androidx.lifecycle:lifecycle-viewmodel-ktx:$lifecycleVersion"

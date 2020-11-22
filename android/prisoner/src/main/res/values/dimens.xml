@@ -3,5 +3,6 @@
 
     <dimen name="added_contact_size">42dp</dimen>
     <dimen name="added_contact_margin">6dp</dimen>
+    <dimen name="contact_item_margin">12dp</dimen>
 
 </resources>

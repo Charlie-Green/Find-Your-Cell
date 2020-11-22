@@ -16,6 +16,7 @@
         android:theme="@style/prisoner_textinput_theme" >
 
         <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/tietName"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textColor="?colorPrimary"
@@ -25,20 +26,11 @@
     </com.google.android.material.textfield.TextInputLayout>
 
 
-    <ScrollView
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recyclerView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_weight="1"
-        android:layout_marginTop="16dp" >
-
-        <!-- One ContactView per each existing contact. -->
-
-        <by.zenkevich_churun.findcell.prisoner.util.view.add_contact.ContactTypesScrollView
-            android:id="@+id/addContactView"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
-
-    </ScrollView>
-
+        android:layout_marginTop="16dp" />
 
 </LinearLayout>
