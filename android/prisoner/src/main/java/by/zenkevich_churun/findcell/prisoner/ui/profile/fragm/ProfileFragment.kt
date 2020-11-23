@@ -5,6 +5,7 @@ import android.view.View
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
+import by.zenkevich_churun.findcell.core.entity.Contact
 import by.zenkevich_churun.findcell.core.entity.Prisoner
 import by.zenkevich_churun.findcell.prisoner.R
 import by.zenkevich_churun.findcell.prisoner.ui.profile.vm.ProfileViewModel
@@ -33,7 +34,9 @@ class ProfileFragment: Fragment(R.layout.profile_fragm) {
     }
 
     private fun displayPrisoner(prisoner: Prisoner) {
+        val addedContactTypes = ProfileFragmentUtil.addedContactTypes(prisoner.contacts)
+
         tietName.setText(prisoner.name)
-        recyclerView.adapter = ProfileRecyclerAdapter(prisoner)
+        recyclerView.adapter = ProfileRecyclerAdapter(prisoner, addedContactTypes)
     }
 }

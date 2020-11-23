@@ -17,7 +17,8 @@ import kotlinx.android.synthetic.main.profile_scrollview_constpart.view.*
 /** Adapter for the [RecyclerView] which is the scrollable part of Profile
   * the screen. Includes contacts, [ContactTypesScrollView] and [Prisoner] info. **/
 internal class ProfileRecyclerAdapter(
-    private val prisoner: Prisoner
+    private val prisoner: Prisoner,
+    private val addedContactTypes: List<Contact.Type>
 ): RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     /** 1 Contact. **/
@@ -41,8 +42,9 @@ internal class ProfileRecyclerAdapter(
             }
         }
 
-        fun bind(prisonerInfo: CharSequence) {
+        fun bind(prisonerInfo: CharSequence, addedContactTypes: List<Contact.Type>) {
             etInfo.setText(prisonerInfo)
+            addContactView.setContent(addedContactTypes)
         }
     }
 
@@ -75,7 +77,7 @@ internal class ProfileRecyclerAdapter(
         if(position in prisoner.contacts.indices) {
             (holder as ContactViewHolder).bind(prisoner.contacts[position])
         } else {
-            (holder as ConstantViewHolder).bind(prisoner.info)
+            (holder as ConstantViewHolder).bind(prisoner.info, addedContactTypes)
         }
     }
 
