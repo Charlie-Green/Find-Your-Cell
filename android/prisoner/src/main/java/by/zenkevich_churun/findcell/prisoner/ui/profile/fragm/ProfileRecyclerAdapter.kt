@@ -5,6 +5,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.ViewGroup.LayoutParams.MATCH_PARENT
 import android.view.ViewGroup.LayoutParams.WRAP_CONTENT
+import androidx.core.widget.addTextChangedListener
 import androidx.recyclerview.widget.RecyclerView
 import by.zenkevich_churun.findcell.core.entity.Contact
 import by.zenkevich_churun.findcell.core.entity.Prisoner
@@ -21,6 +22,10 @@ internal class ProfileRecyclerAdapter(
     private val addedContactTypes: List<Contact.Type>
 ): RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
+    val contacts = prisoner.contacts.toMutableList()
+    private var info: CharSequence = prisoner.info
+
+
     /** 1 Contact. **/
     class ContactViewHolder(
         private val contactView: ContactView
@@ -32,11 +37,19 @@ internal class ProfileRecyclerAdapter(
     }
 
     /** Constant part. **/
-    class ConstantViewHolder(itemView: View): RecyclerView.ViewHolder(itemView) {
+    class ConstantViewHolder(
+        itemView: View,
+        onPrisonerInfoChanged: (info: CharSequence) -> Unit
+    ): RecyclerView.ViewHolder(itemView) {
+
         private val addContactView = itemView.addContactView
         private val etInfo = itemView.etInfo
 
         init {
+            etInfo.addTextChangedListener {
+                onPrisonerInfoChanged(etInfo.text)
+            }
+
             addContactView.setContactTypeSelectedListener { type ->
                 // ...
             }
@@ -50,10 +63,10 @@ internal class ProfileRecyclerAdapter(
 
 
     override fun getItemCount(): Int
-        = prisoner.contacts.size + 1  // + constant part
+        = contacts.size + 1  // + constant part
 
     override fun getItemViewType(position: Int): Int {
-        val isContact = position in prisoner.contacts.indices
+        val isContact = position in contacts.indices
         return if(isContact) VIEWTYPE_CONTACT else VIEWTYPE_CONST
     }
 
@@ -74,10 +87,10 @@ internal class ProfileRecyclerAdapter(
     }
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
-        if(position in prisoner.contacts.indices) {
-            (holder as ContactViewHolder).bind(prisoner.contacts[position])
+        if(position in contacts.indices) {
+            (holder as ContactViewHolder).bind(contacts[position])
         } else {
-            (holder as ConstantViewHolder).bind(prisoner.info, addedContactTypes)
+            (holder as ConstantViewHolder).bind(info, addedContactTypes)
         }
     }
 
@@ -91,8 +104,14 @@ internal class ProfileRecyclerAdapter(
         val constView = LayoutInflater
             .from(parent.context)
             .inflate(R.layout.profile_scrollview_constpart, parent, false)
-        return ConstantViewHolder(constView)
+
+        return ConstantViewHolder(constView) { newInfo ->
+            info = newInfo
+        }
     }
+
+    val prisonerInfo: String
+        get() = info.toString()
 
 
     companion object {

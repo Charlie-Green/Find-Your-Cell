@@ -39,11 +39,6 @@ class PrisonerRepository @Inject constructor(
 
 
     fun logIn(username: String, password: String): LogInResponse {
-        val prisoner = mldPrisoner.value
-        if(prisoner != null) {
-            return LogInResponse.Success(prisoner)
-        }
-
         val passHash = password.toByteArray(Charsets.UTF_16)
         val response = try {
             api.logIn(username, passHash)
@@ -56,5 +51,9 @@ class PrisonerRepository @Inject constructor(
         }
 
         return response
+    }
+
+    fun saveDraft(draft: Prisoner) {
+        mldPrisoner.value = draft
     }
 }

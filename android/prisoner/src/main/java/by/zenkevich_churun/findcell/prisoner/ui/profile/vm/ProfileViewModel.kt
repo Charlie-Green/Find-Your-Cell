@@ -14,6 +14,10 @@ class ProfileViewModel @Inject constructor(
     val prisonerLD: LiveData<Prisoner>
         get() = repo.prisoneeLD
 
+    fun saveDraft(draft: Prisoner) {
+        repo.saveDraft(draft)
+    }
+
 
     companion object {
 
