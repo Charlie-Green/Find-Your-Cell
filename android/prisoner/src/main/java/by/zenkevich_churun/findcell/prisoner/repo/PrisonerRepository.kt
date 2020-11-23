@@ -1,5 +1,6 @@
 package by.zenkevich_churun.findcell.prisoner.repo
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import by.zenkevich_churun.findcell.core.api.LogInResponse
@@ -18,7 +19,7 @@ class PrisonerRepository @Inject constructor(
     private val mldPrisoner = MutableLiveData<Prisoner>().apply {
         value = object: Prisoner() {
             override val id: Int
-                get() = 17
+                get() = Prisoner.INVALID_ID + 1
 
             override val name: String
                 get() = "Simon"
@@ -33,9 +34,13 @@ class PrisonerRepository @Inject constructor(
                 get() = "Fake User"
         }
     }
+
     private val mldUnsavedChanges = MutableLiveData<Boolean>().apply {
         value = false
     }
+
+    private var passwordHash: ByteArray? = /* null */ "pass".toByteArray(Charsets.UTF_16)
+
 
     val prisoneeLD: LiveData<Prisoner>
         get() = mldPrisoner
@@ -60,7 +65,31 @@ class PrisonerRepository @Inject constructor(
     }
 
     fun saveDraft(draft: Prisoner) {
-        mldPrisoner.value = draft
-        mldUnsavedChanges.value = true
+        mldPrisoner.postValue(draft)
+        mldUnsavedChanges.postValue(true)
+    }
+
+    /** @return success **/
+    fun save(data: Prisoner): SavePrisonerResult {
+        val passHash = passwordHash ?: return SavePrisonerResult.IGNORED
+
+        mldUnsavedChanges.postValue(false)
+        try {
+            api.update(data, passHash)
+            mldPrisoner.postValue(data)
+            mldUnsavedChanges.postValue(false)
+
+            // TODO: Remove:
+            return SavePrisonerResult.SUCCESS
+        } catch(exc: IOException) {
+            Log.w(LOGTAG, "Failed to save ${Prisoner::class.java.simpleName}")
+            mldUnsavedChanges.postValue(true)
+            return SavePrisonerResult.ERROR
+        }
+    }
+
+
+    companion object {
+        private const val LOGTAG = "FindCell-Prisoner"
     }
 }

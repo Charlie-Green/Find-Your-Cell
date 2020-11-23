@@ -3,13 +3,14 @@ package by.zenkevich_churun.findcell.prisoner.ui.profile.fragm
 import android.os.Bundle
 import android.util.Log
 import android.view.View
+import androidx.core.view.isVisible
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
-import by.zenkevich_churun.findcell.core.entity.Contact
 import by.zenkevich_churun.findcell.core.entity.Prisoner
 import by.zenkevich_churun.findcell.prisoner.R
+import by.zenkevich_churun.findcell.prisoner.repo.SavePrisonerResult
 import by.zenkevich_churun.findcell.prisoner.ui.profile.vm.ProfileViewModel
 import kotlinx.android.synthetic.main.profile_fragm.*
 
@@ -29,8 +30,15 @@ class ProfileFragment: Fragment(R.layout.profile_fragm) {
             displayPrisoner(prisoner)
         })
         vm.unsavedChangesLD.observe(viewLifecycleOwner, Observer { thereAreChanges ->
-            if(thereAreChanges) {
-                fabSave.visibility = View.VISIBLE
+            fabSave.isVisible = thereAreChanges
+        })
+        vm.loadingLD.observe(viewLifecycleOwner, Observer { isLoading ->
+            prBar.isVisible = isLoading
+        })
+        vm.saveResultLD.observe(viewLifecycleOwner, Observer { result ->
+            if(result != SavePrisonerResult.IGNORED) {
+                Log.v("CharlieDebug", "Result = ${result.name}")
+                vm.notifySaveResultConsumed()
             }
         })
     }
@@ -61,6 +69,10 @@ class ProfileFragment: Fragment(R.layout.profile_fragm) {
                 fabSave.visibility = View.VISIBLE
             }
         }
+
+        fabSave.setOnClickListener {
+            collectData()?.also { vm?.save(it) }
+        }
     }
 
     private fun getViewModel(): ProfileViewModel {
@@ -75,7 +87,6 @@ class ProfileFragment: Fragment(R.layout.profile_fragm) {
         tietName.setText(prisoner.name)
         recyclerView.adapter = ProfileRecyclerAdapter(prisoner, addedContactTypes) {
             /* Data Updated: */
-            Log.v("CharlieDebug", "Info changed")
             fabSave.visibility = View.VISIBLE
         }
     }
@@ -89,8 +100,6 @@ class ProfileFragment: Fragment(R.layout.profile_fragm) {
             tietName.text.toString(),
             adapter.contacts,
             adapter.prisonerInfo
-        ).also {
-            Log.v("CharlieDebug", "${it.contacts.size} contacts, info=\"${it.info}\"")
-        }
+        )
     }
 }

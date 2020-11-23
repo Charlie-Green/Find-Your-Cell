@@ -40,4 +40,5 @@ dependencies {
 
     implementation fileTree(dir: "libs", include: ["*.jar"])
     implementation Deps.libKotlin
+    implementation Deps.libAppCompat
 }
