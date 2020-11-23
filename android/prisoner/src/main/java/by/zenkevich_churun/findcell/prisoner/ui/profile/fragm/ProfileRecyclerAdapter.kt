@@ -19,11 +19,12 @@ import kotlinx.android.synthetic.main.profile_scrollview_constpart.view.*
   * the screen. Includes contacts, [ContactTypesScrollView] and [Prisoner] info. **/
 internal class ProfileRecyclerAdapter(
     private val prisoner: Prisoner,
-    private val addedContactTypes: List<Contact.Type>
+    private val addedContactTypes: List<Contact.Type>,
+    private val onDataUpdated: () -> Unit
 ): RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     val contacts = prisoner.contacts.toMutableList()
-    private var info: CharSequence = prisoner.info
+    private var info = prisoner.info
 
 
     /** 1 Contact. **/
@@ -95,6 +96,10 @@ internal class ProfileRecyclerAdapter(
     }
 
 
+    val prisonerInfo: String
+        get() = info.toString()
+
+
     private fun instantiateViewHolder(parent: ViewGroup, type: Int): RecyclerView.ViewHolder {
         if(type == VIEWTYPE_CONTACT) {
             val contactView = ContactView(parent.context)
@@ -105,13 +110,15 @@ internal class ProfileRecyclerAdapter(
             .from(parent.context)
             .inflate(R.layout.profile_scrollview_constpart, parent, false)
 
-        return ConstantViewHolder(constView) { newInfo ->
+        return ConstantViewHolder(constView) { newInfoChars ->
+            val newInfo = newInfoChars.toString()
+            if(info != newInfo) {
+                onDataUpdated()
+            }
+
             info = newInfo
         }
     }
-
-    val prisonerInfo: String
-        get() = info.toString()
 
 
     companion object {

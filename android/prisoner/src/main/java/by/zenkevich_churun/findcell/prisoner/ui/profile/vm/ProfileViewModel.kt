@@ -14,7 +14,11 @@ class ProfileViewModel @Inject constructor(
     val prisonerLD: LiveData<Prisoner>
         get() = repo.prisoneeLD
 
+    val unsavedChangesLD: LiveData<Boolean>
+        get() = repo.unsavedChangesLD
+
     fun saveDraft(draft: Prisoner) {
+        val current = prisonerLD.value
         repo.saveDraft(draft)
     }
 

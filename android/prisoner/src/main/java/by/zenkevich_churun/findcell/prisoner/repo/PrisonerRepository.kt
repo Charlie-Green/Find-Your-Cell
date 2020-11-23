@@ -33,9 +33,15 @@ class PrisonerRepository @Inject constructor(
                 get() = "Fake User"
         }
     }
+    private val mldUnsavedChanges = MutableLiveData<Boolean>().apply {
+        value = false
+    }
 
     val prisoneeLD: LiveData<Prisoner>
         get() = mldPrisoner
+
+    val unsavedChangesLD: LiveData<Boolean>
+        get() = mldUnsavedChanges
 
 
     fun logIn(username: String, password: String): LogInResponse {
@@ -55,5 +61,6 @@ class PrisonerRepository @Inject constructor(
 
     fun saveDraft(draft: Prisoner) {
         mldPrisoner.value = draft
+        mldUnsavedChanges.value = true
     }
 }

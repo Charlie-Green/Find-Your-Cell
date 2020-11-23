@@ -49,6 +49,7 @@
         android:layout_gravity="bottom|end"
         android:layout_margin="16dp"
         android:src="@drawable/ic_save"
-        android:tint="#f8f8f8" />
+        android:tint="#f8f8f8"
+        android:visibility="gone" />
 
 </FrameLayout>
