@@ -1,36 +1,54 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
+<FrameLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:orientation="vertical"
+
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:padding="8dp">
+    android:layout_height="match_parent" >
 
-    <!-- hintTextAppearance: text appearance of hint in expanded state -->
-    <com.google.android.material.textfield.TextInputLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="@string/prisoner_name_label"
-        app:hintTextAppearance="@style/prisoner_textinput_hint_textappear"
-        android:theme="@style/prisoner_textinput_theme" >
-
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/tietName"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textColor="?colorPrimary"
-            android:textSize="18sp"
-            android:textStyle="bold" />
-
-    </com.google.android.material.textfield.TextInputLayout>
-
-
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recyclerView"
+    <LinearLayout
+        android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_weight="1"
-        android:layout_marginTop="16dp" />
+        android:padding="8dp" >
 
-</LinearLayout>
+        <!-- hintTextAppearance: text appearance of hint in expanded state -->
+        <com.google.android.material.textfield.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/prisoner_name_label"
+            app:hintTextAppearance="@style/prisoner_textinput_hint_textappear"
+            android:theme="@style/prisoner_textinput_theme" >
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/tietName"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="?colorPrimary"
+                android:textSize="18sp"
+                android:textStyle="bold" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recyclerView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:layout_marginTop="16dp" />
+
+    </LinearLayout>
+
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/fabSave"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:fabCustomSize="48dp"
+        android:layout_gravity="bottom|end"
+        android:layout_margin="16dp"
+        android:src="@drawable/ic_save"
+        android:tint="#f8f8f8" />
+
+</FrameLayout>
