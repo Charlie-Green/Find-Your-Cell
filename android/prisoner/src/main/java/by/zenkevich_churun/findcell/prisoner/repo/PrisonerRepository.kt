@@ -39,6 +39,8 @@ class PrisonerRepository @Inject constructor(
         value = false
     }
 
+    private val mldSaveResult = MutableLiveData<SavePrisonerResult>()
+
     private var passwordHash: ByteArray? = /* null */ "pass".toByteArray(Charsets.UTF_16)
 
 
@@ -47,6 +49,9 @@ class PrisonerRepository @Inject constructor(
 
     val unsavedChangesLD: LiveData<Boolean>
         get() = mldUnsavedChanges
+
+    val savePrisonerResultLD: LiveData<SavePrisonerResult>
+        get() = mldSaveResult
 
 
     fun logIn(username: String, password: String): LogInResponse {
@@ -70,22 +75,25 @@ class PrisonerRepository @Inject constructor(
     }
 
     /** @return success **/
-    fun save(data: Prisoner): SavePrisonerResult {
-        val passHash = passwordHash ?: return SavePrisonerResult.IGNORED
+    fun save(data: Prisoner) {
+        val passHash = passwordHash ?: return
 
         mldUnsavedChanges.postValue(false)
         try {
             api.update(data, passHash)
+
             mldPrisoner.postValue(data)
             mldUnsavedChanges.postValue(false)
-
-            // TODO: Remove:
-            return SavePrisonerResult.SUCCESS
+            mldSaveResult.postValue(SavePrisonerResult.SUCCESS)
         } catch(exc: IOException) {
             Log.w(LOGTAG, "Failed to save ${Prisoner::class.java.simpleName}")
             mldUnsavedChanges.postValue(true)
-            return SavePrisonerResult.ERROR
+            mldSaveResult.postValue(SavePrisonerResult.ERROR)
         }
+    }
+
+    fun notifySaveResultConsumed() {
+        mldSaveResult.postValue(SavePrisonerResult.IGNORED)
     }
 
 

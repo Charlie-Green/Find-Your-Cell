@@ -17,7 +17,6 @@ class ProfileViewModel @Inject constructor(
     private val mldLoading = MutableLiveData<Boolean>().apply {
         value = false
     }
-    private val mldSaveResult = MutableLiveData<SavePrisonerResult>()
 
 
     val prisonerLD: LiveData<Prisoner>
@@ -30,7 +29,7 @@ class ProfileViewModel @Inject constructor(
         get() = mldLoading
 
     val saveResultLD: LiveData<SavePrisonerResult>
-        get() = mldSaveResult
+        get() = repo.savePrisonerResultLD
 
 
     fun saveDraft(draft: Prisoner) {
@@ -44,14 +43,13 @@ class ProfileViewModel @Inject constructor(
         mldLoading.value = true
 
         viewModelScope.launch(Dispatchers.IO) {
-            val result = repo.save(data)
-            mldSaveResult.postValue(result)
+            repo.save(data)
             mldLoading.postValue(false)
         }
     }
 
     fun notifySaveResultConsumed() {
-        mldSaveResult.value = SavePrisonerResult.IGNORED
+        repo.notifySaveResultConsumed()
     }
 
 
