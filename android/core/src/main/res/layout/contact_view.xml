@@ -11,14 +11,16 @@
         android:layout_height="42dp"
         android:layout_gravity="center_vertical" />
 
-    <TextView
-        android:id="@+id/txtv"
+    <EditText
+        android:id="@+id/et"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_weight="1"
         android:layout_gravity="center_vertical"
         android:layout_marginStart="8dp"
         android:textSize="15sp"
-        android:textStyle="bold" />
+        android:textStyle="bold"
+        android:enabled="false"
+        android:theme="@style/contactview_edittext_theme" />
 
 </merge>

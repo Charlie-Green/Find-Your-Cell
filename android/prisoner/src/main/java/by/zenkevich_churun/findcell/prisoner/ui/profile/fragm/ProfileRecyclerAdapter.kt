@@ -33,12 +33,30 @@ internal class ProfileRecyclerAdapter(
 
 
     /** 1 Contact. **/
-    class ContactViewHolder(
+    inner class ContactViewHolder(
         private val contactView: ContactView
     ): RecyclerView.ViewHolder(contactView) {
 
+        init {
+            contactView.isEditable = true
+            contactView.addOnValueChangedListener {
+                updateContact()
+                onDataUpdated()
+            }
+        }
+
         fun bind(item: Contact) {
             contactView.show(item)
+        }
+
+        private fun updateContact() {
+            if(adapterPosition !in contacts.indices) {
+                return
+            }
+
+            contactView.value?.also {
+                contacts[adapterPosition] = it
+            }
         }
     }
 
