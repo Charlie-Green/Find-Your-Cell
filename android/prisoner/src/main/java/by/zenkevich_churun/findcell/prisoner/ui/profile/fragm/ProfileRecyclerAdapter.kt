@@ -1,14 +1,13 @@
 package by.zenkevich_churun.findcell.prisoner.ui.profile.fragm
 
 import android.animation.ValueAnimator
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import android.view.ViewGroup.LayoutParams.MATCH_PARENT
 import android.view.ViewGroup.LayoutParams.WRAP_CONTENT
 import androidx.core.animation.doOnEnd
 import androidx.core.view.updateLayoutParams
 import androidx.core.widget.addTextChangedListener
+import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
 import by.zenkevich_churun.findcell.core.entity.Contact
 import by.zenkevich_churun.findcell.core.entity.Prisoner
@@ -59,6 +58,7 @@ internal class ProfileRecyclerAdapter(
             }
         }
     }
+
 
     /** Constant part. **/
     inner class ConstantViewHolder(
@@ -125,6 +125,15 @@ internal class ProfileRecyclerAdapter(
     }
 
 
+    override fun onAttachedToRecyclerView(recyclerView: RecyclerView) {
+        val deleteCallback = SwipeToDeleteContactCallback { position ->
+            val adapter = recyclerView.adapter as ProfileRecyclerAdapter?
+            adapter?.notifyContactDeleted(position)
+        }
+
+        ItemTouchHelper(deleteCallback).attachToRecyclerView(recyclerView)
+    }
+
     override fun getItemCount(): Int
         = contacts.size + 1  // + constant part
 
@@ -145,7 +154,6 @@ internal class ProfileRecyclerAdapter(
 
         return instantiateViewHolder(parent, viewType).apply {
             itemView.layoutParams = params
-
         }
     }
 
@@ -183,6 +191,14 @@ internal class ProfileRecyclerAdapter(
         notifyItemInserted(contacts.lastIndex)  // Added contact.
         notifyItemChanged(contacts.size)        // Changed ContactTypesView.
         onDataUpdated()
+    }
+
+    private fun notifyContactDeleted(position: Int) {
+        if(position in contacts.indices) {
+            contacts.removeAt(position)
+            notifyItemRemoved(position)
+            onDataUpdated()
+        }
     }
 
 
