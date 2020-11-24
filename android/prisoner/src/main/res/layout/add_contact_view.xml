@@ -18,6 +18,7 @@
         android:background="?backgroundColor"
         android:paddingLeft="4dp"
         android:paddingRight="4dp"
+        android:singleLine="true"
         android:textSize="12sp"
         android:textColor="?colorAccent"
         android:textStyle="bold"

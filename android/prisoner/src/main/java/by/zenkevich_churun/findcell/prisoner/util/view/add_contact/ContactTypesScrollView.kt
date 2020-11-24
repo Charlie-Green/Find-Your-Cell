@@ -48,8 +48,9 @@ class ContactTypesScrollView: FrameLayout {
             imgv.setImageResource(types[j].iconRes)
         }
 
-        if(childCount > types.size) {
-            removeViews(types.size, childCount-types.size)
+        val itemCount = hlltContactIcons.childCount
+        if(itemCount > types.size) {
+            hlltContactIcons.removeViews(types.size, itemCount-types.size)
         }
     }
 

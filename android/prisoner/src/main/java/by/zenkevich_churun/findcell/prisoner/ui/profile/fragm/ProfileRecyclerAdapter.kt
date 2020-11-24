@@ -1,10 +1,13 @@
 package by.zenkevich_churun.findcell.prisoner.ui.profile.fragm
 
+import android.animation.ValueAnimator
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.ViewGroup.LayoutParams.MATCH_PARENT
 import android.view.ViewGroup.LayoutParams.WRAP_CONTENT
+import androidx.core.animation.doOnEnd
+import androidx.core.view.updateLayoutParams
 import androidx.core.widget.addTextChangedListener
 import androidx.recyclerview.widget.RecyclerView
 import by.zenkevich_churun.findcell.core.entity.Contact
@@ -59,7 +62,11 @@ internal class ProfileRecyclerAdapter(
 
         fun bind(prisonerInfo: CharSequence, addedContactTypes: List<Contact.Type>) {
             etInfo.setText(prisonerInfo)
+
             addContactView.setContent(addedContactTypes)
+            if(addedContactTypes.isEmpty()) {
+                animateWidthTo(0)
+            }
         }
 
         private fun onPrisonerInfoChanged(newInfoChars: CharSequence) {
@@ -69,6 +76,33 @@ internal class ProfileRecyclerAdapter(
             }
 
             info = newInfo
+        }
+
+        private fun animateWidthTo(target: Int) {
+            if(addContactView.width == target) {
+                if(target == 0) {
+                    addContactView.visibility = View.GONE
+                }
+                return
+            }
+
+            ValueAnimator.ofInt(addContactView.width, target).apply {
+                addUpdateListener { animer ->
+                    val w = animer.animatedValue as Int
+                    addContactView.updateLayoutParams {
+                        width = w
+                    }
+                }
+
+                if(target == 0) {
+                    doOnEnd {
+                        addContactView.visibility = View.GONE
+                    }
+                }
+
+                duration = 2000L
+                start()
+            }
         }
     }
 
