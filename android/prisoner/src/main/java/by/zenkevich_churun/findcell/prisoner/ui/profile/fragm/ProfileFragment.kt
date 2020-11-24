@@ -3,6 +3,7 @@ package by.zenkevich_churun.findcell.prisoner.ui.profile.fragm
 import android.os.Bundle
 import android.util.Log
 import android.view.View
+import androidx.appcompat.app.AlertDialog
 import androidx.core.view.isVisible
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
@@ -36,9 +37,8 @@ class ProfileFragment: Fragment(R.layout.profile_fragm) {
             prBar.isVisible = isLoading
         })
         vm.saveResultLD.observe(viewLifecycleOwner, Observer { result ->
-            if(result != SavePrisonerResult.IGNORED) {
-                Log.v("CharlieDebug", "Result = ${result.name}")
-                vm.notifySaveResultConsumed()
+            if(result == SavePrisonerResult.ERROR) {
+                notifySaveError()
             }
         })
     }
@@ -80,6 +80,7 @@ class ProfileFragment: Fragment(R.layout.profile_fragm) {
         return ProfileViewModel.get(appContext, this)
     }
 
+
     private fun displayPrisoner(prisoner: Prisoner) {
         this.prisoner = prisoner
         val addedContactTypes = ProfileFragmentUtil.addedContactTypes(prisoner.contacts)
@@ -101,5 +102,17 @@ class ProfileFragment: Fragment(R.layout.profile_fragm) {
             adapter.contacts,
             adapter.prisonerInfo
         )
+    }
+
+
+    private fun notifySaveError() {
+        AlertDialog.Builder(requireContext())
+            .setTitle(R.string.error_title)
+            .setMessage(R.string.save_prisoner_error_msg)
+            .setPositiveButton(R.string.ok) { dialog, _ ->
+                dialog.dismiss()
+            }.setOnDismissListener {
+                vm?.notifySaveResultConsumed()
+            }.show()
     }
 }

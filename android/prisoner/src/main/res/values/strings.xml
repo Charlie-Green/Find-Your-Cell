@@ -8,5 +8,6 @@
 
     <!-- Notifications: -->
     <string name="save_prisoner_success_msg">Информация профиля сохранена.</string>
+    <string name="save_prisoner_error_msg">Не удалось сохранить информацию профиля.</string>
 
 </resources>
