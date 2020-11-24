@@ -40,5 +40,7 @@ dependencies {
 
     implementation fileTree(dir: "libs", include: ["*.jar"])
     implementation Deps.libKotlin
+    implementation Deps.libAndroidX
     implementation Deps.libAppCompat
+    implementation Deps.libMaterial
 }

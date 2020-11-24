@@ -1,9 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
+    <!-- Labels and Button Texts: -->
     <string name="add_contact">Добавить контакт</string>
-
     <string name="prisoner_name_label">Имя</string>
     <string name="prisoner_info_label">Любая другая информация:</string>
+
+    <!-- Notifications: -->
+    <string name="save_prisoner_success_msg">Информация профиля сохранена.</string>
 
 </resources>
