@@ -4,7 +4,6 @@ import by.zenkevich_churun.findcell.core.entity.Contact
 import by.zenkevich_churun.findcell.core.entity.Prisoner
 import by.zenkevich_churun.findcell.core.api.LogInResponse
 import by.zenkevich_churun.findcell.core.api.PrisonerApi
-import java.io.IOException
 import java.util.Random
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -92,9 +91,6 @@ class RamPrisonerApi @Inject constructor(): PrisonerApi {
             if(index !in prisoners.indices) {
                 throw IllegalArgumentException("Prisoner ID ${prisoner.id} not found")
             }
-
-            // TODO: Remove:
-            throw IOException("Simulated error")
         }
     }
 

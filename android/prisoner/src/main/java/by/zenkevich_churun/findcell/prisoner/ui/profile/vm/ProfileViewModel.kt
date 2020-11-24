@@ -2,6 +2,7 @@ package by.zenkevich_churun.findcell.prisoner.ui.profile.vm
 
 import android.content.Context
 import androidx.lifecycle.*
+import by.zenkevich_churun.findcell.core.entity.Contact
 import by.zenkevich_churun.findcell.core.entity.Prisoner
 import by.zenkevich_churun.findcell.prisoner.repo.PrisonerRepository
 import by.zenkevich_churun.findcell.prisoner.repo.SavePrisonerResult
@@ -50,6 +51,13 @@ class ProfileViewModel @Inject constructor(
 
     fun notifySaveResultConsumed() {
         repo.notifySaveResultConsumed()
+    }
+
+    fun createContact(
+        type: Contact.Type,
+        existingContacts: Collection<Contact>
+    ): Contact {
+        return ProfileVMUtil.createContact(type, existingContacts)
     }
 
 

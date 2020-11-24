@@ -7,11 +7,19 @@ internal object ProfileFragmentUtil {
 
     /** Obtains list of [Contact.Type]s the user is suggested to add
       * based on the list of existing [Contact]s. **/
-    fun addedContactTypes(existingContacts: Collection<Contact>): List<Contact.Type> {
-        return Contact.Type.values().filter { type ->
-            existingContacts.find { contact ->
+    fun addedContactTypes(existingContacts: Collection<Contact>): MutableList<Contact.Type> {
+        val result = mutableListOf<Contact.Type>()
+
+        for(type in Contact.Type.values()) {
+            val existingContact = existingContacts.find { contact ->
                 contact.type == type
-            } == null
+            }
+
+            if(existingContact == null) {
+                result.add(type)
+            }
         }
+
+        return result
     }
 }

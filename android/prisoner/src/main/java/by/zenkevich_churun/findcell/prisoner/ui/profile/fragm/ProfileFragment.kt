@@ -82,11 +82,12 @@ class ProfileFragment: Fragment(R.layout.profile_fragm) {
 
 
     private fun displayPrisoner(prisoner: Prisoner) {
+        val vm = this.vm ?: return
         this.prisoner = prisoner
         val addedContactTypes = ProfileFragmentUtil.addedContactTypes(prisoner.contacts)
 
         tietName.setText(prisoner.name)
-        recyclerView.adapter = ProfileRecyclerAdapter(prisoner, addedContactTypes) {
+        recyclerView.adapter = ProfileRecyclerAdapter(vm, prisoner, addedContactTypes) {
             /* Data Updated: */
             fabSave.visibility = View.VISIBLE
         }

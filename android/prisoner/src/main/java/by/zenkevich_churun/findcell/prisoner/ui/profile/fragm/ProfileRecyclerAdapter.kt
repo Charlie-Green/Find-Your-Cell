@@ -11,6 +11,7 @@ import by.zenkevich_churun.findcell.core.entity.Contact
 import by.zenkevich_churun.findcell.core.entity.Prisoner
 import by.zenkevich_churun.findcell.core.util.view.contact.ContactView
 import by.zenkevich_churun.findcell.prisoner.R
+import by.zenkevich_churun.findcell.prisoner.ui.profile.vm.ProfileViewModel
 import by.zenkevich_churun.findcell.prisoner.util.view.add_contact.ContactTypesScrollView
 import kotlinx.android.synthetic.main.profile_scrollview_constpart.view.*
 
@@ -18,8 +19,9 @@ import kotlinx.android.synthetic.main.profile_scrollview_constpart.view.*
 /** Adapter for the [RecyclerView] which is the scrollable part of Profile
   * the screen. Includes contacts, [ContactTypesScrollView] and [Prisoner] info. **/
 internal class ProfileRecyclerAdapter(
+    private val vm: ProfileViewModel,
     private val prisoner: Prisoner,
-    private val addedContactTypes: List<Contact.Type>,
+    private val addedContactTypes: MutableList<Contact.Type>,
     private val onDataUpdated: () -> Unit
 ): RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
@@ -38,9 +40,8 @@ internal class ProfileRecyclerAdapter(
     }
 
     /** Constant part. **/
-    class ConstantViewHolder(
-        itemView: View,
-        onPrisonerInfoChanged: (info: CharSequence) -> Unit
+    inner class ConstantViewHolder(
+        itemView: View
     ): RecyclerView.ViewHolder(itemView) {
 
         private val addContactView = itemView.addContactView
@@ -52,13 +53,22 @@ internal class ProfileRecyclerAdapter(
             }
 
             addContactView.setContactTypeSelectedListener { type ->
-                // ...
+                addContact(type)
             }
         }
 
         fun bind(prisonerInfo: CharSequence, addedContactTypes: List<Contact.Type>) {
             etInfo.setText(prisonerInfo)
             addContactView.setContent(addedContactTypes)
+        }
+
+        private fun onPrisonerInfoChanged(newInfoChars: CharSequence) {
+            val newInfo = newInfoChars.toString()
+            if(info != newInfo) {
+                onDataUpdated()
+            }
+
+            info = newInfo
         }
     }
 
@@ -97,7 +107,7 @@ internal class ProfileRecyclerAdapter(
 
 
     val prisonerInfo: String
-        get() = info.toString()
+        get() = info
 
 
     private fun instantiateViewHolder(parent: ViewGroup, type: Int): RecyclerView.ViewHolder {
@@ -110,14 +120,17 @@ internal class ProfileRecyclerAdapter(
             .from(parent.context)
             .inflate(R.layout.profile_scrollview_constpart, parent, false)
 
-        return ConstantViewHolder(constView) { newInfoChars ->
-            val newInfo = newInfoChars.toString()
-            if(info != newInfo) {
-                onDataUpdated()
-            }
+        return ConstantViewHolder(constView)
+    }
 
-            info = newInfo
-        }
+    private fun addContact(type: Contact.Type) {
+        addedContactTypes.removeAll { it == type }
+        val contact = vm.createContact(type, contacts)
+        contacts.add(contact)
+
+        notifyItemInserted(contacts.lastIndex)  // Added contact.
+        notifyItemChanged(contacts.size)        // Changed ContactTypesView.
+        onDataUpdated()
     }
 
 
