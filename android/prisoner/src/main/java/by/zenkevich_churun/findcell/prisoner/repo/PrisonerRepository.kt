@@ -44,7 +44,7 @@ class PrisonerRepository @Inject constructor(
     private var passwordHash: ByteArray? = /* null */ "pass".toByteArray(Charsets.UTF_16)
 
 
-    val prisoneeLD: LiveData<Prisoner>
+    val prisonerLD: LiveData<Prisoner>
         get() = mldPrisoner
 
     val unsavedChangesLD: LiveData<Boolean>

@@ -29,6 +29,7 @@ internal class ProfileRecyclerAdapter(
 
     val contacts = prisoner.contacts.toMutableList()
     private var info = prisoner.info
+    private var lastAddContactWidth = -1
 
 
     /** 1 Contact. **/
@@ -84,6 +85,8 @@ internal class ProfileRecyclerAdapter(
             addContactView.setContent(addedContactTypes)
             if(addedContactTypes.isEmpty()) {
                 animateWidthTo(0)
+            } else if(itemView.width != 0) {
+                animateWidthTo(itemView.width)
             }
         }
 
@@ -97,18 +100,26 @@ internal class ProfileRecyclerAdapter(
         }
 
         private fun animateWidthTo(target: Int) {
-            if(addContactView.width == target) {
+            if(lastAddContactWidth < 0) {
+                // Can't animate, since lastAnimatedWidth is invalid.
+                lastAddContactWidth = target
+                addContactView.updateLayoutParams {
+                    width = target
+                }
+
                 if(target == 0) {
                     addContactView.visibility = View.GONE
                 }
+
                 return
             }
 
-            ValueAnimator.ofInt(addContactView.width, target).apply {
+            addContactView.visibility = View.VISIBLE
+            ValueAnimator.ofInt(lastAddContactWidth, target).apply {
                 addUpdateListener { animer ->
-                    val w = animer.animatedValue as Int
+                    lastAddContactWidth = animer.animatedValue as Int
                     addContactView.updateLayoutParams {
-                        width = w
+                        width = lastAddContactWidth
                     }
                 }
 
@@ -118,7 +129,7 @@ internal class ProfileRecyclerAdapter(
                     }
                 }
 
-                duration = 2000L
+                duration = 700L
                 start()
             }
         }
@@ -194,11 +205,16 @@ internal class ProfileRecyclerAdapter(
     }
 
     private fun notifyContactDeleted(position: Int) {
-        if(position in contacts.indices) {
-            contacts.removeAt(position)
-            notifyItemRemoved(position)
-            onDataUpdated()
+        if(position !in contacts.indices) {
+            return
         }
+
+        addedContactTypes.add( contacts[position].type )
+        contacts.removeAt(position)
+        notifyItemRemoved(position)        // Contact removed.
+        notifyItemChanged(contacts.size)   // Added contact types changed.
+
+        onDataUpdated()
     }
 
 

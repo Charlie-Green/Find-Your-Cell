@@ -10,6 +10,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
+import by.zenkevich_churun.findcell.core.entity.Contact
 import by.zenkevich_churun.findcell.core.entity.Prisoner
 import by.zenkevich_churun.findcell.prisoner.R
 import by.zenkevich_churun.findcell.prisoner.repo.SavePrisonerResult
@@ -17,10 +18,12 @@ import by.zenkevich_churun.findcell.prisoner.ui.profile.vm.ProfileViewModel
 import kotlinx.android.synthetic.main.profile_fragm.*
 
 
+/** Allows viewing and editing user's profile. **/
 class ProfileFragment: Fragment(R.layout.profile_fragm) {
 
-    private var prisoner: Prisoner? = null
     private var vm: ProfileViewModel? = null
+    private var prisoner: Prisoner? = null
+    private var addedContactTypes: MutableList<Contact.Type>? = null
 
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -29,7 +32,12 @@ class ProfileFragment: Fragment(R.layout.profile_fragm) {
 
         val vm = getViewModel().also { this.vm = it }
         vm.prisonerLD.observe(viewLifecycleOwner, Observer { prisoner ->
-            displayPrisoner(prisoner)
+            this.prisoner = prisoner
+            displayPrisoner()
+        })
+        vm.addedContactTypesLD.observe(viewLifecycleOwner, Observer { addedContactTypes ->
+            this.addedContactTypes = addedContactTypes
+            displayPrisoner()
         })
         vm.unsavedChangesLD.observe(viewLifecycleOwner, Observer { thereAreChanges ->
             fabSave.isVisible = thereAreChanges
@@ -82,10 +90,10 @@ class ProfileFragment: Fragment(R.layout.profile_fragm) {
     }
 
 
-    private fun displayPrisoner(prisoner: Prisoner) {
+    private fun displayPrisoner() {
         val vm = this.vm ?: return
-        this.prisoner = prisoner
-        val addedContactTypes = ProfileFragmentUtil.addedContactTypes(prisoner.contacts)
+        val prisoner = this.prisoner ?: return
+        val addedContactTypes = this.addedContactTypes ?: return
 
         tietName.setText(prisoner.name)
         recyclerView.adapter = ProfileRecyclerAdapter(vm, prisoner, addedContactTypes) {

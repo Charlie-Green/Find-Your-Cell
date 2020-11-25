@@ -18,10 +18,15 @@ class ProfileViewModel @Inject constructor(
     private val mldLoading = MutableLiveData<Boolean>().apply {
         value = false
     }
+    private val medLdAddedContactTypes = addedContactTypesMediatorLD()
+    private var lastPrisonerId = Prisoner.INVALID_ID
 
 
     val prisonerLD: LiveData<Prisoner>
-        get() = repo.prisoneeLD
+        get() = repo.prisonerLD
+
+    val addedContactTypesLD: LiveData< MutableList<Contact.Type> >
+        get() = medLdAddedContactTypes
 
     val unsavedChangesLD: LiveData<Boolean>
         get() = repo.unsavedChangesLD
@@ -58,6 +63,23 @@ class ProfileViewModel @Inject constructor(
         existingContacts: Collection<Contact>
     ): Contact {
         return ProfileVMUtil.createContact(type, existingContacts)
+    }
+
+
+    private fun addedContactTypesMediatorLD(): MediatorLiveData< MutableList<Contact.Type> > {
+        val ld = MediatorLiveData< MutableList<Contact.Type> >()
+
+        ld.addSource(repo.prisonerLD) { prisoner ->
+            // Publish new list only if the Prisoner changed
+            // (or this is the first Prisoner emission).
+            // In rest of cases, the list is updated on fly by the UI level.
+            if(prisoner.id != lastPrisonerId) {
+                lastPrisonerId = prisoner.id
+                ld.value = ProfileVMUtil.addedContactTypes(prisoner.contacts)
+            }
+        }
+
+        return ld
     }
 
 
