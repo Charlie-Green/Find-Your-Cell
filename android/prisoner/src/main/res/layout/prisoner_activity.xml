@@ -9,8 +9,8 @@
     tools:context="by.zenkevich_churun.findcell.prisoner.ui.root.activity.PrisonerActivity">
 
     <fragment
-        android:id="@+id/fragmProfile"
-        android:name="by.zenkevich_churun.findcell.prisoner.ui.profile.fragm.ProfileFragment"
+        android:id="@+id/fragmSched"
+        android:name="by.zenkevich_churun.findcell.prisoner.ui.sched.fragm.ScheduleFragment"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         app:layout_behavior="by.zenkevich_churun.findcell.core.util.behave.snackbar.RespectSnackbarBehavior" />

@@ -7,7 +7,9 @@ import java.util.*
 class CellModel(
     override val jailName: String,
     override val number: Short,
-    val color: Int
+    val backColor: Int,
+    val numberBackColor: Int,
+    val textColor: Int
 ): Cell() {
 
     override val seats: Short
@@ -21,7 +23,7 @@ class CellModel(
             day,
             day.clone() as Calendar,
             cellIndex,
-            color
+            backColor
         )
     }
 }

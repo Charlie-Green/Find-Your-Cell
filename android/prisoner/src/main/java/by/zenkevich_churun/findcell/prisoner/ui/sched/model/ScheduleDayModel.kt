@@ -7,13 +7,13 @@ import java.util.*
 class ScheduleDayModel(
     val date: Calendar,
     var cellData: String,
-    var color: Int ) {
+    var textColor: Int ) {
 
     constructor(date: Calendar):
         this(date, "", UNDEFINED_COLOR)
 
     fun changeCell(cell: CellModel) {
-        color = cell.color
+        textColor = cell.textColor
         cellData = cell.toString()
     }
 
