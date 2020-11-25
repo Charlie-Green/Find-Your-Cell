@@ -6,7 +6,7 @@ import android.view.View
 import android.widget.*
 import androidx.core.widget.addTextChangedListener
 import by.zenkevich_churun.findcell.core.R
-import by.zenkevich_churun.findcell.core.entity.Contact
+import by.zenkevich_churun.findcell.core.entity.general.Contact
 import kotlinx.android.synthetic.main.contact_view.view.*
 
 

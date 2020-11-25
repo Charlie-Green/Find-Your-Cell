@@ -1,17 +1,15 @@
 package by.zenkevich_churun.findcell.prisoner.ui.profile.fragm
 
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import androidx.appcompat.app.AlertDialog
 import androidx.core.view.isVisible
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
-import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
-import by.zenkevich_churun.findcell.core.entity.Contact
-import by.zenkevich_churun.findcell.core.entity.Prisoner
+import by.zenkevich_churun.findcell.core.entity.general.Contact
+import by.zenkevich_churun.findcell.core.entity.general.Prisoner
 import by.zenkevich_churun.findcell.prisoner.R
 import by.zenkevich_churun.findcell.prisoner.repo.SavePrisonerResult
 import by.zenkevich_churun.findcell.prisoner.ui.profile.vm.ProfileViewModel

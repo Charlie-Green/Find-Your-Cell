@@ -1,6 +1,6 @@
 package by.zenkevich_churun.findcell.prisoner.ui.profile.vm
 
-import by.zenkevich_churun.findcell.core.entity.Contact
+import by.zenkevich_churun.findcell.core.entity.general.Contact
 
 
 internal object ProfileVMUtil {

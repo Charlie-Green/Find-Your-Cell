@@ -1,12 +1,12 @@
-package by.zenkevich_churun.findcell.core.entity
+package by.zenkevich_churun.findcell.core.entity.general
 
 
 /** A room within a [Jail] where [Prisoner]s live. **/
 abstract class Cell {
 
-    /** The value of [Jail.id] property
+    /** The value of [Jail.name] property
       * of the [Jail] this [Cell] belongs to. **/
-    abstract val jailId: Int
+    abstract val jailName: String
 
     /** The [Cell]'s number within its [Jail]. **/
     abstract val number: Short

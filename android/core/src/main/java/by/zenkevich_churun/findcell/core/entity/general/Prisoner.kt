@@ -1,6 +1,4 @@
-package by.zenkevich_churun.findcell.core.entity
-
-import by.zenkevich_churun.findcell.core.entity.Contact
+package by.zenkevich_churun.findcell.core.entity.general
 
 
 /** A person, who's been in prison and is searching for other such people.

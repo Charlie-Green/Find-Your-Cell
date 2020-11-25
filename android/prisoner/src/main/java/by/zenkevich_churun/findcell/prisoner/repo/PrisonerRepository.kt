@@ -5,8 +5,8 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import by.zenkevich_churun.findcell.core.api.LogInResponse
 import by.zenkevich_churun.findcell.core.api.PrisonerApi
-import by.zenkevich_churun.findcell.core.entity.Contact
-import by.zenkevich_churun.findcell.core.entity.Prisoner
+import by.zenkevich_churun.findcell.core.entity.general.Contact
+import by.zenkevich_churun.findcell.core.entity.general.Prisoner
 import java.io.IOException
 import javax.inject.Inject
 import javax.inject.Singleton

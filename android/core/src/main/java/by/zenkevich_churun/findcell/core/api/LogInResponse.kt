@@ -1,6 +1,6 @@
 package by.zenkevich_churun.findcell.core.api
 
-import by.zenkevich_churun.findcell.core.entity.Prisoner
+import by.zenkevich_churun.findcell.core.entity.general.Prisoner
 
 
 sealed class LogInResponse {

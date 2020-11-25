@@ -1,7 +1,7 @@
 package by.zenkevich_churun.findcell.prisoner.api.ram
 
-import by.zenkevich_churun.findcell.core.entity.Contact
-import by.zenkevich_churun.findcell.core.entity.Prisoner
+import by.zenkevich_churun.findcell.core.entity.general.Contact
+import by.zenkevich_churun.findcell.core.entity.general.Prisoner
 
 
 internal class PrisonerRamEntity(
