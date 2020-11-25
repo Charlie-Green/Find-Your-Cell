@@ -52,5 +52,7 @@ dependencies {
     implementation Deps.libHilt
     kapt           Deps.kaptHilt
 
+    testImplementation Deps.testJUnit
+
     implementation project(":core")
 }

@@ -78,9 +78,11 @@ class ScheduleModel(
                     lastPeriodIndex + 1,
                     listOf(newPeriod, splitPeriods.second)
                 )
+            } else {
+                periods.add(lastPeriodIndex + 1, newPeriod)
             }
         } else {
-            periods.add(lastPeriodIndex + 1, newPeriod)
+            periods.add(0, newPeriod)
         }
     }
 

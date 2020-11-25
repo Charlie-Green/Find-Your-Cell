@@ -62,5 +62,5 @@ class SchedulePeriodModel(
 
 
     private val thisIfValid: SchedulePeriodModel?
-        get() = if(startDate == endDate) null else this
+        get() = if(startDate.after(endDate)) null else this
 }
