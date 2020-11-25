@@ -5,10 +5,19 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <by.zenkevich_churun.findcell.prisoner.util.view.cell.CellView
-        android:id="@+id/cellView"
-        android:layout_width="210dp"
-        android:layout_height="48dp"
-        android:layout_gravity="center" />
+    <View
+        android:id="@+id/source"
+        android:layout_width="96dp"
+        android:layout_height="96dp"
+        android:layout_margin="16dp"
+        android:background="#00f000" />
+
+    <View
+        android:id="@+id/destination"
+        android:layout_width="96dp"
+        android:layout_height="96dp"
+        android:layout_gravity="bottom|end"
+        android:layout_margin="16dp"
+        android:background="#f00000" />
 
 </FrameLayout>

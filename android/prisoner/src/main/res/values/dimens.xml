@@ -5,4 +5,8 @@
     <dimen name="added_contact_margin">6dp</dimen>
     <dimen name="contact_item_margin">12dp</dimen>
 
+    <dimen name="cellview_padding_vertical">6dp</dimen>
+    <dimen name="cellview_padding_horizontal">9dp</dimen>
+    <dimen name="cellview_number_width">58dp</dimen>
+
 </resources>

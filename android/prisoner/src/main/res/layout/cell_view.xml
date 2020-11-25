@@ -1,18 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <merge
     xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/hlltRoot"
     android:orientation="horizontal"
     android:layout_width="match_parent"
     android:layout_height="match_parent" >
 
     <TextView
         android:id="@+id/txtvNumber"
-        android:layout_width="58dp"
+        android:layout_width="@dimen/cellview_number_width"
         android:layout_height="match_parent"
-        android:layout_marginTop="6dp"
-        android:layout_marginBottom="6dp"
-        android:layout_marginStart="9dp"
+        android:layout_marginTop="@dimen/cellview_padding_vertical"
+        android:layout_marginBottom="@dimen/cellview_padding_vertical"
+        android:layout_marginStart="@dimen/cellview_padding_horizontal"
         android:gravity="center"
         android:textSize="18dp"
         android:textStyle="bold"
@@ -24,7 +23,7 @@
         android:layout_height="wrap_content"
         android:layout_weight="1"
         android:layout_gravity="center_vertical"
-        android:layout_marginStart="8dp"
+        android:layout_marginStart="@dimen/cellview_padding_horizontal"
         android:singleLine="true"
         android:textSize="16dp" />
 

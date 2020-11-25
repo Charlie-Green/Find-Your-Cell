@@ -2,6 +2,7 @@ package by.zenkevich_churun.findcell.prisoner.util.view.cell
 
 import android.content.Context
 import android.util.AttributeSet
+import android.util.Log
 import android.view.View
 import android.widget.LinearLayout
 import by.zenkevich_churun.findcell.core.entity.general.Cell
@@ -46,9 +47,29 @@ class CellView: LinearLayout {
     }
 
 
+    /** Ensure this [CellView] is correctly rendered during a drag-and-drop operation. **/
+    fun prepareForShadowBuilder(width: Int, height: Int) {
+        val numbWidth = dimen(R.dimen.cellview_number_width)
+        val padX      = dimen(R.dimen.cellview_padding_horizontal)
+        val padY      = dimen(R.dimen.cellview_padding_vertical)
+
+        txtvNumber.measure(MeasureSpec.UNSPECIFIED, MeasureSpec.UNSPECIFIED)
+        val textHeight = txtvNumber.measuredHeight
+        Log.v("CharlieDebug", "Text height = ${textHeight}")
+
+        layout(0, 0, width, height)
+        txtvNumber.layout(padX, padY, padX+numbWidth, height-padY)
+        txtvJail.layout(2*padX+numbWidth, (height-textHeight)/2, width-padX, (height+textHeight)/2)
+    }
+
+
     private fun setViewBackgroundColor(view: View, color: Int) {
         view.background = view.background.mutate().apply {
             setTint(color)
         }
+    }
+
+    private fun dimen(dimenRes: Int): Int {
+        return context.resources.getDimensionPixelSize(dimenRes)
     }
 }
