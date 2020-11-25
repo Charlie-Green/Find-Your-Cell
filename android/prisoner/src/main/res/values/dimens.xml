@@ -8,5 +8,10 @@
     <dimen name="cellview_padding_vertical">6dp</dimen>
     <dimen name="cellview_padding_horizontal">9dp</dimen>
     <dimen name="cellview_number_width">58dp</dimen>
+    <dimen name="cellview_height">48dp</dimen>
+    <dimen name="cellview_margin_bottom">8dp</dimen>
+    <dimen name="cells_recycler_height">104dp</dimen>
+
+    <dimen name="period_view_padding">8dp</dimen>
 
 </resources>

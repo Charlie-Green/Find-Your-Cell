@@ -7,12 +7,11 @@ import java.util.*
 class SchedulePeriodModel(
     override val startDate: Calendar,
     override val endDate: Calendar,
-    override val cellIndex: Int,
-    val color: Int
+    override val cellIndex: Int
 ): SchedulePeriod() {
 
     init {
-        // For easier comparation:
+        // For easier comparasion:
         ScheduleModelUtil.setToMidnight(startDate)
         ScheduleModelUtil.setToMidnight(endDate)
     }
@@ -48,14 +47,12 @@ class SchedulePeriodModel(
             SchedulePeriodModel(
                 startDate,
                 day.clone() as Calendar,
-                cellIndex,
-                color
+                cellIndex
             ),
             SchedulePeriodModel(
                 day.clone() as Calendar,
                 endDate,
-                cellIndex,
-                color
+                cellIndex
             )
         )
     }

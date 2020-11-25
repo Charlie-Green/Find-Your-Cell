@@ -1,23 +1,33 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout
+<LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:padding="8dp" >
 
-    <View
-        android:id="@+id/source"
-        android:layout_width="96dp"
-        android:layout_height="96dp"
-        android:layout_margin="16dp"
-        android:background="#00f000" />
+<!--    <androidx.recyclerview.widget.RecyclerView-->
+<!--        android:id="@+id/recvCells"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="@dimen/cells_recycler_height" />-->
 
-    <View
-        android:id="@+id/destination"
-        android:layout_width="96dp"
-        android:layout_height="96dp"
-        android:layout_gravity="bottom|end"
-        android:layout_margin="16dp"
-        android:background="#f00000" />
+<!--    <androidx.recyclerview.widget.RecyclerView-->
+<!--        android:id="@+id/recvDays"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="match_parent"-->
+<!--        android:layout_weight="1"-->
+<!--        android:layout_marginTop="8dp" />-->
 
-</FrameLayout>
+    <by.zenkevich_churun.findcell.prisoner.util.view.period.SchedulePeriodView
+        android:id="@+id/periodView"
+        android:layout_width="240dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal" />
+
+    <Button
+        android:id="@+id/buSwitch"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Switch Period" />
+
+</LinearLayout>

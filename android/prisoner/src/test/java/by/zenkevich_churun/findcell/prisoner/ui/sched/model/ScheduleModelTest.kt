@@ -57,7 +57,7 @@ class ScheduleModelTest {
     }
 
     private fun period(startDate: Int, endDate: Int): SchedulePeriodModel {
-        return SchedulePeriodModel(day(startDate), day(endDate), 0, 0)
+        return SchedulePeriodModel(day(startDate), day(endDate), 0)
     }
 
     private fun daysEqual(d1: Calendar, d2: Calendar): Boolean {
@@ -99,9 +99,9 @@ class ScheduleModelTest {
             day(1),
             day(6),
             mutableListOf(
-                CellModel("", 0, 0),
-                CellModel("", 0, 0),
-                CellModel("", 0, 0)
+                CellModel("", 0, 0, 0, 0),
+                CellModel("", 0, 0, 0, 0),
+                CellModel("", 0, 0, 0, 0)
             ),
             mutableListOf(
                 period(1, 3),

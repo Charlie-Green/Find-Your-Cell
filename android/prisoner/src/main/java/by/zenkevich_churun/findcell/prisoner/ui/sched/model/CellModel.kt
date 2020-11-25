@@ -22,8 +22,7 @@ class CellModel(
         return SchedulePeriodModel(
             day,
             day.clone() as Calendar,
-            cellIndex,
-            backColor
+            cellIndex
         )
     }
 }
