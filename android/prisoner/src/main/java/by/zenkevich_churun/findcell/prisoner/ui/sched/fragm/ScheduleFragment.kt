@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.util.Log
 import android.view.View
 import androidx.fragment.app.Fragment
+import androidx.recyclerview.widget.LinearLayoutManager
 import by.zenkevich_churun.findcell.core.entity.sched.Schedule
 import by.zenkevich_churun.findcell.prisoner.R
 import by.zenkevich_churun.findcell.prisoner.ui.sched.model.CellModel
@@ -52,28 +53,10 @@ class ScheduleFragment: Fragment(R.layout.schedule_fragm) {
             mutableListOf()
         )
 
-        periodView.show(period1, cell1)
-        buSwitch.setOnClickListener {
-            periodView.show(period2, cell2)
+        recvPeriods.apply {
+            layoutManager = LinearLayoutManager(requireContext())
+            adapter = SchedulePeriodsAdapter(schedule)
         }
-
-        periodView.listenToResize( object: SchedulePeriodResizedListener {
-            override fun onBeginningCollapsed() {
-                Log.v("CharlieDebug", "Beginning collapsed.")
-            }
-
-            override fun onBeginningExpanded() {
-                Log.v("CharlieDebug", "Beginning expanded.")
-            }
-
-            override fun onEndingCollapsed() {
-                Log.v("CharlieDebug", "Ending collapsed.")
-            }
-
-            override fun onEndingExpanded() {
-                Log.v("CharlieDebug", "Ending expanded.")
-            }
-        } )
     }
 
 //    private fun showCell(cell: CellModel) {

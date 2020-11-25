@@ -2,7 +2,6 @@ package by.zenkevich_churun.findcell.prisoner.util.view.cell
 
 import android.content.Context
 import android.util.AttributeSet
-import android.util.Log
 import android.view.View
 import android.widget.LinearLayout
 import by.zenkevich_churun.findcell.core.entity.general.Cell
@@ -55,7 +54,6 @@ class CellView: LinearLayout {
 
         txtvNumber.measure(MeasureSpec.UNSPECIFIED, MeasureSpec.UNSPECIFIED)
         val textHeight = txtvNumber.measuredHeight
-        Log.v("CharlieDebug", "Text height = ${textHeight}")
 
         layout(0, 0, width, height)
         txtvNumber.layout(padX, padY, padX+numbWidth, height-padY)

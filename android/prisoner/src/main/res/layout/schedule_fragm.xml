@@ -6,28 +6,16 @@
     android:layout_height="match_parent"
     android:padding="8dp" >
 
-<!--    <androidx.recyclerview.widget.RecyclerView-->
-<!--        android:id="@+id/recvCells"-->
-<!--        android:layout_width="match_parent"-->
-<!--        android:layout_height="@dimen/cells_recycler_height" />-->
-
-<!--    <androidx.recyclerview.widget.RecyclerView-->
-<!--        android:id="@+id/recvDays"-->
-<!--        android:layout_width="match_parent"-->
-<!--        android:layout_height="match_parent"-->
-<!--        android:layout_weight="1"-->
-<!--        android:layout_marginTop="8dp" />-->
-
-    <by.zenkevich_churun.findcell.prisoner.util.view.period.SchedulePeriodView
-        android:id="@+id/periodView"
-        android:layout_width="240dp"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal" />
-
-    <Button
-        android:id="@+id/buSwitch"
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recvCells"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Switch Period" />
+        android:layout_height="@dimen/cells_recycler_height" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recvPeriods"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:layout_marginTop="8dp" />
 
 </LinearLayout>

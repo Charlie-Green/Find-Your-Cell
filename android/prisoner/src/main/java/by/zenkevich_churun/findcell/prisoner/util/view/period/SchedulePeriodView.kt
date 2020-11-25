@@ -18,9 +18,6 @@ import java.util.Calendar
 /** Compound [View] to display a [SchedulePeriodModel]. **/
 class SchedulePeriodView: LinearLayout {
 
-    private var resizeListener: SchedulePeriodResizedListener? = null
-
-
     constructor(context: Context):
         super(context)
     constructor(context: Context, attrs: AttributeSet?):
@@ -70,8 +67,6 @@ class SchedulePeriodView: LinearLayout {
         if(childCount > index) {
             removeViews(index, childCount-index)
         }
-
-        Log.v("CharlieDebug", "Added $index days")
     }
 
     fun listenToResize(listener: SchedulePeriodResizedListener) {

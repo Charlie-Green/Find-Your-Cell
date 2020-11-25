@@ -12,7 +12,7 @@
     <dimen name="cellview_margin_bottom">8dp</dimen>
     <dimen name="cells_recycler_height">104dp</dimen>
 
-    <dimen name="period_view_padding">8dp</dimen>
-    <dimen name="period_view_height_delta">36dp</dimen>
+    <dimen name="period_view_padding">6dp</dimen>
+    <dimen name="period_view_height_delta">4dp</dimen>
 
 </resources>
