@@ -1,6 +1,7 @@
 package by.zenkevich_churun.findcell.prisoner.ui.sched.fragm
 
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import androidx.fragment.app.Fragment
 import by.zenkevich_churun.findcell.core.entity.sched.Schedule
@@ -8,6 +9,7 @@ import by.zenkevich_churun.findcell.prisoner.R
 import by.zenkevich_churun.findcell.prisoner.ui.sched.model.CellModel
 import by.zenkevich_churun.findcell.prisoner.ui.sched.model.ScheduleModel
 import by.zenkevich_churun.findcell.prisoner.ui.sched.model.SchedulePeriodModel
+import by.zenkevich_churun.findcell.prisoner.util.view.period.SchedulePeriodResizedListener
 import kotlinx.android.synthetic.main.schedule_fragm.*
 import java.util.*
 
@@ -54,6 +56,24 @@ class ScheduleFragment: Fragment(R.layout.schedule_fragm) {
         buSwitch.setOnClickListener {
             periodView.show(period2, cell2)
         }
+
+        periodView.listenToResize( object: SchedulePeriodResizedListener {
+            override fun onBeginningCollapsed() {
+                Log.v("CharlieDebug", "Beginning collapsed.")
+            }
+
+            override fun onBeginningExpanded() {
+                Log.v("CharlieDebug", "Beginning expanded.")
+            }
+
+            override fun onEndingCollapsed() {
+                Log.v("CharlieDebug", "Ending collapsed.")
+            }
+
+            override fun onEndingExpanded() {
+                Log.v("CharlieDebug", "Ending expanded.")
+            }
+        } )
     }
 
 //    private fun showCell(cell: CellModel) {

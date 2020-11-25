@@ -18,6 +18,9 @@ import java.util.Calendar
 /** Compound [View] to display a [SchedulePeriodModel]. **/
 class SchedulePeriodView: LinearLayout {
 
+    private var resizeListener: SchedulePeriodResizedListener? = null
+
+
     constructor(context: Context):
         super(context)
     constructor(context: Context, attrs: AttributeSet?):
@@ -38,6 +41,11 @@ class SchedulePeriodView: LinearLayout {
         background = background.mutate().apply {
             setTint(color)
         }
+    }
+
+    override fun setOnTouchListener(l: OnTouchListener?) {
+        throw NotImplementedError(
+            "Forbidden, since it screws up the implementation of listenToResize" )
     }
 
 
@@ -64,6 +72,12 @@ class SchedulePeriodView: LinearLayout {
         }
 
         Log.v("CharlieDebug", "Added $index days")
+    }
+
+    fun listenToResize(listener: SchedulePeriodResizedListener) {
+        val heightDelta = dimen(R.dimen.period_view_height_delta)
+        val touchListener = SchedulePeriodTouchListener(listener, heightDelta)
+        super.setOnTouchListener(touchListener)
     }
 
 

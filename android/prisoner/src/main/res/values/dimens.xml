@@ -13,5 +13,6 @@
     <dimen name="cells_recycler_height">104dp</dimen>
 
     <dimen name="period_view_padding">8dp</dimen>
+    <dimen name="period_view_height_delta">36dp</dimen>
 
 </resources>
