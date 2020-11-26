@@ -4,6 +4,45 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content" >
 
-    <!-- Days are inserted programmatically. -->
+    <LinearLayout
+        android:id="@+id/vlltDays"
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" >
+
+        <!-- Days are inserted programmatically. -->
+
+    </LinearLayout>
+
+
+    <ImageView
+        android:id="@+id/imgvExpandBeginning"
+        android:layout_width="@dimen/period_view_arrow_maxsize"
+        android:layout_height="@dimen/period_view_arrow_maxsize"
+        android:layout_gravity="end"
+        android:layout_marginEnd="@dimen/period_view_startarrow_marginend"
+        android:src="@drawable/arrow" />
+
+    <ImageView
+        android:id="@+id/imgvCollapseBeginning"
+        android:layout_width="@dimen/period_view_arrow_maxsize"
+        android:layout_height="@dimen/period_view_arrow_maxsize"
+        android:layout_gravity="end"
+        android:src="@drawable/arrow" />
+
+    <ImageView
+        android:id="@+id/imgvExpandEnding"
+        android:layout_width="@dimen/period_view_arrow_maxsize"
+        android:layout_height="@dimen/period_view_arrow_maxsize"
+        android:layout_gravity="bottom|end"
+        android:layout_marginEnd="@dimen/period_view_startarrow_marginend"
+        android:src="@drawable/arrow" />
+
+    <ImageView
+        android:id="@+id/imgvCollapseEnding"
+        android:layout_width="@dimen/period_view_arrow_maxsize"
+        android:layout_height="@dimen/period_view_arrow_maxsize"
+        android:layout_gravity="bottom|end"
+        android:src="@drawable/arrow" />
 
 </merge>

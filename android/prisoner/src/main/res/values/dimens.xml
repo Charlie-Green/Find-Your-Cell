@@ -14,5 +14,7 @@
 
     <dimen name="period_view_padding">6dp</dimen>
     <dimen name="period_view_height_delta">4dp</dimen>
+    <dimen name="period_view_arrow_maxsize">24dp</dimen>
+    <dimen name="period_view_startarrow_marginend">30dp</dimen>
 
 </resources>

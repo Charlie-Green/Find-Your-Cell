@@ -1,3 +1,4 @@
+
 package by.zenkevich_churun.findcell.prisoner.ui.sched.model
 
 import android.graphics.Color
@@ -6,17 +7,12 @@ import java.util.*
 
 class ScheduleDayModel(
     val date: Calendar,
-    var cellData: String,
-    var textColor: Int ) {
+    val cellData: String,
+    val textColor: Int,
+    val backColors: List<Int> ) {
 
     constructor(date: Calendar):
-        this(date, "", UNDEFINED_COLOR)
-
-    fun changeCell(cell: CellModel) {
-        textColor = cell.textColor
-        cellData = cell.toString()
-    }
-
+        this(date, "", UNDEFINED_COLOR, listOf())
 
     companion object {
         /** In this case, use the theme-defined text color. **/

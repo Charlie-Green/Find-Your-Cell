@@ -17,27 +17,6 @@ class SchedulePeriodModel(
     }
 
 
-    fun beginEarlier(): SchedulePeriodModel {
-        startDate.add(Calendar.DATE, -1)
-        return this
-    }
-
-    fun beginLater(): SchedulePeriodModel? {
-        startDate.add(Calendar.DATE, 1)
-        return thisIfValid
-    }
-
-    fun finishEarlier(): SchedulePeriodModel? {
-        endDate.add(Calendar.DATE, -1)
-        return thisIfValid
-    }
-
-    fun finishLater(): SchedulePeriodModel {
-        endDate.add(Calendar.DATE, 1)
-        return this
-    }
-
-
     fun split(day: Calendar): Pair<SchedulePeriodModel, SchedulePeriodModel> {
         if(day.before(startDate) || day.after(endDate)) {
             throw IllegalArgumentException("Day doesn't belong to period")
@@ -56,8 +35,4 @@ class SchedulePeriodModel(
             )
         )
     }
-
-
-    private val thisIfValid: SchedulePeriodModel?
-        get() = if(startDate.after(endDate)) null else this
 }

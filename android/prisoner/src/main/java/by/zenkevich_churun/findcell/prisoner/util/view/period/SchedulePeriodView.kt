@@ -5,18 +5,20 @@ import android.util.*
 import android.view.View
 import android.view.ViewGroup.LayoutParams.MATCH_PARENT
 import android.view.ViewGroup.LayoutParams.WRAP_CONTENT
+import android.widget.FrameLayout
 import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.core.view.setPadding
 import by.zenkevich_churun.findcell.prisoner.R
 import by.zenkevich_churun.findcell.prisoner.ui.sched.model.CellModel
 import by.zenkevich_churun.findcell.prisoner.ui.sched.model.SchedulePeriodModel
+import kotlinx.android.synthetic.main.period_view.view.*
 import java.text.SimpleDateFormat
 import java.util.Calendar
 
 
 /** Compound [View] to display a [SchedulePeriodModel]. **/
-class SchedulePeriodView: LinearLayout {
+class SchedulePeriodView: FrameLayout {
 
     constructor(context: Context):
         super(context)
@@ -28,8 +30,6 @@ class SchedulePeriodView: LinearLayout {
 
     init {
         View.inflate(context, R.layout.period_view, this)
-        orientation = VERTICAL
-        setPadding( dimen(R.dimen.period_view_padding) )
         setBackgroundResource(R.drawable.shape_cellview_back)
     }
 
@@ -52,9 +52,9 @@ class SchedulePeriodView: LinearLayout {
         val day = period.startDate.clone() as Calendar
         var index = 0
         while(!period.endDate.before(day)) {
-            val textView = getChildAt(index) as TextView? ?: createTextView().also {
+            val textView = itemAt(index) ?: createTextView().also {
                 val params = LinearLayout.LayoutParams(MATCH_PARENT, WRAP_CONTENT)
-                addView(it, params)
+                vlltDays.addView(it, params)
             }
 
             textView.setTextColor(cell.textColor)
@@ -78,6 +78,10 @@ class SchedulePeriodView: LinearLayout {
 
     private fun dimen(dimenRes: Int): Int {
         return context.resources.getDimensionPixelSize(dimenRes)
+    }
+
+    private fun itemAt(index: Int): TextView? {
+        return vlltDays.getChildAt(index) as TextView?
     }
 
     private fun createTextView(): TextView {
