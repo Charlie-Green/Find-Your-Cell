@@ -56,18 +56,18 @@ class ScheduleFragment: Fragment(R.layout.schedule_fragm) {
             2
         )
 
-        val schedule = ScheduleModel(
-            Calendar.getInstance().apply { set(2020, Calendar.NOVEMBER, 20) },
-            Calendar.getInstance().apply { set(2020, Calendar.DECEMBER, 13) },
-            mutableListOf(cell1, cell2, cell3),
-            mutableListOf(period1, period2, period3),
-            mutableListOf()
-        )
-
-        recvPeriods.apply {
-            layoutManager = LinearLayoutManager(requireContext())
-            adapter = SchedulePeriodsAdapter(schedule)
-        }
+//        val schedule = ScheduleModel(
+//            Calendar.getInstance().apply { set(2020, Calendar.NOVEMBER, 20) },
+//            Calendar.getInstance().apply { set(2020, Calendar.DECEMBER, 13) },
+//            mutableListOf(cell1, cell2, cell3),
+//            mutableListOf(period1, period2, period3),
+//            mutableListOf()
+//        )
+//
+//        recvPeriods.apply {
+//            layoutManager = LinearLayoutManager(requireContext())
+//            adapter = SchedulePeriodsAdapter(schedule)
+//        }
     }
 
 //    private fun showCell(cell: CellModel) {

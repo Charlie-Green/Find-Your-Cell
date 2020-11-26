@@ -3,8 +3,9 @@ package by.zenkevich_churun.findcell.prisoner.ui.sched.model
 import by.zenkevich_churun.findcell.core.entity.general.Cell
 import by.zenkevich_churun.findcell.core.entity.sched.Schedule
 import by.zenkevich_churun.findcell.core.entity.sched.SchedulePeriod
+import by.zenkevich_churun.findcell.core.util.std.CalendarUtil
 import java.text.SimpleDateFormat
-import java.util.Calendar
+import java.util.*
 import kotlin.collections.HashSet
 
 
@@ -20,7 +21,7 @@ class ScheduleModel private constructor(
 
 
     fun markDayWithCell(cellIndex: Int, day: Calendar) {
-        ScheduleModelUtil.setToMidnight(day)
+        CalendarUtil.setToMidnight(day)
         days[ dayIndex(day) ].add(cellIndex)
     }
 
@@ -76,8 +77,7 @@ class ScheduleModel private constructor(
     }
 
     private fun dayIndex(day: Calendar): Int {
-        val differenceMillis = day.timeInMillis - start.timeInMillis
-        return (differenceMillis / MILLIS_PER_DAY).toInt()
+        return CalendarUtil.daysDifference(start, day)
     }
 
     private fun dayWithIndex(index: Int): Calendar {
@@ -120,8 +120,100 @@ class ScheduleModel private constructor(
 
 
     companion object {
-        private const val MILLIS_PER_DAY = 86_400_000L
-
         private val dateFormat = SimpleDateFormat("dd.MM.YYYY")
+        private val cellBackColors = LinkedList<Int>().apply {
+            add(0xff_f00000.toInt())
+            add(0xff_0000f0.toInt())
+            add(0xff_00b000.toInt())
+            add(0xff_00f0f0.toInt())
+            add(0xff_f0f000.toInt())
+            add(0xff_f000f0.toInt())
+            add(0xff_804000.toInt())
+            add(0xff_004080.toInt())
+        }
+
+
+        fun fromSchedule(schedule: Schedule): ScheduleModel {
+            val dayCount = CalendarUtil.daysDifference(schedule.start, schedule.end) + 1
+            return ScheduleModel(
+                schedule.start,
+                schedule.end,
+                cellModels(schedule.cells),
+                days(schedule.start, dayCount, schedule.periods)
+            )
+        }
+
+
+        private fun cellModels(cells: List<Cell>): MutableList<CellModel> {
+            val models = mutableListOf<CellModel>()
+
+            for(cell in cells) {
+                val backColor = nextCellBackColor
+                val model = CellModel(
+                    cell.jailName,
+                    cell.number,
+                    backColor,
+                    numberBackColor(backColor),
+                    textColor(backColor)
+                )
+
+                models.add(model)
+            }
+
+            return models
+        }
+
+        private fun days(
+            startDate: Calendar,
+            dayCount: Int,
+            periods: List<SchedulePeriod>
+        ): Array< HashSet<Int> > {
+
+            val days = Array< HashSet<Int> >(dayCount) { index ->
+                hashSetOf()
+            }
+
+            for(period in periods) {
+                val startIndex = CalendarUtil.daysDifference(startDate, period.startDate)
+                val endIndex = CalendarUtil.daysDifference(startDate, period.endDate)
+
+                for(dayIndex in startIndex..endIndex) {
+                    days[dayIndex].add(period.cellIndex)
+                }
+            }
+
+            return days
+        }
+
+
+        private val nextCellBackColor: Int
+            get() {
+                synchronized(cellBackColors) {
+                    val color = cellBackColors.pollFirst()!!
+                    cellBackColors.add(color)
+                    return color
+                }
+
+            }
+
+        private fun numberBackColor(backColor: Int): Int {
+            val r0 = (backColor and 0xff_ff0000.toInt()) shr 16
+            val g0 = (backColor and 0xff_00ff00.toInt()) shr 8
+            val b0 = backColor and 0xff_0000ff.toInt()
+
+            val r = r0/2
+            val g = g0/2
+            val b = b0/2
+
+            val alpha = backColor and 0xff_000000.toInt()
+            return alpha or (r shl 16) or (g shl 8) or b
+        }
+
+        private fun textColor(backColor: Int): Int {
+            val rgb0 = backColor and 0xffffff.toInt()
+            val rgb = 0xffffff - rgb0
+            val alpha = backColor and 0xff_000000.toInt()
+            return alpha or rgb
+        }
     }
 }
