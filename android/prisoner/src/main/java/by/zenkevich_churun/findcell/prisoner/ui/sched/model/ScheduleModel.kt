@@ -70,6 +70,13 @@ class ScheduleModel private constructor(
                 }
             }
 
+            for(cellIndex in cells.indices) {
+                if(!dayCells.contains(cellIndex)) {
+                    // If there was a Period with this Cell, it's over.
+                    mapCellToPeriod.remove(cellIndex)
+                }
+            }
+
             today.add(Calendar.DATE, 1)
         }
 
@@ -101,7 +108,7 @@ class ScheduleModel private constructor(
                 sb.append(". ")
             }
 
-            sb.append( cells[cellIndex].jailName )
+            sb.append( cells[cellIndex].toString() )
         }
 
         return sb.toString()

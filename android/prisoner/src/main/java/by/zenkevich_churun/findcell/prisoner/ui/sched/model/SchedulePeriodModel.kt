@@ -1,6 +1,7 @@
 package by.zenkevich_churun.findcell.prisoner.ui.sched.model
 
 import by.zenkevich_churun.findcell.core.entity.sched.SchedulePeriod
+import by.zenkevich_churun.findcell.core.util.std.CalendarUtil
 import java.util.*
 
 
@@ -12,8 +13,8 @@ class SchedulePeriodModel(
 
     init {
         // For easier comparasion:
-        ScheduleModelUtil.setToMidnight(startDate)
-        ScheduleModelUtil.setToMidnight(endDate)
+        CalendarUtil.setToMidnight(startDate)
+        CalendarUtil.setToMidnight(endDate)
     }
 
 
