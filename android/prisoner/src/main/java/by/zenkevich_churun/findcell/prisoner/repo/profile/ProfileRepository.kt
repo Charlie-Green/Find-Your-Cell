@@ -1,4 +1,4 @@
-package by.zenkevich_churun.findcell.prisoner.repo
+package by.zenkevich_churun.findcell.prisoner.repo.profile
 
 import android.util.Log
 import androidx.lifecycle.LiveData
@@ -7,33 +7,16 @@ import by.zenkevich_churun.findcell.core.api.LogInResponse
 import by.zenkevich_churun.findcell.core.api.ProfileApi
 import by.zenkevich_churun.findcell.core.entity.general.Contact
 import by.zenkevich_churun.findcell.core.entity.general.Prisoner
+import by.zenkevich_churun.findcell.prisoner.repo.common.PrisonerStorage
 import java.io.IOException
 import javax.inject.Inject
 import javax.inject.Singleton
 
 
 @Singleton
-class PrisonerRepository @Inject constructor(
-    private val api: ProfileApi ) {
-
-    private val mldPrisoner = MutableLiveData<Prisoner>().apply {
-        value = object: Prisoner() {
-            override val id: Int
-                get() = Prisoner.INVALID_ID + 1
-
-            override val name: String
-                get() = "Simon"
-
-            override val contacts: List<Contact>
-                get() = listOf(
-                    Contact.Phone("+1 456 1234567"),
-                    Contact.Skype("live:simon_fake")
-                )
-
-            override val info: String
-                get() = "Fake User"
-        }
-    }
+class ProfileRepository @Inject constructor(
+    private val api: ProfileApi,
+    private val store: PrisonerStorage ) {
 
     private val mldUnsavedChanges = MutableLiveData<Boolean>().apply {
         value = false
@@ -41,11 +24,9 @@ class PrisonerRepository @Inject constructor(
 
     private val mldSaveResult = MutableLiveData<SavePrisonerResult>()
 
-    private var passwordHash: ByteArray? = /* null */ "pass".toByteArray(Charsets.UTF_16)
 
-
-    val prisonerLD: LiveData<Prisoner>
-        get() = mldPrisoner
+    val prisonerLD: LiveData<out Prisoner>
+        get() = store.prisonerLD
 
     val unsavedChangesLD: LiveData<Boolean>
         get() = mldUnsavedChanges
@@ -63,26 +44,28 @@ class PrisonerRepository @Inject constructor(
         }
 
         if(response is LogInResponse.Success) {
-            mldPrisoner.postValue(response.prisoner)
+            store.submit(response.prisoner, passHash)
         }
 
         return response
     }
 
     fun saveDraft(draft: Prisoner) {
-        mldPrisoner.postValue(draft)
-        mldUnsavedChanges.postValue(true)
+        store.prisonerLD.value?.also { extendedPrisoner ->
+            store.submit(draft, extendedPrisoner.passwordHash)
+            mldUnsavedChanges.postValue(true)
+        }
     }
 
     /** @return success **/
     fun save(data: Prisoner) {
-        val passHash = passwordHash ?: return
+        val passHash = store.prisonerLD.value?.passwordHash ?: return
 
         mldUnsavedChanges.postValue(false)
         try {
             api.update(data, passHash)
 
-            mldPrisoner.postValue(data)
+            store.submit(data, passHash)
             mldUnsavedChanges.postValue(false)
             mldSaveResult.postValue(SavePrisonerResult.SUCCESS)
         } catch(exc: IOException) {

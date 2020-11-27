@@ -2,12 +2,12 @@ package by.zenkevich_churun.findcell.prisoner.ui.sched.vm
 
 import android.content.Context
 import androidx.lifecycle.*
-import by.zenkevich_churun.findcell.prisoner.repo.PrisonerRepository
+import by.zenkevich_churun.findcell.prisoner.repo.profile.ProfileRepository
 import javax.inject.Inject
 
 
 class ScheduleViewModel @Inject constructor(
-    private val repo: PrisonerRepository
+    private val repo: ProfileRepository
 ): ViewModel() {
 
     private val mldSelectedCellIndex = MutableLiveData<Int>()

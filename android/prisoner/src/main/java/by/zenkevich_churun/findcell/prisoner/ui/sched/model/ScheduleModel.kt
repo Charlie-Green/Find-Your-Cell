@@ -159,6 +159,7 @@ class ScheduleModel private constructor(
                 val model = CellModel(
                     cell.jailName,
                     cell.number,
+                    cell.seats,
                     backColor,
                     numberBackColor(backColor),
                     textColor(backColor)

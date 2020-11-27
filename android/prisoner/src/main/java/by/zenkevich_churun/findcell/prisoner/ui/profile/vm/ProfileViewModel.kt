@@ -4,15 +4,15 @@ import android.content.Context
 import androidx.lifecycle.*
 import by.zenkevich_churun.findcell.core.entity.general.Contact
 import by.zenkevich_churun.findcell.core.entity.general.Prisoner
-import by.zenkevich_churun.findcell.prisoner.repo.PrisonerRepository
-import by.zenkevich_churun.findcell.prisoner.repo.SavePrisonerResult
+import by.zenkevich_churun.findcell.prisoner.repo.profile.ProfileRepository
+import by.zenkevich_churun.findcell.prisoner.repo.profile.SavePrisonerResult
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 
 class ProfileViewModel @Inject constructor(
-    private val repo: PrisonerRepository
+    private val repo: ProfileRepository
 ): ViewModel() {
 
     private val mldLoading = MutableLiveData<Boolean>().apply {
@@ -22,7 +22,7 @@ class ProfileViewModel @Inject constructor(
     private var lastPrisonerId = Prisoner.INVALID_ID
 
 
-    val prisonerLD: LiveData<Prisoner>
+    val prisonerLD: LiveData<out Prisoner>
         get() = repo.prisonerLD
 
     val addedContactTypesLD: LiveData< MutableList<Contact.Type> >

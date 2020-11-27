@@ -5,13 +5,13 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelStoreOwner
-import by.zenkevich_churun.findcell.prisoner.repo.PrisonerRepository
-import by.zenkevich_churun.findcell.prisoner.repo.SavePrisonerResult
+import by.zenkevich_churun.findcell.prisoner.repo.profile.ProfileRepository
+import by.zenkevich_churun.findcell.prisoner.repo.profile.SavePrisonerResult
 import javax.inject.Inject
 
 
 class PrisonerRootViewModel @Inject constructor(
-    private val repo: PrisonerRepository
+    private val repo: ProfileRepository
 ): ViewModel() {
 
     val savePrisonerResultLD: LiveData<SavePrisonerResult>
