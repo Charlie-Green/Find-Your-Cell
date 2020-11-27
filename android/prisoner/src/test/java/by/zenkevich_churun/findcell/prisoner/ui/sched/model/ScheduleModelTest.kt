@@ -75,11 +75,11 @@ class ScheduleModelTest {
         vararg cells: Cell ) {
 
         val day = where.dayAt(dayIndex)
-        val actualDayCount = day.cellData.count { it == '.' } - 1
+        val actualDayCount = day.dayData.count { it == '.' } - 1
         Assertions.assertEquals(cells.size, actualDayCount)
 
         for(cell in cells) {
-            Assertions.assertTrue( day.cellData.contains(cell.toString()) )
+            Assertions.assertTrue( day.dayData.contains(cell.toString()) )
         }
     }
 

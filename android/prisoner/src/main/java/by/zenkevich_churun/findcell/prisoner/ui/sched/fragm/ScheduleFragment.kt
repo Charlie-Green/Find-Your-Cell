@@ -3,6 +3,7 @@ package by.zenkevich_churun.findcell.prisoner.ui.sched.fragm
 import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.Fragment
+import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import by.zenkevich_churun.findcell.core.entity.sched.Schedule
 import by.zenkevich_churun.findcell.prisoner.R
@@ -56,18 +57,22 @@ class ScheduleFragment: Fragment(R.layout.schedule_fragm) {
             2
         )
 
-//        val schedule = ScheduleModel(
-//            Calendar.getInstance().apply { set(2020, Calendar.NOVEMBER, 20) },
-//            Calendar.getInstance().apply { set(2020, Calendar.DECEMBER, 13) },
-//            mutableListOf(cell1, cell2, cell3),
-//            mutableListOf(period1, period2, period3),
-//            mutableListOf()
-//        )
-//
-//        recvPeriods.apply {
-//            layoutManager = LinearLayoutManager(requireContext())
-//            adapter = SchedulePeriodsAdapter(schedule)
-//        }
+        val schedule = Schedule(
+            Calendar.getInstance().apply { set(2020, Calendar.NOVEMBER, 20) },
+            Calendar.getInstance().apply { set(2020, Calendar.DECEMBER, 26) },
+            listOf(cell1, cell2, cell3),
+            listOf(period1, period2, period3)
+        )
+        val scheduleModel = ScheduleModel.fromSchedule(schedule)
+
+
+        val layoutMan = LinearLayoutManager(requireContext())
+        val itemDecoration = DividerItemDecoration(requireContext(), layoutMan.orientation)
+        recvDays.apply {
+            layoutManager = layoutMan
+            addItemDecoration(itemDecoration)
+            adapter = ScheduleAdapter(scheduleModel)
+        }
     }
 
 //    private fun showCell(cell: CellModel) {

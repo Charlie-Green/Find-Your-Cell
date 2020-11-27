@@ -7,7 +7,7 @@ import java.util.*
 
 class ScheduleDayModel(
     val date: Calendar,
-    val cellData: String,
+    val dayData: String,
     val textColor: Int,
     val backColors: List<Int> ) {
 

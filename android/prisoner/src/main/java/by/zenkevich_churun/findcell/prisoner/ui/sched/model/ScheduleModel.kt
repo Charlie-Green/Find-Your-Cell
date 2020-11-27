@@ -5,7 +5,7 @@ import by.zenkevich_churun.findcell.core.entity.sched.Schedule
 import by.zenkevich_churun.findcell.core.entity.sched.SchedulePeriod
 import by.zenkevich_churun.findcell.core.util.std.CalendarUtil
 import java.text.SimpleDateFormat
-import java.util.*
+import java.util.Calendar
 import kotlin.collections.HashSet
 
 
@@ -20,6 +20,15 @@ class ScheduleModel private constructor(
     private val days: Array< HashSet<Int> > ) {
 
 
+    init {
+        CalendarUtil.setToMidnight(start)
+        CalendarUtil.setToMidnight(end)
+    }
+
+
+    val dayCount: Int
+        get() = CalendarUtil.daysDifference(start, end) + 1
+
     fun markDayWithCell(cellIndex: Int, day: Calendar) {
         CalendarUtil.setToMidnight(day)
         days[ dayIndex(day) ].add(cellIndex)
@@ -31,7 +40,7 @@ class ScheduleModel private constructor(
 
         return ScheduleDayModel(
             day,
-            cellData(day, dayData),
+            dayData(day, dayData),
             textColor(dayData),
             backColors(dayData)
         )
@@ -94,7 +103,7 @@ class ScheduleModel private constructor(
     }
 
 
-    private fun cellData(day: Calendar, dayData: HashSet<Int>): String {
+    private fun dayData(day: Calendar, dayData: HashSet<Int>): String {
         val sb = StringBuilder(12 + 16*dayData.size)
 
         sb.append(dateFormat.format(day.time))
@@ -128,16 +137,7 @@ class ScheduleModel private constructor(
 
     companion object {
         private val dateFormat = SimpleDateFormat("dd.MM.YYYY")
-        private val cellBackColors = LinkedList<Int>().apply {
-            add(0xff_f00000.toInt())
-            add(0xff_0000f0.toInt())
-            add(0xff_00b000.toInt())
-            add(0xff_00f0f0.toInt())
-            add(0xff_f0f000.toInt())
-            add(0xff_f000f0.toInt())
-            add(0xff_804000.toInt())
-            add(0xff_004080.toInt())
-        }
+        private val colorGen = ScheduleModuleColorGenerator()
 
 
         fun fromSchedule(schedule: Schedule): ScheduleModel {
@@ -155,7 +155,7 @@ class ScheduleModel private constructor(
             val models = mutableListOf<CellModel>()
 
             for(cell in cells) {
-                val backColor = nextCellBackColor
+                val backColor = colorGen.next
                 val model = CellModel(
                     cell.jailName,
                     cell.number,
@@ -192,16 +192,6 @@ class ScheduleModel private constructor(
             return days
         }
 
-
-        private val nextCellBackColor: Int
-            get() {
-                synchronized(cellBackColors) {
-                    val color = cellBackColors.pollFirst()!!
-                    cellBackColors.add(color)
-                    return color
-                }
-
-            }
 
         private fun numberBackColor(backColor: Int): Int {
             val r0 = (backColor and 0xff_ff0000.toInt()) shr 16

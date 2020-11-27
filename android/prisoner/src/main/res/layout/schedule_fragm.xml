@@ -12,7 +12,7 @@
         android:layout_height="@dimen/cells_recycler_height" />
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recvPeriods"
+        android:id="@+id/recvDays"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_weight="1"
