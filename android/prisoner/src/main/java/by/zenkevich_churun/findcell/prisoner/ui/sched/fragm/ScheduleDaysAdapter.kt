@@ -11,9 +11,9 @@ import by.zenkevich_churun.findcell.prisoner.util.draw.MultipleColorsDrawable
 import kotlinx.android.synthetic.main.schedule_day_item.view.*
 
 
-internal class ScheduleAdapter(
+internal class ScheduleDaysAdapter(
     private val schedule: ScheduleModel
-): RecyclerView.Adapter<ScheduleAdapter.DayViewHolder>() {
+): RecyclerView.Adapter<ScheduleDaysAdapter.DayViewHolder>() {
 
     class DayViewHolder(itemView: View): RecyclerView.ViewHolder(itemView) {
         private val frltRoot = itemView.frltRoot

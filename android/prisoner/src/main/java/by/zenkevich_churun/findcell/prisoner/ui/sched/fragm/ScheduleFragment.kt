@@ -6,6 +6,7 @@ import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import by.zenkevich_churun.findcell.core.entity.sched.Schedule
+import by.zenkevich_churun.findcell.core.util.recycler.autogrid.AutomaticGridLayoutManager
 import by.zenkevich_churun.findcell.prisoner.R
 import by.zenkevich_churun.findcell.prisoner.ui.sched.model.CellModel
 import by.zenkevich_churun.findcell.prisoner.ui.sched.model.ScheduleModel
@@ -65,22 +66,25 @@ class ScheduleFragment: Fragment(R.layout.schedule_fragm) {
         )
         val scheduleModel = ScheduleModel.fromSchedule(schedule)
 
-
         val layoutMan = LinearLayoutManager(requireContext())
         val itemDecoration = DividerItemDecoration(requireContext(), layoutMan.orientation)
         recvDays.apply {
             layoutManager = layoutMan
             addItemDecoration(itemDecoration)
-            adapter = ScheduleAdapter(scheduleModel)
+            adapter = ScheduleDaysAdapter(scheduleModel)
+        }
+
+
+        recvCells.apply {
+            layoutManager = AutomaticGridLayoutManager(
+                requireActivity(),
+                dimen(R.dimen.cellview_width)
+            )
+            adapter = CellsAdapter(scheduleModel.cells)
         }
     }
 
-//    private fun showCell(cell: CellModel) {
-//        cellView.apply {
-//            setBackgroundColor(cell.backColor)
-//            setNumberBackgroundColor(cell.numberBackColor)
-//            setTextColor(cell.textColor)
-//            show(cell)
-//        }
-//    }
+
+    private fun dimen(dimenRes: Int): Int
+        = resources.getDimensionPixelSize(dimenRes)
 }

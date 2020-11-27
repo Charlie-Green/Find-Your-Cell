@@ -194,9 +194,9 @@ class ScheduleModel private constructor(
 
 
         private fun numberBackColor(backColor: Int): Int {
-            val r0 = (backColor and 0xff_ff0000.toInt()) shr 16
-            val g0 = (backColor and 0xff_00ff00.toInt()) shr 8
-            val b0 = backColor and 0xff_0000ff.toInt()
+            val r0 = (backColor and 0x00_ff0000.toInt()) shr 16
+            val g0 = (backColor and 0x00_00ff00.toInt()) shr 8
+            val b0 = backColor and 0x00_0000ff.toInt()
 
             val r = r0/2
             val g = g0/2
