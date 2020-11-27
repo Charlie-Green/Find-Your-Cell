@@ -3,20 +3,26 @@ package by.zenkevich_churun.findcell.prisoner.ui.sched.fragm
 import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import by.zenkevich_churun.findcell.core.entity.sched.Schedule
+import by.zenkevich_churun.findcell.core.util.android.AndroidUtil
 import by.zenkevich_churun.findcell.core.util.recycler.autogrid.AutomaticGridLayoutManager
 import by.zenkevich_churun.findcell.prisoner.R
 import by.zenkevich_churun.findcell.prisoner.ui.sched.model.CellModel
 import by.zenkevich_churun.findcell.prisoner.ui.sched.model.ScheduleModel
 import by.zenkevich_churun.findcell.prisoner.ui.sched.model.SchedulePeriodModel
+import by.zenkevich_churun.findcell.prisoner.ui.sched.vm.ScheduleViewModel
 import kotlinx.android.synthetic.main.schedule_fragm.*
-import java.util.*
+import java.util.Calendar
 
 
 /** Allows viewing interactive editing of the user's arest [Schedule]. **/
 class ScheduleFragment: Fragment(R.layout.schedule_fragm) {
+
+    private lateinit var vm: ScheduleViewModel
+
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         val cell1 = CellModel(
@@ -64,24 +70,60 @@ class ScheduleFragment: Fragment(R.layout.schedule_fragm) {
             listOf(cell1, cell2, cell3),
             listOf(period1, period2, period3)
         )
+
         val scheduleModel = ScheduleModel.fromSchedule(schedule)
+
+
+        initFields()
+        initCellsAdapter()
+        initDaysAdapter()
+        displaySchedule(scheduleModel)
+
+        vm.selectedCellIndexLD.observe(viewLifecycleOwner, Observer { cellIndex ->
+            selectCell(cellIndex)
+        })
+
+        view.setOnClickListener {
+            vm.unselectCell()
+        }
+    }
+
+
+    private fun initFields() {
+        val appContext = requireContext().applicationContext
+        vm = ScheduleViewModel.get(appContext, this)
+    }
+
+    private fun initCellsAdapter() {
+        recvCells.layoutManager = AutomaticGridLayoutManager(
+            requireActivity(),
+            dimen(R.dimen.cellview_width)
+        )
+    }
+
+    private fun initDaysAdapter() {
+        val activitySize = AndroidUtil.activitySize(requireActivity())
+        recvDays.pivotX = 0.5f*activitySize.width
+        recvDays.pivotY = 0.5f*activitySize.height
 
         val layoutMan = LinearLayoutManager(requireContext())
         val itemDecoration = DividerItemDecoration(requireContext(), layoutMan.orientation)
         recvDays.apply {
             layoutManager = layoutMan
             addItemDecoration(itemDecoration)
-            adapter = ScheduleDaysAdapter(scheduleModel)
         }
+    }
 
+    private fun displaySchedule(scheduleModel: ScheduleModel) {
+        recvCells.adapter = CellsAdapter(scheduleModel.cells, vm)
+        recvDays.adapter = ScheduleDaysAdapter(scheduleModel)
+    }
 
-        recvCells.apply {
-            layoutManager = AutomaticGridLayoutManager(
-                requireActivity(),
-                dimen(R.dimen.cellview_width)
-            )
-            adapter = CellsAdapter(scheduleModel.cells)
-        }
+    private fun selectCell(index: Int) {
+        val adapter = recvCells.adapter as CellsAdapter
+        adapter.selectCellAt(index)
+        recvDays.scaleX = if(index < 0) 1.0f else 0.9f
+        recvDays.scaleY = if(index < 0) 1.0f else 0.9f
     }
 
 
