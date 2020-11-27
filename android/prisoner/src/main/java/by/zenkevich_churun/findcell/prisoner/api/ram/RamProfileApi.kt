@@ -1,41 +1,28 @@
 package by.zenkevich_churun.findcell.prisoner.api.ram
 
-import by.zenkevich_churun.findcell.core.entity.general.Contact
 import by.zenkevich_churun.findcell.core.entity.general.Prisoner
 import by.zenkevich_churun.findcell.core.api.LogInResponse
-import by.zenkevich_churun.findcell.core.api.PrisonerApi
+import by.zenkevich_churun.findcell.core.api.ProfileApi
+import by.zenkevich_churun.findcell.core.util.std.CollectionUtil
 import java.util.Random
 import javax.inject.Inject
 import javax.inject.Singleton
 
 
-/** Fake implementation of [PrisonerApi], which stores data in RAM. **/
+/** Fake implementation of [ProfileApi], which stores data in RAM. **/
 @Singleton
-class RamPrisonerApi @Inject constructor(): PrisonerApi {
+class RamProfileApi @Inject constructor(): ProfileApi {
 
     private val random = Random()
-    private val prisoners = mutableListOf(
-        PrisonerRamEntity(
-            Prisoner.INVALID_ID + 1,
-            "Charlie",
-            "charlz123",
-            "pass".toByteArray(Charsets.UTF_16),
-            listOf(
-                Contact.Phone("+1 23 456789"),
-                Contact.Telegram("@my_telegram")
-            ),
-            "This is a fake RAM user."
-        )
-    )
 
 
     override fun logIn(username: String, passwordHash: ByteArray): LogInResponse {
         simulateNetworkRequest(800L, 1500L)
 
-        val prisoner = synchronized(prisoners) {
-            prisoners.find { prisoner ->
+        val prisoner = synchronized(RamUserStorage) {
+            RamUserStorage.prisoners.find { prisoner ->
                 prisoner.username == username &&
-                    prisoner.passwordHash.contentEquals(passwordHash)
+                prisoner.passwordHash.contentEquals(passwordHash)
             }
         }
 
@@ -43,8 +30,8 @@ class RamPrisonerApi @Inject constructor(): PrisonerApi {
             return LogInResponse.Success(prisoner)
         }
 
-        val usernameExists = synchronized(this) {
-            prisoners.find { prisoner ->
+        val usernameExists = synchronized(RamUserStorage) {
+            RamUserStorage.prisoners.find { prisoner ->
                 prisoner.username == username
             } != null
         }
@@ -61,8 +48,8 @@ class RamPrisonerApi @Inject constructor(): PrisonerApi {
 
         simulateNetworkRequest(1000L, 1600L)
 
-        synchronized(prisoners) {
-            val lastPrisoner = prisoners.maxBy {
+        synchronized(RamUserStorage) {
+            val lastPrisoner = RamUserStorage.prisoners.maxBy {
                 it.id
             }
             val id = lastPrisoner?.id?.plus(1)
@@ -77,7 +64,7 @@ class RamPrisonerApi @Inject constructor(): PrisonerApi {
                 ""
             )
 
-            prisoners.add(newPrisoner)
+            RamUserStorage.prisoners.add(newPrisoner)
 
             return id
         }
@@ -86,11 +73,22 @@ class RamPrisonerApi @Inject constructor(): PrisonerApi {
     override fun update(prisoner: Prisoner, passwordHash: ByteArray) {
         simulateNetworkRequest(1000L, 1600L)
 
-        synchronized(prisoners) {
-            val index = prisoners.indexOfFirst { it.id == prisoner.id }
-            if(index !in prisoners.indices) {
+        synchronized(RamUserStorage) {
+            val index = RamUserStorage.prisoners.indexOfFirst {
+                it.id == prisoner.id && it.passwordHash.contentEquals(passwordHash)
+            }
+            if(index !in RamUserStorage.prisoners.indices) {
                 throw IllegalArgumentException("Prisoner ID ${prisoner.id} not found")
             }
+
+            RamUserStorage.prisoners[index] = PrisonerRamEntity(
+                prisoner.id,
+                prisoner.name,
+                RamUserStorage.prisoners[index].username,
+                passwordHash,
+                CollectionUtil.copyList(prisoner.contacts),
+                prisoner.info
+            )
         }
     }
 

@@ -1,7 +1,7 @@
 package by.zenkevich_churun.findcell.app.di
 
-import by.zenkevich_churun.findcell.core.api.PrisonerApi
-import by.zenkevich_churun.findcell.prisoner.api.ram.RamPrisonerApi
+import by.zenkevich_churun.findcell.core.api.ProfileApi
+import by.zenkevich_churun.findcell.prisoner.api.ram.RamProfileApi
 import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn
@@ -16,6 +16,6 @@ interface ApplicationModule {
     @Singleton
     @Binds
     fun prisonerApi(
-        impl: RamPrisonerApi
-    ): PrisonerApi
+        impl: RamProfileApi
+    ): ProfileApi
 }

@@ -5,7 +5,7 @@ import by.zenkevich_churun.findcell.core.entity.general.Prisoner
 
 /** Performs remote CRUD of [Prisoner] data.
   * All calls should be wrapped with try-catch. **/
-interface PrisonerApi {
+interface ProfileApi {
 
     /** Gets information about the user. **/
     fun logIn(username: String, passwordHash: ByteArray): LogInResponse

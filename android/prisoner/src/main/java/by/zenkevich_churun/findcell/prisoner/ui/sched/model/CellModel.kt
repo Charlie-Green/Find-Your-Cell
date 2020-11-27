@@ -7,13 +7,11 @@ import java.util.*
 class CellModel(
     override val jailName: String,
     override val number: Short,
+    override val seats: Short,
     val backColor: Int,
     val numberBackColor: Int,
     val textColor: Int
 ): Cell() {
-
-    override val seats: Short
-        get() = throw NotImplementedError("Number of seats doesn't matter.")
 
     override fun toString(): String
         = "$jailName, $number"

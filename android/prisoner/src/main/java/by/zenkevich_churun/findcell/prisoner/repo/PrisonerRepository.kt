@@ -4,7 +4,7 @@ import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import by.zenkevich_churun.findcell.core.api.LogInResponse
-import by.zenkevich_churun.findcell.core.api.PrisonerApi
+import by.zenkevich_churun.findcell.core.api.ProfileApi
 import by.zenkevich_churun.findcell.core.entity.general.Contact
 import by.zenkevich_churun.findcell.core.entity.general.Prisoner
 import java.io.IOException
@@ -14,7 +14,7 @@ import javax.inject.Singleton
 
 @Singleton
 class PrisonerRepository @Inject constructor(
-    private val api: PrisonerApi ) {
+    private val api: ProfileApi ) {
 
     private val mldPrisoner = MutableLiveData<Prisoner>().apply {
         value = object: Prisoner() {
