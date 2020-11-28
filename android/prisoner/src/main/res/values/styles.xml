@@ -23,4 +23,8 @@
         <item name="android:textColor">?backgroundColor</item>
     </style>
 
+    <style name="cell_fragm_label">
+        <item name="android:textSize">12sp</item>
+    </style>
+
 </resources>

@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="6dp" >
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        android:text="@string/specify_cell" />
+
+
+    <GridLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:columnCount="2" >
+
+        <TextView
+            style="@style/cell_fragm_label"
+            android:layout_gravity="center_vertical"
+            android:text="@string/jail_label" />
+
+        <Spinner
+            android:id="@+id/spJail"
+            android:layout_width="0dp"
+            android:layout_gravity="fill" />
+
+
+        <TextView
+            style="@style/cell_fragm_label"
+            android:layout_gravity="center_vertical"
+            android:layout_marginTop="@dimen/cellfragm_rows_distance"
+            android:text="@string/cell_number_label" />
+
+        <NumberPicker
+            android:id="@+id/numpCellNumber"
+            android:layout_width="0dp"
+            android:layout_height="86dp"
+            android:layout_gravity="fill"
+            android:layout_marginTop="@dimen/cellfragm_rows_distance" />
+
+    </GridLayout>
+
+
+    <Button
+        android:id="@+id/buSave"
+        android:layout_width="match_parent"
+        android:layout_height="42dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginBottom="8dp"
+        android:background="?colorPrimary"
+        android:textColor="?backgroundColor" />
+
+</LinearLayout>

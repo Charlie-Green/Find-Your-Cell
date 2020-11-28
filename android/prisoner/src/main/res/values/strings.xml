@@ -6,6 +6,9 @@
     <string name="add_cell">+1 камера</string>
     <string name="prisoner_name_label">Имя</string>
     <string name="prisoner_info_label">Любая другая информация:</string>
+    <string name="jail_label">Тюрьма:\u0020</string>
+    <string name="cell_number_label">№ камеры:\u0020</string>
+    <string name="specify_cell">Укажите камеру:</string>
 
     <!-- Notifications: -->
     <string name="save_prisoner_success_msg">Информация профиля сохранена.</string>

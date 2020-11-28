@@ -12,6 +12,7 @@ import by.zenkevich_churun.findcell.core.entity.sched.Schedule
 import by.zenkevich_churun.findcell.core.util.android.AndroidUtil
 import by.zenkevich_churun.findcell.core.util.recycler.autogrid.AutomaticGridLayoutManager
 import by.zenkevich_churun.findcell.prisoner.R
+import by.zenkevich_churun.findcell.prisoner.ui.cell.fragm.CellDialog
 import by.zenkevich_churun.findcell.prisoner.ui.sched.model.ScheduleModel
 import by.zenkevich_churun.findcell.prisoner.ui.sched.vm.ScheduleViewModel
 import kotlinx.android.synthetic.main.schedule_fragm.*
@@ -49,6 +50,9 @@ class ScheduleFragment: Fragment(R.layout.schedule_fragm) {
 
         view.setOnClickListener {
             vm.unselectCell()
+        }
+        buAddCell.setOnClickListener {
+            addCell()
         }
         buSave.setOnClickListener {
             vm.saveSchedule()
@@ -107,6 +111,11 @@ class ScheduleFragment: Fragment(R.layout.schedule_fragm) {
             }.setOnDismissListener {
                 vm.notifyErrorConsumed()
             }.show()
+    }
+
+
+    private fun addCell() {
+        CellDialog().show(parentFragmentManager, null)
     }
 
 
