@@ -9,5 +9,7 @@
     <!-- Notifications: -->
     <string name="save_prisoner_success_msg">Информация профиля сохранена.</string>
     <string name="save_prisoner_error_msg">Не удалось сохранить информацию профиля.</string>
+    <string name="get_schedule_failed_msg">Не удалось получить Ваше расписание.</string>
+    <string name="update_schedule_failed_msg">Не удалось сохранить расписание.</string>
 
 </resources>

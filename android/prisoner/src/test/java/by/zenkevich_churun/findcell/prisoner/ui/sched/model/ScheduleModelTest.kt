@@ -34,7 +34,7 @@ class ScheduleModelTest {
             )
         )
 
-        val model = ScheduleModel.fromSchedule(schedule)
+        val model = ScheduleModel.from(schedule)
 
         assertDay(model, 0, cell2)
         assertDay(model, 3, cell1, cell2)
@@ -51,7 +51,7 @@ class ScheduleModelTest {
             listOf()
         )
 
-        val model = ScheduleModel.fromSchedule(schedule)
+        val model = ScheduleModel.from(schedule)
         model.markDayWithCell(0, calendar(2020, 11, 19))
         model.markDayWithCell(0, calendar(2020, 11, 21))
         model.markDayWithCell(0, calendar(2020, 11, 22))

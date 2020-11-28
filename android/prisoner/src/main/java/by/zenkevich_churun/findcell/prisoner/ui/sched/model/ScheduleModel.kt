@@ -140,7 +140,7 @@ class ScheduleModel private constructor(
         private val colorGen = ScheduleModuleColorGenerator()
 
 
-        fun fromSchedule(schedule: Schedule): ScheduleModel {
+        fun from(schedule: Schedule): ScheduleModel {
             val dayCount = CalendarUtil.daysDifference(schedule.start, schedule.end) + 1
             return ScheduleModel(
                 schedule.start,

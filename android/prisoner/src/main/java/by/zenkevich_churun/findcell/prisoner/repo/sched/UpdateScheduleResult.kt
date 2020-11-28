@@ -7,5 +7,5 @@ sealed class UpdateScheduleResult {
     ): UpdateScheduleResult()
 
     object Success: UpdateScheduleResult()
-    object NoInternet: UpdateScheduleResult()
+    object NotAuthorized: UpdateScheduleResult()
 }

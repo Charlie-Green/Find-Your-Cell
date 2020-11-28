@@ -1,6 +1,7 @@
 package by.zenkevich_churun.findcell.prisoner.repo.sched
 
 import by.zenkevich_churun.findcell.core.entity.sched.Schedule
+import java.io.IOException
 
 
 sealed class GetScheduleResult {
@@ -9,8 +10,8 @@ sealed class GetScheduleResult {
     ): GetScheduleResult()
 
     class Failed(
-        val exc: Exception
+        val exc: IOException
     ): GetScheduleResult()
 
-    object NoInternet: GetScheduleResult()
+    object NotAuthorized: GetScheduleResult()
 }
