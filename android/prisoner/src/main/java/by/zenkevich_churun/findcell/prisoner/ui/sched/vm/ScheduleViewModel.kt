@@ -18,15 +18,18 @@ import javax.inject.Inject
 
 class ScheduleViewModel @Inject constructor(
     @ApplicationContext appContext: Context,
-    private val repo: ScheduleRepository,
-    private val rootVM: PrisonerRootViewModel
+    private val repo: ScheduleRepository
 ): ViewModel() {
 
+    // TODO: Replace with some common storage.
+    private val rootVM: PrisonerRootViewModel
     private val mapping = ScheduleVMMapping(appContext)
+
     private val mldSelectedCellIndex = MutableLiveData<Int>()
     private val mldSchedule = MutableLiveData<ScheduleModel>()
     private val mldError = MutableLiveData<String?>()
     private val mldChanges = MutableLiveData<Boolean>()
+    private val mldLoading = MutableLiveData<Boolean>()
 
 
     init {
@@ -50,6 +53,9 @@ class ScheduleViewModel @Inject constructor(
     val unsavedChangesLD: LiveData<Boolean>
         get() = mldChanges
 
+    val loadingLD: LiveData<Boolean>
+        get() = mldLoading
+
 
     fun selectCell(cellIndex: Int) {
         mldSelectedCellIndex.value = cellIndex
@@ -70,9 +76,12 @@ class ScheduleViewModel @Inject constructor(
 
     fun saveSchedule() {
         val scheduleModel = mldSchedule.value ?: return
+
+        mldLoading.value = true
         viewModelScope.launch(Dispatchers.IO) {
             val schedule = scheduleModel.toSchedule()
             updateSchedule(schedule)
+            mldLoading.postValue(false)
         }
     }
 
@@ -81,11 +90,12 @@ class ScheduleViewModel @Inject constructor(
         netMan: ConnectivityManager,
         callback: ConnectivityManager.NetworkCallback ) {
 
+        mldLoading.postValue(true)
+
         viewModelScope.launch(Dispatchers.IO) {
             when(val result = repo.getSchedule()) {
                 is GetScheduleResult.Success -> {
                     netMan.unregisterNetworkCallback(callback)
-                    mldChanges.postValue(false)
 
                     val scheduleModel = ScheduleModel.from(result.schedule)
                     mldSchedule.postValue(scheduleModel)
@@ -95,6 +105,8 @@ class ScheduleViewModel @Inject constructor(
                     mldError.postValue(mapping.getFailedMessage)
                 }
             }
+
+            mldLoading.postValue(false)
         }
     }
 
@@ -103,6 +115,7 @@ class ScheduleViewModel @Inject constructor(
 
         if(result is UpdateScheduleResult.Success) {
             rootVM.submitUpdateScheduleSuccess()
+            mldChanges.postValue(false)
         } else {
             mldError.postValue(mapping.updateFailedMessage)
         }

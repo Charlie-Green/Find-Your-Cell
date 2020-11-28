@@ -6,10 +6,14 @@ import android.net.*
 import android.os.Build
 import android.util.DisplayMetrics
 import android.util.Size
+import android.util.TypedValue
 import android.view.WindowInsets
 
 
 object AndroidUtil {
+    private val typval by lazy { TypedValue() }
+
+
     fun activitySize(activity: Activity): Size {
         if(Build.VERSION.SDK_INT < 29) {
             val metrics = DisplayMetrics()
@@ -46,5 +50,11 @@ object AndroidUtil {
         }
 
         connectMan.registerNetworkCallback(request, callback)
+    }
+
+
+    fun themeColor(appContext: Context, attrRes: Int): Int {
+        appContext.theme.resolveAttribute(attrRes, typval, true)
+        return typval.data
     }
 }

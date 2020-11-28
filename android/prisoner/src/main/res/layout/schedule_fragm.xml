@@ -37,4 +37,13 @@
         android:tint="#f0f0f0"
         android:visibility="gone" />
 
+
+    <ProgressBar
+        android:id="@+id/prBar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:theme="@style/primary_tinted_progressbar_theme"
+        android:visibility="gone" />
+
 </FrameLayout>

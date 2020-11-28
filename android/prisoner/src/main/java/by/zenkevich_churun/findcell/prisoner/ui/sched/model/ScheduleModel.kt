@@ -31,7 +31,13 @@ class ScheduleModel private constructor(
 
     fun markDayWithCell(cellIndex: Int, day: Calendar) {
         CalendarUtil.setToMidnight(day)
-        days[ dayIndex(day) ].add(cellIndex)
+
+        val cellIndices = days[ dayIndex(day) ]
+        if(cellIndices.contains(cellIndex)) {
+            cellIndices.remove(cellIndex)
+        } else {
+            cellIndices.add(cellIndex)
+        }
     }
 
     fun dayAt(index: Int): ScheduleDayModel {

@@ -21,6 +21,7 @@ import kotlinx.android.synthetic.main.schedule_fragm.*
 class ScheduleFragment: Fragment(R.layout.schedule_fragm) {
 
     private lateinit var vm: ScheduleViewModel
+    private var selectedCellIndex = -1
 
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -29,16 +30,21 @@ class ScheduleFragment: Fragment(R.layout.schedule_fragm) {
         initDaysAdapter()
 
         vm.selectedCellIndexLD.observe(viewLifecycleOwner, Observer { cellIndex ->
-            selectCell(cellIndex)
+            selectedCellIndex = cellIndex
+            selectCell()
         })
         vm.scheduleLD.observe(viewLifecycleOwner, Observer { schedule ->
             displaySchedule(schedule)
+            selectCell()
         })
         vm.errorLD.observe(viewLifecycleOwner, Observer { message ->
             message?.also { notifyError(it) }
         })
         vm.unsavedChangesLD.observe(viewLifecycleOwner, Observer { thereAreChanges ->
             fabSave.isVisible = thereAreChanges
+        })
+        vm.loadingLD.observe(viewLifecycleOwner, Observer { isLoading ->
+            prBar.isVisible = isLoading
         })
 
         view.setOnClickListener {
@@ -78,14 +84,18 @@ class ScheduleFragment: Fragment(R.layout.schedule_fragm) {
 
     private fun displaySchedule(scheduleModel: ScheduleModel) {
         recvCells.adapter = CellsAdapter(scheduleModel.cells, vm)
-        recvDays.adapter = ScheduleDaysAdapter(scheduleModel)
+        recvDays.adapter = ScheduleDaysAdapter(scheduleModel, vm)
     }
 
-    private fun selectCell(index: Int) {
-        val adapter = recvCells.adapter as CellsAdapter
-        adapter.selectCellAt(index)
-        recvDays.scaleX = if(index < 0) 1.0f else 0.9f
-        recvDays.scaleY = if(index < 0) 1.0f else 0.9f
+    private fun selectCell() {
+        val adapter1 = recvCells.adapter as CellsAdapter? ?: return
+        val adapter2 = recvDays.adapter as ScheduleDaysAdapter? ?: return
+        val scale = if(selectedCellIndex < 0) 1.0f else 0.9f
+
+        adapter1.selectCellAt(selectedCellIndex)
+        adapter2.selectedCellIndex = selectedCellIndex
+        recvDays.scaleX = scale
+        recvDays.scaleY = scale
     }
 
     private fun notifyError(message: String) {
