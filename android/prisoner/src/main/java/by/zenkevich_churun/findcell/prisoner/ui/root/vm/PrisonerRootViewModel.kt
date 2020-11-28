@@ -5,32 +5,28 @@ import androidx.lifecycle.*
 import by.zenkevich_churun.findcell.prisoner.repo.profile.ProfileRepository
 import by.zenkevich_churun.findcell.prisoner.repo.profile.SavePrisonerResult
 import by.zenkevich_churun.findcell.prisoner.repo.sched.UpdateScheduleResult
+import by.zenkevich_churun.findcell.prisoner.ui.common.vm.PrisonerLiveDatasStorage
 import javax.inject.Inject
 
 
 class PrisonerRootViewModel @Inject constructor(
-    private val repo: ProfileRepository
+    private val repo: ProfileRepository,
+    private val store: PrisonerLiveDatasStorage
 ): ViewModel() {
-
-    private val mldUpdateScheduleResult = MutableLiveData<UpdateScheduleResult.Success?>()
-
 
     val savePrisonerResultLD: LiveData<SavePrisonerResult>
         get() = repo.savePrisonerResultLD
 
     val updateScheduleResultLD: LiveData<UpdateScheduleResult.Success?>
-        get() = mldUpdateScheduleResult
+        get() = store.updateScheduleResultLD
+
 
     fun notifySaveResultConsumed() {
         repo.notifySaveResultConsumed()
     }
 
     fun notifyUpdateScheduleResultConsumed() {
-        mldUpdateScheduleResult.postValue(null)
-    }
-
-    fun submitUpdateScheduleSuccess() {
-        mldUpdateScheduleResult.postValue(UpdateScheduleResult.Success)
+        store.notifyUpdateScheduleResultConsumed()
     }
 
 

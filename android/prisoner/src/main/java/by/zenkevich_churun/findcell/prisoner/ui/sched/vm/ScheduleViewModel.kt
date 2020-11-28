@@ -8,7 +8,7 @@ import by.zenkevich_churun.findcell.core.util.android.AndroidUtil
 import by.zenkevich_churun.findcell.prisoner.repo.sched.GetScheduleResult
 import by.zenkevich_churun.findcell.prisoner.repo.sched.ScheduleRepository
 import by.zenkevich_churun.findcell.prisoner.repo.sched.UpdateScheduleResult
-import by.zenkevich_churun.findcell.prisoner.ui.root.vm.PrisonerRootViewModel
+import by.zenkevich_churun.findcell.prisoner.ui.common.vm.PrisonerLiveDatasStorage
 import by.zenkevich_churun.findcell.prisoner.ui.sched.model.ScheduleModel
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.Dispatchers
@@ -18,11 +18,10 @@ import javax.inject.Inject
 
 class ScheduleViewModel @Inject constructor(
     @ApplicationContext appContext: Context,
-    private val repo: ScheduleRepository
+    private val repo: ScheduleRepository,
+    private val store: PrisonerLiveDatasStorage
 ): ViewModel() {
 
-    // TODO: Replace with some common storage.
-    private val rootVM: PrisonerRootViewModel
     private val mapping = ScheduleVMMapping(appContext)
 
     private val mldSelectedCellIndex = MutableLiveData<Int>()
@@ -114,7 +113,7 @@ class ScheduleViewModel @Inject constructor(
         val result = repo.updateSchedule(schedule)
 
         if(result is UpdateScheduleResult.Success) {
-            rootVM.submitUpdateScheduleSuccess()
+            store.submitUpdateScheduleSuccess()
             mldChanges.postValue(false)
         } else {
             mldError.postValue(mapping.updateFailedMessage)
