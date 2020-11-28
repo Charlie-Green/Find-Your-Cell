@@ -3,9 +3,12 @@ package by.zenkevich_churun.findcell.prisoner.ui.sched.vm
 import android.content.Context
 import android.net.ConnectivityManager
 import androidx.lifecycle.*
+import by.zenkevich_churun.findcell.core.entity.sched.Schedule
 import by.zenkevich_churun.findcell.core.util.android.AndroidUtil
 import by.zenkevich_churun.findcell.prisoner.repo.sched.GetScheduleResult
 import by.zenkevich_churun.findcell.prisoner.repo.sched.ScheduleRepository
+import by.zenkevich_churun.findcell.prisoner.repo.sched.UpdateScheduleResult
+import by.zenkevich_churun.findcell.prisoner.ui.root.vm.PrisonerRootViewModel
 import by.zenkevich_churun.findcell.prisoner.ui.sched.model.ScheduleModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -14,7 +17,8 @@ import javax.inject.Inject
 
 class ScheduleViewModel @Inject constructor(
     appContext: Context,
-    private val repo: ScheduleRepository
+    private val repo: ScheduleRepository,
+    private val rootVM: PrisonerRootViewModel
 ): ViewModel() {
 
     private val mapping = ScheduleVMMapping(appContext)
@@ -54,9 +58,18 @@ class ScheduleViewModel @Inject constructor(
         mldError.value = null
     }
 
+    fun saveSchedule() {
+        val scheduleModel = mldSchedule.value ?: return
+        viewModelScope.launch(Dispatchers.IO) {
+            val schedule = scheduleModel.toSchedule()
+            updateSchedule(schedule)
+        }
+    }
+
 
     private fun getSchedule(
-        netMan: ConnectivityManager, callback: ConnectivityManager.NetworkCallback ) {
+        netMan: ConnectivityManager,
+        callback: ConnectivityManager.NetworkCallback ) {
 
         viewModelScope.launch(Dispatchers.IO) {
             when(val result = repo.getSchedule()) {
@@ -70,6 +83,16 @@ class ScheduleViewModel @Inject constructor(
                     mldError.postValue(mapping.getFailedMessage)
                 }
             }
+        }
+    }
+
+    private fun updateSchedule(schedule: Schedule) {
+        val result = repo.updateSchedule(schedule)
+
+        if(result is UpdateScheduleResult.Success) {
+            rootVM.submitUpdateScheduleResult(result)
+        } else {
+            mldError.postValue(mapping.updateFailedMessage)
         }
     }
 
