@@ -10,13 +10,14 @@ import by.zenkevich_churun.findcell.prisoner.repo.sched.ScheduleRepository
 import by.zenkevich_churun.findcell.prisoner.repo.sched.UpdateScheduleResult
 import by.zenkevich_churun.findcell.prisoner.ui.root.vm.PrisonerRootViewModel
 import by.zenkevich_churun.findcell.prisoner.ui.sched.model.ScheduleModel
+import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 
 class ScheduleViewModel @Inject constructor(
-    appContext: Context,
+    @ApplicationContext appContext: Context,
     private val repo: ScheduleRepository,
     private val rootVM: PrisonerRootViewModel
 ): ViewModel() {
@@ -25,6 +26,7 @@ class ScheduleViewModel @Inject constructor(
     private val mldSelectedCellIndex = MutableLiveData<Int>()
     private val mldSchedule = MutableLiveData<ScheduleModel>()
     private val mldError = MutableLiveData<String?>()
+    private val mldChanges = MutableLiveData<Boolean>()
 
 
     init {
@@ -45,6 +47,9 @@ class ScheduleViewModel @Inject constructor(
     val errorLD: LiveData<String?>
         get() = mldError
 
+    val unsavedChangesLD: LiveData<Boolean>
+        get() = mldChanges
+
 
     fun selectCell(cellIndex: Int) {
         mldSelectedCellIndex.value = cellIndex
@@ -57,6 +62,11 @@ class ScheduleViewModel @Inject constructor(
     fun notifyErrorConsumed() {
         mldError.value = null
     }
+
+    fun notifyScheduleChanged() {
+        mldChanges.value = true
+    }
+
 
     fun saveSchedule() {
         val scheduleModel = mldSchedule.value ?: return
@@ -74,9 +84,11 @@ class ScheduleViewModel @Inject constructor(
         viewModelScope.launch(Dispatchers.IO) {
             when(val result = repo.getSchedule()) {
                 is GetScheduleResult.Success -> {
+                    netMan.unregisterNetworkCallback(callback)
+                    mldChanges.postValue(false)
+
                     val scheduleModel = ScheduleModel.from(result.schedule)
                     mldSchedule.postValue(scheduleModel)
-                    netMan.unregisterNetworkCallback(callback)
                 }
 
                 is GetScheduleResult.Failed -> {
@@ -90,7 +102,7 @@ class ScheduleViewModel @Inject constructor(
         val result = repo.updateSchedule(schedule)
 
         if(result is UpdateScheduleResult.Success) {
-            rootVM.submitUpdateScheduleResult(result)
+            rootVM.submitUpdateScheduleSuccess()
         } else {
             mldError.postValue(mapping.updateFailedMessage)
         }

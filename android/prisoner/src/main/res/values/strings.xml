@@ -11,5 +11,6 @@
     <string name="save_prisoner_error_msg">Не удалось сохранить информацию профиля.</string>
     <string name="get_schedule_failed_msg">Не удалось получить Ваше расписание.</string>
     <string name="update_schedule_failed_msg">Не удалось сохранить расписание.</string>
+    <string name="update_schedule_success_msg">Расписание сохранено.</string>
 
 </resources>

@@ -1,6 +1,5 @@
 package by.zenkevich_churun.findcell.prisoner.ui.sched.fragm
 
-import android.util.Log
 import android.view.ViewGroup
 import android.view.ViewGroup.LayoutParams.MATCH_PARENT
 import androidx.core.view.setMargins
@@ -86,7 +85,6 @@ internal class CellsAdapter(
 
 
     fun selectCellAt(index: Int) {
-        Log.v("CharlieDebug", "selectCellAt($index)")
         if(positionSelected != index) {
             positionSelected = index
             notifyItemRangeChanged(0, itemCount, PAYLOAD_SELECTED_CELL_CHANGED)

@@ -3,6 +3,7 @@ package by.zenkevich_churun.findcell.prisoner.api.ram
 import by.zenkevich_churun.findcell.core.api.ScheduleApi
 import by.zenkevich_churun.findcell.core.entity.sched.Schedule
 import by.zenkevich_churun.findcell.core.util.std.CollectionUtil
+import java.io.IOException
 import java.util.Calendar
 import java.util.Random
 import javax.inject.Inject

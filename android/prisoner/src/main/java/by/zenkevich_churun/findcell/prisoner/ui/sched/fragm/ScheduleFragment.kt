@@ -2,6 +2,8 @@ package by.zenkevich_churun.findcell.prisoner.ui.sched.fragm
 
 import android.os.Bundle
 import android.view.View
+import androidx.appcompat.app.AlertDialog
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.DividerItemDecoration
@@ -29,9 +31,21 @@ class ScheduleFragment: Fragment(R.layout.schedule_fragm) {
         vm.selectedCellIndexLD.observe(viewLifecycleOwner, Observer { cellIndex ->
             selectCell(cellIndex)
         })
+        vm.scheduleLD.observe(viewLifecycleOwner, Observer { schedule ->
+            displaySchedule(schedule)
+        })
+        vm.errorLD.observe(viewLifecycleOwner, Observer { message ->
+            message?.also { notifyError(it) }
+        })
+        vm.unsavedChangesLD.observe(viewLifecycleOwner, Observer { thereAreChanges ->
+            fabSave.isVisible = thereAreChanges
+        })
 
         view.setOnClickListener {
             vm.unselectCell()
+        }
+        fabSave.setOnClickListener {
+            vm.saveSchedule()
         }
     }
 
@@ -61,6 +75,7 @@ class ScheduleFragment: Fragment(R.layout.schedule_fragm) {
         }
     }
 
+
     private fun displaySchedule(scheduleModel: ScheduleModel) {
         recvCells.adapter = CellsAdapter(scheduleModel.cells, vm)
         recvDays.adapter = ScheduleDaysAdapter(scheduleModel)
@@ -71,6 +86,17 @@ class ScheduleFragment: Fragment(R.layout.schedule_fragm) {
         adapter.selectCellAt(index)
         recvDays.scaleX = if(index < 0) 1.0f else 0.9f
         recvDays.scaleY = if(index < 0) 1.0f else 0.9f
+    }
+
+    private fun notifyError(message: String) {
+        AlertDialog.Builder(requireContext())
+            .setTitle(R.string.error_title)
+            .setMessage(message)
+            .setPositiveButton(R.string.ok) { dialog, _ ->
+                dialog.dismiss()
+            }.setOnDismissListener {
+                vm.notifyErrorConsumed()
+            }.show()
     }
 
 

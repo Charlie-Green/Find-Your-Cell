@@ -12,13 +12,13 @@ class PrisonerRootViewModel @Inject constructor(
     private val repo: ProfileRepository
 ): ViewModel() {
 
-    private val mldUpdateScheduleResult = MutableLiveData<UpdateScheduleResult?>()
+    private val mldUpdateScheduleResult = MutableLiveData<UpdateScheduleResult.Success?>()
 
 
     val savePrisonerResultLD: LiveData<SavePrisonerResult>
         get() = repo.savePrisonerResultLD
 
-    val updateScheduleResultLD: LiveData<UpdateScheduleResult?>
+    val updateScheduleResultLD: LiveData<UpdateScheduleResult.Success?>
         get() = mldUpdateScheduleResult
 
     fun notifySaveResultConsumed() {
@@ -29,8 +29,8 @@ class PrisonerRootViewModel @Inject constructor(
         mldUpdateScheduleResult.postValue(null)
     }
 
-    fun submitUpdateScheduleResult(result: UpdateScheduleResult) {
-        mldUpdateScheduleResult.postValue(result)
+    fun submitUpdateScheduleSuccess() {
+        mldUpdateScheduleResult.postValue(UpdateScheduleResult.Success)
     }
 
 

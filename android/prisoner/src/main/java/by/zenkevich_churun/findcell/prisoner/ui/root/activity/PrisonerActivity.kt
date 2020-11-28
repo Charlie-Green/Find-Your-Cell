@@ -23,17 +23,34 @@ class PrisonerActivity: AppCompatActivity(R.layout.prisoner_activity) {
         super.onCreate(savedInstanceState)
 
         val vm = PrisonerRootViewModel.get(applicationContext, this)
+
         vm.savePrisonerResultLD.observe(this, Observer { result ->
             if(result == SavePrisonerResult.SUCCESS) {
-                notifySaveSuccess()
+                notifySavePrisonerSuccess()
                 vm.notifySaveResultConsumed()
+            }
+        })
+
+        vm.updateScheduleResultLD.observe(this, Observer { result ->
+            if(result != null) {
+                notifyUpdateScheduleSuccess()
+                vm.notifyUpdateScheduleResultConsumed()
             }
         })
     }
 
 
-    private fun notifySaveSuccess() {
-        Snackbar.make(cdltRoot, R.string.save_prisoner_success_msg, 2000).apply {
+    private fun notifySavePrisonerSuccess() {
+        notifySuccess(R.string.save_prisoner_success_msg)
+    }
+
+    private fun notifyUpdateScheduleSuccess() {
+        notifySuccess(R.string.update_schedule_success_msg)
+    }
+
+
+    private fun notifySuccess(messageRes: Int) {
+        Snackbar.make(cdltRoot, messageRes, 2000).apply {
             setTextColor(Color.WHITE)
             show()
         }
