@@ -1,10 +1,11 @@
-package by.zenkevich_churun.findcell.prisoner.api.ram
+package by.zenkevich_churun.findcell.prisoner.api.ram.common
 
 import by.zenkevich_churun.findcell.core.entity.general.Contact
 import by.zenkevich_churun.findcell.core.entity.general.Prisoner
+import by.zenkevich_churun.findcell.prisoner.api.ram.profile.PrisonerRamEntity
 
 
-internal object RamUserStorage {
+object RamUserStorage {
     val prisoners = mutableListOf(
         PrisonerRamEntity(
             Prisoner.INVALID_ID + 1,

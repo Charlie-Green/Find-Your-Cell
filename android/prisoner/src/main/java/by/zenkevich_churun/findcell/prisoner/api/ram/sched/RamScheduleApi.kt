@@ -1,9 +1,10 @@
-package by.zenkevich_churun.findcell.prisoner.api.ram
+package by.zenkevich_churun.findcell.prisoner.api.ram.sched
 
 import by.zenkevich_churun.findcell.core.api.ScheduleApi
 import by.zenkevich_churun.findcell.core.entity.sched.Schedule
 import by.zenkevich_churun.findcell.core.util.std.CollectionUtil
-import java.io.IOException
+import by.zenkevich_churun.findcell.prisoner.api.ram.profile.RamCell
+import by.zenkevich_churun.findcell.prisoner.api.ram.common.RamUserStorage
 import java.util.Calendar
 import java.util.Random
 import javax.inject.Inject
@@ -39,27 +40,45 @@ class RamScheduleApi @Inject constructor(): ScheduleApi {
 
 
     private fun createSchedule(): Schedule {
-        val cell1 = RamCell("Окрестина ЦИП", 789, 4)
-        val cell2 = RamCell("Жодино", 123, 10)
-        val cell3 = RamCell("Барановичи", 43, 8)
+        val cell1 =
+            RamCell(
+                "Окрестина ЦИП",
+                789,
+                4
+            )
+        val cell2 =
+            RamCell(
+                "Жодино",
+                123,
+                10
+            )
+        val cell3 =
+            RamCell(
+                "Барановичи",
+                43,
+                8
+            )
 
-        val period1 = RamSchedulePeriod(
-            Calendar.getInstance().apply { set(2020, Calendar.NOVEMBER, 20) },
-            Calendar.getInstance().apply { set(2020, Calendar.NOVEMBER, 29) },
-            0
-        )
+        val period1 =
+            RamSchedulePeriod(
+                Calendar.getInstance().apply { set(2020, Calendar.NOVEMBER, 20) },
+                Calendar.getInstance().apply { set(2020, Calendar.NOVEMBER, 29) },
+                0
+            )
 
-        val period2 = RamSchedulePeriod(
-            Calendar.getInstance().apply { set(2020, Calendar.NOVEMBER, 29) },
-            Calendar.getInstance().apply { set(2020, Calendar.DECEMBER, 13) },
-            1
-        )
+        val period2 =
+            RamSchedulePeriod(
+                Calendar.getInstance().apply { set(2020, Calendar.NOVEMBER, 29) },
+                Calendar.getInstance().apply { set(2020, Calendar.DECEMBER, 13) },
+                1
+            )
 
-        val period3 = RamSchedulePeriod(
-            Calendar.getInstance().apply { set(2020, Calendar.DECEMBER, 13) },
-            Calendar.getInstance().apply { set(2020, Calendar.DECEMBER, 26) },
-            2
-        )
+        val period3 =
+            RamSchedulePeriod(
+                Calendar.getInstance().apply { set(2020, Calendar.DECEMBER, 13) },
+                Calendar.getInstance().apply { set(2020, Calendar.DECEMBER, 26) },
+                2
+            )
 
         return Schedule(
             Calendar.getInstance().apply { set(2020, Calendar.NOVEMBER, 20) },

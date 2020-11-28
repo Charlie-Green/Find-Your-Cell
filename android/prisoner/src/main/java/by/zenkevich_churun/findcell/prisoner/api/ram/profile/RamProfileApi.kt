@@ -1,9 +1,10 @@
-package by.zenkevich_churun.findcell.prisoner.api.ram
+package by.zenkevich_churun.findcell.prisoner.api.ram.profile
 
 import by.zenkevich_churun.findcell.core.entity.general.Prisoner
 import by.zenkevich_churun.findcell.core.api.LogInResponse
 import by.zenkevich_churun.findcell.core.api.ProfileApi
 import by.zenkevich_churun.findcell.core.util.std.CollectionUtil
+import by.zenkevich_churun.findcell.prisoner.api.ram.common.RamUserStorage
 import java.util.Random
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -55,14 +56,15 @@ class RamProfileApi @Inject constructor(): ProfileApi {
             val id = lastPrisoner?.id?.plus(1)
                 ?: Prisoner.INVALID_ID + 1
 
-            val newPrisoner = PrisonerRamEntity(
-                id,
-                name,
-                username,
-                passwordHash,
-                listOf(),
-                ""
-            )
+            val newPrisoner =
+                PrisonerRamEntity(
+                    id,
+                    name,
+                    username,
+                    passwordHash,
+                    listOf(),
+                    ""
+                )
 
             RamUserStorage.prisoners.add(newPrisoner)
 
@@ -81,14 +83,15 @@ class RamProfileApi @Inject constructor(): ProfileApi {
                 throw IllegalArgumentException("Prisoner ID ${prisoner.id} not found")
             }
 
-            RamUserStorage.prisoners[index] = PrisonerRamEntity(
-                prisoner.id,
-                prisoner.name,
-                RamUserStorage.prisoners[index].username,
-                passwordHash,
-                CollectionUtil.copyList(prisoner.contacts),
-                prisoner.info
-            )
+            RamUserStorage.prisoners[index] =
+                PrisonerRamEntity(
+                    prisoner.id,
+                    prisoner.name,
+                    RamUserStorage.prisoners[index].username,
+                    passwordHash,
+                    CollectionUtil.copyList(prisoner.contacts),
+                    prisoner.info
+                )
         }
     }
 

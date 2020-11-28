@@ -12,4 +12,15 @@ class JailEntity(
 
     @ColumnInfo(name = "name")
     override val name: String
-): Jail()
+): Jail() {
+
+    companion object {
+
+        fun from(jail: Jail): JailEntity {
+            if(jail is JailEntity) {
+                return jail
+            }
+            return JailEntity(jail.id, jail.name)
+        }
+    }
+}

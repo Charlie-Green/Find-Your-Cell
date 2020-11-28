@@ -1,10 +1,10 @@
-package by.zenkevich_churun.findcell.prisoner.api.ram
+package by.zenkevich_churun.findcell.prisoner.api.ram.sched
 
 import by.zenkevich_churun.findcell.core.entity.sched.SchedulePeriod
 import java.util.*
 
 
-internal class RamSchedulePeriod(
+class RamSchedulePeriod(
     override val startDate: Calendar,
     override val endDate: Calendar,
     override val cellIndex: Int

@@ -1,4 +1,4 @@
-package by.zenkevich_churun.findcell.prisoner.api.ram
+package by.zenkevich_churun.findcell.prisoner.api.ram.profile
 
 import by.zenkevich_churun.findcell.core.entity.general.Cell
 

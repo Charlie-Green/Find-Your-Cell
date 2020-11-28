@@ -1,13 +1,9 @@
 package by.zenkevich_churun.findcell.prisoner.db
 
 import android.content.Context
-import androidx.room.Database
-import androidx.room.Room
-import androidx.room.RoomDatabase
-import by.zenkevich_churun.findcell.prisoner.db.dao.CellsDao
-import by.zenkevich_churun.findcell.prisoner.db.dao.JailsDao
-import by.zenkevich_churun.findcell.prisoner.db.entity.CellEntity
-import by.zenkevich_churun.findcell.prisoner.db.entity.JailEntity
+import androidx.room.*
+import by.zenkevich_churun.findcell.prisoner.db.dao.*
+import by.zenkevich_churun.findcell.prisoner.db.entity.*
 import by.zenkevich_churun.findcell.prisoner.db.version.JailsDatabaseVersion
 
 

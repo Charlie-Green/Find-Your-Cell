@@ -1,10 +1,10 @@
-package by.zenkevich_churun.findcell.prisoner.api.ram
+package by.zenkevich_churun.findcell.prisoner.api.ram.profile
 
 import by.zenkevich_churun.findcell.core.entity.general.Contact
 import by.zenkevich_churun.findcell.core.entity.general.Prisoner
 
 
-internal class PrisonerRamEntity(
+class PrisonerRamEntity(
     override val id: Int,
     override val name: String,
     val username: String,
