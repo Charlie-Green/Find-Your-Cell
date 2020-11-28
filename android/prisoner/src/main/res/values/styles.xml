@@ -17,4 +17,10 @@
         <item name="android:textColorHint">?android:textColorSecondary</item>
     </style>
 
+    <style name="schedule_fragm_button">
+        <item name="android:textSize">14dp</item>
+        <item name="android:backgroundTint">@color/statelist_enablable_button</item>
+        <item name="android:textColor">?backgroundColor</item>
+    </style>
+
 </resources>

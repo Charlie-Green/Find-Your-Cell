@@ -41,7 +41,7 @@ class ScheduleFragment: Fragment(R.layout.schedule_fragm) {
             message?.also { notifyError(it) }
         })
         vm.unsavedChangesLD.observe(viewLifecycleOwner, Observer { thereAreChanges ->
-            fabSave.isVisible = thereAreChanges
+            buSave.isEnabled = thereAreChanges
         })
         vm.loadingLD.observe(viewLifecycleOwner, Observer { isLoading ->
             prBar.isVisible = isLoading
@@ -50,7 +50,7 @@ class ScheduleFragment: Fragment(R.layout.schedule_fragm) {
         view.setOnClickListener {
             vm.unselectCell()
         }
-        fabSave.setOnClickListener {
+        buSave.setOnClickListener {
             vm.saveSchedule()
         }
     }

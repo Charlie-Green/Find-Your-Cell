@@ -3,6 +3,7 @@
 
     <!-- Labels and Button Texts: -->
     <string name="add_contact">Добавить контакт</string>
+    <string name="add_cell">+1 камера</string>
     <string name="prisoner_name_label">Имя</string>
     <string name="prisoner_info_label">Любая другая информация:</string>
 

@@ -4,7 +4,6 @@ import android.app.Activity
 import android.graphics.Color
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
 import androidx.lifecycle.Observer
 import by.zenkevich_churun.findcell.prisoner.R
 import by.zenkevich_churun.findcell.core.entity.general.Prisoner
@@ -33,7 +32,6 @@ class PrisonerActivity: AppCompatActivity(R.layout.prisoner_activity) {
         })
 
         vm.updateScheduleResultLD.observe(this, Observer { result ->
-            Log.v("CharlieDEbug", "Update result = ${result?.javaClass?.simpleName}")
             if(result != null) {
                 notifyUpdateScheduleSuccess()
                 vm.notifyUpdateScheduleResultConsumed()

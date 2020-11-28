@@ -23,19 +23,32 @@
             android:layout_weight="1"
             android:layout_marginTop="8dp" />
 
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" >
+
+            <Button
+                android:id="@+id/buAddCell"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:layout_marginEnd="6dp"
+                style="@style/schedule_fragm_button"
+                android:text="@string/add_cell" />
+
+            <Button
+                android:id="@+id/buSave"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                style="@style/schedule_fragm_button"
+                android:text="@string/save"
+                android:enabled="false" />
+
+        </LinearLayout>
+
     </LinearLayout>
-
-
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/fabSave"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:fabCustomSize="42dp"
-        android:layout_gravity="bottom|end"
-        android:layout_margin="16dp"
-        android:src="@drawable/ic_save"
-        android:tint="#f0f0f0"
-        android:visibility="gone" />
 
 
     <ProgressBar

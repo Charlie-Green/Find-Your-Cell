@@ -5,9 +5,7 @@ import android.net.ConnectivityManager
 import androidx.lifecycle.*
 import by.zenkevich_churun.findcell.core.entity.sched.Schedule
 import by.zenkevich_churun.findcell.core.util.android.AndroidUtil
-import by.zenkevich_churun.findcell.prisoner.repo.sched.GetScheduleResult
-import by.zenkevich_churun.findcell.prisoner.repo.sched.ScheduleRepository
-import by.zenkevich_churun.findcell.prisoner.repo.sched.UpdateScheduleResult
+import by.zenkevich_churun.findcell.prisoner.repo.sched.*
 import by.zenkevich_churun.findcell.prisoner.ui.common.vm.PrisonerLiveDatasStorage
 import by.zenkevich_churun.findcell.prisoner.ui.sched.model.ScheduleModel
 import dagger.hilt.android.qualifiers.ApplicationContext
@@ -76,7 +74,10 @@ class ScheduleViewModel @Inject constructor(
     fun saveSchedule() {
         val scheduleModel = mldSchedule.value ?: return
 
-        mldLoading.value = true
+        if(!startLoad()) {
+            return
+        }
+
         viewModelScope.launch(Dispatchers.IO) {
             val schedule = scheduleModel.toSchedule()
             updateSchedule(schedule)
@@ -118,6 +119,16 @@ class ScheduleViewModel @Inject constructor(
         } else {
             mldError.postValue(mapping.updateFailedMessage)
         }
+    }
+
+
+    private fun startLoad(): Boolean {
+        if(mldLoading.value == true) {
+            return false
+        }
+
+        mldLoading.postValue(true)
+        return true
     }
 
 
