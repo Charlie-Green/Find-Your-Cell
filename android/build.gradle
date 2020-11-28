@@ -49,6 +49,10 @@ ext {
     libLiveData   = "androidx.lifecycle:lifecycle-livedata-ktx:$lifecycleVersion"
     // kaptLifecycle = "androidx.lifecycle:lifecycle-compiler:$lifecycleVersion"
 
+    def roomVersion = "2.2.5"
+    libRoom = "androidx.room:room-runtime:$roomVersion"
+    kaptRoom = "androidx.room:room-compiler:$roomVersion"
+
     libHilt  = "com.google.dagger:hilt-android:$hiltVersion"
     kaptHilt = "com.google.dagger:hilt-android-compiler:$hiltVersion"
 
