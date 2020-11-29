@@ -9,4 +9,7 @@ abstract class Jail {
 
     /** Jail's name in the app's default language. **/
     abstract val name: String
+
+    /** Number of [Cell]s within this [Jail]. **/
+    abstract val cellCount: Short
 }

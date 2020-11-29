@@ -142,7 +142,7 @@ class ScheduleModel private constructor(
 
 
     companion object {
-        private val dateFormat = SimpleDateFormat("dd.MM.YYYY")
+        private val dateFormat = SimpleDateFormat("dd.MM.yyyy")
         private val colorGen = ScheduleModuleColorGenerator()
 
 

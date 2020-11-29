@@ -6,9 +6,6 @@ import by.zenkevich_churun.findcell.prisoner.db.entity.CellEntity
 
 @Dao
 interface CellsDao {
-    @Query("select max(number) from Cells where jail=:jailId")
-    fun maxNumber(jailId: Int): Short
-
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun addOrUpdate(cells: List<CellEntity>)
 

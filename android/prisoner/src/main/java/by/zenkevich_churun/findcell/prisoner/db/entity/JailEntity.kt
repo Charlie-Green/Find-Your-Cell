@@ -11,7 +11,10 @@ class JailEntity(
     override val id: Int,
 
     @ColumnInfo(name = "name")
-    override val name: String
+    override val name: String,
+
+    @ColumnInfo(name = "cells")
+    override val cellCount: Short
 ): Jail() {
 
     companion object {
@@ -20,7 +23,7 @@ class JailEntity(
             if(jail is JailEntity) {
                 return jail
             }
-            return JailEntity(jail.id, jail.name)
+            return JailEntity(jail.id, jail.name, jail.cellCount)
         }
     }
 }

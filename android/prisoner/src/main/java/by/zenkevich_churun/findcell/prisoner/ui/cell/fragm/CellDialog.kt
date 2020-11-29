@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import androidx.fragment.app.DialogFragment
 import by.zenkevich_churun.findcell.core.util.android.AndroidUtil
@@ -30,11 +31,11 @@ class CellDialog: DialogFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         val state = CellEditorState(
             listOf(
-                JailHeader(1, "Окрестина ИВС"),
-                JailHeader(2, "Окрестина ЦИП"),
-                JailHeader(3, "Жодино"),
-                JailHeader(4, "Барановичи"),
-                JailHeader(5, "Могилёв")
+                JailHeader(1, "Окрестина ИВС", 24),
+                JailHeader(2, "Окрестина ЦИП", 40),
+                JailHeader(3, "Жодино", 210),
+                JailHeader(4, "Барановичи", 150),
+                JailHeader(5, "Могилёв", 120)
             ),
             2,
             7,
@@ -55,8 +56,21 @@ class CellDialog: DialogFragment() {
 
         numpCellNumber.apply {
             minValue = 1
-            maxValue = 9999
+            maxValue = state.jails[state.jailIndex].cellCount.toInt()
             value = state.cellNumber.toInt()
+        }
+
+        spJail.onItemSelectedListener = object: AdapterView.OnItemSelectedListener {
+            override fun onItemSelected(
+                parent: AdapterView<*>?,
+                view: View?,
+                position: Int,
+                id: Long ) {
+
+                numpCellNumber.maxValue = state.jails[position].cellCount.toInt()
+            }
+
+            override fun onNothingSelected(parent: AdapterView<*>) {   }
         }
 
         buSave.setText( if(state.isNew) R.string.add else R.string.save )

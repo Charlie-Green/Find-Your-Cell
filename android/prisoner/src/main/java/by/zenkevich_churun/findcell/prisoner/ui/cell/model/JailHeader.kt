@@ -5,7 +5,8 @@ import by.zenkevich_churun.findcell.core.entity.general.Jail
 
 class JailHeader(
     override val id: Int,
-    override val name: String
+    override val name: String,
+    override val cellCount: Short
 ): Jail() {
 
     override fun toString(): String
