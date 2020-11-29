@@ -16,5 +16,15 @@
     <string name="get_schedule_failed_msg">Не удалось получить Ваше расписание.</string>
     <string name="update_schedule_failed_msg">Не удалось сохранить расписание.</string>
     <string name="update_schedule_success_msg">Расписание сохранено.</string>
+    <string name="cell_error_title">Дорогой пользователь!</string>
+    <string name="cell_commonpart_msg">
+        Данный редактор предлагает Вам выбрать тюрьму из списка.
+    </string>
+    <string name="cell_need_internet_msg">
+        Чтобы получить список тюрем в первый раз, требуется соединение с интернетом.
+    </string>
+    <string name="cell_error_msg">
+        Пиложение попыталось получить список тюрем с сервероа, но возникла ошибка.
+    </string>
 
 </resources>

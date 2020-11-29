@@ -57,4 +57,24 @@ object AndroidUtil {
         appContext.theme.resolveAttribute(attrRes, typval, true)
         return typval.data
     }
+
+
+    fun mergeStrings(
+        appContext: Context,
+        vararg stringRess: Int
+    ): String {
+
+        val sb = StringBuilder(64*stringRess.size)
+
+        for(stringRes in stringRess) {
+            val string = appContext.getString(stringRes)
+
+            if(!sb.isEmpty()) {
+                sb.append(" ")
+            }
+            sb.append(string)
+        }
+
+        return sb.toString()
+    }
 }

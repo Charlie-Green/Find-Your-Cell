@@ -1,4 +1,4 @@
-package by.zenkevich_churun.findcell.prisoner.ui.cell.fragm
+package by.zenkevich_churun.findcell.prisoner.ui.cell.dialog
 
 import android.os.Bundle
 import android.view.LayoutInflater
