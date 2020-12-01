@@ -1,20 +1,24 @@
 package by.zenkevich_churun.findcell.prisoner.ui.cell.dialog
 
 import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
+import androidx.core.view.isVisible
+import androidx.core.view.updateLayoutParams
 import androidx.fragment.app.DialogFragment
+import androidx.lifecycle.Observer
 import by.zenkevich_churun.findcell.core.util.android.AndroidUtil
 import by.zenkevich_churun.findcell.prisoner.R
 import by.zenkevich_churun.findcell.prisoner.ui.cell.model.CellEditorState
-import by.zenkevich_churun.findcell.prisoner.ui.cell.model.JailHeader
+import by.zenkevich_churun.findcell.prisoner.ui.cell.vm.CellViewModel
 import kotlinx.android.synthetic.main.cell_dialog.*
+import kotlinx.android.synthetic.main.cell_dialog.view.*
 
 
 class CellDialog: DialogFragment() {
+    private var vm: CellViewModel? = null
+
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -24,25 +28,31 @@ class CellDialog: DialogFragment() {
         val activitySize = AndroidUtil.activitySize(requireActivity())
 
         return inflater.inflate(R.layout.cell_dialog, container, false).apply {
-            minimumWidth = (activitySize.width*4)/5
+            vlltContent.updateLayoutParams {
+                width = (activitySize.width*4)/5
+            }
         }
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        val state = CellEditorState(
-            listOf(
-                JailHeader(1, "Окрестина ИВС", 24),
-                JailHeader(2, "Окрестина ЦИП", 40),
-                JailHeader(3, "Жодино", 210),
-                JailHeader(4, "Барановичи", 150),
-                JailHeader(5, "Могилёв", 120)
-            ),
-            2,
-            7,
-            true
+        val appContext = view.context.applicationContext
+        val vm = CellViewModel.get(appContext, this).also { this.vm = it }
+
+        val args = requireArguments()
+        vm.requestState(
+            CellDialogArguments.jailId(args),
+            CellDialogArguments.cellNumber(args)
         )
 
-        displayState(state)
+        vm.editorStateLD.observe(viewLifecycleOwner, Observer { state ->
+            displayState(state)
+        })
+        vm.loadingLD.observe(viewLifecycleOwner, Observer { loading ->
+            prBar.isVisible = loading
+        })
+        vm.errorLD.observe(viewLifecycleOwner, Observer { message ->
+            notifyError(message)
+        })
     }
 
 
@@ -74,5 +84,20 @@ class CellDialog: DialogFragment() {
         }
 
         buSave.setText( if(state.isNew) R.string.add else R.string.save )
+    }
+
+    private fun notifyError(message: String?) {
+        if(message == null) {
+            txtvError.visibility = View.GONE
+        } else {
+            txtvError.visibility = View.VISIBLE
+            txtvError.text = message
+        }
+    }
+
+
+    companion object {
+        fun arguments(jailId: Int, cellNumber: Short): Bundle
+            = CellDialogArguments.create(jailId, cellNumber)
     }
 }

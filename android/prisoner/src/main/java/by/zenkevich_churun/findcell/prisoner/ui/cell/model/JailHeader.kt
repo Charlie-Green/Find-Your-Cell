@@ -11,4 +11,14 @@ class JailHeader(
 
     override fun toString(): String
         = name
+
+
+    companion object {
+        fun from(jail: Jail): JailHeader {
+            if(jail is JailHeader) {
+                return jail
+            }
+            return JailHeader(jail.id, jail.name, jail.cellCount)
+        }
+    }
 }

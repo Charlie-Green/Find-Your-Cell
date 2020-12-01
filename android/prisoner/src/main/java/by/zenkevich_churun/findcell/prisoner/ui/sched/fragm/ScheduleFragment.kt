@@ -115,7 +115,11 @@ class ScheduleFragment: Fragment(R.layout.schedule_fragm) {
 
 
     private fun addCell() {
-        CellDialog().show(parentFragmentManager, null)
+        val fragmMan = parentFragmentManager
+        CellDialog().apply {
+            arguments = CellDialog.arguments(-1, -1)
+            show(fragmMan, null)
+        }
     }
 
 

@@ -7,6 +7,7 @@ import by.zenkevich_churun.findcell.core.util.std.max
 import by.zenkevich_churun.findcell.prisoner.repo.jail.GetJailsResult
 import by.zenkevich_churun.findcell.prisoner.repo.jail.JailsRepository
 import by.zenkevich_churun.findcell.prisoner.ui.cell.model.CellEditorState
+import by.zenkevich_churun.findcell.prisoner.ui.cell.model.JailHeader
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -42,6 +43,7 @@ class CellViewModel @Inject constructor(
         if(getAndSetLoading()) {
             return
         }
+        mldError.value = null
 
         viewModelScope.launch(Dispatchers.IO) {
             // TODO: Provide the real value of 'internet' parameter.
@@ -79,12 +81,16 @@ class CellViewModel @Inject constructor(
         cellNumber: Short
     ): CellEditorState {
 
+        val jailHeaders = jails.map { jail ->
+            JailHeader.from(jail)
+        }
+
         val jailIndex = jails.indexOfFirst { jail ->
             jail.id == jailId
         }
 
         return CellEditorState(
-            jails,
+            jailHeaders,
             if(jailIndex in jails.indices) jailIndex else 0,
             max(cellNumber, 1.toShort()),
             true
