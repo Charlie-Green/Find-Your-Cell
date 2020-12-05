@@ -4,10 +4,13 @@ import android.content.Context
 import androidx.lifecycle.*
 import by.zenkevich_churun.findcell.core.entity.general.Jail
 import by.zenkevich_churun.findcell.core.util.std.max
+import by.zenkevich_churun.findcell.prisoner.repo.common.ScheduleLiveDataStorage
 import by.zenkevich_churun.findcell.prisoner.repo.jail.GetJailsResult
 import by.zenkevich_churun.findcell.prisoner.repo.jail.JailsRepository
+import by.zenkevich_churun.findcell.prisoner.repo.sched.ScheduleRepository
 import by.zenkevich_churun.findcell.prisoner.ui.cell.model.CellEditorState
 import by.zenkevich_churun.findcell.prisoner.ui.cell.model.JailHeader
+import by.zenkevich_churun.findcell.prisoner.ui.common.model.ScheduleModel
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -16,13 +19,17 @@ import javax.inject.Inject
 
 class CellViewModel @Inject constructor(
     @ApplicationContext appContext: Context,
-    private val repo: JailsRepository
+    private val repo: JailsRepository,
+    private val scheduleRepo: ScheduleRepository,
+    private val scheduleStore: ScheduleLiveDataStorage
 ): ViewModel() {
 
     private val mapping = CellVMMapping(appContext)
     private val mldEditorState = MutableLiveData<CellEditorState>()
     private val mldLoading = MutableLiveData<Boolean>()
     private val mldError = MutableLiveData<String?>()
+    private var jailName: String? = null
+    private var cellNumber = (-1).toShort()
 
 
     val editorStateLD: LiveData<CellEditorState>
@@ -43,7 +50,10 @@ class CellViewModel @Inject constructor(
         if(getAndSetLoading()) {
             return
         }
+
         mldError.value = null
+        this.jailName = null
+        this.cellNumber = cellNumber
 
         viewModelScope.launch(Dispatchers.IO) {
             // TODO: Provide the real value of 'internet' parameter.
@@ -53,6 +63,8 @@ class CellViewModel @Inject constructor(
                 is GetJailsResult.Success -> {
                     val state = createState(result.jails, jailId, cellNumber)
                     mldEditorState.postValue(state)
+
+                    jailName = state.selectedJail.name
                 }
 
                 is GetJailsResult.FirstTimeNeedInternet -> {
@@ -65,6 +77,25 @@ class CellViewModel @Inject constructor(
             }
 
             mldLoading.postValue(false)
+        }
+    }
+
+
+    fun submitState(state: CellEditorState) {
+        synchronized(this) {
+            mldEditorState.value = state
+        }
+    }
+
+
+    fun save() {
+        if(getAndSetLoading()) {
+            return
+        }
+
+        viewModelScope.launch(Dispatchers.IO) {
+            val scheduleModel = applyStateToSchedule() ?: return@launch
+            scheduleRepo.updateSchedule(scheduleModel.toSchedule())
         }
     }
 
@@ -95,6 +126,31 @@ class CellViewModel @Inject constructor(
             max(cellNumber, 1.toShort()),
             true
         )
+    }
+
+    private fun applyStateToSchedule(): ScheduleModel? {
+        val state = mldEditorState.value ?: return null
+        val schedule = scheduleStore.scheduleLD.value ?: return null
+        val newJailId = state.selectedJail.id
+        val newJailName = state.selectedJail.name
+        val newCellNumber = state.cellNumber
+
+        // TODO: Get the real value of 'internet' parameter.
+        val cell = repo.cell(newJailId, newCellNumber, true) ?: return null
+
+        synchronized(this) {
+            if(state.isNew) {
+                schedule.addCell(newJailName, newCellNumber, cell.seats)
+            } else {
+                val oldJailName = jailName ?: return null
+                schedule.updateCell(
+                    oldJailName, cellNumber,
+                    newJailName, newCellNumber, cell.seats
+                )
+            }
+        }
+
+        return schedule
     }
 
 

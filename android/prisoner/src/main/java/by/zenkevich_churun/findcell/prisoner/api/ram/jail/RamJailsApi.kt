@@ -1,6 +1,7 @@
 package by.zenkevich_churun.findcell.prisoner.api.ram.jail
 
 import by.zenkevich_churun.findcell.core.api.JailsApi
+import by.zenkevich_churun.findcell.core.entity.general.Cell
 import by.zenkevich_churun.findcell.core.entity.general.Jail
 import java.util.Random
 import javax.inject.Inject
@@ -35,5 +36,15 @@ class RamJailsApi @Inject constructor(): JailsApi {
         } catch(exc: InterruptedException) {
             // Empty.
         }
+    }
+
+
+    override fun cell(jailId: Int, cellNumber: Short): Cell {
+        val jail = jails.find { j ->
+            j.id == jailId
+        }
+        jail ?: throw IllegalArgumentException("No Jail with ID $jailId")
+
+        return RamCellEntity(jail.name, cellNumber, 8)
     }
 }

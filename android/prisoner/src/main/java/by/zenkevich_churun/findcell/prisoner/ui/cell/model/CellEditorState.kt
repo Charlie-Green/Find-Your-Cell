@@ -7,5 +7,8 @@ class CellEditorState(
     val jails: List<Jail>,
     val jailIndex: Int,
     val cellNumber: Short,
-    val isNew: Boolean
-)
+    val isNew: Boolean ) {
+
+    val selectedJail: Jail
+        get() = jails[jailIndex]
+}

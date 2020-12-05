@@ -1,4 +1,4 @@
-package by.zenkevich_churun.findcell.prisoner.ui.sched.model
+package by.zenkevich_churun.findcell.prisoner.ui.common.model
 
 import java.util.*
 

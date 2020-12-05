@@ -1,4 +1,4 @@
-package by.zenkevich_churun.findcell.prisoner.ui.sched.model
+package by.zenkevich_churun.findcell.prisoner.ui.common.model
 
 import by.zenkevich_churun.findcell.core.entity.sched.SchedulePeriod
 import by.zenkevich_churun.findcell.core.util.std.CalendarUtil

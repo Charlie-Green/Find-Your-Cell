@@ -2,10 +2,19 @@ package by.zenkevich_churun.findcell.prisoner.db.dao
 
 import androidx.room.*
 import by.zenkevich_churun.findcell.prisoner.db.entity.CellEntity
+import by.zenkevich_churun.findcell.prisoner.db.view.CompositeCellEntity
 
 
 @Dao
 interface CellsDao {
+    @Query("select :jailId as jailId, " +
+                  "J.name as jailName, " +
+                  ":cellNumber as number, " +
+                  "C.seats as seats " +
+           "from Jails J inner join Cells C on J.id=C.jail " +
+           "where J.id=:jailId and C.number=:cellNumber" )
+    fun get(jailId: Int, cellNumber: Short): CompositeCellEntity?
+
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun addOrUpdate(cells: List<CellEntity>)
 

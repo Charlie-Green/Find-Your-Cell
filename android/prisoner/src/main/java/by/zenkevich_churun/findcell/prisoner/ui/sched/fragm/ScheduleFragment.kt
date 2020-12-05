@@ -13,7 +13,7 @@ import by.zenkevich_churun.findcell.core.util.android.AndroidUtil
 import by.zenkevich_churun.findcell.core.util.recycler.autogrid.AutomaticGridLayoutManager
 import by.zenkevich_churun.findcell.prisoner.R
 import by.zenkevich_churun.findcell.prisoner.ui.cell.dialog.CellDialog
-import by.zenkevich_churun.findcell.prisoner.ui.sched.model.ScheduleModel
+import by.zenkevich_churun.findcell.prisoner.ui.common.model.ScheduleModel
 import by.zenkevich_churun.findcell.prisoner.ui.sched.vm.ScheduleViewModel
 import kotlinx.android.synthetic.main.schedule_fragm.*
 

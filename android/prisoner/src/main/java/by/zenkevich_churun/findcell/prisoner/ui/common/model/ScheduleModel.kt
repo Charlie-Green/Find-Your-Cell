@@ -1,4 +1,4 @@
-package by.zenkevich_churun.findcell.prisoner.ui.sched.model
+package by.zenkevich_churun.findcell.prisoner.ui.common.model
 
 import by.zenkevich_churun.findcell.core.entity.general.Cell
 import by.zenkevich_churun.findcell.core.entity.sched.Schedule
@@ -59,6 +59,40 @@ class ScheduleModel private constructor(
             cells,
             resolvePeriods()
         )
+    }
+
+
+    fun addCell(jailName: String, cellNumber: Short, seats: Short) {
+        val existingCell = cells.find { cell ->
+            cell.jailName == jailName && cell.number == cellNumber
+        }
+        if(existingCell != null) {
+            return
+        }
+
+        val backColor = colorGen.next
+        val newCell = CellModel(
+            jailName,
+            cellNumber,
+            seats,
+            backColor,
+            numberBackColor(backColor),
+            textColor(backColor)
+        )
+
+        cells.add(newCell)
+    }
+
+    fun updateCell(
+        oldJailName: String, oldCellNumber: Short,
+        newJailName: String, newCellNumber: Short,
+        newSeats: Short ) {
+
+        cells.removeAll { cell ->
+            cell.jailName == oldJailName && cell.number == oldCellNumber
+        }
+
+        addCell(newJailName, newCellNumber, newSeats)
     }
 
 

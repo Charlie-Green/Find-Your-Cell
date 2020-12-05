@@ -3,8 +3,10 @@ package by.zenkevich_churun.findcell.prisoner.repo.jail
 import android.content.Context
 import android.util.Log
 import by.zenkevich_churun.findcell.core.api.JailsApi
+import by.zenkevich_churun.findcell.core.entity.general.Cell
 import by.zenkevich_churun.findcell.core.entity.general.Jail
 import by.zenkevich_churun.findcell.prisoner.db.JailsDatabase
+import by.zenkevich_churun.findcell.prisoner.db.entity.CellEntity
 import by.zenkevich_churun.findcell.prisoner.db.entity.JailEntity
 import dagger.hilt.android.qualifiers.ApplicationContext
 import java.io.IOException
@@ -36,6 +38,34 @@ class JailsRepository @Inject constructor(
         dao.addOrUpdate(jailEntities)
 
         return GetJailsResult.Success(fetched)
+    }
+
+    fun cell(
+        jailId: Int,
+        cellNumber: Short,
+        internet: Boolean
+    ): Cell? {
+
+        val dao = JailsDatabase.get(appContext).cellsDao
+        var cell: Cell? = dao.get(jailId, cellNumber)
+        if(cell != null) {
+            return cell
+        }
+
+        if(!internet) {
+            return null
+        }
+
+        try {
+            cell = api.cell(jailId, cellNumber)
+            val entity = CellEntity.from(jailId, cell)
+            dao.addOrUpdate( listOf(entity) )
+
+            return cell
+        } catch(exc: IOException) {
+            Log.e(LOGTAG, "Failed to fetch Cell: ${exc.javaClass.name}: ${exc.message}")
+            return null
+        }
     }
 
 

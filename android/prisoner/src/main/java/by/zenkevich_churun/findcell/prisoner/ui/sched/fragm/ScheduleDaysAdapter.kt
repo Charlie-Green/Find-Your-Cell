@@ -6,9 +6,8 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import by.zenkevich_churun.findcell.core.util.android.AndroidUtil
 import by.zenkevich_churun.findcell.prisoner.R
-import by.zenkevich_churun.findcell.prisoner.ui.sched.model.CellModel
-import by.zenkevich_churun.findcell.prisoner.ui.sched.model.ScheduleDayModel
-import by.zenkevich_churun.findcell.prisoner.ui.sched.model.ScheduleModel
+import by.zenkevich_churun.findcell.prisoner.ui.common.model.ScheduleDayModel
+import by.zenkevich_churun.findcell.prisoner.ui.common.model.ScheduleModel
 import by.zenkevich_churun.findcell.prisoner.ui.sched.vm.ScheduleViewModel
 import by.zenkevich_churun.findcell.prisoner.util.draw.MultipleColorsDrawable
 import kotlinx.android.synthetic.main.schedule_day_item.view.*

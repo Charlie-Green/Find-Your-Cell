@@ -3,6 +3,7 @@ package by.zenkevich_churun.findcell.prisoner.db.entity
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.ForeignKey
+import by.zenkevich_churun.findcell.core.entity.general.Cell
 
 
 @Entity(
@@ -24,5 +25,17 @@ class CellEntity(
     val number: Short,
 
     @ColumnInfo(name = "seats")
-    val seats: Short
-)
+    val seats: Short ) {
+
+
+    companion object {
+
+        fun from(jailId: Int, cell: Cell): CellEntity {
+            return CellEntity(
+                jailId,
+                cell.number,
+                cell.seats
+            )
+        }
+    }
+}
