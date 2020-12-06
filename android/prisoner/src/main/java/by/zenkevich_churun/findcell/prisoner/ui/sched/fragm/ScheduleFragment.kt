@@ -1,6 +1,7 @@
 package by.zenkevich_churun.findcell.prisoner.ui.sched.fragm
 
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import androidx.appcompat.app.AlertDialog
 import androidx.core.view.isVisible
@@ -13,6 +14,7 @@ import by.zenkevich_churun.findcell.core.util.android.AndroidUtil
 import by.zenkevich_churun.findcell.core.util.recycler.autogrid.AutomaticGridLayoutManager
 import by.zenkevich_churun.findcell.prisoner.R
 import by.zenkevich_churun.findcell.prisoner.ui.cell.dialog.CellDialog
+import by.zenkevich_churun.findcell.prisoner.ui.common.model.CellUpdate
 import by.zenkevich_churun.findcell.prisoner.ui.common.model.ScheduleModel
 import by.zenkevich_churun.findcell.prisoner.ui.sched.vm.ScheduleViewModel
 import kotlinx.android.synthetic.main.schedule_fragm.*
@@ -46,6 +48,9 @@ class ScheduleFragment: Fragment(R.layout.schedule_fragm) {
         })
         vm.loadingLD.observe(viewLifecycleOwner, Observer { isLoading ->
             prBar.isVisible = isLoading
+        })
+        vm.cellUpdateLD.observe(viewLifecycleOwner, Observer { update ->
+            updateCells(update)
         })
 
         view.setOnClickListener {
@@ -119,6 +124,24 @@ class ScheduleFragment: Fragment(R.layout.schedule_fragm) {
         CellDialog().apply {
             arguments = CellDialog.arguments(-1, -1)
             show(fragmMan, null)
+        }
+    }
+
+
+    private fun updateCells(update: CellUpdate?) {
+        Log.v("CharlieDebug", "Consuming update ${update?.javaClass?.simpleName}")
+        val adapter = recvCells.adapter as CellsAdapter? ?: return
+
+        when(update) {
+            is CellUpdate.Added -> {
+                adapter.notifyItemInserted(adapter.itemCount - 1)
+                vm.notifyCellUpdateConsumed()
+            }
+
+            is CellUpdate.Updated -> {
+                adapter.notifyDataSetChanged()
+                vm.notifyCellUpdateConsumed()
+            }
         }
     }
 

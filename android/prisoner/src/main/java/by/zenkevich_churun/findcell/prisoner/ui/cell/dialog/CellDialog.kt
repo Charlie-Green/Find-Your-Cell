@@ -53,6 +53,16 @@ class CellDialog: DialogFragment() {
         vm.errorLD.observe(viewLifecycleOwner, Observer { message ->
             notifyError(message)
         })
+        vm.cellUpdateLD.observe(viewLifecycleOwner, Observer { update ->
+            if(update != null) {
+                dismiss()
+            }
+        })
+
+        buSave.setOnClickListener {
+            submitDraft()
+            vm.save()
+        }
     }
 
 
@@ -93,6 +103,23 @@ class CellDialog: DialogFragment() {
             txtvError.visibility = View.VISIBLE
             txtvError.text = message
         }
+    }
+
+
+    private fun submitDraft() {
+        val vm = this.vm ?: return
+        val state = vm.editorStateLD?.value ?: return
+
+        val draft = CellEditorState(
+            state.jails,
+            state.oldJailIndex,
+            spJail.selectedItemPosition,
+            state.oldCellNumber,
+            numpCellNumber.value.toShort(),
+            state.isNew
+        )
+
+        vm.submitState(draft)
     }
 
 

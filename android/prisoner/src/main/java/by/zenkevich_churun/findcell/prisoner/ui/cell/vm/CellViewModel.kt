@@ -1,6 +1,7 @@
 package by.zenkevich_churun.findcell.prisoner.ui.cell.vm
 
 import android.content.Context
+import android.util.Log
 import androidx.lifecycle.*
 import by.zenkevich_churun.findcell.core.entity.general.Cell
 import by.zenkevich_churun.findcell.core.entity.general.Jail
@@ -9,9 +10,8 @@ import by.zenkevich_churun.findcell.prisoner.repo.common.ScheduleLiveDataStorage
 import by.zenkevich_churun.findcell.prisoner.repo.jail.GetJailsResult
 import by.zenkevich_churun.findcell.prisoner.repo.jail.JailsRepository
 import by.zenkevich_churun.findcell.prisoner.repo.sched.ScheduleRepository
-import by.zenkevich_churun.findcell.prisoner.ui.cell.model.CellEditorState
-import by.zenkevich_churun.findcell.prisoner.ui.cell.model.JailHeader
-import by.zenkevich_churun.findcell.prisoner.ui.common.model.ScheduleModel
+import by.zenkevich_churun.findcell.prisoner.ui.cell.model.*
+import by.zenkevich_churun.findcell.prisoner.ui.common.model.CellUpdate
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -40,6 +40,9 @@ class CellViewModel @Inject constructor(
     val errorLD: LiveData<String?>
         get() = mldError
 
+    val cellUpdateLD: LiveData<CellUpdate?>
+        get() = scheduleStore.cellUpdateLD
+
 
     fun requestState(jailId: Int, cellNumber: Short) {
         if(mldEditorState.value != null) {
@@ -67,7 +70,7 @@ class CellViewModel @Inject constructor(
                 }
 
                 is GetJailsResult.FirstTimeError -> {
-                    mldError.postValue(mapping.errorMessage)
+                    mldError.postValue(mapping.getJailsErrorMessage)
                 }
             }
 
@@ -92,18 +95,26 @@ class CellViewModel @Inject constructor(
 
         viewModelScope.launch(Dispatchers.IO) {
             if(state.isNew) {
+                Log.v("CharlieDebug", "Adding")
                 if(scheduleRepo.addCell(state.selectedJail.id, state.cellNumber)) {
                     addToSchedule(state)
+                } else {
+                    mldError.postValue(mapping.addCellFailedMessage)
                 }
             } else {
+                Log.v("CharlieDebug", "Updating")
                 val isUpdated = scheduleRepo.updateCell(
                     state.oldSelectedJail.id, state.oldCellNumber,
                     state.selectedJail.id, state.cellNumber
                 )
                 if(isUpdated) {
                     updateInSchedule(state)
+                } else {
+                    mldError.postValue(mapping.updateCellFailedMessage)
                 }
             }
+
+            mldLoading.postValue(false)
         }
     }
 
@@ -136,31 +147,6 @@ class CellViewModel @Inject constructor(
         )
     }
 
-//    private fun applyStateToSchedule(): ScheduleModel? {
-//        val state = mldEditorState.value ?: return null
-//        val schedule = scheduleStore.scheduleLD.value ?: return null
-//        val newJailId = state.selectedJail.id
-//        val newJailName = state.selectedJail.name
-//        val newCellNumber = state.cellNumber
-//
-//        // TODO: Get the real value of 'internet' parameter.
-//        val cell = repo.cell(newJailId, newCellNumber, true) ?: return null
-//
-//        synchronized(this) {
-//            if(state.isNew) {
-//                schedule.addCell(newJailName, newCellNumber, cell.seats)
-//            } else {
-//                val oldJailName = jailName ?: return null
-//                schedule.updateCell(
-//                    oldJailName, cellNumber,
-//                    newJailName, newCellNumber, cell.seats
-//                )
-//            }
-//        }
-//
-//        return schedule
-//    }
-
     private fun addToSchedule(editorState: CellEditorState) {
         val addedCell = cell(editorState) ?: return
 
@@ -172,6 +158,8 @@ class CellViewModel @Inject constructor(
                 addedCell.seats
             )
         }
+
+        scheduleStore.notifyCellAdded()
     }
 
     private fun updateInSchedule(editorState: CellEditorState) {
@@ -185,6 +173,8 @@ class CellViewModel @Inject constructor(
                 updatedCell.seats
             )
         }
+
+        scheduleStore.notifyCellUpdated()
     }
 
 

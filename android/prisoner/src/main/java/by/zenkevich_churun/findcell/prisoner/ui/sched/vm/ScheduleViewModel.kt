@@ -7,6 +7,7 @@ import by.zenkevich_churun.findcell.core.entity.sched.Schedule
 import by.zenkevich_churun.findcell.core.util.android.AndroidUtil
 import by.zenkevich_churun.findcell.prisoner.repo.common.ScheduleLiveDataStorage
 import by.zenkevich_churun.findcell.prisoner.repo.sched.*
+import by.zenkevich_churun.findcell.prisoner.ui.common.model.CellUpdate
 import by.zenkevich_churun.findcell.prisoner.ui.common.vm.PrisonerLiveDatasStorage
 import by.zenkevich_churun.findcell.prisoner.ui.common.model.ScheduleModel
 import dagger.hilt.android.qualifiers.ApplicationContext
@@ -54,6 +55,9 @@ class ScheduleViewModel @Inject constructor(
     val loadingLD: LiveData<Boolean>
         get() = mldLoading
 
+    val cellUpdateLD: LiveData<CellUpdate?>
+        get() = scheduleStore.cellUpdateLD
+
 
     fun selectCell(cellIndex: Int) {
         mldSelectedCellIndex.value = cellIndex
@@ -84,6 +88,11 @@ class ScheduleViewModel @Inject constructor(
             updateSchedule(schedule)
             mldLoading.postValue(false)
         }
+    }
+
+
+    fun notifyCellUpdateConsumed() {
+        scheduleStore.notifyCellUpdateConsumed()
     }
 
 
