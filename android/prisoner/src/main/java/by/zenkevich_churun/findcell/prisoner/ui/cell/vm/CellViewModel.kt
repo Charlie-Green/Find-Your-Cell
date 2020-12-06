@@ -1,12 +1,11 @@
 package by.zenkevich_churun.findcell.prisoner.ui.cell.vm
 
 import android.content.Context
-import android.util.Log
 import androidx.lifecycle.*
 import by.zenkevich_churun.findcell.core.entity.general.Cell
 import by.zenkevich_churun.findcell.core.entity.general.Jail
 import by.zenkevich_churun.findcell.core.util.std.max
-import by.zenkevich_churun.findcell.prisoner.repo.common.ScheduleLiveDataStorage
+import by.zenkevich_churun.findcell.prisoner.ui.common.vm.ScheduleLivesDataStorage
 import by.zenkevich_churun.findcell.prisoner.repo.jail.GetJailsResult
 import by.zenkevich_churun.findcell.prisoner.repo.jail.JailsRepository
 import by.zenkevich_churun.findcell.prisoner.repo.sched.ScheduleRepository
@@ -22,7 +21,7 @@ class CellViewModel @Inject constructor(
     @ApplicationContext appContext: Context,
     private val repo: JailsRepository,
     private val scheduleRepo: ScheduleRepository,
-    private val scheduleStore: ScheduleLiveDataStorage
+    private val scheduleStore: ScheduleLivesDataStorage
 ): ViewModel() {
 
     private val mapping = CellVMMapping(appContext)
@@ -95,20 +94,23 @@ class CellViewModel @Inject constructor(
 
         viewModelScope.launch(Dispatchers.IO) {
             if(state.isNew) {
-                Log.v("CharlieDebug", "Adding")
                 if(scheduleRepo.addCell(state.selectedJail.id, state.cellNumber)) {
                     addToSchedule(state)
+                    scheduleStore.notifyCellAdded()
                 } else {
                     mldError.postValue(mapping.addCellFailedMessage)
                 }
+
             } else {
-                Log.v("CharlieDebug", "Updating")
+
                 val isUpdated = scheduleRepo.updateCell(
                     state.oldSelectedJail.id, state.oldCellNumber,
                     state.selectedJail.id, state.cellNumber
                 )
+
                 if(isUpdated) {
                     updateInSchedule(state)
+                    scheduleStore.notifyCellUpdated()
                 } else {
                     mldError.postValue(mapping.updateCellFailedMessage)
                 }

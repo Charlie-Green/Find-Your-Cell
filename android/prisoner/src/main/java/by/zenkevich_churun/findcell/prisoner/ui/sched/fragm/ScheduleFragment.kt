@@ -1,7 +1,6 @@
 package by.zenkevich_churun.findcell.prisoner.ui.sched.fragm
 
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import androidx.appcompat.app.AlertDialog
 import androidx.core.view.isVisible
@@ -129,12 +128,11 @@ class ScheduleFragment: Fragment(R.layout.schedule_fragm) {
 
 
     private fun updateCells(update: CellUpdate?) {
-        Log.v("CharlieDebug", "Consuming update ${update?.javaClass?.simpleName}")
         val adapter = recvCells.adapter as CellsAdapter? ?: return
 
         when(update) {
             is CellUpdate.Added -> {
-                adapter.notifyItemInserted(adapter.itemCount - 1)
+                adapter.notifyCellProbablyAdded()
                 vm.notifyCellUpdateConsumed()
             }
 

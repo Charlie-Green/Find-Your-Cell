@@ -70,7 +70,6 @@ class JailsRepository @Inject constructor(
 
 
     private fun fetchJailsList(): List<Jail>? {
-        Log.v("CharlieDebug", "Fetching jails list")
         try {
             return api.jailsList()
         } catch(exc: IOException) {

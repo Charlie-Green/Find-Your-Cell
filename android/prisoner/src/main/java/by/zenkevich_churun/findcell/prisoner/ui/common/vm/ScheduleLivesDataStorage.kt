@@ -1,6 +1,5 @@
-package by.zenkevich_churun.findcell.prisoner.repo.common
+package by.zenkevich_churun.findcell.prisoner.ui.common.vm
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import by.zenkevich_churun.findcell.prisoner.ui.common.model.CellUpdate
@@ -10,7 +9,7 @@ import javax.inject.Singleton
 
 
 @Singleton
-class ScheduleLiveDataStorage @Inject constructor() {
+class ScheduleLivesDataStorage @Inject constructor() {
     private val mldSchedule = MutableLiveData<ScheduleModel>()
     private val mldCellUpdate = MutableLiveData<CellUpdate?>()
 
@@ -26,12 +25,10 @@ class ScheduleLiveDataStorage @Inject constructor() {
     }
 
     fun notifyCellAdded() {
-        Log.v("CharlieDebug", "Cell added")
         mldCellUpdate.postValue(CellUpdate.Added)
     }
 
     fun notifyCellUpdated() {
-        Log.v("CharlieDebug", "Cell updated")
         mldCellUpdate.postValue(CellUpdate.Updated)
     }
 

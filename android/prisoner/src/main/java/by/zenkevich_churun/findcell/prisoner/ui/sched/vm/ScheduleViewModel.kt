@@ -5,7 +5,7 @@ import android.net.ConnectivityManager
 import androidx.lifecycle.*
 import by.zenkevich_churun.findcell.core.entity.sched.Schedule
 import by.zenkevich_churun.findcell.core.util.android.AndroidUtil
-import by.zenkevich_churun.findcell.prisoner.repo.common.ScheduleLiveDataStorage
+import by.zenkevich_churun.findcell.prisoner.ui.common.vm.ScheduleLivesDataStorage
 import by.zenkevich_churun.findcell.prisoner.repo.sched.*
 import by.zenkevich_churun.findcell.prisoner.ui.common.model.CellUpdate
 import by.zenkevich_churun.findcell.prisoner.ui.common.vm.PrisonerLiveDatasStorage
@@ -20,7 +20,7 @@ class ScheduleViewModel @Inject constructor(
     @ApplicationContext appContext: Context,
     private val repo: ScheduleRepository,
     private val prisonerStore: PrisonerLiveDatasStorage,
-    private val scheduleStore: ScheduleLiveDataStorage
+    private val scheduleStore: ScheduleLivesDataStorage
 ): ViewModel() {
 
     private val mapping = ScheduleVMMapping(appContext)

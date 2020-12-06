@@ -16,6 +16,7 @@ internal class CellsAdapter(
 ): RecyclerView.Adapter<CellsAdapter.CellViewHolder>() {
 
     private var positionSelected = -1
+    private var lastCount = cells.size
 
 
     inner class CellViewHolder(
@@ -51,7 +52,7 @@ internal class CellsAdapter(
 
 
     override fun getItemCount(): Int
-        = cells.size
+        = cells.size.also { lastCount = it }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CellViewHolder {
         val res = parent.context.resources
@@ -88,6 +89,14 @@ internal class CellsAdapter(
         if(positionSelected != index) {
             positionSelected = index
             notifyItemRangeChanged(0, itemCount, PAYLOAD_SELECTED_CELL_CHANGED)
+        }
+    }
+
+    fun notifyCellProbablyAdded() {
+        if(itemCount == lastCount + 1) {
+            notifyItemInserted(lastCount++)
+        } else {
+            notifyDataSetChanged()
         }
     }
 
