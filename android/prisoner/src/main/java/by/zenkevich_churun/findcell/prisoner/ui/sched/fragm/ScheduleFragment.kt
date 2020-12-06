@@ -8,11 +8,13 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
+import by.zenkevich_churun.findcell.core.entity.general.Cell
 import by.zenkevich_churun.findcell.core.entity.sched.Schedule
 import by.zenkevich_churun.findcell.core.util.android.AndroidUtil
 import by.zenkevich_churun.findcell.core.util.recycler.autogrid.AutomaticGridLayoutManager
 import by.zenkevich_churun.findcell.prisoner.R
 import by.zenkevich_churun.findcell.prisoner.ui.cell.dialog.CellDialog
+import by.zenkevich_churun.findcell.prisoner.ui.cellopt.dialog.CellOptionsDialog
 import by.zenkevich_churun.findcell.prisoner.ui.common.model.CellUpdate
 import by.zenkevich_churun.findcell.prisoner.ui.common.model.ScheduleModel
 import by.zenkevich_churun.findcell.prisoner.ui.sched.vm.ScheduleViewModel
@@ -50,6 +52,12 @@ class ScheduleFragment: Fragment(R.layout.schedule_fragm) {
         })
         vm.cellUpdateLD.observe(viewLifecycleOwner, Observer { update ->
             updateCells(update)
+        })
+        vm.cellOptionsLD.observe(viewLifecycleOwner, Observer { cell ->
+            cell?.also {
+                suggestOptions(it)
+                vm.notifyCellOptionsSuggested()
+            }
         })
 
         view.setOnClickListener {
@@ -140,6 +148,14 @@ class ScheduleFragment: Fragment(R.layout.schedule_fragm) {
                 adapter.notifyDataSetChanged()
                 vm.notifyCellUpdateConsumed()
             }
+        }
+    }
+
+    private fun suggestOptions(cell: Cell) {
+        val fragmMan = parentFragmentManager
+        CellOptionsDialog().apply {
+            arguments = CellOptionsDialog.arguments(cell)
+            show(fragmMan, null)
         }
     }
 

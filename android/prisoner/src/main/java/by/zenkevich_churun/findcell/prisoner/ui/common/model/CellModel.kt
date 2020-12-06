@@ -1,7 +1,6 @@
 package by.zenkevich_churun.findcell.prisoner.ui.common.model
 
 import by.zenkevich_churun.findcell.core.entity.general.Cell
-import java.util.*
 
 
 class CellModel(
@@ -15,12 +14,4 @@ class CellModel(
 
     override fun toString(): String
         = "$jailName, $number"
-
-    fun createPeriod(day: Calendar, cellIndex: Int): SchedulePeriodModel {
-        return SchedulePeriodModel(
-            day,
-            day.clone() as Calendar,
-            cellIndex
-        )
-    }
 }

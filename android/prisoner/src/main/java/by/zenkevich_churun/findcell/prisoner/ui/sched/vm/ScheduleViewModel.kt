@@ -3,6 +3,7 @@ package by.zenkevich_churun.findcell.prisoner.ui.sched.vm
 import android.content.Context
 import android.net.ConnectivityManager
 import androidx.lifecycle.*
+import by.zenkevich_churun.findcell.core.entity.general.Cell
 import by.zenkevich_churun.findcell.core.entity.sched.Schedule
 import by.zenkevich_churun.findcell.core.util.android.AndroidUtil
 import by.zenkevich_churun.findcell.prisoner.ui.common.vm.ScheduleLivesDataStorage
@@ -29,6 +30,7 @@ class ScheduleViewModel @Inject constructor(
     private val mldError = MutableLiveData<String?>()
     private val mldChanges = MutableLiveData<Boolean>()
     private val mldLoading = MutableLiveData<Boolean>()
+    private val mldCellOptions = MutableLiveData<Cell?>()
 
 
     init {
@@ -57,6 +59,9 @@ class ScheduleViewModel @Inject constructor(
 
     val cellUpdateLD: LiveData<CellUpdate?>
         get() = scheduleStore.cellUpdateLD
+
+    val cellOptionsLD: LiveData<Cell?>
+        get() = mldCellOptions
 
 
     fun selectCell(cellIndex: Int) {
@@ -90,9 +95,24 @@ class ScheduleViewModel @Inject constructor(
         }
     }
 
-
     fun notifyCellUpdateConsumed() {
         scheduleStore.notifyCellUpdateConsumed()
+    }
+
+
+    fun requestOptions(cellIndex: Int) {
+        synchronized(scheduleStore) {
+            val schedule = scheduleStore.scheduleLD.value ?: return
+            if(cellIndex !in schedule.cells.indices) {
+                return
+            }
+
+            mldCellOptions.value = schedule.cells[cellIndex]
+        }
+    }
+
+    fun notifyCellOptionsSuggested() {
+        mldCellOptions.value = null
     }
 
 

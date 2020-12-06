@@ -27,6 +27,10 @@ internal class CellsAdapter(
             cellView.setOnClickListener {
                 vm.selectCell(adapterPosition)
             }
+            cellView.setOnLongClickListener {
+                vm.requestOptions(adapterPosition)
+                true
+            }
         }
 
         fun bind(cell: CellModel) {
