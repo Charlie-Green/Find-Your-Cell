@@ -2,6 +2,7 @@ package by.zenkevich_churun.findcell.prisoner.ui.cell.vm
 
 import android.content.Context
 import androidx.lifecycle.*
+import by.zenkevich_churun.findcell.core.entity.general.Cell
 import by.zenkevich_churun.findcell.core.entity.general.Jail
 import by.zenkevich_churun.findcell.core.util.std.max
 import by.zenkevich_churun.findcell.prisoner.repo.common.ScheduleLiveDataStorage
@@ -28,8 +29,6 @@ class CellViewModel @Inject constructor(
     private val mldEditorState = MutableLiveData<CellEditorState>()
     private val mldLoading = MutableLiveData<Boolean>()
     private val mldError = MutableLiveData<String?>()
-    private var jailName: String? = null
-    private var cellNumber = (-1).toShort()
 
 
     val editorStateLD: LiveData<CellEditorState>
@@ -52,8 +51,6 @@ class CellViewModel @Inject constructor(
         }
 
         mldError.value = null
-        this.jailName = null
-        this.cellNumber = cellNumber
 
         viewModelScope.launch(Dispatchers.IO) {
             // TODO: Provide the real value of 'internet' parameter.
@@ -63,8 +60,6 @@ class CellViewModel @Inject constructor(
                 is GetJailsResult.Success -> {
                     val state = createState(result.jails, jailId, cellNumber)
                     mldEditorState.postValue(state)
-
-                    jailName = state.selectedJail.name
                 }
 
                 is GetJailsResult.FirstTimeNeedInternet -> {
@@ -93,9 +88,22 @@ class CellViewModel @Inject constructor(
             return
         }
 
+        val state = mldEditorState.value ?: return
+
         viewModelScope.launch(Dispatchers.IO) {
-            val scheduleModel = applyStateToSchedule() ?: return@launch
-            scheduleRepo.updateSchedule(scheduleModel.toSchedule())
+            if(state.isNew) {
+                if(scheduleRepo.addCell(state.selectedJail.id, state.cellNumber)) {
+                    addToSchedule(state)
+                }
+            } else {
+                val isUpdated = scheduleRepo.updateCell(
+                    state.oldSelectedJail.id, state.oldCellNumber,
+                    state.selectedJail.id, state.cellNumber
+                )
+                if(isUpdated) {
+                    updateInSchedule(state)
+                }
+            }
         }
     }
 
@@ -128,29 +136,65 @@ class CellViewModel @Inject constructor(
         )
     }
 
-    private fun applyStateToSchedule(): ScheduleModel? {
-        val state = mldEditorState.value ?: return null
-        val schedule = scheduleStore.scheduleLD.value ?: return null
-        val newJailId = state.selectedJail.id
-        val newJailName = state.selectedJail.name
-        val newCellNumber = state.cellNumber
+//    private fun applyStateToSchedule(): ScheduleModel? {
+//        val state = mldEditorState.value ?: return null
+//        val schedule = scheduleStore.scheduleLD.value ?: return null
+//        val newJailId = state.selectedJail.id
+//        val newJailName = state.selectedJail.name
+//        val newCellNumber = state.cellNumber
+//
+//        // TODO: Get the real value of 'internet' parameter.
+//        val cell = repo.cell(newJailId, newCellNumber, true) ?: return null
+//
+//        synchronized(this) {
+//            if(state.isNew) {
+//                schedule.addCell(newJailName, newCellNumber, cell.seats)
+//            } else {
+//                val oldJailName = jailName ?: return null
+//                schedule.updateCell(
+//                    oldJailName, cellNumber,
+//                    newJailName, newCellNumber, cell.seats
+//                )
+//            }
+//        }
+//
+//        return schedule
+//    }
 
-        // TODO: Get the real value of 'internet' parameter.
-        val cell = repo.cell(newJailId, newCellNumber, true) ?: return null
+    private fun addToSchedule(editorState: CellEditorState) {
+        val addedCell = cell(editorState) ?: return
+
+        synchronized(scheduleStore) {
+            val schedule = scheduleStore.scheduleLD.value ?: return
+            schedule.addCell(
+                editorState.selectedJail.name,
+                editorState.cellNumber,
+                addedCell.seats
+            )
+        }
+    }
+
+    private fun updateInSchedule(editorState: CellEditorState) {
+        val updatedCell = cell(editorState) ?: return
 
         synchronized(this) {
-            if(state.isNew) {
-                schedule.addCell(newJailName, newCellNumber, cell.seats)
-            } else {
-                val oldJailName = jailName ?: return null
-                schedule.updateCell(
-                    oldJailName, cellNumber,
-                    newJailName, newCellNumber, cell.seats
-                )
-            }
+            val schedule = scheduleStore.scheduleLD.value ?: return
+            schedule.updateCell(
+                editorState.oldSelectedJail.name, editorState.oldCellNumber,
+                editorState.selectedJail.name, editorState.cellNumber,
+                updatedCell.seats
+            )
         }
+    }
 
-        return schedule
+
+    private fun cell(editorState: CellEditorState): Cell? {
+        // TODO: Get the real value of 'internet' parameter.
+        return repo.cell(
+            editorState.selectedJail.id,
+            editorState.cellNumber,
+            true
+        )
     }
 
 

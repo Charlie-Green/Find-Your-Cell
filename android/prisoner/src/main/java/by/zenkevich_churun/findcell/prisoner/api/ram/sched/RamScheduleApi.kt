@@ -1,8 +1,12 @@
 package by.zenkevich_churun.findcell.prisoner.api.ram.sched
 
 import by.zenkevich_churun.findcell.core.api.ScheduleApi
+import by.zenkevich_churun.findcell.core.api.WrongPasswordException
+import by.zenkevich_churun.findcell.core.entity.general.Cell
+import by.zenkevich_churun.findcell.core.entity.general.Jail
 import by.zenkevich_churun.findcell.core.entity.sched.Schedule
 import by.zenkevich_churun.findcell.core.util.std.CollectionUtil
+import by.zenkevich_churun.findcell.prisoner.api.ram.common.RamJailsStorage
 import by.zenkevich_churun.findcell.prisoner.api.ram.profile.RamCell
 import by.zenkevich_churun.findcell.prisoner.api.ram.common.RamUserStorage
 import java.util.Calendar
@@ -35,6 +39,39 @@ class RamScheduleApi @Inject constructor(): ScheduleApi {
 
         synchronized(this) {
             this.schedule = cloneSchedule(schedule)
+        }
+    }
+
+
+    override fun addCell(
+        prisonerId: Int, passwordHash: ByteArray,
+        jailId: Int, cellNumber: Short ) {
+
+        startCellNetworkRequest(prisonerId, passwordHash)
+        synchronized(this) {
+            addCell(jailId, cellNumber)
+        }
+    }
+
+    override fun deleteCell(
+        prisonerId: Int, passwordHash: ByteArray,
+        jailId: Int, cellNumber: Short ) {
+
+        startCellNetworkRequest(prisonerId, passwordHash)
+        synchronized(this) {
+            deleteCell(jailId, cellNumber)
+        }
+    }
+
+    override fun updateCell(
+        prisonerId: Int, passwordHash: ByteArray,
+        oldJailId: Int, oldCellNumber: Short,
+        newJailId: Int, newCellNumber: Short ) {
+
+        startCellNetworkRequest(prisonerId, passwordHash)
+        synchronized(this) {
+            deleteCell(oldJailId, oldCellNumber)
+            addCell(newJailId, newCellNumber)
         }
     }
 
@@ -83,10 +120,46 @@ class RamScheduleApi @Inject constructor(): ScheduleApi {
         return Schedule(
             Calendar.getInstance().apply { set(2020, Calendar.NOVEMBER, 20) },
             Calendar.getInstance().apply { set(2020, Calendar.DECEMBER, 26) },
-            listOf(cell1, cell2, cell3),
-            listOf(period1, period2, period3)
+            mutableListOf(cell1, cell2, cell3),
+            mutableListOf(period1, period2, period3)
         )
     }
+
+
+    private fun startCellNetworkRequest(
+        prisonerId: Int,
+        passwordHash: ByteArray ) {
+
+        simulateNetworkRequest(700L, 1100L)
+        if(!RamUserStorage.validate(prisonerId, passwordHash)) {
+            throw WrongPasswordException()
+        }
+    }
+
+    private fun addCell(jailId: Int, cellNumber: Short) {
+        val sched = schedule ?: return
+        val jail = jailById(jailId)
+
+        val existingCell = sched.cells.find { cell ->
+            cell.jailName == jail.name && cell.number == cellNumber
+        }
+
+        if(existingCell == null) {
+            val cells = sched.cells as MutableList<Cell>
+            cells.add( RamCell(jail.name, cellNumber, 8) )
+        }
+    }
+
+    private fun deleteCell(jailId: Int, cellNumber: Short) {
+        val sched = schedule ?: return
+        val jail = jailById(jailId)
+        val cells = sched.cells as MutableList<Cell>
+
+        cells.removeAll { cell ->
+            cell.jailName == jail.name && cell.number == cellNumber
+        }
+    }
+
 
     private fun simulateNetworkRequest(minTime: Long, maxTime: Long) {
         val delta = (maxTime - minTime).toInt()
@@ -105,5 +178,11 @@ class RamScheduleApi @Inject constructor(): ScheduleApi {
             CollectionUtil.copyList(orig.cells),
             CollectionUtil.copyList(orig.periods)
         )
+    }
+
+    private fun jailById(id: Int): Jail {
+        return RamJailsStorage.jails.find { j ->
+            j.id == id
+        } ?: throw IllegalArgumentException("Wrong Jail ID $id")
     }
 }

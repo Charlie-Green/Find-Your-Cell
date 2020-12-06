@@ -3,6 +3,7 @@ package by.zenkevich_churun.findcell.prisoner.api.ram.jail
 import by.zenkevich_churun.findcell.core.api.JailsApi
 import by.zenkevich_churun.findcell.core.entity.general.Cell
 import by.zenkevich_churun.findcell.core.entity.general.Jail
+import by.zenkevich_churun.findcell.prisoner.api.ram.common.RamJailsStorage
 import java.util.Random
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -11,18 +12,11 @@ import javax.inject.Singleton
 @Singleton
 class RamJailsApi @Inject constructor(): JailsApi {
     private val random = Random()
-    private val jails = listOf(
-        RamJailEntity(17, "Окрестина ИВС", 24),
-        RamJailEntity(11, "Окрестина ЦИП", 40),
-        RamJailEntity(24, "Жодино",        210),
-        RamJailEntity(16, "Барановичи",    150),
-        RamJailEntity(29, "Могилёв",       180)
-    )
 
 
     override fun jailsList(): List<Jail> {
         simulateNetworkRequest(900L, 1300L)
-        return jails.map { jail ->
+        return RamJailsStorage.jails.map { jail ->
             jail.copy()
         }
     }
@@ -40,7 +34,7 @@ class RamJailsApi @Inject constructor(): JailsApi {
 
 
     override fun cell(jailId: Int, cellNumber: Short): Cell {
-        val jail = jails.find { j ->
+        val jail = RamJailsStorage.jails.find { j ->
             j.id == jailId
         }
         jail ?: throw IllegalArgumentException("No Jail with ID $jailId")

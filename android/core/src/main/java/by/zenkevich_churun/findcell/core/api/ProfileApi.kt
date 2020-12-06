@@ -26,8 +26,4 @@ interface ProfileApi {
       * Password hash is used to validate the client's right
       * to mutate information about this user. **/
     fun update(prisoner: Prisoner, passwordHash: ByteArray)
-
-
-    /** Throws by the API's methods if [Prisoner.id] and password hash don't match. **/
-    class WrongPasswordException: SecurityException()
 }

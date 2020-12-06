@@ -39,6 +39,59 @@ class ScheduleRepository @Inject constructor(
     }
 
 
+    fun addCell(
+        jailId: Int,
+        cellNumber: Short
+    ): Boolean {
+
+        val prisoner = store.prisonerLD.value ?: return false
+
+        try {
+            api.addCell(prisoner.id, prisoner.passwordHash, jailId, cellNumber)
+            return true
+        } catch(exc: IOException) {
+            Log.w(LOGTAG, "Failed to add cell: ${exc.javaClass.name}: ${exc.message}")
+            return false
+        }
+    }
+
+    fun deleteCell(
+        jailId: Int,
+        cellNumber: Short
+    ): Boolean {
+
+        val prisoner = store.prisonerLD.value ?: return false
+
+        try {
+            api.deleteCell(prisoner.id, prisoner.passwordHash, jailId, cellNumber)
+            return true
+        } catch(exc: IOException) {
+            Log.w(LOGTAG, "Failed to delete cell: ${exc.javaClass.name}: ${exc.message}")
+            return false
+        }
+    }
+
+    fun updateCell(
+        oldJailId: Int, oldCellNumber: Short,
+        newJailId: Int, newCellNumber: Short
+    ): Boolean {
+
+        val prisoner = store.prisonerLD.value ?: return false
+
+        try {
+            api.updateCell(
+                prisoner.id, prisoner.passwordHash,
+                oldJailId, oldCellNumber,
+                newJailId, newCellNumber
+            )
+            return true
+        } catch(exc: IOException) {
+            Log.w(LOGTAG, "Failed to update cell: ${exc.javaClass.name}: ${exc.message}")
+            return false
+        }
+    }
+
+
     companion object {
         private const val LOGTAG = "FindCell-Schedule"
     }
