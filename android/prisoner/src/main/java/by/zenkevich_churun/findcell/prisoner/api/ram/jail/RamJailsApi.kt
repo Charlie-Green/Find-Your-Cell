@@ -39,6 +39,6 @@ class RamJailsApi @Inject constructor(): JailsApi {
         }
         jail ?: throw IllegalArgumentException("No Jail with ID $jailId")
 
-        return RamCellEntity(jail.name, cellNumber, 8)
+        return RamCellEntity(jailId, jail.name, cellNumber, 8)
     }
 }

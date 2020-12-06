@@ -1,6 +1,7 @@
 package by.zenkevich_churun.findcell.prisoner.ui.common.model
 
 import by.zenkevich_churun.findcell.core.entity.general.Cell
+import by.zenkevich_churun.findcell.core.entity.general.Jail
 import by.zenkevich_churun.findcell.core.entity.sched.Schedule
 import by.zenkevich_churun.findcell.core.entity.sched.SchedulePeriod
 import by.zenkevich_churun.findcell.core.util.std.CalendarUtil
@@ -62,9 +63,9 @@ class ScheduleModel private constructor(
     }
 
 
-    fun addCell(jailName: String, cellNumber: Short, seats: Short) {
+    fun addCell(jail: Jail, cellNumber: Short, seats: Short) {
         val existingCell = cells.find { cell ->
-            cell.jailName == jailName && cell.number == cellNumber
+            cell.jailId == jail.id && cell.number == cellNumber
         }
         if(existingCell != null) {
             return
@@ -72,7 +73,8 @@ class ScheduleModel private constructor(
 
         val backColor = colorGen.next
         val newCell = CellModel(
-            jailName,
+            jail.id,
+            jail.name,
             cellNumber,
             seats,
             backColor,
@@ -84,15 +86,15 @@ class ScheduleModel private constructor(
     }
 
     fun updateCell(
-        oldJailName: String, oldCellNumber: Short,
-        newJailName: String, newCellNumber: Short,
+        oldJailId: Int, oldCellNumber: Short,
+        newJail: Jail, newCellNumber: Short,
         newSeats: Short ) {
 
         cells.removeAll { cell ->
-            cell.jailName == oldJailName && cell.number == oldCellNumber
+            cell.jailId == oldJailId && cell.number == oldCellNumber
         }
 
-        addCell(newJailName, newCellNumber, newSeats)
+        addCell(newJail, newCellNumber, newSeats)
     }
 
 
@@ -197,6 +199,7 @@ class ScheduleModel private constructor(
             for(cell in cells) {
                 val backColor = colorGen.next
                 val model = CellModel(
+                    cell.jailId,
                     cell.jailName,
                     cell.number,
                     cell.seats,

@@ -4,6 +4,7 @@ import by.zenkevich_churun.findcell.core.entity.general.Cell
 
 
 internal class RamCellEntity(
+    override val jailId: Int,
     override val jailName: String,
     override val number: Short,
     override val seats: Short

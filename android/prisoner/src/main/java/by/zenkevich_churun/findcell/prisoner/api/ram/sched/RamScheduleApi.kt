@@ -7,8 +7,8 @@ import by.zenkevich_churun.findcell.core.entity.general.Jail
 import by.zenkevich_churun.findcell.core.entity.sched.Schedule
 import by.zenkevich_churun.findcell.core.util.std.CollectionUtil
 import by.zenkevich_churun.findcell.prisoner.api.ram.common.RamJailsStorage
-import by.zenkevich_churun.findcell.prisoner.api.ram.profile.RamCell
 import by.zenkevich_churun.findcell.prisoner.api.ram.common.RamUserStorage
+import by.zenkevich_churun.findcell.prisoner.api.ram.jail.RamCellEntity
 import java.util.Calendar
 import java.util.Random
 import javax.inject.Inject
@@ -77,24 +77,13 @@ class RamScheduleApi @Inject constructor(): ScheduleApi {
 
 
     private fun createSchedule(): Schedule {
-        val cell1 =
-            RamCell(
-                "Окрестина ЦИП",
-                789,
-                4
-            )
-        val cell2 =
-            RamCell(
-                "Жодино",
-                123,
-                10
-            )
-        val cell3 =
-            RamCell(
-                "Барановичи",
-                43,
-                8
-            )
+        val jail1 = RamJailsStorage.jails[0]
+        val jail2 = RamJailsStorage.jails[1]
+        val jail3 = RamJailsStorage.jails[2]
+
+        val cell1 = RamCellEntity(jail1.id, jail1.name, 789,  4)
+        val cell2 = RamCellEntity(jail2.id, jail2.name, 123, 10)
+        val cell3 = RamCellEntity(jail3.id, jail3.name,  43,  8)
 
         val period1 =
             RamSchedulePeriod(
@@ -146,7 +135,7 @@ class RamScheduleApi @Inject constructor(): ScheduleApi {
 
         if(existingCell == null) {
             val cells = sched.cells as MutableList<Cell>
-            cells.add( RamCell(jail.name, cellNumber, 8) )
+            cells.add( RamCellEntity(jailId, jail.name, cellNumber, 8) )
         }
     }
 

@@ -155,7 +155,7 @@ class CellViewModel @Inject constructor(
         synchronized(scheduleStore) {
             val schedule = scheduleStore.scheduleLD.value ?: return
             schedule.addCell(
-                editorState.selectedJail.name,
+                editorState.selectedJail,
                 editorState.cellNumber,
                 addedCell.seats
             )
@@ -170,8 +170,8 @@ class CellViewModel @Inject constructor(
         synchronized(this) {
             val schedule = scheduleStore.scheduleLD.value ?: return
             schedule.updateCell(
-                editorState.oldSelectedJail.name, editorState.oldCellNumber,
-                editorState.selectedJail.name, editorState.cellNumber,
+                editorState.oldSelectedJail.id, editorState.oldCellNumber,
+                editorState.selectedJail, editorState.cellNumber,
                 updatedCell.seats
             )
         }

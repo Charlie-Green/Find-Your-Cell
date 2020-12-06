@@ -1,13 +1,36 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout
+<LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="192dp">
+    android:orientation="vertical"
+    android:layout_width="210dp"
+    android:layout_height="wrap_content">
 
     <TextView
-        android:layout_width="wrap_content"
+        android:id="@+id/txtvCell"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:text="Cell Options" />
+        android:gravity="center"
+        android:textSize="16sp"
+        android:textStyle="bold" />
 
-</FrameLayout>
+
+    <include layout="@layout/view_divider" />
+
+    <TextView
+        android:id="@+id/txtvUpdate"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        style="@style/cell_option"
+        android:text="@string/replace" />
+
+
+    <include layout="@layout/view_divider" />
+
+    <TextView
+        android:id="@+id/txtvDelete"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        style="@style/cell_option"
+        android:text="@string/delete" />
+
+</LinearLayout>

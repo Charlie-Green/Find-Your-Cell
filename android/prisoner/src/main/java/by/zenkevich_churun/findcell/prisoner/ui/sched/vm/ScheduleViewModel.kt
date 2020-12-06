@@ -30,7 +30,6 @@ class ScheduleViewModel @Inject constructor(
     private val mldError = MutableLiveData<String?>()
     private val mldChanges = MutableLiveData<Boolean>()
     private val mldLoading = MutableLiveData<Boolean>()
-    private val mldCellOptions = MutableLiveData<Cell?>()
 
 
     init {
@@ -61,7 +60,7 @@ class ScheduleViewModel @Inject constructor(
         get() = scheduleStore.cellUpdateLD
 
     val cellOptionsLD: LiveData<Cell?>
-        get() = mldCellOptions
+        get() = scheduleStore.cellOptionsLD
 
 
     fun selectCell(cellIndex: Int) {
@@ -107,12 +106,12 @@ class ScheduleViewModel @Inject constructor(
                 return
             }
 
-            mldCellOptions.value = schedule.cells[cellIndex]
+            scheduleStore.requestOptions( schedule.cells[cellIndex] )
         }
     }
 
     fun notifyCellOptionsSuggested() {
-        mldCellOptions.value = null
+        scheduleStore.notifyCellOptionsSuggested()
     }
 
 
