@@ -12,13 +12,13 @@ import androidx.lifecycle.Observer
 import by.zenkevich_churun.findcell.core.util.android.AndroidUtil
 import by.zenkevich_churun.findcell.prisoner.R
 import by.zenkevich_churun.findcell.prisoner.ui.cell.model.CellEditorState
-import by.zenkevich_churun.findcell.prisoner.ui.cell.vm.CellViewModel
+import by.zenkevich_churun.findcell.prisoner.ui.cell.vm.CellEditorViewModel
 import kotlinx.android.synthetic.main.cell_dialog.*
 import kotlinx.android.synthetic.main.cell_dialog.view.*
 
 
-class CellDialog: DialogFragment() {
-    private var vm: CellViewModel? = null
+class CellEditorDialog: DialogFragment() {
+    private var vm: CellEditorViewModel? = null
 
 
     override fun onCreateView(
@@ -37,9 +37,9 @@ class CellDialog: DialogFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         val appContext = view.context.applicationContext
-        val vm = CellViewModel.get(appContext, this).also { this.vm = it }
+        val vm = CellEditorViewModel.get(appContext, this).also { this.vm = it }
 
-        val args = CellDialogArguments.from(this)
+        val args = CellEditorDialogArguments.from(this)
         vm.requestState(args.jailId, args.cellNumber)
 
         vm.editorStateLD.observe(viewLifecycleOwner, Observer { state ->
@@ -128,6 +128,6 @@ class CellDialog: DialogFragment() {
 
     companion object {
         fun arguments(jailId: Int, cellNumber: Short): Bundle
-            = CellDialogArguments.create(jailId, cellNumber)
+            = CellEditorDialogArguments.create(jailId, cellNumber)
     }
 }

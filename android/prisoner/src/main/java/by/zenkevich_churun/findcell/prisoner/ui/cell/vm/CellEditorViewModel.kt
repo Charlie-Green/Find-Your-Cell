@@ -17,14 +17,14 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 
-class CellViewModel @Inject constructor(
+class CellEditorViewModel @Inject constructor(
     @ApplicationContext appContext: Context,
     private val repo: JailsRepository,
     private val scheduleRepo: ScheduleRepository,
     private val scheduleStore: ScheduleLivesDataStorage
 ): ViewModel() {
 
-    private val mapping = CellVMMapping(appContext)
+    private val mapping = CellEditorVMMapping(appContext)
     private val mldEditorState = MutableLiveData<CellEditorState?>()
     private val mldLoading = MutableLiveData<Boolean>()
     private val mldError = MutableLiveData<String?>()
@@ -199,11 +199,11 @@ class CellViewModel @Inject constructor(
         fun get(
             appContext: Context,
             storeOwner: ViewModelStoreOwner
-        ): CellViewModel {
+        ): CellEditorViewModel {
 
-            val fact = CellVMFactory.get(appContext)
+            val fact = CellEditorVMFactory.get(appContext)
             val provider = ViewModelProvider(storeOwner, fact)
-            return provider.get(CellViewModel::class.java)
+            return provider.get(CellEditorViewModel::class.java)
         }
     }
 }

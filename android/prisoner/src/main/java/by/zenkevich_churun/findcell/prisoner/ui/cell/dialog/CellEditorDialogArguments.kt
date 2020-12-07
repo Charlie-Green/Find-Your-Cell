@@ -5,7 +5,7 @@ import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 
 
-internal class CellDialogArguments private constructor(
+internal class CellEditorDialogArguments private constructor(
     val jailId: Int,
     val cellNumber: Short ) {
 
@@ -21,9 +21,9 @@ internal class CellDialogArguments private constructor(
             )
         }
 
-        fun from(fragment: Fragment): CellDialogArguments {
+        fun from(fragment: Fragment): CellEditorDialogArguments {
             val args = fragment.requireArguments()
-            return CellDialogArguments(
+            return CellEditorDialogArguments(
                 args.getInt(ATTR_JAIL_ID),
                 args.getShort(ATTR_CELL_NUMBER)
             )

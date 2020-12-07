@@ -9,31 +9,31 @@ import dagger.hilt.android.EntryPointAccessors
 import dagger.hilt.android.components.ApplicationComponent
 
 
-internal class CellVMFactory(
+internal class CellEditorVMFactory(
     private val appContext: Context
 ): ViewModelProvider.Factory {
 
     @EntryPoint
     @InstallIn(ApplicationComponent::class)
-    interface CellEntryPoint {
-        val cellViewModel: CellViewModel
+    interface CellEditorEntryPoint {
+        val cellEditorViewModel: CellEditorViewModel
     }
 
 
     @Suppress("UNCHECKED_CAST")
     override fun <T: ViewModel?> create(modelClass: Class<T>): T {
-        val entryClass = CellEntryPoint::class.java
+        val entryClass = CellEditorEntryPoint::class.java
         val accessor = EntryPointAccessors.fromApplication(appContext, entryClass)
-        return accessor.cellViewModel as T
+        return accessor.cellEditorViewModel as T
     }
 
 
     companion object {
-        private var instance: CellVMFactory? = null
+        private var instance: CellEditorVMFactory? = null
 
-        fun get(appContext: Context): CellVMFactory {
+        fun get(appContext: Context): CellEditorVMFactory {
             return instance ?: synchronized(this) {
-                instance ?: CellVMFactory(appContext).also {
+                instance ?: CellEditorVMFactory(appContext).also {
                     instance = it
                 }
             }

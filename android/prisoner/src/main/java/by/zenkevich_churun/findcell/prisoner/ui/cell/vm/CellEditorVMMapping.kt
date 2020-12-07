@@ -5,7 +5,7 @@ import by.zenkevich_churun.findcell.core.util.android.AndroidUtil
 import by.zenkevich_churun.findcell.prisoner.R
 
 
-internal class CellVMMapping(
+internal class CellEditorVMMapping(
     private val appContext: Context ) {
 
     val needInternetMessage: String

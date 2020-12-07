@@ -13,7 +13,7 @@ import by.zenkevich_churun.findcell.core.entity.sched.Schedule
 import by.zenkevich_churun.findcell.core.util.android.AndroidUtil
 import by.zenkevich_churun.findcell.core.util.recycler.autogrid.AutomaticGridLayoutManager
 import by.zenkevich_churun.findcell.prisoner.R
-import by.zenkevich_churun.findcell.prisoner.ui.cell.dialog.CellDialog
+import by.zenkevich_churun.findcell.prisoner.ui.cell.dialog.CellEditorDialog
 import by.zenkevich_churun.findcell.prisoner.ui.cellopt.dialog.CellOptionsDialog
 import by.zenkevich_churun.findcell.prisoner.ui.common.model.CellUpdate
 import by.zenkevich_churun.findcell.prisoner.ui.common.model.ScheduleModel
@@ -134,8 +134,8 @@ class ScheduleFragment: Fragment(R.layout.schedule_fragm) {
 
     private fun addCell() {
         val fragmMan = parentFragmentManager
-        CellDialog().apply {
-            arguments = CellDialog.arguments(-1, -1)
+        CellEditorDialog().apply {
+            arguments = CellEditorDialog.arguments(-1, -1)
             show(fragmMan, null)
         }
     }
@@ -168,8 +168,8 @@ class ScheduleFragment: Fragment(R.layout.schedule_fragm) {
 
     private fun suggestUpdateCell(cell: Cell) {
         val fragmMan = parentFragmentManager
-        CellDialog().apply {
-            arguments = CellDialog.arguments(cell.jailId, cell.number)
+        CellEditorDialog().apply {
+            arguments = CellEditorDialog.arguments(cell.jailId, cell.number)
             show(fragmMan, null)
         }
     }
