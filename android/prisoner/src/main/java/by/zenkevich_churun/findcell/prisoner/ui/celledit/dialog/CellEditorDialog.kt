@@ -1,4 +1,4 @@
-package by.zenkevich_churun.findcell.prisoner.ui.cell.dialog
+package by.zenkevich_churun.findcell.prisoner.ui.celledit.dialog
 
 import android.content.DialogInterface
 import android.os.Bundle
@@ -11,8 +11,8 @@ import androidx.fragment.app.DialogFragment
 import androidx.lifecycle.Observer
 import by.zenkevich_churun.findcell.core.util.android.AndroidUtil
 import by.zenkevich_churun.findcell.prisoner.R
-import by.zenkevich_churun.findcell.prisoner.ui.cell.model.CellEditorState
-import by.zenkevich_churun.findcell.prisoner.ui.cell.vm.CellEditorViewModel
+import by.zenkevich_churun.findcell.prisoner.ui.celledit.model.CellEditorState
+import by.zenkevich_churun.findcell.prisoner.ui.celledit.vm.CellEditorViewModel
 import kotlinx.android.synthetic.main.cell_dialog.*
 import kotlinx.android.synthetic.main.cell_dialog.view.*
 
@@ -118,8 +118,7 @@ class CellEditorDialog: DialogFragment() {
             state.oldJailIndex,
             spJail.selectedItemPosition,
             state.oldCellNumber,
-            numpCellNumber.value.toShort(),
-            state.isNew
+            numpCellNumber.value.toShort()
         )
 
         vm.submitState(draft)

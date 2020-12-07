@@ -1,6 +1,7 @@
-package by.zenkevich_churun.findcell.prisoner.ui.cell.vm
+package by.zenkevich_churun.findcell.prisoner.ui.celledit.vm
 
 import android.content.Context
+import android.util.Log
 import androidx.lifecycle.*
 import by.zenkevich_churun.findcell.core.entity.general.Cell
 import by.zenkevich_churun.findcell.core.entity.general.Jail
@@ -9,7 +10,7 @@ import by.zenkevich_churun.findcell.prisoner.ui.common.vm.ScheduleLivesDataStora
 import by.zenkevich_churun.findcell.prisoner.repo.jail.GetJailsResult
 import by.zenkevich_churun.findcell.prisoner.repo.jail.JailsRepository
 import by.zenkevich_churun.findcell.prisoner.repo.sched.ScheduleRepository
-import by.zenkevich_churun.findcell.prisoner.ui.cell.model.*
+import by.zenkevich_churun.findcell.prisoner.ui.celledit.model.*
 import by.zenkevich_churun.findcell.prisoner.ui.common.model.CellUpdate
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.Dispatchers
@@ -92,6 +93,8 @@ class CellEditorViewModel @Inject constructor(
         val state = mldEditorState.value ?: return
 
         viewModelScope.launch(Dispatchers.IO) {
+            Log.v("CharlieDebug", "isNew = ${state.isNew}")
+
             if(state.isNew) {
                 if(scheduleRepo.addCell(state.selectedJail.id, state.cellNumber)) {
                     addToSchedule(state)
@@ -106,6 +109,7 @@ class CellEditorViewModel @Inject constructor(
                     state.oldSelectedJail.id, state.oldCellNumber,
                     state.selectedJail.id, state.cellNumber
                 )
+                Log.v("CharlieDebug", "isUpdated = $isUpdated")
 
                 if(isUpdated) {
                     updateInSchedule(state)
@@ -148,8 +152,7 @@ class CellEditorViewModel @Inject constructor(
         return CellEditorState(
             jailHeaders,
             if(jailIndex in jails.indices) jailIndex else 0,
-            max(cellNumber, 1.toShort()),
-            true
+            max(cellNumber, 1.toShort())
         )
     }
 

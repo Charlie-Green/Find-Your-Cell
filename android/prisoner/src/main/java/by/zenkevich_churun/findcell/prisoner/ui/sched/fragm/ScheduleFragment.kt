@@ -1,6 +1,7 @@
 package by.zenkevich_churun.findcell.prisoner.ui.sched.fragm
 
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import androidx.appcompat.app.AlertDialog
 import androidx.core.view.isVisible
@@ -13,7 +14,7 @@ import by.zenkevich_churun.findcell.core.entity.sched.Schedule
 import by.zenkevich_churun.findcell.core.util.android.AndroidUtil
 import by.zenkevich_churun.findcell.core.util.recycler.autogrid.AutomaticGridLayoutManager
 import by.zenkevich_churun.findcell.prisoner.R
-import by.zenkevich_churun.findcell.prisoner.ui.cell.dialog.CellEditorDialog
+import by.zenkevich_churun.findcell.prisoner.ui.celledit.dialog.CellEditorDialog
 import by.zenkevich_churun.findcell.prisoner.ui.cellopt.dialog.CellOptionsDialog
 import by.zenkevich_churun.findcell.prisoner.ui.common.model.CellUpdate
 import by.zenkevich_churun.findcell.prisoner.ui.common.model.ScheduleModel
@@ -51,6 +52,7 @@ class ScheduleFragment: Fragment(R.layout.schedule_fragm) {
             prBar.isVisible = isLoading
         })
         vm.cellUpdateLD.observe(viewLifecycleOwner, Observer { update ->
+            Log.v("CharlieDebug", "Update = ${update?.javaClass?.simpleName}")
             updateCells(update)
         })
         vm.cellOptionsLD.observe(viewLifecycleOwner, Observer { cell ->
@@ -142,17 +144,20 @@ class ScheduleFragment: Fragment(R.layout.schedule_fragm) {
 
 
     private fun updateCells(update: CellUpdate?) {
-        val adapter = recvCells.adapter as CellsAdapter? ?: return
+        val cellsAdapter = recvCells.adapter as CellsAdapter? ?: return
 
         when(update) {
             is CellUpdate.Added -> {
-                adapter.notifyCellProbablyAdded()
+                cellsAdapter.notifyCellProbablyAdded()
                 vm.notifyCellUpdateConsumed()
             }
 
             is CellUpdate.Updated -> {
-                adapter.notifyDataSetChanged()
+                cellsAdapter.notifyDataSetChanged()
                 vm.notifyCellUpdateConsumed()
+
+                val daysAdapter = recvDays.adapter as ScheduleDaysAdapter? ?: return
+                daysAdapter.notifyDataSetChanged()
             }
         }
     }

@@ -1,4 +1,4 @@
-package by.zenkevich_churun.findcell.prisoner.ui.cell.dialog
+package by.zenkevich_churun.findcell.prisoner.ui.celledit.dialog
 
 import android.os.Bundle
 import androidx.core.os.bundleOf

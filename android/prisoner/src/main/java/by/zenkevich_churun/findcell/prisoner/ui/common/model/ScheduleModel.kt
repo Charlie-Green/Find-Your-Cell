@@ -91,11 +91,22 @@ class ScheduleModel private constructor(
         newJail: Jail, newCellNumber: Short,
         newSeats: Short ) {
 
-        cells.removeAll { cell ->
+        val cellIndex = cells.indexOfFirst { cell ->
             cell.jailId == oldJailId && cell.number == oldCellNumber
         }
 
-        addCell(newJail, newCellNumber, newSeats)
+        if(cellIndex in cells.indices) {
+            val oldCell = cells[cellIndex]
+            cells[cellIndex] = CellModel(
+                newJail.id,
+                newJail.name,
+                newCellNumber,
+                newSeats,
+                oldCell.backColor,
+                oldCell.numberBackColor,
+                oldCell.textColor
+            )
+        }
     }
 
 

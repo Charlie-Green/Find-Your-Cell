@@ -1,4 +1,4 @@
-package by.zenkevich_churun.findcell.prisoner.ui.cell.vm
+package by.zenkevich_churun.findcell.prisoner.ui.celledit.vm
 
 import android.content.Context
 import androidx.lifecycle.ViewModel
