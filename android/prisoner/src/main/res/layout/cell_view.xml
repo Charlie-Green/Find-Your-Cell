@@ -15,7 +15,7 @@
         android:gravity="center"
         android:textSize="18dp"
         android:textStyle="bold"
-        android:background="@drawable/shape_cellview_back" />
+        android:background="@drawable/shape_roundrect_8" />
 
     <TextView
         android:id="@+id/txtvJail"

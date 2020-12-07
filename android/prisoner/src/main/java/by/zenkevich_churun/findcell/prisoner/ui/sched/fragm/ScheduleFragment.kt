@@ -54,10 +54,7 @@ class ScheduleFragment: Fragment(R.layout.schedule_fragm) {
             updateCells(update)
         })
         vm.cellOptionsLD.observe(viewLifecycleOwner, Observer { cell ->
-            cell?.also {
-                suggestOptions(it)
-                vm.notifyCellOptionsSuggested()
-            }
+            cell?.also { suggestOptions(it) }
         })
 
         view.setOnClickListener {

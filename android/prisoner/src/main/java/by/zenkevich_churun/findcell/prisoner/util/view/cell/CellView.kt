@@ -22,7 +22,7 @@ class CellView: LinearLayout {
 
     init {
         View.inflate(context, R.layout.cell_view, this)
-        setBackgroundResource(R.drawable.shape_cellview_back)
+        setBackgroundResource(R.drawable.shape_roundrect_8)
     }
 
 
