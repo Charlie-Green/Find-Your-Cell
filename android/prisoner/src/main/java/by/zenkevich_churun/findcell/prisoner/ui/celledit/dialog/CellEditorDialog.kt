@@ -13,8 +13,8 @@ import by.zenkevich_churun.findcell.core.util.android.AndroidUtil
 import by.zenkevich_churun.findcell.prisoner.R
 import by.zenkevich_churun.findcell.prisoner.ui.celledit.model.CellEditorState
 import by.zenkevich_churun.findcell.prisoner.ui.celledit.vm.CellEditorViewModel
-import kotlinx.android.synthetic.main.cell_dialog.*
-import kotlinx.android.synthetic.main.cell_dialog.view.*
+import kotlinx.android.synthetic.main.cell_edit_dialog.*
+import kotlinx.android.synthetic.main.cell_edit_dialog.view.*
 
 
 class CellEditorDialog: DialogFragment() {
@@ -28,7 +28,7 @@ class CellEditorDialog: DialogFragment() {
     ): View? {
         val activitySize = AndroidUtil.activitySize(requireActivity())
 
-        return inflater.inflate(R.layout.cell_dialog, container, false).apply {
+        return inflater.inflate(R.layout.cell_edit_dialog, container, false).apply {
             vlltContent.updateLayoutParams {
                 width = (activitySize.width*4)/5
             }

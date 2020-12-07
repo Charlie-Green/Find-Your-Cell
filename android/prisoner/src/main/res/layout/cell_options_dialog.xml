@@ -12,30 +12,39 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
-        android:layout_marginBottom="8dp"
+        android:layout_marginLeft="@dimen/celloptions_title_margin_horizontal"
+        android:layout_marginRight="@dimen/celloptions_title_margin_horizontal"
         android:gravity="center"
         android:textSize="16sp"
         android:textStyle="bold"
         android:textColor="?colorPrimary" />
 
+    <TextView
+        android:id="@+id/txtvAlert"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/celloptions_title_margin_horizontal"
+        android:layout_marginRight="@dimen/celloptions_title_margin_horizontal"
+        android:gravity="center"
+        android:textSize="12sp"
+        android:textColor="?android:textColorSecondary" />
+
 
     <include layout="@layout/view_divider" />
 
     <TextView
-        android:id="@+id/txtvUpdate"
+        android:id="@+id/txtvUpdateOrYes"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        style="@style/cell_option"
-        android:text="@string/replace" />
+        style="@style/cell_option" />
 
 
     <include layout="@layout/view_divider" />
 
     <TextView
-        android:id="@+id/txtvDelete"
+        android:id="@+id/txtvDeleteOrNo"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        style="@style/cell_option"
-        android:text="@string/delete" />
+        style="@style/cell_option" />
 
 </LinearLayout>

@@ -15,4 +15,7 @@
 
     <dimen name="cellfragm_rows_distance">6dp</dimen>
 
+    <dimen name="celloptions_title_margin_vertical">8dp</dimen>
+    <dimen name="celloptions_title_margin_horizontal">8dp</dimen>
+
 </resources>

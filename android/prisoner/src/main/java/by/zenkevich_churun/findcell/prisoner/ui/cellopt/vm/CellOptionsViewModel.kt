@@ -4,6 +4,7 @@ import android.content.Context
 import androidx.lifecycle.*
 import by.zenkevich_churun.findcell.core.entity.general.Cell
 import by.zenkevich_churun.findcell.prisoner.repo.jail.JailsRepository
+import by.zenkevich_churun.findcell.prisoner.ui.cellopt.model.CellOptionsMode
 import by.zenkevich_churun.findcell.prisoner.ui.common.vm.ScheduleLivesDataStorage
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -15,12 +16,17 @@ class CellOptionsViewModel @Inject constructor(
     private val jailRepo: JailsRepository
 ): ViewModel() {
 
-    private val mldData = MutableLiveData<String>()
-    private var cell: Cell? = null
+    private val mldData = MutableLiveData<Cell>()
+    private val mldMode = MutableLiveData<CellOptionsMode>().apply {
+        value = CellOptionsMode.OPTIONS
+    }
 
 
-    val dataLD: LiveData<String>
+    val dataLD: LiveData<Cell>
         get() = mldData
+
+    val modeLD: LiveData<CellOptionsMode>
+        get() = mldMode
 
 
     fun requestData(jailId: Int, cellNumber: Short) {
@@ -35,16 +41,28 @@ class CellOptionsViewModel @Inject constructor(
 
 
     fun update() {
-        cell?.also { scheduleStore.requestCellUpdate(it) }
+        mldData.value?.also { cell ->
+            scheduleStore.requestCellUpdate(cell)
+        }
+    }
+
+    fun delete() {
+        mldMode.value = CellOptionsMode.CONFIRM_DELETE
+    }
+
+    fun confirmDelete() {
+        // TODO
+    }
+
+    fun declineDelete() {
+        mldMode.value = CellOptionsMode.OPTIONS
     }
 
 
     private fun loadData(jailId: Int, cellNumber: Short) {
         // TODO: Provide the real value of 'internet' parameter.
         jailRepo.cell(jailId, cellNumber, true)?.also { cell ->
-            this.cell = cell
-            val cellData = "${cell.jailName}, ${cell.number}"
-            mldData.postValue(cellData)
+            mldData.postValue(cell)
         }
     }
 
