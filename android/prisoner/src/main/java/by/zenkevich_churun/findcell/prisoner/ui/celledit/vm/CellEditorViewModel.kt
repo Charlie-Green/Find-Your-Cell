@@ -98,7 +98,7 @@ class CellEditorViewModel @Inject constructor(
             if(state.isNew) {
                 if(scheduleRepo.addCell(state.selectedJail.id, state.cellNumber)) {
                     addToSchedule(state)
-                    scheduleStore.notifyCellAdded()
+                    scheduleStore.submitCellUpdate(CellUpdate.Added)
                 } else {
                     mldError.postValue(mapping.addCellFailedMessage)
                 }
@@ -113,7 +113,7 @@ class CellEditorViewModel @Inject constructor(
 
                 if(isUpdated) {
                     updateInSchedule(state)
-                    scheduleStore.notifyCellUpdated()
+                    scheduleStore.submitCellUpdate(CellUpdate.Updated)
                 } else {
                     mldError.postValue(mapping.updateCellFailedMessage)
                 }
@@ -168,7 +168,7 @@ class CellEditorViewModel @Inject constructor(
             )
         }
 
-        scheduleStore.notifyCellAdded()
+        scheduleStore.submitCellUpdate(CellUpdate.Added)
     }
 
     private fun updateInSchedule(editorState: CellEditorState) {
@@ -183,7 +183,7 @@ class CellEditorViewModel @Inject constructor(
             )
         }
 
-        scheduleStore.notifyCellUpdated()
+        scheduleStore.submitCellUpdate(CellUpdate.Updated)
     }
 
 

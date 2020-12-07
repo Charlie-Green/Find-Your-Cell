@@ -30,21 +30,43 @@
         android:textColor="?android:textColorSecondary" />
 
 
-    <include layout="@layout/view_divider" />
-
-    <TextView
-        android:id="@+id/txtvUpdateOrYes"
+    <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        style="@style/cell_option" />
+        android:layout_height="wrap_content" >
+
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" >
+
+            <include layout="@layout/view_divider" />
+
+            <TextView
+                android:id="@+id/txtvUpdateOrYes"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                style="@style/cell_option" />
 
 
-    <include layout="@layout/view_divider" />
+            <include layout="@layout/view_divider" />
 
-    <TextView
-        android:id="@+id/txtvDeleteOrNo"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        style="@style/cell_option" />
+            <TextView
+                android:id="@+id/txtvDeleteOrNo"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                style="@style/cell_option" />
+
+        </LinearLayout>
+
+
+        <ProgressBar
+            android:id="@+id/prBar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:theme="@style/primary_tinted_progressbar_theme"
+            android:visibility="gone" />
+
+    </FrameLayout>
 
 </LinearLayout>

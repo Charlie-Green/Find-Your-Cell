@@ -153,11 +153,11 @@ class ScheduleFragment: Fragment(R.layout.schedule_fragm) {
             }
 
             is CellUpdate.Updated -> {
-                cellsAdapter.notifyDataSetChanged()
-                vm.notifyCellUpdateConsumed()
+                changeDataset(cellsAdapter)
+            }
 
-                val daysAdapter = recvDays.adapter as ScheduleDaysAdapter? ?: return
-                daysAdapter.notifyDataSetChanged()
+            is CellUpdate.Deleted -> {
+                changeDataset(cellsAdapter)
             }
         }
     }
@@ -177,6 +177,14 @@ class ScheduleFragment: Fragment(R.layout.schedule_fragm) {
             arguments = CellEditorDialog.arguments(cell.jailId, cell.number)
             show(fragmMan, null)
         }
+    }
+
+    private fun changeDataset(cellsAdapter: CellsAdapter) {
+        cellsAdapter.notifyDataSetChanged()
+        vm.notifyCellUpdateConsumed()
+
+        val daysAdapter = recvDays.adapter as ScheduleDaysAdapter? ?: return
+        daysAdapter.notifyDataSetChanged()
     }
 
 

@@ -39,12 +39,8 @@ class ScheduleLivesDataStorage @Inject constructor() {
         mldCellUpdateRequest.value = cell
     }
 
-    fun notifyCellAdded() {
-        mldCellUpdate.postValue(CellUpdate.Added)
-    }
-
-    fun notifyCellUpdated() {
-        mldCellUpdate.postValue(CellUpdate.Updated)
+    fun submitCellUpdate(update: CellUpdate) {
+        mldCellUpdate.postValue(update)
     }
 
     fun notifyCellUpdateConsumed() {

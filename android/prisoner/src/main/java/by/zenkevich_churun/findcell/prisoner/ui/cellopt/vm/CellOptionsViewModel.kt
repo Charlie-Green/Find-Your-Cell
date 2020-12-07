@@ -4,7 +4,9 @@ import android.content.Context
 import androidx.lifecycle.*
 import by.zenkevich_churun.findcell.core.entity.general.Cell
 import by.zenkevich_churun.findcell.prisoner.repo.jail.JailsRepository
+import by.zenkevich_churun.findcell.prisoner.repo.sched.ScheduleRepository
 import by.zenkevich_churun.findcell.prisoner.ui.cellopt.model.CellOptionsMode
+import by.zenkevich_churun.findcell.prisoner.ui.common.model.CellUpdate
 import by.zenkevich_churun.findcell.prisoner.ui.common.vm.ScheduleLivesDataStorage
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -13,10 +15,12 @@ import javax.inject.Inject
 
 class CellOptionsViewModel @Inject constructor(
     private val scheduleStore: ScheduleLivesDataStorage,
-    private val jailRepo: JailsRepository
+    private val jailRepo: JailsRepository,
+    private val scheduleRepo: ScheduleRepository
 ): ViewModel() {
 
     private val mldData = MutableLiveData<Cell>()
+    private val mldLoading = MutableLiveData<Boolean>()
     private val mldMode = MutableLiveData<CellOptionsMode>().apply {
         value = CellOptionsMode.OPTIONS
     }
@@ -27,6 +31,9 @@ class CellOptionsViewModel @Inject constructor(
 
     val modeLD: LiveData<CellOptionsMode>
         get() = mldMode
+
+    val loadingLD: LiveData<Boolean>
+        get() = mldLoading
 
 
     fun requestData(jailId: Int, cellNumber: Short) {
@@ -51,7 +58,19 @@ class CellOptionsViewModel @Inject constructor(
     }
 
     fun confirmDelete() {
-        // TODO
+        val cell = mldData.value ?: return
+        if(mldMode.value != CellOptionsMode.CONFIRM_DELETE) {
+            return
+        }
+        if(!getAndSetLoading()) {
+            return
+        }
+
+        viewModelScope.launch(Dispatchers.IO) {
+            deleteCell(cell)
+            mldLoading.postValue(false)
+        }
+
     }
 
     fun declineDelete() {
@@ -64,6 +83,23 @@ class CellOptionsViewModel @Inject constructor(
         jailRepo.cell(jailId, cellNumber, true)?.also { cell ->
             mldData.postValue(cell)
         }
+    }
+
+    private fun deleteCell(cell: Cell) {
+        val deleted = scheduleRepo.deleteCell(cell.jailId, cell.number)
+        if(deleted) {
+            scheduleStore.submitCellUpdate(CellUpdate.Deleted)
+        }
+    }
+
+
+    private fun getAndSetLoading(): Boolean {
+        if(mldLoading.value == true) {
+            return false
+        }
+
+        mldLoading.value = true
+        return true
     }
 
 

@@ -3,8 +3,7 @@ package by.zenkevich_churun.findcell.prisoner.ui.cellopt.dialog
 import android.os.Bundle
 import android.view.*
 import android.widget.LinearLayout
-import androidx.core.view.marginBottom
-import androidx.core.view.updateLayoutParams
+import androidx.core.view.*
 import androidx.fragment.app.DialogFragment
 import androidx.lifecycle.Observer
 import by.zenkevich_churun.findcell.core.entity.general.Cell
@@ -48,6 +47,9 @@ class CellOptionsDialog: DialogFragment() {
         vm.modeLD.observe(viewLifecycleOwner, Observer { mode ->
             this.mode = mode
             enterMode()
+        })
+        vm.loadingLD.observe(viewLifecycleOwner, Observer { isLoading ->
+            prBar.isVisible = isLoading
         })
     }
 
