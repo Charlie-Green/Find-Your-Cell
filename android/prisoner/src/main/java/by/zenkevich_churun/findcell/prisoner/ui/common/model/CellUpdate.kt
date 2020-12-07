@@ -5,4 +5,5 @@ package by.zenkevich_churun.findcell.prisoner.ui.common.model
 sealed class CellUpdate {
     object Added: CellUpdate()
     object Updated: CellUpdate()
+    object Deleted: CellUpdate()
 }

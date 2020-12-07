@@ -1,5 +1,6 @@
 package by.zenkevich_churun.findcell.prisoner.ui.cell.dialog
 
+import android.content.DialogInterface
 import android.os.Bundle
 import android.view.*
 import android.widget.AdapterView
@@ -38,14 +39,11 @@ class CellDialog: DialogFragment() {
         val appContext = view.context.applicationContext
         val vm = CellViewModel.get(appContext, this).also { this.vm = it }
 
-        val args = requireArguments()
-        vm.requestState(
-            CellDialogArguments.jailId(args),
-            CellDialogArguments.cellNumber(args)
-        )
+        val args = CellDialogArguments.from(this)
+        vm.requestState(args.jailId, args.cellNumber)
 
         vm.editorStateLD.observe(viewLifecycleOwner, Observer { state ->
-            displayState(state)
+            state?.also { displayState(it) }
         })
         vm.loadingLD.observe(viewLifecycleOwner, Observer { loading ->
             prBar.isVisible = loading
@@ -63,6 +61,11 @@ class CellDialog: DialogFragment() {
             submitDraft()
             vm.save()
         }
+    }
+
+    override fun onDismiss(dialog: DialogInterface) {
+        super.onDismiss(dialog)
+        vm?.notifyUiDismissed()
     }
 
 

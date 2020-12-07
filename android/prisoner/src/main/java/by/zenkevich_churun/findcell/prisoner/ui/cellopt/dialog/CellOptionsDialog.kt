@@ -1,6 +1,5 @@
 package by.zenkevich_churun.findcell.prisoner.ui.cellopt.dialog
 
-import android.content.DialogInterface
 import android.os.Bundle
 import android.view.*
 import androidx.fragment.app.DialogFragment
@@ -39,12 +38,17 @@ class CellOptionsDialog: DialogFragment() {
         vm.dataLD.observe(viewLifecycleOwner, Observer { data ->
             txtvCell.text = data
         })
+
+        txtvUpdate.setOnClickListener {
+            dismiss()
+            vm.update()
+        }
     }
 
-    override fun onDismiss(dialog: DialogInterface) {
-        super.onDismiss(dialog)
-        vm.notifyUiDismissed()
-    }
+//    override fun onDismiss(dialog: DialogInterface) {
+//        super.onDismiss(dialog)
+//        vm.notifyUiDismissed()
+//    }
 
 
     private fun initFields() {

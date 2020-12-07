@@ -11,8 +11,6 @@ class ScheduleDayModel(
     val textColor: Int,
     val backColors: List<Int> ) {
 
-    constructor(date: Calendar):
-        this(date, "", UNDEFINED_COLOR, listOf())
 
     companion object {
         /** In this case, use the theme-defined text color. **/

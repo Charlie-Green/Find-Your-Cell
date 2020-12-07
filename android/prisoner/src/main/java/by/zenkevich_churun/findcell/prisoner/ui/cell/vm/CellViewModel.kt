@@ -25,12 +25,12 @@ class CellViewModel @Inject constructor(
 ): ViewModel() {
 
     private val mapping = CellVMMapping(appContext)
-    private val mldEditorState = MutableLiveData<CellEditorState>()
+    private val mldEditorState = MutableLiveData<CellEditorState?>()
     private val mldLoading = MutableLiveData<Boolean>()
     private val mldError = MutableLiveData<String?>()
 
 
-    val editorStateLD: LiveData<CellEditorState>
+    val editorStateLD: LiveData<CellEditorState?>
         get() = mldEditorState
 
     val loadingLD: LiveData<Boolean>
@@ -47,7 +47,6 @@ class CellViewModel @Inject constructor(
         if(mldEditorState.value != null) {
             return
         }
-
         if(getAndSetLoading()) {
             return
         }
@@ -118,6 +117,11 @@ class CellViewModel @Inject constructor(
 
             mldLoading.postValue(false)
         }
+    }
+
+
+    fun notifyUiDismissed() {
+        scheduleStore.notifyCellUpdateRequestConsumed()
     }
 
 

@@ -12,19 +12,16 @@ import javax.inject.Inject
 
 class CellOptionsViewModel @Inject constructor(
     private val scheduleStore: ScheduleLivesDataStorage,
-    private val repo: JailsRepository
+    private val jailRepo: JailsRepository
 ): ViewModel() {
 
     private val mldData = MutableLiveData<String>()
+    private var cell: Cell? = null
 
 
     val dataLD: LiveData<String>
         get() = mldData
 
-
-    fun notifyUiDismissed() {
-        scheduleStore.notifyCellOptionsSuggested()
-    }
 
     fun requestData(jailId: Int, cellNumber: Short) {
         if(mldData.value != null) {
@@ -37,9 +34,15 @@ class CellOptionsViewModel @Inject constructor(
     }
 
 
+    fun update() {
+        cell?.also { scheduleStore.requestCellUpdate(it) }
+    }
+
+
     private fun loadData(jailId: Int, cellNumber: Short) {
         // TODO: Provide the real value of 'internet' parameter.
-        repo.cell(jailId, cellNumber, true)?.also { cell ->
+        jailRepo.cell(jailId, cellNumber, true)?.also { cell ->
+            this.cell = cell
             val cellData = "${cell.jailName}, ${cell.number}"
             mldData.postValue(cellData)
         }

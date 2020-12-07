@@ -14,6 +14,7 @@ class ScheduleLivesDataStorage @Inject constructor() {
     private val mldSchedule = MutableLiveData<ScheduleModel>()
     private val mldCellUpdate = MutableLiveData<CellUpdate?>()
     private val mldCellOptions = MutableLiveData<Cell?>()
+    private val mldCellUpdateRequest = MutableLiveData<Cell?>()
 
 
     val scheduleLD: LiveData<ScheduleModel>
@@ -25,11 +26,18 @@ class ScheduleLivesDataStorage @Inject constructor() {
     val cellOptionsLD: LiveData<Cell?>
         get() = mldCellOptions
 
+    val cellUpdateRequestLD: LiveData<Cell?>
+        get() = mldCellUpdateRequest
+
 
     fun submitSchedule(schedule: ScheduleModel) {
         mldSchedule.postValue(schedule)
     }
 
+
+    fun requestCellUpdate(cell: Cell) {
+        mldCellUpdateRequest.value = cell
+    }
 
     fun notifyCellAdded() {
         mldCellUpdate.postValue(CellUpdate.Added)
@@ -41,6 +49,10 @@ class ScheduleLivesDataStorage @Inject constructor() {
 
     fun notifyCellUpdateConsumed() {
         mldCellUpdate.postValue(null)
+    }
+
+    fun notifyCellUpdateRequestConsumed() {
+        mldCellUpdateRequest.postValue(null)
     }
 
 

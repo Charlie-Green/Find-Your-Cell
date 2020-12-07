@@ -62,6 +62,9 @@ class ScheduleViewModel @Inject constructor(
     val cellOptionsLD: LiveData<Cell?>
         get() = scheduleStore.cellOptionsLD
 
+    val cellUpdateRequestLD: LiveData<Cell?>
+        get() = scheduleStore.cellUpdateRequestLD
+
 
     fun selectCell(cellIndex: Int) {
         mldSelectedCellIndex.value = cellIndex
@@ -112,6 +115,10 @@ class ScheduleViewModel @Inject constructor(
 
     fun notifyCellOptionsSuggested() {
         scheduleStore.notifyCellOptionsSuggested()
+    }
+
+    fun notifyCellUpdateSuggested() {
+        scheduleStore.notifyCellUpdateRequestConsumed()
     }
 
 

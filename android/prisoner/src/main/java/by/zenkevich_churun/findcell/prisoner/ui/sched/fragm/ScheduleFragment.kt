@@ -54,7 +54,16 @@ class ScheduleFragment: Fragment(R.layout.schedule_fragm) {
             updateCells(update)
         })
         vm.cellOptionsLD.observe(viewLifecycleOwner, Observer { cell ->
-            cell?.also { suggestOptions(it) }
+            cell?.also {
+                suggestOptions(it)
+                vm.notifyCellOptionsSuggested()
+            }
+        })
+        vm.cellUpdateRequestLD.observe(viewLifecycleOwner, Observer { cell ->
+            cell?.also {
+                suggestUpdateCell(it)
+                vm.notifyCellUpdateSuggested()
+            }
         })
 
         view.setOnClickListener {
@@ -148,10 +157,19 @@ class ScheduleFragment: Fragment(R.layout.schedule_fragm) {
         }
     }
 
+
     private fun suggestOptions(cell: Cell) {
         val fragmMan = parentFragmentManager
         CellOptionsDialog().apply {
             arguments = CellOptionsDialog.arguments(cell)
+            show(fragmMan, null)
+        }
+    }
+
+    private fun suggestUpdateCell(cell: Cell) {
+        val fragmMan = parentFragmentManager
+        CellDialog().apply {
+            arguments = CellDialog.arguments(cell.jailId, cell.number)
             show(fragmMan, null)
         }
     }

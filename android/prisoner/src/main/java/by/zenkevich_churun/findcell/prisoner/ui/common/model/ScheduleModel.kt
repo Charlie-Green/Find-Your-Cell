@@ -1,5 +1,6 @@
 package by.zenkevich_churun.findcell.prisoner.ui.common.model
 
+import androidx.core.graphics.ColorUtils
 import by.zenkevich_churun.findcell.core.entity.general.Cell
 import by.zenkevich_churun.findcell.core.entity.general.Jail
 import by.zenkevich_churun.findcell.core.entity.sched.Schedule
@@ -172,7 +173,8 @@ class ScheduleModel private constructor(
 
     private fun backColors(dayData: HashSet<Int>): List<Int> {
         return dayData.map { cellIndex ->
-            cells[cellIndex].backColor
+            val originalColor = cells[cellIndex].backColor
+            ColorUtils.setAlphaComponent(originalColor, 192)
         }
     }
 
