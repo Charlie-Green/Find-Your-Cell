@@ -1,7 +1,6 @@
 package by.zenkevich_churun.findcell.prisoner.ui.celledit.vm
 
 import android.content.Context
-import android.util.Log
 import androidx.lifecycle.*
 import by.zenkevich_churun.findcell.core.entity.general.Cell
 import by.zenkevich_churun.findcell.core.entity.general.Jail
@@ -93,8 +92,6 @@ class CellEditorViewModel @Inject constructor(
         val state = mldEditorState.value ?: return
 
         viewModelScope.launch(Dispatchers.IO) {
-            Log.v("CharlieDebug", "isNew = ${state.isNew}")
-
             if(state.isNew) {
                 if(scheduleRepo.addCell(state.selectedJail.id, state.cellNumber)) {
                     addToSchedule(state)
@@ -109,7 +106,6 @@ class CellEditorViewModel @Inject constructor(
                     state.oldSelectedJail.id, state.oldCellNumber,
                     state.selectedJail.id, state.cellNumber
                 )
-                Log.v("CharlieDebug", "isUpdated = $isUpdated")
 
                 if(isUpdated) {
                     updateInSchedule(state)

@@ -7,6 +7,7 @@ import by.zenkevich_churun.findcell.prisoner.repo.jail.JailsRepository
 import by.zenkevich_churun.findcell.prisoner.repo.sched.ScheduleRepository
 import by.zenkevich_churun.findcell.prisoner.ui.cellopt.model.CellOptionsMode
 import by.zenkevich_churun.findcell.prisoner.ui.common.model.CellUpdate
+import by.zenkevich_churun.findcell.prisoner.ui.common.model.ScheduleModel
 import by.zenkevich_churun.findcell.prisoner.ui.common.vm.ScheduleLivesDataStorage
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -35,6 +36,9 @@ class CellOptionsViewModel @Inject constructor(
     val loadingLD: LiveData<Boolean>
         get() = mldLoading
 
+    val cellUpdateLD: LiveData<CellUpdate?>
+        get() = scheduleStore.cellUpdateLD
+
 
     fun requestData(jailId: Int, cellNumber: Short) {
         if(mldData.value != null) {
@@ -59,6 +63,7 @@ class CellOptionsViewModel @Inject constructor(
 
     fun confirmDelete() {
         val cell = mldData.value ?: return
+
         if(mldMode.value != CellOptionsMode.CONFIRM_DELETE) {
             return
         }
@@ -87,9 +92,16 @@ class CellOptionsViewModel @Inject constructor(
 
     private fun deleteCell(cell: Cell) {
         val deleted = scheduleRepo.deleteCell(cell.jailId, cell.number)
-        if(deleted) {
-            scheduleStore.submitCellUpdate(CellUpdate.Deleted)
+        if(!deleted) {
+            return
         }
+
+        synchronized(scheduleStore) {
+            val schedule = scheduleStore.scheduleLD.value
+            schedule?.deleteCell(cell.jailId, cell.number)
+        }
+
+        scheduleStore.submitCellUpdate(CellUpdate.Deleted)
     }
 
 

@@ -109,6 +109,23 @@ class ScheduleModel private constructor(
         }
     }
 
+    fun deleteCell(jailId: Int, cellNumber: Short) {
+        val pivotIndex = cells.indexOfFirst { cell ->
+            cell.jailId == jailId && cell.number == cellNumber
+        }
+        if(pivotIndex !in cells.indices) {
+            return
+        }
+
+        // Remove the cell.
+        cells.removeAt(pivotIndex)
+
+        // Update cell indices:
+        for(j in days.indices) {
+            days[j] = updateCellIndices(days[j], pivotIndex)
+        }
+    }
+
 
     private fun resolvePeriods(): List<SchedulePeriod> {
         val periods = mutableListOf<SchedulePeriod>()
@@ -154,6 +171,33 @@ class ScheduleModel private constructor(
         val cal = start.clone() as Calendar
         cal.add(Calendar.DATE, index)
         return cal
+    }
+
+
+    private fun updateCellIndices(
+        oldIndices: HashSet<Int>,
+        pivotIndex: Int
+    ): HashSet<Int> {
+
+        val newIndices = hashSetOf<Int>()
+
+        for(oldIndex in oldIndices) {
+            when {
+                oldIndex < pivotIndex -> {
+                    // The Cell remains at the same index.
+                    newIndices.add(oldIndex)
+                }
+
+                oldIndex > pivotIndex -> {
+                    // The Cell moves 1 position back:
+                    newIndices.add(oldIndex - 1)
+                }
+
+                // Otherwise, the Cell is removed.
+            }
+        }
+
+        return newIndices
     }
 
 

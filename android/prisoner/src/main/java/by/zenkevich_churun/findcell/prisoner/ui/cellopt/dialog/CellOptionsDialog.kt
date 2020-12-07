@@ -11,6 +11,7 @@ import by.zenkevich_churun.findcell.core.util.android.AndroidUtil
 import by.zenkevich_churun.findcell.prisoner.R
 import by.zenkevich_churun.findcell.prisoner.ui.cellopt.model.CellOptionsMode
 import by.zenkevich_churun.findcell.prisoner.ui.cellopt.vm.CellOptionsViewModel
+import by.zenkevich_churun.findcell.prisoner.ui.common.model.CellUpdate
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.cell_options_dialog.*
 import javax.inject.Inject
@@ -50,6 +51,11 @@ class CellOptionsDialog: DialogFragment() {
         })
         vm.loadingLD.observe(viewLifecycleOwner, Observer { isLoading ->
             prBar.isVisible = isLoading
+        })
+        vm.cellUpdateLD.observe(viewLifecycleOwner, Observer { update ->
+            if(update is CellUpdate.Deleted) {
+                dismiss()
+            }
         })
     }
 

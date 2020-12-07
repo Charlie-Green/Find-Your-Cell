@@ -1,7 +1,6 @@
 package by.zenkevich_churun.findcell.prisoner.ui.sched.fragm
 
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import androidx.appcompat.app.AlertDialog
 import androidx.core.view.isVisible
@@ -52,7 +51,6 @@ class ScheduleFragment: Fragment(R.layout.schedule_fragm) {
             prBar.isVisible = isLoading
         })
         vm.cellUpdateLD.observe(viewLifecycleOwner, Observer { update ->
-            Log.v("CharlieDebug", "Update = ${update?.javaClass?.simpleName}")
             updateCells(update)
         })
         vm.cellOptionsLD.observe(viewLifecycleOwner, Observer { cell ->

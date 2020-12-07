@@ -77,7 +77,6 @@ class ScheduleRepository @Inject constructor(
     ): Boolean {
 
         val prisoner = store.prisonerLD.value ?: return false
-        Log.v("CharlieDebug", "Update: ($oldJailId; $oldCellNumber) -> ($newJailId; $newCellNumber)")
 
         try {
             api.updateCell(
