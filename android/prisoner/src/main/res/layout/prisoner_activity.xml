@@ -10,7 +10,7 @@
 
     <fragment
         android:id="@+id/fragmSched"
-        android:name="by.zenkevich_churun.findcell.prisoner.ui.sched.fragm.ScheduleFragment"
+        android:name="by.zenkevich_churun.findcell.prisoner.ui.auth.fragm.AuthorizationFragment"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         app:layout_behavior="by.zenkevich_churun.findcell.core.util.behave.snackbar.RespectSnackbarBehavior" />

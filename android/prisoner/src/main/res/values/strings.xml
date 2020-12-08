@@ -5,10 +5,14 @@
     <string name="add_contact">Добавить контакт</string>
     <string name="add_cell">+1 камера</string>
     <string name="prisoner_name_label">Имя</string>
+    <string name="prisoner_username_label">Логин</string>
+    <string name="prisoner_password_label">Пароль</string>
     <string name="prisoner_info_label">Любая другая информация:</string>
     <string name="jail_label">Тюрьма:\u0020</string>
     <string name="cell_number_label">№ камеры:\u0020</string>
     <string name="specify_cell">Укажите камеру:</string>
+    <string name="log_in">Войти</string>
+    <string name="sign_up">Зарегистрироватьсясясясясясяся</string>
 
     <!-- Notifications: -->
     <string name="save_prisoner_success_msg">Информация профиля сохранена.</string>
