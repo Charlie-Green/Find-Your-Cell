@@ -9,7 +9,6 @@ import by.zenkevich_churun.findcell.core.util.std.CollectionUtil
 import by.zenkevich_churun.findcell.prisoner.api.ram.common.RamJailsStorage
 import by.zenkevich_churun.findcell.prisoner.api.ram.common.RamUserStorage
 import by.zenkevich_churun.findcell.prisoner.api.ram.jail.RamCellEntity
-import java.io.IOException
 import java.util.Calendar
 import java.util.Random
 import javax.inject.Inject
@@ -124,9 +123,6 @@ class RamScheduleApi @Inject constructor(): ScheduleApi {
         if(!RamUserStorage.validate(prisonerId, passwordHash)) {
             throw WrongPasswordException()
         }
-
-        // TODO: CHarlieDebug:
-        throw IOException("Simulated Error")
     }
 
     private fun addCell(jailId: Int, cellNumber: Short) {

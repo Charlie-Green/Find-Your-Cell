@@ -40,6 +40,7 @@ class ScheduleFragment: Fragment(R.layout.schedule_fragm) {
         vm.scheduleLD.observe(viewLifecycleOwner, Observer { schedule ->
             displaySchedule(schedule)
             selectCell()
+            buAddCell.isEnabled = true
         })
         vm.errorLD.observe(viewLifecycleOwner, Observer { message ->
             message?.also { notifyError(it) }

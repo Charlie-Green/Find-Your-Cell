@@ -1,7 +1,6 @@
 package by.zenkevich_churun.findcell.prisoner.ui.celledit.vm
 
 import android.content.Context
-import android.util.Log
 import androidx.lifecycle.*
 import by.zenkevich_churun.findcell.core.entity.general.Cell
 import by.zenkevich_churun.findcell.core.entity.general.Jail
@@ -98,7 +97,6 @@ class CellEditorViewModel @Inject constructor(
                     addToSchedule(state)
                     scheduleStore.submitCellUpdate(CellUpdate.Added)
                 } else {
-                    Log.v("CharlieDebug", "Add failed")
                     mldError.postValue(mapping.addCellFailedMessage)
                 }
 

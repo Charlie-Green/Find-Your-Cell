@@ -5,7 +5,6 @@ import by.zenkevich_churun.findcell.core.api.LogInResponse
 import by.zenkevich_churun.findcell.core.api.ProfileApi
 import by.zenkevich_churun.findcell.core.util.std.CollectionUtil
 import by.zenkevich_churun.findcell.prisoner.api.ram.common.RamUserStorage
-import java.io.IOException
 import java.util.Random
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -105,8 +104,5 @@ class RamProfileApi @Inject constructor(): ProfileApi {
         } catch(exc: InterruptedException) {
             // Empty.
         }
-
-        // TODO: CharlieDebug:
-        throw IOException("Simulated Error")
     }
 }

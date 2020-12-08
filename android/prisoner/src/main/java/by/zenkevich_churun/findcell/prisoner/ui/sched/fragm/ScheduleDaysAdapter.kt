@@ -1,8 +1,7 @@
 package by.zenkevich_churun.findcell.prisoner.ui.sched.fragm
 
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
+import androidx.core.text.HtmlCompat
 import androidx.recyclerview.widget.RecyclerView
 import by.zenkevich_churun.findcell.core.util.android.AndroidUtil
 import by.zenkevich_churun.findcell.prisoner.R
@@ -39,7 +38,7 @@ internal class ScheduleDaysAdapter(
         fun bind(day: ScheduleDayModel) {
             frltRoot.background = MultipleColorsDrawable(day.backColors)
             txtvData.setTextColor( textColor(day) )
-            txtvData.text = day.dayData
+            txtvData.text = HtmlCompat.fromHtml(day.fullHtml, 0)
         }
 
         private fun textColor(day: ScheduleDayModel): Int {

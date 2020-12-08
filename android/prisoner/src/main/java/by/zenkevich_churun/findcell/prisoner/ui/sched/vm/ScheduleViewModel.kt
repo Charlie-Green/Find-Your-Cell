@@ -85,10 +85,11 @@ class ScheduleViewModel @Inject constructor(
 
     fun saveSchedule() {
         val scheduleModel = scheduleLD.value ?: return
-
         if(!startLoad()) {
             return
         }
+
+        mldSelectedCellIndex.value = -1
 
         viewModelScope.launch(Dispatchers.IO) {
             val schedule = scheduleModel.toSchedule()

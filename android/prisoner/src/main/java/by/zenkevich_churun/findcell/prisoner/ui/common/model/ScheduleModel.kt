@@ -202,16 +202,10 @@ class ScheduleModel private constructor(
 
 
     private fun dayData(day: Calendar, dayData: HashSet<Int>): String {
-        val sb = StringBuilder(12 + 16*dayData.size)
-
-        sb.append(dateFormat.format(day.time))
-        var isFirstJail = true
+        val sb = StringBuilder(16*dayData.size)
 
         for(cellIndex in dayData) {
-            if(isFirstJail) {
-                sb.append(": ")
-                isFirstJail = false
-            } else {
+            if(!sb.isEmpty()) {
                 sb.append(". ")
             }
 
@@ -235,7 +229,6 @@ class ScheduleModel private constructor(
 
 
     companion object {
-        private val dateFormat = SimpleDateFormat("dd.MM.yyyy")
         private val colorGen = ScheduleModuleColorGenerator()
 
 

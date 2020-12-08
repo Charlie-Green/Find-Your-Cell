@@ -18,4 +18,6 @@
     <dimen name="celloptions_title_margin_vertical">8dp</dimen>
     <dimen name="celloptions_title_margin_horizontal">8dp</dimen>
 
+    <dimen name="schedule_fragm_stroke_width">4dp</dimen>
+
 </resources>

@@ -12,8 +12,8 @@ class ScheduleModelTest {
 
     @Test
     fun fromSchedule() {
-        val cell1 = CellModel("Жодино", 7, 0, 0, 0)
-        val cell2 = CellModel("Окрестина", 14, 0, 0, 0)
+        val cell1 = CellModel(1, "Жодино", 7, 0, 0, 0, 0)
+        val cell2 = CellModel(2, "Окрестина", 14, 0, 0, 0, 0)
 
         val schedule = Schedule(
             calendar(2020, 11, 18),
@@ -47,7 +47,7 @@ class ScheduleModelTest {
         val schedule = Schedule(
             calendar(2020, 11, 18),
             calendar(2020, 11, 22),
-            listOf( CellModel("Жодино", 31, 0, 0, 0) ),
+            listOf( CellModel(1, "Жодино", 31, 0, 0, 0, 0) ),
             listOf()
         )
 
@@ -75,7 +75,7 @@ class ScheduleModelTest {
         vararg cells: Cell ) {
 
         val day = where.dayAt(dayIndex)
-        val actualDayCount = day.dayData.count { it == '.' } - 1
+        val actualDayCount = day.dayData.count { it == '.' } + 1
         Assertions.assertEquals(cells.size, actualDayCount)
 
         for(cell in cells) {
