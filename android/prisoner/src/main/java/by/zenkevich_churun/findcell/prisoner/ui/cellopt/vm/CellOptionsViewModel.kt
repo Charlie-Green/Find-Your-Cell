@@ -93,6 +93,7 @@ class CellOptionsViewModel @Inject constructor(
     private fun deleteCell(cell: Cell) {
         val deleted = scheduleRepo.deleteCell(cell.jailId, cell.number)
         if(!deleted) {
+            scheduleStore.submitCellUpdate(CellUpdate.DeleteFailed)
             return
         }
 

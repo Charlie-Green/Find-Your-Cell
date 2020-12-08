@@ -8,6 +8,7 @@ import androidx.lifecycle.Observer
 import by.zenkevich_churun.findcell.prisoner.R
 import by.zenkevich_churun.findcell.core.entity.general.Prisoner
 import by.zenkevich_churun.findcell.prisoner.repo.profile.SavePrisonerResult
+import by.zenkevich_churun.findcell.prisoner.ui.common.model.CellUpdate
 import by.zenkevich_churun.findcell.prisoner.ui.root.vm.PrisonerRootViewModel
 import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
@@ -37,21 +38,36 @@ class PrisonerActivity: AppCompatActivity(R.layout.prisoner_activity) {
                 vm.notifyUpdateScheduleResultConsumed()
             }
         })
+        
+        vm.cellUpdateLD.observe(this, Observer { update ->
+            if(update is CellUpdate.DeleteFailed) {
+                notifyDeleteCellFailed()
+                vm.notifyCellUpdateConsumed()
+            }
+        })
     }
 
 
-    private fun notifySavePrisonerSuccess() {
-        notifySuccess(R.string.save_prisoner_success_msg)
-    }
+    private fun notifySavePrisonerSuccess()
+        = notifySuccess(R.string.save_prisoner_success_msg)
 
-    private fun notifyUpdateScheduleSuccess() {
-        notifySuccess(R.string.update_schedule_success_msg)
-    }
+    private fun notifyUpdateScheduleSuccess()
+        = notifySuccess(R.string.update_schedule_success_msg)
+
+    private fun notifyDeleteCellFailed()
+        = notifyError(R.string.delete_cell_failed_msg)
 
 
     private fun notifySuccess(messageRes: Int) {
         Snackbar.make(cdltRoot, messageRes, 2000).apply {
             setTextColor(Color.WHITE)
+            show()
+        }
+    }
+
+    private fun notifyError(messageRes: Int) {
+        Snackbar.make(cdltRoot, messageRes, 3000).apply {
+            setTextColor(Color.RED)
             show()
         }
     }

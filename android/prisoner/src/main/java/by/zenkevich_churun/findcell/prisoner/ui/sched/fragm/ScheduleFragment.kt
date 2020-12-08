@@ -148,6 +148,7 @@ class ScheduleFragment: Fragment(R.layout.schedule_fragm) {
             is CellUpdate.Added -> {
                 cellsAdapter.notifyCellProbablyAdded()
                 vm.notifyCellUpdateConsumed()
+                recvCells.scrollToPosition(cellsAdapter.itemCount - 1)
             }
 
             is CellUpdate.Updated -> {

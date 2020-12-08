@@ -53,9 +53,7 @@ class CellOptionsDialog: DialogFragment() {
             prBar.isVisible = isLoading
         })
         vm.cellUpdateLD.observe(viewLifecycleOwner, Observer { update ->
-            if(update is CellUpdate.Deleted) {
-                dismiss()
-            }
+            handleUpdate(update)
         })
     }
 
@@ -122,6 +120,14 @@ class CellOptionsDialog: DialogFragment() {
                 setBottomMargin(txtvCell, 0)
                 setBottomMargin(txtvAlert, R.dimen.celloptions_title_margin_vertical)
             }
+        }
+    }
+
+    private fun handleUpdate(update: CellUpdate?) {
+        if(update is CellUpdate.Deleted ||
+            update is CellUpdate.DeleteFailed ) {
+
+            dismiss()
         }
     }
 

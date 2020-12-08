@@ -4,6 +4,7 @@ import by.zenkevich_churun.findcell.core.api.JailsApi
 import by.zenkevich_churun.findcell.core.entity.general.Cell
 import by.zenkevich_churun.findcell.core.entity.general.Jail
 import by.zenkevich_churun.findcell.prisoner.api.ram.common.RamJailsStorage
+import java.io.IOException
 import java.util.Random
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -30,6 +31,9 @@ class RamJailsApi @Inject constructor(): JailsApi {
         } catch(exc: InterruptedException) {
             // Empty.
         }
+
+        // TODO: CharlieDebug:
+        throw IOException("Simulated Error")
     }
 
 

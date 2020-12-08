@@ -6,4 +6,5 @@ sealed class CellUpdate {
     object Added: CellUpdate()
     object Updated: CellUpdate()
     object Deleted: CellUpdate()
+    object DeleteFailed: CellUpdate()
 }
