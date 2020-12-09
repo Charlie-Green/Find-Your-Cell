@@ -7,17 +7,19 @@ import by.zenkevich_churun.findcell.core.entity.general.Prisoner
   * All calls should be wrapped with try-catch. **/
 interface ProfileApi {
 
-    /** Gets information about the user. **/
+    /** Gets information about the user.
+      * @return any of [LogInResponse], except [LogInResponse.Error]. **/
     fun logIn(username: String, passwordHash: ByteArray): LogInResponse
 
     /** Creates a new [Prisoner] on the server.
-      * @return id the server assigned to the [Prisoner],
-      *         or [Prisoner.INVALID_ID] if username already exists. **/
+      * @return any of [SignUpResponse], except [SignUpResponse.NetworkError].
+      *         In case of [SignUpResponse.Success], the [Prisoner] within the instance
+      *         contains the ID assigned to new user by the server. **/
     fun signUp(
         username: String,
         name: String,
         passwordHash: ByteArray
-    ): Int
+    ): SignUpResponse
 
     /** Updates user information.
       * [Prisoner.id] is used to identify the user.

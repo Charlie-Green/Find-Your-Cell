@@ -39,5 +39,6 @@
     <string name="delete_cell_alert_message">
         Это удалит всю информацию о Вашем содержании в камере №%d, %s.
     </string>
+    <string name="prisoner_default_name">Без имени</string>
 
 </resources>

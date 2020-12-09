@@ -3,6 +3,7 @@ package by.zenkevich_churun.findcell.prisoner.ui.auth.vm
 import android.content.Context
 import androidx.lifecycle.*
 import by.zenkevich_churun.findcell.core.api.LogInResponse
+import by.zenkevich_churun.findcell.core.api.SignUpResponse
 import by.zenkevich_churun.findcell.prisoner.repo.profile.ProfileRepository
 import by.zenkevich_churun.findcell.prisoner.ui.auth.model.AuthorizationState
 import by.zenkevich_churun.findcell.prisoner.ui.auth.model.PrisonerCredentials
@@ -26,7 +27,7 @@ class AuthorizationViewModel @Inject constructor(
             when(val response = repo.logIn(username, password)) {
                 is LogInResponse.WrongUsername -> AuthorizationState.USERNAME_NOT_EXIST
                 is LogInResponse.WrongPassword -> AuthorizationState.PASSWORD_NOT_MATCH
-                is LogInResponse.Error         -> AuthorizationState.NETWORK_ERROR_LOGIN
+                is LogInResponse.NetworkError  -> AuthorizationState.NETWORK_ERROR_LOGIN
                 is LogInResponse.Success       -> AuthorizationState.SUCCESS
             }
         }
@@ -34,7 +35,11 @@ class AuthorizationViewModel @Inject constructor(
 
     fun signUp(username: String, password: String) {
         authorize(username, password) {
-            TODO()
+            when(val response = repo.signUp(username, password)) {
+                is SignUpResponse.NetworkError   -> AuthorizationState.NETWORK_ERROR_SIGNUP
+                is SignUpResponse.UsernameExists -> AuthorizationState.USERNAME_EXISTS
+                is SignUpResponse.Success        -> AuthorizationState.SUCCESS
+            }
         }
     }
 

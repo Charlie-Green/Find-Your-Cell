@@ -8,10 +8,7 @@ sealed class LogInResponse {
         val prisoner: Prisoner
     ): LogInResponse()
 
-    class Error(
-        val exc: Exception
-    ): LogInResponse()
-
+    object NetworkError: LogInResponse()
     object WrongUsername: LogInResponse()
     object WrongPassword: LogInResponse()
 }

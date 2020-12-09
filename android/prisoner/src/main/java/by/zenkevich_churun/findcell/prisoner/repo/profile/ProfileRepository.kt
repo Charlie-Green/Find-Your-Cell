@@ -1,13 +1,15 @@
 package by.zenkevich_churun.findcell.prisoner.repo.profile
 
+import android.content.Context
 import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import by.zenkevich_churun.findcell.core.api.LogInResponse
-import by.zenkevich_churun.findcell.core.api.ProfileApi
+import by.zenkevich_churun.findcell.core.api.*
 import by.zenkevich_churun.findcell.core.entity.general.Contact
 import by.zenkevich_churun.findcell.core.entity.general.Prisoner
+import by.zenkevich_churun.findcell.prisoner.R
 import by.zenkevich_churun.findcell.prisoner.repo.common.PrisonerStorage
+import dagger.hilt.android.qualifiers.ApplicationContext
 import java.io.IOException
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -15,6 +17,7 @@ import javax.inject.Singleton
 
 @Singleton
 class ProfileRepository @Inject constructor(
+    @ApplicationContext private val appContext: Context,
     private val api: ProfileApi,
     private val store: PrisonerStorage ) {
 
@@ -40,10 +43,29 @@ class ProfileRepository @Inject constructor(
         val response = try {
             api.logIn(username, passHash)
         } catch(exc: IOException) {
-            LogInResponse.Error(exc)
+            Log.w(LOGTAG, "Failed to log in: ${exc.javaClass.name}: ${exc.message}")
+            LogInResponse.NetworkError
         }
 
         if(response is LogInResponse.Success) {
+            store.submit(response.prisoner, passHash)
+        }
+
+        return response
+    }
+
+    fun signUp(username: String, password: String): SignUpResponse {
+        val passHash = password.toByteArray(Charsets.UTF_16)
+        val defaultName = appContext.getString(R.string.prisoner_default_name)
+
+        val response = try {
+            api.signUp(username, defaultName, passHash)
+        } catch(exc: IOException) {
+            Log.w(LOGTAG, "Failed to sign up: ${exc.javaClass.name}: ${exc.message}")
+            SignUpResponse.NetworkError
+        }
+
+        if(response is SignUpResponse.Success) {
             store.submit(response.prisoner, passHash)
         }
 
