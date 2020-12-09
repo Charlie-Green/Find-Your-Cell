@@ -17,22 +17,23 @@
             android:layout_weight="1"
             android:padding="8dp" >
 
-            <LinearLayout
-                android:orientation="vertical"
+            <GridLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical" >
+                android:layout_gravity="center_vertical"
+                android:columnCount="2" >
 
                 <ImageView
                     android:id="@+id/imgvLogo"
                     android:layout_width="72dp"
                     android:layout_height="72dp"
-                    android:layout_gravity="center_horizontal" />
+                    android:layout_gravity="center_horizontal"
+                    android:layout_columnSpan="2" />
 
 
                 <com.google.android.material.textfield.TextInputLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_width="0dp"
+                    android:layout_gravity="fill_horizontal"
                     android:layout_marginTop="16dp"
                     android:hint="@string/prisoner_username_label"
                     app:hintTextAppearance="@style/auth_textinput_hint_textappear"
@@ -42,15 +43,22 @@
                         android:id="@+id/tietUsername"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:inputType="text"
                         android:textColor="?colorPrimary"
                         android:textSize="18sp" />
 
                 </com.google.android.material.textfield.TextInputLayout>
 
+                <ImageView
+                    android:id="@+id/imgvUsernameInfo"
+                    android:layout_gravity="center_vertical"
+                    style="@style/auth_credential_info" />
+
 
                 <com.google.android.material.textfield.TextInputLayout
-                    android:layout_width="match_parent"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
+                    android:layout_gravity="fill_horizontal"
                     android:layout_marginTop="8dp"
                     android:hint="@string/prisoner_password_label"
                     app:hintTextAppearance="@style/auth_textinput_hint_textappear"
@@ -66,7 +74,12 @@
 
                 </com.google.android.material.textfield.TextInputLayout>
 
-            </LinearLayout>
+                <ImageView
+                    android:id="@+id/imgvPasswordInfo"
+                    android:layout_gravity="center_vertical"
+                    style="@style/auth_credential_info" />
+
+            </GridLayout>
 
         </ScrollView>
 

@@ -85,8 +85,4 @@ object AndroidUtil {
     }
 
 
-    fun removeDialogBackground(target: Dialog) {
-        val transparentDrawable = ColorDrawable(Color.TRANSPARENT)
-        target.window?.setBackgroundDrawable(transparentDrawable)
-    }
 }

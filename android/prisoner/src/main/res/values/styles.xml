@@ -39,4 +39,13 @@
         <item name="android:gravity">center_horizontal</item>
     </style>
 
+
+    <style name="auth_credential_info">
+        <item name="android:width">24dp</item>
+        <item name="android:height">24dp</item>
+        <item name="android:layout_marginStart">8dp</item>
+        <item name="android:src">@drawable/ic_info</item>
+        <item name="android:tint">?android:textColorSecondary</item>
+    </style>
+
 </resources>

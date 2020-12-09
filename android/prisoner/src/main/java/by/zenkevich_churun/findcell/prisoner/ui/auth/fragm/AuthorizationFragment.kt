@@ -2,10 +2,11 @@ package by.zenkevich_churun.findcell.prisoner.ui.auth.fragm
 
 import android.os.Bundle
 import android.util.Log
-import android.view.View
+import android.view.*
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
+import by.zenkevich_churun.findcell.core.util.android.DialogUtil
 import by.zenkevich_churun.findcell.prisoner.R
 import by.zenkevich_churun.findcell.prisoner.ui.auth.model.AuthorizationState
 import by.zenkevich_churun.findcell.prisoner.ui.auth.vm.AuthorizationViewModel
@@ -35,6 +36,8 @@ class AuthorizationFragment: Fragment(R.layout.authorization_fragm) {
         buSignUp.setOnClickListener {
             vm.signUp(username, password)
         }
+        onClickShowInfo(imgvUsernameInfo, R.string.username_info)
+        onClickShowInfo(imgvPasswordInfo, R.string.password_info)
     }
 
 
@@ -111,16 +114,24 @@ class AuthorizationFragment: Fragment(R.layout.authorization_fragm) {
 
 
     private fun notifyError(titleRes: Int, message: String) {
-        AlertDialog.Builder(requireContext())
+        val dialog = AlertDialog.Builder(requireContext())
             .setTitle(titleRes)
             .setMessage(message)
             .setPositiveButton(R.string.ok) { dialog, _ ->
                 dialog.dismiss()
             }.setOnDismissListener {
                 vm.notifyStateConsumed()
-            }.show()
+            }.create()
+
+        DialogUtil.showAt(dialog, 200, 400)
     }
 
     private fun notifyError(titleRes: Int, messageRes: Int)
         = notifyError(titleRes, getString(messageRes))
+
+
+    private fun onClickShowInfo(clickedView: View, infoStringRes: Int) {
+        val listener = ShowInfoOnClickListener(infoStringRes)
+        clickedView.setOnClickListener(listener)
+    }
 }

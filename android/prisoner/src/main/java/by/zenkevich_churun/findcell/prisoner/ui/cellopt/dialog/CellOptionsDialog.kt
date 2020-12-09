@@ -7,7 +7,7 @@ import androidx.core.view.*
 import androidx.fragment.app.DialogFragment
 import androidx.lifecycle.Observer
 import by.zenkevich_churun.findcell.core.entity.general.Cell
-import by.zenkevich_churun.findcell.core.util.android.AndroidUtil
+import by.zenkevich_churun.findcell.core.util.android.DialogUtil
 import by.zenkevich_churun.findcell.prisoner.R
 import by.zenkevich_churun.findcell.prisoner.ui.cellopt.model.CellOptionsMode
 import by.zenkevich_churun.findcell.prisoner.ui.cellopt.vm.CellOptionsViewModel
@@ -32,7 +32,7 @@ class CellOptionsDialog: DialogFragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        dialog?.also { AndroidUtil.removeDialogBackground(it) }
+        dialog?.also { DialogUtil.removeBackground(it) }
         return inflater.inflate(R.layout.cell_options_dialog, container, false)
     }
 

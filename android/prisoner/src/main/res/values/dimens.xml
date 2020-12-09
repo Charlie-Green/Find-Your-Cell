@@ -20,4 +20,6 @@
 
     <dimen name="schedule_fragm_stroke_width">4dp</dimen>
 
+    <dimen name="auth_info_width">210dp</dimen>
+
 </resources>
