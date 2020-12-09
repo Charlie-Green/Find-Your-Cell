@@ -12,9 +12,28 @@
     <string name="cell_number_label">№ камеры:\u0020</string>
     <string name="specify_cell">Укажите камеру:</string>
     <string name="log_in">Войти</string>
-    <string name="sign_up">Зарегистрироватьсясясясясясяся</string>
+    <string name="sign_up">Зарегистрироваться</string>
 
-    <!-- Notifications: -->
+    <!-- Notifications (Authorization): -->
+    <string name="login_failed_msg">Не удалось выполнить вход: ошибка сети.</string>
+    <string name="signup_failed_msg">Не удалось зарегистрироваться: ошибка сети.</string>
+    <string name="invalid_username_title">Недопустимый логин</string>
+    <string name="username_rules">
+        Логин состоит хотя бы из 3 символов. В начале и в конце не должно быть пробелов.
+    </string>
+    <string name="invalid_password_title">Недопустимый пароль</string>
+    <string name="password_rules">
+        Пароль состоит хотя бы из 3 символов. В начале и в конце не должно быть пробелов.
+    </string>
+    <string name="auth_needs_internet_msg">
+        Для того, чтобы войти или зарегистрироваться, нужно соединение с интернетом.
+    </string>
+    <string name="wrong_credentials_title">Не удалось войти</string>
+    <string name="username_not_exist_msg">Имя пользователя введено неверно.</string>
+    <string name="password_not_match_msg">Пароль введён неверно.</string>
+    <string name="username_taken_msg">"%s" уже занято. Логин должен быть уникальным.</string>
+
+    <!-- Notifications (Other): -->
     <string name="save_prisoner_success_msg">Информация профиля сохранена.</string>
     <string name="save_prisoner_error_msg">Не удалось сохранить информацию профиля.</string>
     <string name="get_schedule_failed_msg">Не удалось получить Ваше расписание.</string>

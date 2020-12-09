@@ -1,8 +1,7 @@
 package by.zenkevich_churun.findcell.prisoner.api.ram.profile
 
+import by.zenkevich_churun.findcell.core.api.*
 import by.zenkevich_churun.findcell.core.entity.general.Prisoner
-import by.zenkevich_churun.findcell.core.api.LogInResponse
-import by.zenkevich_churun.findcell.core.api.ProfileApi
 import by.zenkevich_churun.findcell.core.util.std.CollectionUtil
 import by.zenkevich_churun.findcell.prisoner.api.ram.common.RamUserStorage
 import java.util.Random
@@ -45,30 +44,36 @@ class RamProfileApi @Inject constructor(): ProfileApi {
         username: String,
         name: String,
         passwordHash: ByteArray
-    ): Int {
+    ): SignUpResponse {
 
         simulateNetworkRequest(1000L, 1600L)
 
         synchronized(RamUserStorage) {
+            val existingPrisoner = RamUserStorage.prisoners.find { p ->
+                p.username == username
+            }
+            if(existingPrisoner != null) {
+                return SignUpResponse.UsernameExists
+            }
+
             val lastPrisoner = RamUserStorage.prisoners.maxBy {
                 it.id
             }
             val id = lastPrisoner?.id?.plus(1)
                 ?: Prisoner.INVALID_ID + 1
 
-            val newPrisoner =
-                PrisonerRamEntity(
-                    id,
-                    name,
-                    username,
-                    passwordHash,
-                    listOf(),
-                    ""
-                )
+            val newPrisoner = PrisonerRamEntity(
+                id,
+                name,
+                username,
+                passwordHash,
+                listOf(),
+                ""
+            )
 
             RamUserStorage.prisoners.add(newPrisoner)
 
-            return id
+            return SignUpResponse.Success(newPrisoner)
         }
     }
 

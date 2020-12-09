@@ -107,6 +107,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:theme="@style/primary_tinted_progressbar_theme" />
+        android:theme="@style/primary_tinted_progressbar_theme"
+        android:visibility="gone" />
 
 </FrameLayout>

@@ -16,7 +16,9 @@ class AuthorizationViewModel @Inject constructor(
     private val repo: ProfileRepository
 ): ViewModel() {
 
-    private val mldState = MutableLiveData<AuthorizationState>()
+    private val mldState = MutableLiveData<AuthorizationState>().apply {
+        value = AuthorizationState.Idle
+    }
 
     val stateLD: LiveData<AuthorizationState>
         get() = mldState
@@ -25,10 +27,10 @@ class AuthorizationViewModel @Inject constructor(
     fun logIn(username: String, password: String) {
         authorize(username, password) {
             when(val response = repo.logIn(username, password)) {
-                is LogInResponse.WrongUsername -> AuthorizationState.USERNAME_NOT_EXIST
-                is LogInResponse.WrongPassword -> AuthorizationState.PASSWORD_NOT_MATCH
-                is LogInResponse.NetworkError  -> AuthorizationState.NETWORK_ERROR_LOGIN
-                is LogInResponse.Success       -> AuthorizationState.SUCCESS
+                is LogInResponse.WrongUsername -> AuthorizationState.UsernameNotExist
+                is LogInResponse.WrongPassword -> AuthorizationState.PasswordNotMatch
+                is LogInResponse.NetworkError  -> AuthorizationState.NetworkError(true)
+                is LogInResponse.Success       -> AuthorizationState.Success
             }
         }
     }
@@ -36,11 +38,16 @@ class AuthorizationViewModel @Inject constructor(
     fun signUp(username: String, password: String) {
         authorize(username, password) {
             when(val response = repo.signUp(username, password)) {
-                is SignUpResponse.NetworkError   -> AuthorizationState.NETWORK_ERROR_SIGNUP
-                is SignUpResponse.UsernameExists -> AuthorizationState.USERNAME_EXISTS
-                is SignUpResponse.Success        -> AuthorizationState.SUCCESS
+                is SignUpResponse.NetworkError   -> AuthorizationState.NetworkError(false)
+                is SignUpResponse.UsernameExists -> AuthorizationState.UsernameTaken(username)
+                is SignUpResponse.Success        -> AuthorizationState.Success
             }
         }
+    }
+
+
+    fun notifyStateConsumed() {
+        mldState.value = AuthorizationState.Idle
     }
 
 
@@ -49,7 +56,7 @@ class AuthorizationViewModel @Inject constructor(
         password: String,
         crossinline makeNetworkCall: () -> AuthorizationState ) {
 
-        if(mldState.value != AuthorizationState.IDLE) {
+        if(mldState.value != AuthorizationState.Idle) {
             return
         }
 
@@ -58,6 +65,8 @@ class AuthorizationViewModel @Inject constructor(
         if(!validate(username, password)) {
             return
         }
+
+        mldState.value = AuthorizationState.Loading
 
         viewModelScope.launch(Dispatchers.IO) {
             val state = makeNetworkCall()
@@ -70,12 +79,12 @@ class AuthorizationViewModel @Inject constructor(
         val creds = PrisonerCredentials(username, password)
 
         if(!creds.isUsernameValid) {
-            mldState.value = AuthorizationState.USERNAME_INVALID
+            mldState.value = AuthorizationState.InvalidUsername
             return false
         }
 
         if(!creds.isPasswordValid) {
-            mldState.value = AuthorizationState.PASSWORD_INVALID
+            mldState.value = AuthorizationState.InvalidPassword
             return false
         }
 
