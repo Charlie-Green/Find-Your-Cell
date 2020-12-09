@@ -1,12 +1,13 @@
 package by.zenkevich_churun.findcell.prisoner.ui.auth.fragm
 
 import android.os.Bundle
-import android.util.Log
 import android.view.*
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
+import androidx.navigation.fragment.findNavController
 import by.zenkevich_churun.findcell.core.util.android.DialogUtil
+import by.zenkevich_churun.findcell.core.util.android.NavigationUtil
 import by.zenkevich_churun.findcell.prisoner.R
 import by.zenkevich_churun.findcell.prisoner.ui.auth.model.AuthorizationState
 import by.zenkevich_churun.findcell.prisoner.ui.auth.vm.AuthorizationViewModel
@@ -106,8 +107,11 @@ class AuthorizationFragment: Fragment(R.layout.authorization_fragm) {
             }
 
             is AuthorizationState.Success -> {
-                Log.v("CharlieDebug", "Success")
-                // TODO: Navigate to the next screen.
+                NavigationUtil.safeNavigate(
+                    findNavController(),
+                    R.id.fragmAuth,
+                    R.id.actLogIn
+                )
             }
         }
     }

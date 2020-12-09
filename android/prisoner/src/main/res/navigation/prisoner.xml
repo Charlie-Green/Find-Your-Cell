@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    app:startDestination="@id/fragmAuth" >
+
+    <fragment
+        android:id="@+id/fragmAuth"
+        android:name="by.zenkevich_churun.findcell.prisoner.ui.auth.fragm.AuthorizationFragment"
+        android:label="@string/auth_navlabel" >
+
+        <action
+            android:id="@+id/actLogIn"
+            app:destination="@id/fragmProfile"
+            app:enterAnim="@anim/enter_from_bottom"
+            app:exitAnim="@anim/exit_to_top" />
+
+    </fragment>
+
+    <fragment
+        android:id="@+id/fragmProfile"
+        android:name="by.zenkevich_churun.findcell.prisoner.ui.profile.fragm.ProfileFragment"
+        android:label="@string/profile_navlabel" />
+
+</navigation>

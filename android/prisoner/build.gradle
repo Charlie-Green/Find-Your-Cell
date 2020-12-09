@@ -55,6 +55,9 @@ dependencies {
     implementation Deps.libHilt
     kapt           Deps.kaptHilt
 
+    implementation Deps.libNavigationFragm
+    implementation Deps.libNavigationUi
+
     testImplementation Deps.testJUnit
 
     implementation project(":core")

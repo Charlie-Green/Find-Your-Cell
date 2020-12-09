@@ -56,6 +56,10 @@ ext {
     libHilt  = "com.google.dagger:hilt-android:$hiltVersion"
     kaptHilt = "com.google.dagger:hilt-android-compiler:$hiltVersion"
 
+    def navVersion = "2.3.2"
+    libNavigationFragm = "androidx.navigation:navigation-fragment-ktx:$navVersion"
+    libNavigationUi    = "androidx.navigation:navigation-ui-ktx:$navVersion"
+
     def jupiterVersion = "5.3.1"
     testJUnit = "org.junit.jupiter:junit-jupiter-api:$jupiterVersion"
 }

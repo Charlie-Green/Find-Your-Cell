@@ -53,14 +53,17 @@
     <string name="update_cell_failed_msg">Не удалось обновить камеру: ошибка сети.</string>
     <string name="delete_cell_failed_msg">Не удалось удалить сведения.</string>
 
+    <!-- Navigation Labels: -->
+    <string name="auth_navlabel">Авторизация</string>
+    <string name="profile_navlabel">Ваш профиль</string>
+    <string name="schedule_navlabel">Дни ареста</string>
+
     <!-- Other: -->
     <string name="delete_cell_alert_title">Удалить камеру?</string>
     <string name="delete_cell_alert_message">
         Это удалит всю информацию о Вашем содержании в камере №%d, %s.
     </string>
     <string name="prisoner_default_name">Без имени</string>
-
-    <!-- Other: -->
     <string name="username_info">
         Логин не отображается другим пользователям - он нужен лишь для авторизации.
         Войдите в приложение, используя логин,
