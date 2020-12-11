@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<GridLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:columnCount="3" >
+
+    <TextView
+        android:id="@+id/txtvStart"
+        style="@style/arest_date_textappear" />
+
+    <TextView
+        style="@style/arest_date_textappear"
+        android:text=" - " />
+
+    <TextView
+        android:id="@+id/txtvEnd"
+        style="@style/arest_date_textappear" />
+
+
+    <TextView
+        android:id="@+id/txtvJails"
+        android:layout_columnSpan="3"
+        android:layout_gravity="fill_horizontal"
+        android:layout_marginTop="8dp"
+        android:singleLine="true" />
+
+</GridLayout>
