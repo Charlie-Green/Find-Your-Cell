@@ -4,8 +4,7 @@ import android.content.Context
 import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import by.zenkevich_churun.findcell.core.api.*
-import by.zenkevich_churun.findcell.core.entity.general.Contact
+import by.zenkevich_churun.findcell.core.api.auth.*
 import by.zenkevich_churun.findcell.core.entity.general.Prisoner
 import by.zenkevich_churun.findcell.prisoner.R
 import by.zenkevich_churun.findcell.prisoner.repo.common.PrisonerStorage

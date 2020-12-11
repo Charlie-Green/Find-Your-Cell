@@ -1,4 +1,4 @@
-package by.zenkevich_churun.findcell.core.api
+package by.zenkevich_churun.findcell.core.api.jail
 
 import by.zenkevich_churun.findcell.core.entity.general.Cell
 import by.zenkevich_churun.findcell.core.entity.general.Jail

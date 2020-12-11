@@ -1,6 +1,6 @@
 package by.zenkevich_churun.findcell.prisoner.api.ram.jail
 
-import by.zenkevich_churun.findcell.core.api.JailsApi
+import by.zenkevich_churun.findcell.core.api.jail.JailsApi
 import by.zenkevich_churun.findcell.core.entity.general.Cell
 import by.zenkevich_churun.findcell.core.entity.general.Jail
 import by.zenkevich_churun.findcell.prisoner.api.ram.common.RamJailsStorage

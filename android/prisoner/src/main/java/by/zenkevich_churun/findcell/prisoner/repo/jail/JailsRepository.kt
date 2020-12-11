@@ -2,7 +2,7 @@ package by.zenkevich_churun.findcell.prisoner.repo.jail
 
 import android.content.Context
 import android.util.Log
-import by.zenkevich_churun.findcell.core.api.JailsApi
+import by.zenkevich_churun.findcell.core.api.jail.JailsApi
 import by.zenkevich_churun.findcell.core.entity.general.Cell
 import by.zenkevich_churun.findcell.core.entity.general.Jail
 import by.zenkevich_churun.findcell.prisoner.db.JailsDatabase
@@ -17,7 +17,8 @@ import javax.inject.Singleton
 @Singleton
 class JailsRepository @Inject constructor(
     @ApplicationContext private val appContext: Context,
-    private val api: JailsApi ) {
+    private val api: JailsApi
+) {
 
     fun jailsList(internet: Boolean): GetJailsResult {
         val dao = JailsDatabase.get(appContext).jailsDao

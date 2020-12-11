@@ -1,6 +1,6 @@
 package by.zenkevich_churun.findcell.prisoner.api.ram.profile
 
-import by.zenkevich_churun.findcell.core.api.*
+import by.zenkevich_churun.findcell.core.api.auth.*
 import by.zenkevich_churun.findcell.core.entity.general.Prisoner
 import by.zenkevich_churun.findcell.core.util.std.CollectionUtil
 import by.zenkevich_churun.findcell.prisoner.api.ram.common.RamUserStorage

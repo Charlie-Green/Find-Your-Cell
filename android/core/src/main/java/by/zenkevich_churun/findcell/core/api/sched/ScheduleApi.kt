@@ -1,4 +1,4 @@
-package by.zenkevich_churun.findcell.core.api
+package by.zenkevich_churun.findcell.core.api.sched
 
 import by.zenkevich_churun.findcell.core.entity.sched.Schedule
 

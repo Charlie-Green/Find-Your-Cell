@@ -1,7 +1,7 @@
 package by.zenkevich_churun.findcell.prisoner.api.ram.sched
 
-import by.zenkevich_churun.findcell.core.api.ScheduleApi
-import by.zenkevich_churun.findcell.core.api.WrongPasswordException
+import by.zenkevich_churun.findcell.core.api.sched.ScheduleApi
+import by.zenkevich_churun.findcell.core.api.common.WrongPasswordException
 import by.zenkevich_churun.findcell.core.entity.general.Cell
 import by.zenkevich_churun.findcell.core.entity.general.Jail
 import by.zenkevich_churun.findcell.core.entity.sched.Schedule
