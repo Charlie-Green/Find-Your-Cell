@@ -6,7 +6,10 @@ import java.util.Calendar
 
 interface ArestsApi {
 
-    fun get(): List<LightArest>
+    fun get(
+        prisonerId: Int,
+        passwordHash: ByteArray
+    ): List<LightArest>
 
     /** @return This method never returns [CreateOrUpdateArestResponse.NetworkError].
       *         Network errors have to be try-catched by the caller. **/

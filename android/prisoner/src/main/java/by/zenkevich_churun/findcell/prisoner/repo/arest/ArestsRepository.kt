@@ -9,8 +9,7 @@ import javax.inject.Singleton
 @Singleton
 class ArestsRepository @Inject constructor(
     private val arestsApi: ArestsApi,
-    private val jailsApi: JailsApi
-) {
+    private val jailsApi: JailsApi ) {
 
 
 }

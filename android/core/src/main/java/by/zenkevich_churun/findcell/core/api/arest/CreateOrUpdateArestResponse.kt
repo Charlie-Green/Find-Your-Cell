@@ -9,8 +9,13 @@ sealed class CreateOrUpdateArestResponse {
 
         /** The value of [Arest.id] for the intersected [Arest]. **/
         val intersectedId: Int
-    )
+    ): CreateOrUpdateArestResponse()
+
+    class Success(
+        /** ID of the [Arest] updated,
+          * or assigned valid ID of a new created [Arest]. **/
+        val arestId: Int
+    ): CreateOrUpdateArestResponse()
 
     object NetworkError: CreateOrUpdateArestResponse()
-    object Success: CreateOrUpdateArestResponse()
 }

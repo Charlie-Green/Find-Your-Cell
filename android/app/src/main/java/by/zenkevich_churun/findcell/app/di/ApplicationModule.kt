@@ -1,8 +1,10 @@
 package by.zenkevich_churun.findcell.app.di
 
+import by.zenkevich_churun.findcell.core.api.arest.ArestsApi
 import by.zenkevich_churun.findcell.core.api.jail.JailsApi
 import by.zenkevich_churun.findcell.core.api.auth.ProfileApi
 import by.zenkevich_churun.findcell.core.api.sched.ScheduleApi
+import by.zenkevich_churun.findcell.prisoner.api.ram.arest.RamArestsApi
 import by.zenkevich_churun.findcell.prisoner.api.ram.jail.RamJailsApi
 import by.zenkevich_churun.findcell.prisoner.api.ram.profile.RamProfileApi
 import by.zenkevich_churun.findcell.prisoner.api.ram.sched.RamScheduleApi
@@ -34,4 +36,10 @@ interface ApplicationModule {
     fun jailsApi(
         impl: RamJailsApi
     ): JailsApi
+
+    @Singleton
+    @Binds
+    fun arestsApi(
+        impl: RamArestsApi
+    ): ArestsApi
 }
