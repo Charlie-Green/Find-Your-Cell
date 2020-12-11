@@ -21,4 +21,37 @@ class Arest(
         CalendarUtil.setToMidnight(start)
         CalendarUtil.setToMidnight(end)
     }
+
+
+    companion object {
+
+        /** @return [Arest] entity obtained from the given [LightArest] entity
+          *         by substituting [Jail]s from the [Collection] instead of [Jail] IDs.
+          *         Null is returned if a [Jail] couldn't be found for an ID. **/
+        fun from(
+            la: LightArest,
+            availableJails: Collection<Jail>
+        ): Arest? {
+
+            val jails = mutableListOf<Jail>()
+            for(id in la.jailIds) {
+
+                val jail = availableJails.find { j ->
+                    j.id == id
+                }
+
+                if(jail == null) {
+                    return null
+                }
+
+                jails.add(jail)
+            }
+
+            return Arest(
+                la.start,
+                la.end,
+                jails
+            )
+        }
+    }
 }
