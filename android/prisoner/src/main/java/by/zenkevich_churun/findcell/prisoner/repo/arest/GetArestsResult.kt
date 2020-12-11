@@ -10,6 +10,5 @@ sealed class GetArestsResult {
     ): GetArestsResult()
 
     object NotAuthorized: GetArestsResult()
-    object NoInternet: GetArestsResult()
     object NetworkError: GetArestsResult()
 }

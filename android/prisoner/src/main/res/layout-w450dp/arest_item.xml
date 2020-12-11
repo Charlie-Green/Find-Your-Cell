@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <GridLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:columnCount="3" >
@@ -23,7 +22,9 @@
         android:id="@+id/txtvJails"
         android:layout_columnSpan="3"
         android:layout_gravity="fill_horizontal"
-        android:layout_marginTop="8dp"
-        android:singleLine="true" />
+        android:layout_marginTop="4dp"
+        android:layout_marginBottom="16dp"
+        android:singleLine="true"
+        style="@style/arest_jails_textappear" />
 
 </GridLayout>

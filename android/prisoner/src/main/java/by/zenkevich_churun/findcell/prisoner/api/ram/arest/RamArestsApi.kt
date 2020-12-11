@@ -5,6 +5,7 @@ import by.zenkevich_churun.findcell.core.api.arest.CreateOrUpdateArestResponse
 import by.zenkevich_churun.findcell.core.entity.arest.LightArest
 import by.zenkevich_churun.findcell.prisoner.api.ram.common.RamJailsStorage
 import by.zenkevich_churun.findcell.prisoner.api.ram.common.RamUserStorage
+import java.io.IOException
 import java.util.Calendar
 import java.util.Random
 import javax.inject.Inject

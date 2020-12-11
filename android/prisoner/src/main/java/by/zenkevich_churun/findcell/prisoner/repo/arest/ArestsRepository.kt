@@ -24,11 +24,7 @@ class ArestsRepository @Inject constructor(
     private val prisonerStore: PrisonerStorage ) {
 
 
-    fun arestsList(internet: Boolean): GetArestsResult {
-        if(!internet) {
-            return GetArestsResult.NoInternet
-        }
-
+    fun arestsList(): GetArestsResult {
         val prisoner = prisonerStore.prisonerLD.value
             ?: return GetArestsResult.NotAuthorized
         val jailsResult = jailsList(true)

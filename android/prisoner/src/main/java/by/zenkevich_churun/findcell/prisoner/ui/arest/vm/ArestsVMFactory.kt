@@ -14,7 +14,7 @@ internal class ArestsVMFactory(
 ): ViewModelProvider.Factory {
 
     @EntryPoint
-    @InstallIn(applicationComponent::class)
+    @InstallIn(ApplicationComponent::class)
     interface ArestsEntryPoint {
         val arestsViewModel: ArestsViewModel
     }
