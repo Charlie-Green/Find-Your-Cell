@@ -81,4 +81,11 @@
         Сочетание символов (минимум 3) для входа в приложение. Не забывайте Ваш пароль!
     </string>
 
+    <string name="edit_interrupt_title">Прервать редактирование?</string>
+    <string name="edit_interrupt_message">
+        У Вас есть несохранённые изменения. Уйдя с экрана, Вы можете потерять их.
+    </string>
+    <string name="edit_interrupt_yes">Перейти</string>
+    <string name="edit_interrupt_no">Остаться</string>
+
 </resources>

@@ -5,6 +5,8 @@ import androidx.lifecycle.*
 import by.zenkevich_churun.findcell.prisoner.repo.profile.ProfileRepository
 import by.zenkevich_churun.findcell.prisoner.repo.profile.SavePrisonerResult
 import by.zenkevich_churun.findcell.prisoner.repo.sched.UpdateScheduleResult
+import by.zenkevich_churun.findcell.prisoner.ui.common.interrupt.InterruptLiveDataStorage
+import by.zenkevich_churun.findcell.prisoner.ui.common.interrupt.EditInterruptState
 import by.zenkevich_churun.findcell.prisoner.ui.common.sched.CellUpdate
 import by.zenkevich_churun.findcell.prisoner.ui.common.sched.ScheduleLiveDatasStorage
 import javax.inject.Inject
@@ -12,7 +14,8 @@ import javax.inject.Inject
 
 class PrisonerRootViewModel @Inject constructor(
     private val repo: ProfileRepository,
-    private val scheduleStore: ScheduleLiveDatasStorage
+    private val scheduleStore: ScheduleLiveDatasStorage,
+    private val interruptStore: InterruptLiveDataStorage
 ): ViewModel() {
 
     val savePrisonerResultLD: LiveData<SavePrisonerResult>
@@ -23,6 +26,9 @@ class PrisonerRootViewModel @Inject constructor(
 
     val cellUpdateLD: LiveData<CellUpdate?>
         get() = scheduleStore.cellUpdateLD
+
+    val editInterruptStateLD: LiveData<EditInterruptState>
+        get() = interruptStore.stateLD
 
 
     fun notifySaveResultConsumed()

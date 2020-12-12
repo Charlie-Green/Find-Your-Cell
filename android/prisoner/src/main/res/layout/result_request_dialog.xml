@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<GridLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:columnCount="3"
+    android:paddingLeft="8dp"
+    android:paddingRight="8dp"
+    android:paddingTop="8dp" >
+
+    <TextView
+        android:layout_gravity="fill_horizontal"
+        android:layout_columnSpan="3"
+        android:layout_marginBottom="4dp"
+        android:gravity="center_horizontal"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        android:text="@string/edit_interrupt_title" />
+
+    <TextView
+        android:layout_gravity="fill_horizontal"
+        android:layout_columnSpan="3"
+        android:layout_marginBottom="8dp"
+        android:textSize="14sp"
+        android:text="@string/edit_interrupt_message" />
+
+
+    <View
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_gravity="fill_horizontal" />
+
+    <Button
+        android:id="@+id/buNo"
+        android:backgroundTint="?backgroundColor"
+        android:textColor="?colorPrimary"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        android:text="@string/edit_interrupt_no" />
+
+    <Button
+        android:id="@+id/buYes"
+        android:layout_marginStart="4dp"
+        android:backgroundTint="?colorPrimary"
+        android:textColor="?backgroundColor"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        android:text="@string/edit_interrupt_yes" />
+
+</GridLayout>

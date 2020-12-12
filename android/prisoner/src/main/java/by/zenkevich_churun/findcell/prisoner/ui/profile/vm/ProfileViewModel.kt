@@ -6,13 +6,15 @@ import by.zenkevich_churun.findcell.core.entity.general.Contact
 import by.zenkevich_churun.findcell.core.entity.general.Prisoner
 import by.zenkevich_churun.findcell.prisoner.repo.profile.ProfileRepository
 import by.zenkevich_churun.findcell.prisoner.repo.profile.SavePrisonerResult
+import by.zenkevich_churun.findcell.prisoner.ui.common.interrupt.InterruptLiveDataStorage
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 
 class ProfileViewModel @Inject constructor(
-    private val repo: ProfileRepository
+    private val repo: ProfileRepository,
+    private val rrs: InterruptLiveDataStorage
 ): ViewModel() {
 
     private val mldLoading = MutableLiveData<Boolean>().apply {
@@ -66,8 +68,8 @@ class ProfileViewModel @Inject constructor(
     }
 
 
-    fun requestResults() {
-
+    fun requestResult() {
+        rrs.requestResult()
     }
 
 
