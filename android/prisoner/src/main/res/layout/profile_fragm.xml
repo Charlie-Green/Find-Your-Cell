@@ -39,6 +39,16 @@
             android:layout_weight="1"
             android:layout_marginTop="16dp" />
 
+
+        <Button
+            android:id="@+id/buResults"
+            android:layout_width="match_parent"
+            android:layout_height="42dp"
+            android:backgroundTint="?colorPrimary"
+            android:textColor="?backgroundColor"
+            android:textSize="16sp"
+            android:textStyle="bold" />
+
     </LinearLayout>
 
 
@@ -57,7 +67,8 @@
         android:layout_height="wrap_content"
         app:fabCustomSize="48dp"
         android:layout_gravity="bottom|end"
-        android:layout_margin="16dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="52dp"
         android:src="@drawable/ic_save"
         android:tint="#f8f8f8"
         android:visibility="gone" />

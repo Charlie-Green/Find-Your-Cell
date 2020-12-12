@@ -6,16 +6,15 @@ import by.zenkevich_churun.findcell.core.entity.general.Cell
 import by.zenkevich_churun.findcell.prisoner.repo.jail.JailsRepository
 import by.zenkevich_churun.findcell.prisoner.repo.sched.ScheduleRepository
 import by.zenkevich_churun.findcell.prisoner.ui.cellopt.model.CellOptionsMode
-import by.zenkevich_churun.findcell.prisoner.ui.common.model.CellUpdate
-import by.zenkevich_churun.findcell.prisoner.ui.common.model.ScheduleModel
-import by.zenkevich_churun.findcell.prisoner.ui.common.vm.ScheduleLivesDataStorage
+import by.zenkevich_churun.findcell.prisoner.ui.common.sched.CellUpdate
+import by.zenkevich_churun.findcell.prisoner.ui.common.sched.ScheduleLiveDatasStorage
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 
 class CellOptionsViewModel @Inject constructor(
-    private val scheduleStore: ScheduleLivesDataStorage,
+    private val scheduleStore: ScheduleLiveDatasStorage,
     private val jailRepo: JailsRepository,
     private val scheduleRepo: ScheduleRepository
 ): ViewModel() {

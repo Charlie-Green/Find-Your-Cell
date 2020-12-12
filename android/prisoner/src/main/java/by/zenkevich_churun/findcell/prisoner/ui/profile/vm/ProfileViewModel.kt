@@ -66,6 +66,11 @@ class ProfileViewModel @Inject constructor(
     }
 
 
+    fun requestResults() {
+
+    }
+
+
     private fun addedContactTypesMediatorLD(): MediatorLiveData< MutableList<Contact.Type> > {
         val ld = MediatorLiveData< MutableList<Contact.Type> >()
 

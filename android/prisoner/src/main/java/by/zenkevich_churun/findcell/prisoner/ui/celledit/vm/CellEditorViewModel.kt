@@ -5,12 +5,12 @@ import androidx.lifecycle.*
 import by.zenkevich_churun.findcell.core.entity.general.Cell
 import by.zenkevich_churun.findcell.core.entity.general.Jail
 import by.zenkevich_churun.findcell.core.util.std.max
-import by.zenkevich_churun.findcell.prisoner.ui.common.vm.ScheduleLivesDataStorage
+import by.zenkevich_churun.findcell.prisoner.ui.common.sched.ScheduleLiveDatasStorage
 import by.zenkevich_churun.findcell.prisoner.repo.jail.GetJailsResult
 import by.zenkevich_churun.findcell.prisoner.repo.jail.JailsRepository
 import by.zenkevich_churun.findcell.prisoner.repo.sched.ScheduleRepository
 import by.zenkevich_churun.findcell.prisoner.ui.celledit.model.*
-import by.zenkevich_churun.findcell.prisoner.ui.common.model.CellUpdate
+import by.zenkevich_churun.findcell.prisoner.ui.common.sched.CellUpdate
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -21,7 +21,7 @@ class CellEditorViewModel @Inject constructor(
     @ApplicationContext appContext: Context,
     private val repo: JailsRepository,
     private val scheduleRepo: ScheduleRepository,
-    private val scheduleStore: ScheduleLivesDataStorage
+    private val scheduleStore: ScheduleLiveDatasStorage
 ): ViewModel() {
 
     private val mapping = CellEditorVMMapping(appContext)

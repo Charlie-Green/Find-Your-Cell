@@ -3,6 +3,7 @@ package by.zenkevich_churun.findcell.prisoner.ui.common.model
 import by.zenkevich_churun.findcell.core.entity.general.Cell
 import by.zenkevich_churun.findcell.core.entity.sched.Schedule
 import by.zenkevich_churun.findcell.core.entity.sched.SchedulePeriod
+import by.zenkevich_churun.findcell.prisoner.ui.common.sched.*
 import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.Test
 import java.util.*

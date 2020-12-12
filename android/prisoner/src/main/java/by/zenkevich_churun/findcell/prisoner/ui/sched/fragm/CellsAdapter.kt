@@ -5,7 +5,7 @@ import android.view.ViewGroup.LayoutParams.MATCH_PARENT
 import androidx.core.view.setMargins
 import androidx.recyclerview.widget.RecyclerView
 import by.zenkevich_churun.findcell.prisoner.R
-import by.zenkevich_churun.findcell.prisoner.ui.common.model.CellModel
+import by.zenkevich_churun.findcell.prisoner.ui.common.sched.CellModel
 import by.zenkevich_churun.findcell.prisoner.ui.sched.vm.ScheduleViewModel
 import by.zenkevich_churun.findcell.prisoner.util.view.cell.CellView
 

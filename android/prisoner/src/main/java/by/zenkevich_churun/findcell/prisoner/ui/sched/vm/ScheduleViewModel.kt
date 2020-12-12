@@ -6,11 +6,10 @@ import androidx.lifecycle.*
 import by.zenkevich_churun.findcell.core.entity.general.Cell
 import by.zenkevich_churun.findcell.core.entity.sched.Schedule
 import by.zenkevich_churun.findcell.core.util.android.AndroidUtil
-import by.zenkevich_churun.findcell.prisoner.ui.common.vm.ScheduleLivesDataStorage
+import by.zenkevich_churun.findcell.prisoner.ui.common.sched.ScheduleLiveDatasStorage
 import by.zenkevich_churun.findcell.prisoner.repo.sched.*
-import by.zenkevich_churun.findcell.prisoner.ui.common.model.CellUpdate
-import by.zenkevich_churun.findcell.prisoner.ui.common.vm.PrisonerLiveDatasStorage
-import by.zenkevich_churun.findcell.prisoner.ui.common.model.ScheduleModel
+import by.zenkevich_churun.findcell.prisoner.ui.common.sched.CellUpdate
+import by.zenkevich_churun.findcell.prisoner.ui.common.sched.ScheduleModel
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -20,8 +19,7 @@ import javax.inject.Inject
 class ScheduleViewModel @Inject constructor(
     @ApplicationContext appContext: Context,
     private val repo: ScheduleRepository,
-    private val prisonerStore: PrisonerLiveDatasStorage,
-    private val scheduleStore: ScheduleLivesDataStorage
+    private val scheduleStore: ScheduleLiveDatasStorage
 ): ViewModel() {
 
     private val mapping = ScheduleVMMapping(appContext)
@@ -151,7 +149,7 @@ class ScheduleViewModel @Inject constructor(
         val result = repo.updateSchedule(schedule)
 
         if(result is UpdateScheduleResult.Success) {
-            prisonerStore.submitUpdateScheduleSuccess()
+            scheduleStore.submitUpdateScheduleSuccess()
             mldChanges.postValue(false)
         } else {
             mldError.postValue(mapping.updateFailedMessage)

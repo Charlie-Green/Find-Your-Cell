@@ -15,8 +15,8 @@ import by.zenkevich_churun.findcell.core.util.recycler.autogrid.AutomaticGridLay
 import by.zenkevich_churun.findcell.prisoner.R
 import by.zenkevich_churun.findcell.prisoner.ui.celledit.dialog.CellEditorDialog
 import by.zenkevich_churun.findcell.prisoner.ui.cellopt.dialog.CellOptionsDialog
-import by.zenkevich_churun.findcell.prisoner.ui.common.model.CellUpdate
-import by.zenkevich_churun.findcell.prisoner.ui.common.model.ScheduleModel
+import by.zenkevich_churun.findcell.prisoner.ui.common.sched.CellUpdate
+import by.zenkevich_churun.findcell.prisoner.ui.common.sched.ScheduleModel
 import by.zenkevich_churun.findcell.prisoner.ui.sched.vm.ScheduleViewModel
 import kotlinx.android.synthetic.main.schedule_fragm.*
 

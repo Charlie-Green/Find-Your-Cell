@@ -11,7 +11,7 @@ import by.zenkevich_churun.findcell.core.util.android.DialogUtil
 import by.zenkevich_churun.findcell.prisoner.R
 import by.zenkevich_churun.findcell.prisoner.ui.cellopt.model.CellOptionsMode
 import by.zenkevich_churun.findcell.prisoner.ui.cellopt.vm.CellOptionsViewModel
-import by.zenkevich_churun.findcell.prisoner.ui.common.model.CellUpdate
+import by.zenkevich_churun.findcell.prisoner.ui.common.sched.CellUpdate
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.cell_options_dialog.*
 import javax.inject.Inject

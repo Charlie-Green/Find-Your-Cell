@@ -1,20 +1,20 @@
-package by.zenkevich_churun.findcell.prisoner.ui.common.vm
+package by.zenkevich_churun.findcell.prisoner.ui.common.sched
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import by.zenkevich_churun.findcell.core.entity.general.Cell
-import by.zenkevich_churun.findcell.prisoner.ui.common.model.CellUpdate
-import by.zenkevich_churun.findcell.prisoner.ui.common.model.ScheduleModel
+import by.zenkevich_churun.findcell.prisoner.repo.sched.UpdateScheduleResult
 import javax.inject.Inject
 import javax.inject.Singleton
 
 
 @Singleton
-class ScheduleLivesDataStorage @Inject constructor() {
+class ScheduleLiveDatasStorage @Inject constructor() {
     private val mldSchedule = MutableLiveData<ScheduleModel>()
     private val mldCellUpdate = MutableLiveData<CellUpdate?>()
     private val mldCellOptions = MutableLiveData<Cell?>()
     private val mldCellUpdateRequest = MutableLiveData<Cell?>()
+    private val mldUpdateScheduleResult = MutableLiveData<UpdateScheduleResult.Success?>()
 
 
     val scheduleLD: LiveData<ScheduleModel>
@@ -28,6 +28,9 @@ class ScheduleLivesDataStorage @Inject constructor() {
 
     val cellUpdateRequestLD: LiveData<Cell?>
         get() = mldCellUpdateRequest
+
+    val updateScheduleResultLD: LiveData<UpdateScheduleResult.Success?>
+        get() = mldUpdateScheduleResult
 
 
     fun submitSchedule(schedule: ScheduleModel) {
@@ -58,5 +61,14 @@ class ScheduleLivesDataStorage @Inject constructor() {
 
     fun notifyCellOptionsSuggested() {
         mldCellOptions.value = null
+    }
+
+
+    fun submitUpdateScheduleSuccess() {
+        mldUpdateScheduleResult.postValue(UpdateScheduleResult.Success)
+    }
+
+    fun notifyUpdateScheduleResultConsumed() {
+        mldUpdateScheduleResult.postValue(null)
     }
 }

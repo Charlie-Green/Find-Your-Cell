@@ -8,7 +8,7 @@ import androidx.lifecycle.Observer
 import by.zenkevich_churun.findcell.prisoner.R
 import by.zenkevich_churun.findcell.core.entity.general.Prisoner
 import by.zenkevich_churun.findcell.prisoner.repo.profile.SavePrisonerResult
-import by.zenkevich_churun.findcell.prisoner.ui.common.model.CellUpdate
+import by.zenkevich_churun.findcell.prisoner.ui.common.sched.CellUpdate
 import by.zenkevich_churun.findcell.prisoner.ui.root.vm.PrisonerRootViewModel
 import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint

@@ -48,6 +48,10 @@ class ProfileFragment: Fragment(R.layout.profile_fragm) {
                 notifySaveError()
             }
         })
+
+        buResults.setOnClickListener {
+            vm.requestResults()
+        }
     }
 
     override fun onSaveInstanceState(outState: Bundle) {

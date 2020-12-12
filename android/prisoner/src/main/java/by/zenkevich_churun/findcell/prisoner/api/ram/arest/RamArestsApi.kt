@@ -20,7 +20,7 @@ class RamArestsApi @Inject constructor(): ArestsApi {
         LightArest(
             17,
             cal( 5, Calendar.SEPTEMBER, 2020),
-            cal(15,  Calendar.NOVEMBER, 2020),
+            cal(15,  Calendar.SEPTEMBER, 2020),
             listOf(
                 jailId("Окрестина ИВС"),
                 jailId("Окрестина ЦИП"),
@@ -30,8 +30,8 @@ class RamArestsApi @Inject constructor(): ArestsApi {
 
         LightArest(
             13,
-            cal( 8, 11, 2020),
-            cal(18, 11, 2020),
+            cal( 8, Calendar.NOVEMBER, 2020),
+            cal(18, Calendar.NOVEMBER, 2020),
             listOf(
                 jailId("Жодино")
             )
