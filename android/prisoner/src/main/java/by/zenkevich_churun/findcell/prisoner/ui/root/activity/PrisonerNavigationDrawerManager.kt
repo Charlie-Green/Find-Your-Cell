@@ -1,16 +1,82 @@
 package by.zenkevich_churun.findcell.prisoner.ui.root.activity
 
-import android.util.Log
+import androidx.drawerlayout.widget.DrawerLayout
+import androidx.navigation.NavController
+import by.zenkevich_churun.findcell.core.util.android.NavigationUtil
+import by.zenkevich_churun.findcell.prisoner.R
 import com.google.android.material.navigation.NavigationView
 
 
 internal class PrisonerNavigationDrawerManager(
-    private val drawer: NavigationView ) {
+    private val drawer: NavigationView,
+    private val controller: NavController ) {
 
     fun setup() {
         drawer.setNavigationItemSelectedListener { item ->
-            Log.v("CharlieDebug", "Checked item id ${item.itemId}, checked = ${item.isChecked}")
+            navigate(item.itemId)
+            (drawer.parent as DrawerLayout).closeDrawers()
             true  // Yes, display this item as the selected one.
         }
+
+        controller.addOnDestinationChangedListener { _, dest, _ ->
+            select(dest.id)
+            setDrawerEnabled()
+        }
+    }
+
+
+    private fun navigate(itemId: Int) {
+        when(itemId) {
+            R.id.miProfile -> {
+                NavigationUtil.navigateIfNotYet(
+                    controller,
+                    R.id.fragmProfile,
+                    R.id.actSelectProfileMenu
+                ) { null }
+            }
+
+            R.id.miArests  -> {
+                NavigationUtil.navigateIfNotYet(
+                    controller,
+                    R.id.fragmArests,
+                    R.id.actSelectArestsMenu
+                ) { null }
+            }
+
+            R.id.miAuth -> {
+                NavigationUtil.navigateIfNotYet(
+                    controller,
+                    R.id.fragmAuth,
+                    R.id.actSelectAuthMenu
+                ) { null }
+            }
+
+            else -> {
+                throw NotImplementedError("Unknown menu item $itemId")
+            }
+        }
+    }
+
+    private fun select(destId: Int) {
+        val itemId = when(destId) {
+            R.id.fragmProfile -> R.id.miProfile
+            R.id.fragmArests  -> R.id.miArests
+            R.id.fragmAuth    -> R.id.miAuth
+            else -> return
+        }
+
+        if(drawer.checkedItem?.itemId != itemId) {
+            drawer.setCheckedItem(itemId)
+        }
+
+    }
+
+    private fun setDrawerEnabled() {
+        val enabled = (controller.currentDestination?.id != R.id.fragmAuth)
+        val lockMode =
+            if(enabled) DrawerLayout.LOCK_MODE_UNLOCKED
+            else DrawerLayout.LOCK_MODE_LOCKED_CLOSED
+
+        (drawer.parent as DrawerLayout).setDrawerLockMode(lockMode)
     }
 }

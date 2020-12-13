@@ -62,4 +62,23 @@
         android:id="@+id/dialogEditInterrupt"
         android:name="by.zenkevich_churun.findcell.prisoner.ui.interrupt.dialog.EditInterruptDialog" />
 
+
+    <action
+        android:id="@+id/actSelectProfileMenu"
+        app:destination="@id/fragmProfile"
+        app:popUpTo="@id/fragmProfile"
+        app:popUpToInclusive="true" />
+
+    <action
+        android:id="@+id/actSelectArestsMenu"
+        app:destination="@id/fragmArests"
+        app:popUpTo="@id/fragmArests"
+        app:popUpToInclusive="true" />
+
+    <action
+        android:id="@+id/actSelectAuthMenu"
+        app:destination="@id/fragmAuth"
+        app:popUpTo="@id/fragmAuth"
+        app:popUpToInclusive="true" />
+
 </navigation>
