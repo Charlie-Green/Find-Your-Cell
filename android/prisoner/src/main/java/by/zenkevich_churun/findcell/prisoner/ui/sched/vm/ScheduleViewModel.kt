@@ -8,6 +8,7 @@ import by.zenkevich_churun.findcell.core.entity.sched.Schedule
 import by.zenkevich_churun.findcell.core.util.android.AndroidUtil
 import by.zenkevich_churun.findcell.prisoner.ui.common.sched.ScheduleLiveDatasStorage
 import by.zenkevich_churun.findcell.prisoner.repo.sched.*
+import by.zenkevich_churun.findcell.prisoner.ui.common.change.UnsavedChangesLiveDatasStorage
 import by.zenkevich_churun.findcell.prisoner.ui.common.sched.CellUpdate
 import by.zenkevich_churun.findcell.prisoner.ui.common.sched.ScheduleModel
 import dagger.hilt.android.qualifiers.ApplicationContext
@@ -19,14 +20,14 @@ import javax.inject.Inject
 class ScheduleViewModel @Inject constructor(
     @ApplicationContext appContext: Context,
     private val repo: ScheduleRepository,
-    private val scheduleStore: ScheduleLiveDatasStorage
+    private val scheduleStore: ScheduleLiveDatasStorage,
+    private val changesStore: UnsavedChangesLiveDatasStorage
 ): ViewModel() {
 
     private val mapping = ScheduleVMMapping(appContext)
 
     private val mldSelectedCellIndex = MutableLiveData<Int>()
     private val mldError = MutableLiveData<String?>()
-    private val mldChanges = MutableLiveData<Boolean>()
     private val mldLoading = MutableLiveData<Boolean>()
 
 
@@ -49,7 +50,7 @@ class ScheduleViewModel @Inject constructor(
         get() = mldError
 
     val unsavedChangesLD: LiveData<Boolean>
-        get() = mldChanges
+        get() = changesStore.scheduleLD
 
     val loadingLD: LiveData<Boolean>
         get() = mldLoading
@@ -77,7 +78,7 @@ class ScheduleViewModel @Inject constructor(
     }
 
     fun notifyScheduleChanged() {
-        mldChanges.value = true
+        changesStore.setSchedule(true)
     }
 
 
@@ -150,7 +151,7 @@ class ScheduleViewModel @Inject constructor(
 
         if(result is UpdateScheduleResult.Success) {
             scheduleStore.submitUpdateScheduleSuccess()
-            mldChanges.postValue(false)
+            changesStore.setSchedule(false)
         } else {
             mldError.postValue(mapping.updateFailedMessage)
         }

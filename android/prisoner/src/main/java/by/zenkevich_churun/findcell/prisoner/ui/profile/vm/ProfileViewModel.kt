@@ -6,6 +6,7 @@ import by.zenkevich_churun.findcell.core.entity.general.Contact
 import by.zenkevich_churun.findcell.core.entity.general.Prisoner
 import by.zenkevich_churun.findcell.prisoner.repo.profile.ProfileRepository
 import by.zenkevich_churun.findcell.prisoner.repo.profile.SavePrisonerResult
+import by.zenkevich_churun.findcell.prisoner.ui.common.change.UnsavedChangesLiveDatasStorage
 import by.zenkevich_churun.findcell.prisoner.ui.common.interrupt.InterruptLiveDataStorage
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -55,16 +56,19 @@ class ProfileViewModel @Inject constructor(
         }
     }
 
-    fun notifySaveResultConsumed() {
-        repo.notifySaveResultConsumed()
-    }
-
     fun createContact(
         type: Contact.Type,
         existingContacts: Collection<Contact>
     ): Contact {
         return ProfileVMUtil.createContact(type, existingContacts)
     }
+
+
+    fun notifySaveResultConsumed()
+        = repo.notifySaveResultConsumed()
+
+    fun notifyDataChanged()
+        = repo.notifyDataChanged()
 
 
     private fun addedContactTypesMediatorLD(): MediatorLiveData< MutableList<Contact.Type> > {

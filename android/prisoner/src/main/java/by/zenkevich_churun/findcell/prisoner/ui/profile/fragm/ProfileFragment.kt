@@ -77,7 +77,7 @@ class ProfileFragment: Fragment(R.layout.profile_fragm) {
                 prisoner != null &&
                 prisoner?.name?.length != tietName.text?.length ) {
 
-                fabSave.visibility = View.VISIBLE
+                vm?.notifyDataChanged()
             }
         }
 
@@ -100,7 +100,7 @@ class ProfileFragment: Fragment(R.layout.profile_fragm) {
         tietName.setText(prisoner.name)
         recyclerView.adapter = ProfileRecyclerAdapter(vm, prisoner, addedContactTypes) {
             /* Data Updated: */
-            fabSave.visibility = View.VISIBLE
+            vm.notifyDataChanged()
         }
     }
 

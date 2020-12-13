@@ -2,10 +2,18 @@ package by.zenkevich_churun.findcell.prisoner.ui.interrupt.vm
 
 import android.content.Context
 import androidx.lifecycle.*
+import by.zenkevich_churun.findcell.prisoner.ui.common.change.UnsavedChangesLiveDatasStorage
+import by.zenkevich_churun.findcell.prisoner.ui.common.interrupt.InterruptLiveDataStorage
 import javax.inject.Inject
 
 
-class EditInterruptViewModel @Inject constructor(): ViewModel() {
+class EditInterruptViewModel @Inject constructor(
+    private val interruptStore: InterruptLiveDataStorage
+): ViewModel() {
+
+    fun notifyInterruptDeclined()
+        = interruptStore.decline()
+
 
     companion object {
 

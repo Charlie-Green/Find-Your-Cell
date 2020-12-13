@@ -96,8 +96,13 @@ class ProfileRepository @Inject constructor(
         }
     }
 
+
     fun notifySaveResultConsumed() {
         mldSaveResult.postValue(SavePrisonerResult.IGNORED)
+    }
+
+    fun notifyDataChanged() {
+        mldUnsavedChanges.postValue(true)
     }
 
 

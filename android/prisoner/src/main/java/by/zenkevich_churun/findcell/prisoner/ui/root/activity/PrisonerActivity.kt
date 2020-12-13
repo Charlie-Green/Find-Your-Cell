@@ -24,6 +24,7 @@ import kotlinx.android.synthetic.main.prisoner_activity.*
 class PrisonerActivity: AppCompatActivity(R.layout.prisoner_activity) {
 
     private lateinit var vm: PrisonerRootViewModel
+    private var thereAreUnsavedChanges = false
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -58,16 +59,31 @@ class PrisonerActivity: AppCompatActivity(R.layout.prisoner_activity) {
                 warnEditInterrupt()
             }
         })
+
+        vm.unsavedChangesLD.observe(this, Observer { changes ->
+            thereAreUnsavedChanges = changes
+        })
     }
 
     override fun onBackPressed() {
-        val controller = findNavController(R.id.navHost)
-        if(controller.currentDestination?.id == R.id.fragmSchedule) {
+        if(interruptingEdit) {
             vm.notifyEditInterrupted()
         } else {
             super.onBackPressed()
         }
     }
+
+
+    private val interruptingEdit: Boolean
+        get() {
+            if(!thereAreUnsavedChanges) {
+                return false
+            }
+
+            val navController = findNavController(R.id.navHost)
+            val destId = navController.currentDestination?.id ?: 0
+            return (destId == R.id.fragmProfile || destId == R.id.fragmSchedule)
+        }
 
 
     private fun setupNavigation() {
