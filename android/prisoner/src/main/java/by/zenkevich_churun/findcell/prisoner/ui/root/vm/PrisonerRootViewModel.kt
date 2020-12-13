@@ -2,6 +2,7 @@ package by.zenkevich_churun.findcell.prisoner.ui.root.vm
 
 import android.content.Context
 import androidx.lifecycle.*
+import by.zenkevich_churun.findcell.core.entity.general.Prisoner
 import by.zenkevich_churun.findcell.prisoner.repo.profile.ProfileRepository
 import by.zenkevich_churun.findcell.prisoner.repo.profile.SavePrisonerResult
 import by.zenkevich_churun.findcell.prisoner.repo.sched.UpdateScheduleResult
@@ -17,6 +18,9 @@ class PrisonerRootViewModel @Inject constructor(
     private val scheduleStore: ScheduleLiveDatasStorage,
     private val interruptStore: InterruptLiveDataStorage
 ): ViewModel() {
+
+    val prisonerLD: LiveData<out Prisoner>
+        get() = repo.prisonerLD
 
     val savePrisonerResultLD: LiveData<SavePrisonerResult>
         get() = repo.savePrisonerResultLD
@@ -39,6 +43,9 @@ class PrisonerRootViewModel @Inject constructor(
 
     fun notifyCellUpdateConsumed()
         = scheduleStore.notifyCellUpdateConsumed()
+
+    fun notifyEditInterrupted()
+        = interruptStore.interrupt()
 
 
     companion object {

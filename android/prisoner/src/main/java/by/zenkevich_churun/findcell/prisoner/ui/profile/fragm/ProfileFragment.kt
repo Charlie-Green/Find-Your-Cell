@@ -50,7 +50,7 @@ class ProfileFragment: Fragment(R.layout.profile_fragm) {
         })
 
         buResults.setOnClickListener {
-            vm.requestResult()
+            // TODO: Request result.
         }
     }
 

@@ -111,7 +111,7 @@ class AuthorizationFragment: Fragment(R.layout.authorization_fragm) {
                     findNavController(),
                     R.id.fragmAuth,
                     R.id.actLogIn
-                )
+                ) { null }
             }
         }
     }

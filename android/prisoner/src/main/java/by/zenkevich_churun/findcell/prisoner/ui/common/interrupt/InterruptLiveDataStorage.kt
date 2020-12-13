@@ -17,13 +17,13 @@ class InterruptLiveDataStorage @Inject constructor() {
         get() = mldState
 
 
-    fun requestResult()
+    fun interrupt()
         = transmith(EditInterruptState.NOT_REQUESTED, EditInterruptState.ASKING)
 
-    fun confirmRequest()
+    fun confirm()
         = transmith(EditInterruptState.ASKING, EditInterruptState.CONFIRMED)
 
-    fun declineRequest()
+    fun decline()
         = transmith(EditInterruptState.ASKING, EditInterruptState.NOT_REQUESTED)
 
     fun notifyConfirmationConsumed()

@@ -13,8 +13,7 @@ import javax.inject.Inject
 
 
 class ProfileViewModel @Inject constructor(
-    private val repo: ProfileRepository,
-    private val rrs: InterruptLiveDataStorage
+    private val repo: ProfileRepository
 ): ViewModel() {
 
     private val mldLoading = MutableLiveData<Boolean>().apply {
@@ -65,11 +64,6 @@ class ProfileViewModel @Inject constructor(
         existingContacts: Collection<Contact>
     ): Contact {
         return ProfileVMUtil.createContact(type, existingContacts)
-    }
-
-
-    fun requestResult() {
-        rrs.requestResult()
     }
 
 

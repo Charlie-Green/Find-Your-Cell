@@ -13,6 +13,7 @@
     <string name="specify_cell">Укажите камеру:</string>
     <string name="log_in">Войти</string>
     <string name="sign_up">Зарегистрироваться</string>
+    <string name="find_prisoners">Найти сокамерников!</string>
 
     <!-- Notifications (Authorization): -->
     <string name="login_failed_msg">Не удалось выполнить вход: ошибка сети.</string>
@@ -62,6 +63,7 @@
     <!-- Navigation Labels: -->
     <string name="auth_navlabel">Авторизация</string>
     <string name="profile_navlabel">Ваш профиль</string>
+    <string name="arests_navlabel">Список арестов</string>
     <string name="schedule_navlabel">Дни ареста</string>
 
     <!-- Other: -->

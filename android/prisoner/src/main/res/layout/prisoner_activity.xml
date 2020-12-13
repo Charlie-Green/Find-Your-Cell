@@ -8,18 +8,11 @@
     android:layout_height="match_parent"
     tools:context="by.zenkevich_churun.findcell.prisoner.ui.root.activity.PrisonerActivity">
 
-<!--    <androidx.fragment.app.FragmentContainerView-->
-<!--        android:id="@+id/nav_host_fragment"-->
-<!--        android:name="androidx.navigation.fragment.NavHostFragment"-->
-<!--        android:layout_width="match_parent"-->
-<!--        android:layout_height="match_parent"-->
-<!--        app:defaultNavHost="true"-->
-<!--        app:navGraph="@navigation/prisoner" />-->
-
     <fragment
-        android:id="@+id/fragm"
-        android:name="by.zenkevich_churun.findcell.prisoner.ui.arest.fragm.ArestsFragment"
+        android:id="@+id/navHost"
+        android:name="androidx.navigation.fragment.NavHostFragment"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="match_parent"
+        app:defaultNavHost="true" />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

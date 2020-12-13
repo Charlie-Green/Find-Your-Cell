@@ -6,11 +6,13 @@ import androidx.appcompat.app.AlertDialog
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import by.zenkevich_churun.findcell.core.entity.general.Cell
 import by.zenkevich_churun.findcell.core.entity.sched.Schedule
 import by.zenkevich_churun.findcell.core.util.android.AndroidUtil
+import by.zenkevich_churun.findcell.core.util.android.NavigationUtil
 import by.zenkevich_churun.findcell.core.util.recycler.autogrid.AutomaticGridLayoutManager
 import by.zenkevich_churun.findcell.prisoner.R
 import by.zenkevich_churun.findcell.prisoner.ui.celledit.dialog.CellEditorDialog
@@ -164,19 +166,19 @@ class ScheduleFragment: Fragment(R.layout.schedule_fragm) {
 
 
     private fun suggestOptions(cell: Cell) {
-        val fragmMan = parentFragmentManager
-        CellOptionsDialog().apply {
-            arguments = CellOptionsDialog.arguments(cell)
-            show(fragmMan, null)
-        }
+        NavigationUtil.safeNavigate(
+            findNavController(),
+            R.id.fragmSchedule,
+            R.id.dialogCellOptions
+        ) { CellOptionsDialog.arguments(cell) }
     }
 
     private fun suggestUpdateCell(cell: Cell) {
-        val fragmMan = parentFragmentManager
-        CellEditorDialog().apply {
-            arguments = CellEditorDialog.arguments(cell.jailId, cell.number)
-            show(fragmMan, null)
-        }
+        NavigationUtil.safeNavigate(
+            findNavController(),
+            R.id.fragmSchedule,
+            R.id.dialogCellEdit
+        ) { CellEditorDialog.arguments(cell.jailId, cell.number) }
     }
 
     private fun changeDataset(cellsAdapter: CellsAdapter) {

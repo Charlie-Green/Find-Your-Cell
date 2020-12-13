@@ -5,11 +5,13 @@ import android.graphics.Color
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.lifecycle.Observer
+import androidx.navigation.findNavController
 import by.zenkevich_churun.findcell.prisoner.R
 import by.zenkevich_churun.findcell.core.entity.general.Prisoner
+import by.zenkevich_churun.findcell.core.util.android.NavigationUtil
 import by.zenkevich_churun.findcell.prisoner.repo.profile.SavePrisonerResult
+import by.zenkevich_churun.findcell.prisoner.ui.common.interrupt.EditInterruptState
 import by.zenkevich_churun.findcell.prisoner.ui.common.sched.CellUpdate
-import by.zenkevich_churun.findcell.prisoner.ui.interrupt.dialog.EditInterruptDialog
 import by.zenkevich_churun.findcell.prisoner.ui.root.vm.PrisonerRootViewModel
 import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
@@ -21,10 +23,14 @@ import kotlinx.android.synthetic.main.prisoner_activity.*
 @AndroidEntryPoint
 class PrisonerActivity: AppCompatActivity(R.layout.prisoner_activity) {
 
+    private lateinit var vm: PrisonerRootViewModel
+
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        val vm = PrisonerRootViewModel.get(applicationContext, this)
+        vm = PrisonerRootViewModel.get(applicationContext, this)
+        setupNavigation()
 
         vm.savePrisonerResultLD.observe(this, Observer { result ->
             if(result == SavePrisonerResult.SUCCESS) {
@@ -47,7 +53,33 @@ class PrisonerActivity: AppCompatActivity(R.layout.prisoner_activity) {
             }
         })
 
-        EditInterruptDialog().show(supportFragmentManager, null)
+        vm.editInterruptStateLD.observe(this, Observer { state ->
+            if(state == EditInterruptState.ASKING) {
+                warnEditInterrupt()
+            }
+        })
+    }
+
+    override fun onBackPressed() {
+        val controller = findNavController(R.id.navHost)
+        if(controller.currentDestination?.id == R.id.fragmSchedule) {
+            vm.notifyEditInterrupted()
+        } else {
+            super.onBackPressed()
+        }
+    }
+
+
+    private fun setupNavigation() {
+        val authorized = (vm.prisonerLD.value != null)
+
+        val navController = findNavController(R.id.navHost)
+        val prisonerGraph = navController.navInflater.inflate(R.navigation.prisoner)
+        prisonerGraph.startDestination =
+            if(authorized) R.id.fragmProfile
+            else R.id.fragmAuth
+
+        navController.graph = prisonerGraph
     }
 
 
@@ -73,5 +105,12 @@ class PrisonerActivity: AppCompatActivity(R.layout.prisoner_activity) {
             setTextColor(Color.RED)
             show()
         }
+    }
+
+    private fun warnEditInterrupt() {
+        NavigationUtil.navigateIfNotYet(
+            findNavController(R.id.navHost),
+            R.id.dialogEditInterrupt
+        ) { null }
     }
 }
