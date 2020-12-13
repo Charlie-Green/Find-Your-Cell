@@ -17,9 +17,12 @@
         app:layout_behavior="by.zenkevich_churun.findcell.core.util.behave.snackbar.RespectSnackbarBehavior" />
 
     <com.google.android.material.navigation.NavigationView
+        android:id="@+id/navDrawer"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:layout_gravity="start"
-        app:menu="@menu/prisoner" />
+        app:menu="@menu/prisoner"
+        app:itemIconTint="@color/statelist_navmenu_icon"
+        app:itemTextColor="@color/statelist_navmenu_icon" />
 
 </androidx.drawerlayout.widget.DrawerLayout>

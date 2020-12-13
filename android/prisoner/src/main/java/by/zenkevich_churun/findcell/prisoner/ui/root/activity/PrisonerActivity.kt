@@ -32,6 +32,7 @@ class PrisonerActivity: AppCompatActivity(R.layout.prisoner_activity) {
 
         vm = PrisonerRootViewModel.get(applicationContext, this)
         setupNavigation()
+        setupNavigationDrawer()
 
         vm.savePrisonerResultLD.observe(this, Observer { result ->
             if(result == SavePrisonerResult.SUCCESS) {
@@ -96,6 +97,10 @@ class PrisonerActivity: AppCompatActivity(R.layout.prisoner_activity) {
             else R.id.fragmAuth
 
         navController.graph = prisonerGraph
+    }
+
+    private fun setupNavigationDrawer() {
+        PrisonerNavigationDrawerManager(navDrawer).setup()
     }
 
 
