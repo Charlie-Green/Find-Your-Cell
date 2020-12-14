@@ -84,5 +84,17 @@ object AndroidUtil {
         return sb.toString()
     }
 
+    fun stringByResourceName(
+        context: Context,
+        resourceName: String
+    ): String? {
 
+        val res = context.resources.getIdentifier(
+            resourceName,
+            "string",
+            context.packageName
+        )
+
+        return if(res == 0) null else context.getString(res)
+    }
 }

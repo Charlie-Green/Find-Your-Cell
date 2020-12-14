@@ -101,6 +101,7 @@ class PrisonerActivity: AppCompatActivity(R.layout.prisoner_activity) {
 
     private fun setupNavigationDrawer() {
         PrisonerNavigationDrawerManager(
+            toolbar,
             navDrawer,
             findNavController(R.id.navHost)
         ).setup()

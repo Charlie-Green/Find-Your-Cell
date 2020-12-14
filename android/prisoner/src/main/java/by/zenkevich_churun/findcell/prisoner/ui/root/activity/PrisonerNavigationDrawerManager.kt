@@ -1,13 +1,16 @@
 package by.zenkevich_churun.findcell.prisoner.ui.root.activity
 
+import androidx.appcompat.widget.Toolbar
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.navigation.NavController
+import by.zenkevich_churun.findcell.core.util.android.AndroidUtil
 import by.zenkevich_churun.findcell.core.util.android.NavigationUtil
 import by.zenkevich_churun.findcell.prisoner.R
 import com.google.android.material.navigation.NavigationView
 
 
 internal class PrisonerNavigationDrawerManager(
+    private val toolbar: Toolbar,
     private val drawer: NavigationView,
     private val controller: NavController ) {
 
@@ -20,10 +23,14 @@ internal class PrisonerNavigationDrawerManager(
 
         controller.addOnDestinationChangedListener { _, dest, _ ->
             select(dest.id)
+            setTitle(dest.label)
             setDrawerEnabled()
         }
     }
 
+
+    private val appName: String
+        get() = AndroidUtil.stringByResourceName(toolbar.context, "app_name") ?: ""
 
     private fun navigate(itemId: Int) {
         when(itemId) {
@@ -78,5 +85,9 @@ internal class PrisonerNavigationDrawerManager(
             else DrawerLayout.LOCK_MODE_LOCKED_CLOSED
 
         (drawer.parent as DrawerLayout).setDrawerLockMode(lockMode)
+    }
+
+    private fun setTitle(title: CharSequence?) {
+        toolbar.title = title ?: appName
     }
 }
