@@ -52,6 +52,9 @@ class PrisonerRootViewModel @Inject constructor(
     fun notifyEditInterrupted()
         = interruptStore.interrupt()
 
+    fun notifyInterruptConfirmationConsumed()
+        = interruptStore.notifyConfirmationConsumed()
+
 
     companion object {
 

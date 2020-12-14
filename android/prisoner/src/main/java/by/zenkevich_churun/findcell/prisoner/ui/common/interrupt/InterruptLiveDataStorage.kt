@@ -1,5 +1,6 @@
 package by.zenkevich_churun.findcell.prisoner.ui.common.interrupt
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import javax.inject.Inject
@@ -35,6 +36,7 @@ class InterruptLiveDataStorage @Inject constructor() {
         nextState: EditInterruptState) {
 
         if(mldState.value == expectedCurrentState) {
+            Log.v("CharlieDebug", "Move to state $nextState")
             mldState.value = nextState
         }
     }

@@ -14,6 +14,9 @@ class EditInterruptViewModel @Inject constructor(
     fun notifyInterruptDeclined()
         = interruptStore.decline()
 
+    fun notifyInterruptConfirmed()
+        = interruptStore.confirm()
+
 
     companion object {
 

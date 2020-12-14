@@ -13,6 +13,7 @@ import kotlinx.android.synthetic.main.result_request_dialog.*
 class EditInterruptDialog: DialogFragment() {
 
     private lateinit var vm: EditInterruptViewModel
+    private var confirmed = false
 
 
     override fun onCreateView(
@@ -31,15 +32,22 @@ class EditInterruptDialog: DialogFragment() {
         initFields()
 
         buNo.setOnClickListener {
+            confirmed = false
             dismiss()
         }
         buYes.setOnClickListener {
-            // TODO: Navigate to results.
+            confirmed = true
+            dismiss()
         }
     }
 
     override fun onDismiss(dialog: DialogInterface) {
-        vm.notifyInterruptDeclined()
+        if(confirmed) {
+            vm.notifyInterruptConfirmed()
+        } else {
+            vm.notifyInterruptDeclined()
+        }
+
         super.onDismiss(dialog)
     }
 
@@ -53,5 +61,7 @@ class EditInterruptDialog: DialogFragment() {
     private fun initFields() {
         val appContext = requireContext().applicationContext
         vm = EditInterruptViewModel.get(appContext, this)
+
+        confirmed = false
     }
 }

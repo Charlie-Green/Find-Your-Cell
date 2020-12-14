@@ -118,16 +118,14 @@ class AuthorizationFragment: Fragment(R.layout.authorization_fragm) {
 
 
     private fun notifyError(titleRes: Int, message: String) {
-        val dialog = AlertDialog.Builder(requireContext())
+        AlertDialog.Builder(requireContext())
             .setTitle(titleRes)
             .setMessage(message)
             .setPositiveButton(R.string.ok) { dialog, _ ->
                 dialog.dismiss()
             }.setOnDismissListener {
                 vm.notifyStateConsumed()
-            }.create()
-
-        DialogUtil.showAt(dialog, 200, 400)
+            }.show()
     }
 
     private fun notifyError(titleRes: Int, messageRes: Int)

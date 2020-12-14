@@ -1,5 +1,6 @@
 package by.zenkevich_churun.findcell.prisoner.ui.root.activity
 
+import android.util.Log
 import androidx.appcompat.widget.Toolbar
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.navigation.NavController
@@ -9,12 +10,19 @@ import by.zenkevich_churun.findcell.prisoner.R
 import com.google.android.material.navigation.NavigationView
 
 
-internal class PrisonerNavigationDrawerManager(
+internal class PrisonerNavigationManager(
     private val toolbar: Toolbar,
     private val drawer: NavigationView,
     private val controller: NavController ) {
 
-    fun setup() {
+    private var lastDest = 0
+    private var actionFrom = 0
+    private var action: (() -> Unit)? = null
+
+
+    fun setup(authorized: Boolean) {
+        inflateGraph( if(authorized) R.id.fragmProfile else R.id.fragmAuth )
+
         drawer.setNavigationItemSelectedListener { item ->
             navigate(item.itemId)
             (drawer.parent as DrawerLayout).closeDrawers()
@@ -25,12 +33,28 @@ internal class PrisonerNavigationDrawerManager(
             select(dest.id)
             setTitle(dest.label)
             setDrawerEnabled()
+
+            lastDest = dest.id
+            optionallyNavigateBack()
         }
+    }
+
+    /** Authomatically navigate back when destination reaches the given one. **/
+    fun doOnce(destId: Int, what: () -> Unit) {
+        actionFrom = destId
+        action = what
+        optionallyNavigateBack()
     }
 
 
     private val appName: String
         get() = AndroidUtil.stringByResourceName(toolbar.context, "app_name") ?: ""
+
+    private fun inflateGraph(startDest: Int) {
+        val prisonerGraph = controller.navInflater.inflate(R.navigation.prisoner)
+        prisonerGraph.startDestination = startDest
+        controller.graph = prisonerGraph
+    }
 
     private fun navigate(itemId: Int) {
         when(itemId) {
@@ -75,7 +99,15 @@ internal class PrisonerNavigationDrawerManager(
         if(drawer.checkedItem?.itemId != itemId) {
             drawer.setCheckedItem(itemId)
         }
+    }
 
+    private fun optionallyNavigateBack() {
+        Log.v("CharlieDebug", "lastDest = $lastDest, actionFrom = $actionFrom, action is null: ${action == null}")
+        val act = action ?: return
+        if(lastDest == actionFrom) {
+            action = null
+            act()
+        }
     }
 
     private fun setDrawerEnabled() {

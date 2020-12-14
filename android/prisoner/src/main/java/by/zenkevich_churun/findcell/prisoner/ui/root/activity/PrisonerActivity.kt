@@ -4,7 +4,9 @@ import android.app.Activity
 import android.graphics.Color
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import androidx.lifecycle.Observer
+import androidx.navigation.NavController
 import androidx.navigation.findNavController
 import by.zenkevich_churun.findcell.prisoner.R
 import by.zenkevich_churun.findcell.core.entity.general.Prisoner
@@ -24,15 +26,16 @@ import kotlinx.android.synthetic.main.prisoner_activity.*
 class PrisonerActivity: AppCompatActivity(R.layout.prisoner_activity) {
 
     private lateinit var vm: PrisonerRootViewModel
+    private lateinit var navMan: PrisonerNavigationManager
     private var thereAreUnsavedChanges = false
+    private var interruptedDest = 0
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        vm = PrisonerRootViewModel.get(applicationContext, this)
-        setupNavigation()
-        setupNavigationDrawer()
+        initFields()
+        navMan.setup( vm.prisonerLD.value != null )
 
         vm.savePrisonerResultLD.observe(this, Observer { result ->
             if(result == SavePrisonerResult.SUCCESS) {
@@ -56,8 +59,9 @@ class PrisonerActivity: AppCompatActivity(R.layout.prisoner_activity) {
         })
 
         vm.editInterruptStateLD.observe(this, Observer { state ->
-            if(state == EditInterruptState.ASKING) {
-                warnEditInterrupt()
+            when(state) {
+                EditInterruptState.CONFIRMED -> interruptAndNavigateBack()
+                EditInterruptState.ASKING    -> warnEditInterrupt()
             }
         })
 
@@ -67,13 +71,19 @@ class PrisonerActivity: AppCompatActivity(R.layout.prisoner_activity) {
     }
 
     override fun onBackPressed() {
+        Log.v("CharlieDebug", "On Back pressed.")
         if(interruptingEdit) {
+            interruptedDest = navController.currentDestination?.id ?: 0
             vm.notifyEditInterrupted()
         } else {
+            interruptedDest = 0
             super.onBackPressed()
         }
     }
 
+
+    private val navController: NavController
+        get() = findNavController(R.id.navHost)
 
     private val interruptingEdit: Boolean
         get() {
@@ -81,32 +91,15 @@ class PrisonerActivity: AppCompatActivity(R.layout.prisoner_activity) {
                 return false
             }
 
-            val navController = findNavController(R.id.navHost)
             val destId = navController.currentDestination?.id ?: 0
             return (destId == R.id.fragmProfile || destId == R.id.fragmSchedule)
         }
 
 
-    private fun setupNavigation() {
-        val authorized = (vm.prisonerLD.value != null)
-
-        val navController = findNavController(R.id.navHost)
-        val prisonerGraph = navController.navInflater.inflate(R.navigation.prisoner)
-        prisonerGraph.startDestination =
-            if(authorized) R.id.fragmProfile
-            else R.id.fragmAuth
-
-        navController.graph = prisonerGraph
+    private fun initFields() {
+        vm = PrisonerRootViewModel.get(applicationContext, this)
+        navMan = PrisonerNavigationManager(toolbar, navDrawer, navController)
     }
-
-    private fun setupNavigationDrawer() {
-        PrisonerNavigationDrawerManager(
-            toolbar,
-            navDrawer,
-            findNavController(R.id.navHost)
-        ).setup()
-    }
-
 
     private fun notifySavePrisonerSuccess()
         = notifySuccess(R.string.save_prisoner_success_msg)
@@ -125,17 +118,28 @@ class PrisonerActivity: AppCompatActivity(R.layout.prisoner_activity) {
         }
     }
 
+    private fun warnEditInterrupt() {
+        NavigationUtil.navigateIfNotYet(
+            navController,
+            R.id.dialogEditInterrupt
+        ) { null }
+    }
+
+    private fun interruptAndNavigateBack() {
+        navMan.doOnce(interruptedDest) {
+            cdltRoot.post {  // In order to avoid the FragmentManager-in-Transaction failure.
+                interruptedDest = 0
+                super.onBackPressed()
+                vm.notifyInterruptConfirmationConsumed()
+            }
+        }
+    }
+
+
     private fun notifyError(messageRes: Int) {
         Snackbar.make(cdltRoot, messageRes, 3000).apply {
             setTextColor(Color.RED)
             show()
         }
-    }
-
-    private fun warnEditInterrupt() {
-        NavigationUtil.navigateIfNotYet(
-            findNavController(R.id.navHost),
-            R.id.dialogEditInterrupt
-        ) { null }
     }
 }
