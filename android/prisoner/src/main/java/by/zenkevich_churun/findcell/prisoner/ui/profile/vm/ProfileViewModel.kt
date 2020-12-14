@@ -27,7 +27,7 @@ class ProfileViewModel @Inject constructor(
     val prisonerLD: LiveData<out Prisoner>
         get() = repo.prisonerLD
 
-    val addedContactTypesLD: LiveData< MutableList<Contact.Type> >
+    val addedContactTypesLD: LiveData< List<Contact.Type> >
         get() = medLdAddedContactTypes
 
     val unsavedChangesLD: LiveData<Boolean>
@@ -40,8 +40,9 @@ class ProfileViewModel @Inject constructor(
         get() = repo.savePrisonerResultLD
 
 
-    fun saveDraft(draft: Prisoner) {
+    fun saveDraft(draft: Prisoner, contactTypes: List<Contact.Type>) {
         repo.saveDraft(draft)
+        medLdAddedContactTypes.value = contactTypes
     }
 
     fun save(data: Prisoner) {
@@ -52,6 +53,7 @@ class ProfileViewModel @Inject constructor(
 
         viewModelScope.launch(Dispatchers.IO) {
             repo.save(data)
+
             mldLoading.postValue(false)
         }
     }
@@ -71,8 +73,8 @@ class ProfileViewModel @Inject constructor(
         = repo.notifyDataChanged()
 
 
-    private fun addedContactTypesMediatorLD(): MediatorLiveData< MutableList<Contact.Type> > {
-        val ld = MediatorLiveData< MutableList<Contact.Type> >()
+    private fun addedContactTypesMediatorLD(): MediatorLiveData< List<Contact.Type> > {
+        val ld = MediatorLiveData< List<Contact.Type> >()
 
         ld.addSource(repo.prisonerLD) { prisoner ->
             // Publish new list only if the Prisoner changed

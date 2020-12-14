@@ -7,9 +7,11 @@ import androidx.core.view.isVisible
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import by.zenkevich_churun.findcell.core.entity.general.Contact
 import by.zenkevich_churun.findcell.core.entity.general.Prisoner
+import by.zenkevich_churun.findcell.core.util.std.CollectionUtil
 import by.zenkevich_churun.findcell.prisoner.R
 import by.zenkevich_churun.findcell.prisoner.repo.profile.SavePrisonerResult
 import by.zenkevich_churun.findcell.prisoner.ui.profile.vm.ProfileViewModel
@@ -34,7 +36,7 @@ class ProfileFragment: Fragment(R.layout.profile_fragm) {
             displayPrisoner()
         })
         vm.addedContactTypesLD.observe(viewLifecycleOwner, Observer { addedContactTypes ->
-            this.addedContactTypes = addedContactTypes
+            this.addedContactTypes = CollectionUtil.copyList(addedContactTypes)
             displayPrisoner()
         })
         vm.unsavedChangesLD.observe(viewLifecycleOwner, Observer { thereAreChanges ->
@@ -56,14 +58,7 @@ class ProfileFragment: Fragment(R.layout.profile_fragm) {
 
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
-
-        if(fabSave.visibility == View.VISIBLE) {
-            // There are unsaved changes.
-            // Flush them down the app architecture to survive configuration change:
-            collectData()?.also {
-                vm?.saveDraft(it)
-            }
-        }
+        saveDraft()
     }
 
 
@@ -98,10 +93,7 @@ class ProfileFragment: Fragment(R.layout.profile_fragm) {
         val addedContactTypes = this.addedContactTypes ?: return
 
         tietName.setText(prisoner.name)
-        recyclerView.adapter = ProfileRecyclerAdapter(vm, prisoner, addedContactTypes) {
-            /* Data Updated: */
-            vm.notifyDataChanged()
-        }
+        recyclerView.adapter = ProfileRecyclerAdapter(vm, prisoner, addedContactTypes)
     }
 
     private fun collectData(): Prisoner? {
@@ -114,6 +106,12 @@ class ProfileFragment: Fragment(R.layout.profile_fragm) {
             adapter.contacts,
             adapter.prisonerInfo
         )
+    }
+
+    private fun saveDraft() {
+        val contactTypes = addedContactTypes ?: return
+        val draft = collectData() ?: return
+        vm?.saveDraft(draft, contactTypes)
     }
 
 

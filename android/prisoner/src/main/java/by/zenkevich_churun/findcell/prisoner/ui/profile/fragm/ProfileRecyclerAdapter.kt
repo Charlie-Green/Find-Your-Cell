@@ -22,9 +22,8 @@ import kotlinx.android.synthetic.main.profile_scrollview_constpart.view.*
   * the screen. Includes contacts, [ContactTypesScrollView] and [Prisoner] info. **/
 internal class ProfileRecyclerAdapter(
     private val vm: ProfileViewModel,
-    private val prisoner: Prisoner,
-    private val addedContactTypes: MutableList<Contact.Type>,
-    private val onDataUpdated: () -> Unit
+    prisoner: Prisoner,
+    private val addedContactTypes: MutableList<Contact.Type>
 ): RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     val contacts = prisoner.contacts.toMutableList()
@@ -41,7 +40,7 @@ internal class ProfileRecyclerAdapter(
             contactView.isEditable = true
             contactView.addOnValueChangedListener {
                 updateContact()
-                onDataUpdated()
+                vm.notifyDataChanged()
             }
         }
 
@@ -93,7 +92,7 @@ internal class ProfileRecyclerAdapter(
         private fun onPrisonerInfoChanged(newInfoChars: CharSequence) {
             val newInfo = newInfoChars.toString()
             if(info != newInfo) {
-                onDataUpdated()
+                vm.notifyDataChanged()
             }
 
             info = newInfo
@@ -201,7 +200,7 @@ internal class ProfileRecyclerAdapter(
 
         notifyItemInserted(contacts.lastIndex)  // Added contact.
         notifyItemChanged(contacts.size)        // Changed ContactTypesView.
-        onDataUpdated()
+        vm.notifyDataChanged()
     }
 
     private fun notifyContactDeleted(position: Int) {
@@ -214,7 +213,7 @@ internal class ProfileRecyclerAdapter(
         notifyItemRemoved(position)        // Contact removed.
         notifyItemChanged(contacts.size)   // Added contact types changed.
 
-        onDataUpdated()
+        vm.notifyDataChanged()
     }
 
 
