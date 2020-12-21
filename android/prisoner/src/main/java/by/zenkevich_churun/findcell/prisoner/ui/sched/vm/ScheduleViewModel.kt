@@ -2,7 +2,6 @@ package by.zenkevich_churun.findcell.prisoner.ui.sched.vm
 
 import android.content.Context
 import android.net.ConnectivityManager
-import android.util.Log
 import androidx.lifecycle.*
 import by.zenkevich_churun.findcell.core.entity.general.Cell
 import by.zenkevich_churun.findcell.core.entity.sched.Schedule

@@ -45,4 +45,6 @@ dependencies {
     implementation Deps.libMaterial
 
     implementation Deps.libNavigationFragm
+
+    implementation Deps.libHilt
 }
