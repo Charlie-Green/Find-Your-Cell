@@ -4,7 +4,6 @@ import android.app.Activity
 import android.graphics.Color
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
 import androidx.lifecycle.Observer
 import androidx.navigation.NavController
 import androidx.navigation.findNavController
@@ -71,7 +70,6 @@ class PrisonerActivity: AppCompatActivity(R.layout.prisoner_activity) {
     }
 
     override fun onBackPressed() {
-        Log.v("CharlieDebug", "On Back pressed.")
         if(interruptingEdit) {
             interruptedDest = navController.currentDestination?.id ?: 0
             vm.notifyEditInterrupted()

@@ -5,8 +5,17 @@ import by.zenkevich_churun.findcell.core.entity.sched.Schedule
 
 /** Performs CRUD operations on user's [Schedule]. **/
 interface ScheduleApi {
-    fun get(prisonerId: Int, passwordHash: ByteArray): Schedule
-    fun update(prisonerId: Int, passwordHash: ByteArray, schedule: Schedule)
+    fun get(
+        prisonerId: Int,
+        passwordHash: ByteArray,
+        arestId: Int
+    ): Schedule
+
+    fun update(
+        prisonerId: Int,
+        passwordHash: ByteArray,
+        schedule: Schedule
+    )
 
     fun addCell(
         prisonerId: Int, passwordHash: ByteArray,

@@ -11,6 +11,7 @@ import kotlin.collections.HashSet
 
 
 class ScheduleModel private constructor(
+    val arestId: Int,
     val start: Calendar,
     val end: Calendar,
     val cells: MutableList<CellModel>,
@@ -55,6 +56,7 @@ class ScheduleModel private constructor(
 
     fun toSchedule(): Schedule {
         return Schedule(
+            arestId,
             start,
             end,
             cells,
@@ -234,6 +236,7 @@ class ScheduleModel private constructor(
         fun from(schedule: Schedule): ScheduleModel {
             val dayCount = CalendarUtil.daysDifference(schedule.start, schedule.end) + 1
             return ScheduleModel(
+                schedule.arestId,
                 schedule.start,
                 schedule.end,
                 cellModels(schedule.cells),

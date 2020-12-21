@@ -23,7 +23,12 @@ class RamScheduleApi @Inject constructor(): ScheduleApi {
     private var schedule: Schedule? = null
 
 
-    override fun get(prisonerId: Int, passwordHash: ByteArray): Schedule {
+    override fun get(
+        prisonerId: Int,
+        passwordHash: ByteArray,
+        arestId: Int
+    ): Schedule {
+
         simulateNetworkRequest(1200L, 1900L)
         RamUserStorage.validate(prisonerId, passwordHash)
 
@@ -107,6 +112,7 @@ class RamScheduleApi @Inject constructor(): ScheduleApi {
             )
 
         return Schedule(
+            17,
             Calendar.getInstance().apply { set(2020, Calendar.NOVEMBER, 20) },
             Calendar.getInstance().apply { set(2020, Calendar.DECEMBER, 26) },
             mutableListOf(cell1, cell2, cell3),
@@ -162,6 +168,7 @@ class RamScheduleApi @Inject constructor(): ScheduleApi {
 
     private fun cloneSchedule(orig: Schedule): Schedule {
         return Schedule(
+            orig.arestId,
             orig.start.clone() as Calendar,
             orig.end.clone() as Calendar,
             CollectionUtil.copyList(orig.cells),

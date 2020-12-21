@@ -6,10 +6,12 @@ import android.view.View
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import by.zenkevich_churun.findcell.prisoner.R
 import by.zenkevich_churun.findcell.prisoner.ui.arest.state.ArestsListState
 import by.zenkevich_churun.findcell.prisoner.ui.arest.vm.ArestsViewModel
+import by.zenkevich_churun.findcell.prisoner.ui.sched.fragm.ScheduleFragment
 import kotlinx.android.synthetic.main.arests_fragm.*
 import javax.inject.Inject
 
@@ -28,6 +30,12 @@ class ArestsFragment: Fragment(R.layout.arests_fragm) {
         vm.listStateLD.observe(viewLifecycleOwner, Observer { state ->
             renderState(state)
         })
+        vm.openedArestLD.observe(viewLifecycleOwner, Observer { arest ->
+            arest?.id?.also { id ->
+                openSchedule(id)
+                vm.notifyScheduleOpened()
+            }
+        })
     }
 
 
@@ -38,7 +46,7 @@ class ArestsFragment: Fragment(R.layout.arests_fragm) {
 
     private fun initRecycler() {
         recvArests.layoutManager = LinearLayoutManager(requireContext())
-        recvArests.adapter = ArestsAdapter()
+        recvArests.adapter = ArestsAdapter(vm)
     }
 
 
@@ -71,6 +79,11 @@ class ArestsFragment: Fragment(R.layout.arests_fragm) {
                 }
             }
         }
+    }
+
+    private fun openSchedule(arestId: Int) {
+        val args = ScheduleFragment.arguments(arestId)
+        findNavController().navigate(R.id.actOpenArest, args)
     }
 
 

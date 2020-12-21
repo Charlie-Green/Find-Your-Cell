@@ -8,6 +8,10 @@ import java.util.Calendar
 /** Light information about 1 user arest,
   * that is the period between the first and the last day in jails. **/
 class Arest(
+
+    /** Database identifier. Assigned by the server. **/
+    val id: Int,
+
     /** The first day in a [Jail]. **/
     val start: Calendar,
 
@@ -48,6 +52,7 @@ class Arest(
             }
 
             return Arest(
+                la.id,
                 la.start,
                 la.end,
                 jails

@@ -10,14 +10,14 @@ import javax.inject.Singleton
 
 @Singleton
 class ScheduleLiveDatasStorage @Inject constructor() {
-    private val mldSchedule = MutableLiveData<ScheduleModel>()
+    private val mldSchedule = MutableLiveData<ScheduleModel?>()
     private val mldCellUpdate = MutableLiveData<CellUpdate?>()
     private val mldCellOptions = MutableLiveData<Cell?>()
     private val mldCellUpdateRequest = MutableLiveData<Cell?>()
     private val mldUpdateScheduleResult = MutableLiveData<UpdateScheduleResult.Success?>()
 
 
-    val scheduleLD: LiveData<ScheduleModel>
+    val scheduleLD: LiveData<ScheduleModel?>
         get() = mldSchedule
 
     val cellUpdateLD: LiveData<CellUpdate?>
@@ -35,6 +35,10 @@ class ScheduleLiveDatasStorage @Inject constructor() {
 
     fun submitSchedule(schedule: ScheduleModel) {
         mldSchedule.postValue(schedule)
+    }
+
+    fun clearSchedule() {
+        mldSchedule.postValue(null)
     }
 
 

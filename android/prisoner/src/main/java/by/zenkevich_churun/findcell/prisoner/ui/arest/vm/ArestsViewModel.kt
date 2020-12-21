@@ -2,6 +2,7 @@ package by.zenkevich_churun.findcell.prisoner.ui.arest.vm
 
 import android.content.Context
 import androidx.lifecycle.*
+import by.zenkevich_churun.findcell.core.entity.arest.Arest
 import by.zenkevich_churun.findcell.prisoner.repo.arest.ArestsRepository
 import by.zenkevich_churun.findcell.prisoner.repo.arest.GetArestsResult
 import by.zenkevich_churun.findcell.prisoner.ui.arest.state.ArestsListState
@@ -17,10 +18,14 @@ class ArestsViewModel @Inject constructor(
     private val mldListState = MutableLiveData<ArestsListState>().apply {
         value = ArestsListState.Idle
     }
+    private val mldOpenedArest = MutableLiveData<Arest?>()
 
 
     val listStateLD: LiveData<ArestsListState>
         get() = mldListState
+
+    val openedArestLD: LiveData<Arest?>
+        get() = mldOpenedArest
 
 
     fun loadData() {
@@ -37,6 +42,27 @@ class ArestsViewModel @Inject constructor(
         }
     }
 
+    fun openSchedule(position: Int) {
+        val arests = this.arests ?: return
+        if(position in arests.indices) {
+            mldOpenedArest.value = arests[position]
+        }
+    }
+
+    fun notifyScheduleOpened() {
+        mldOpenedArest.value = null
+    }
+
+
+    private val arests: List<Arest>?
+        get() {
+            val state = mldListState.value
+            if(state !is ArestsListState.Loaded) {
+                return null
+            }
+
+            return state.arests
+        }
 
     private fun applyResult(result: GetArestsResult) {
 

@@ -14,11 +14,11 @@ class ScheduleRepository @Inject constructor(
     private val api: ScheduleApi,
     private val store: PrisonerStorage ) {
 
-    fun getSchedule(): GetScheduleResult {
+    fun getSchedule(arestId: Int): GetScheduleResult {
         val prisoner = store.prisonerLD.value ?: return GetScheduleResult.NotAuthorized
 
         return try {
-            val schedule = api.get(prisoner.id, prisoner.passwordHash)
+            val schedule = api.get(prisoner.id, prisoner.passwordHash, arestId)
             GetScheduleResult.Success(schedule)
         } catch(exc: IOException) {
             Log.w(LOGTAG, "Failed to get schedule: ${exc.javaClass.name}: ${exc.message}")

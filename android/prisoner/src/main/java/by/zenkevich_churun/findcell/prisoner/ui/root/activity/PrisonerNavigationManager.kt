@@ -1,6 +1,5 @@
 package by.zenkevich_churun.findcell.prisoner.ui.root.activity
 
-import android.util.Log
 import androidx.appcompat.widget.Toolbar
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.navigation.NavController
@@ -102,7 +101,6 @@ internal class PrisonerNavigationManager(
     }
 
     private fun optionallyNavigateBack() {
-        Log.v("CharlieDebug", "lastDest = $lastDest, actionFrom = $actionFrom, action is null: ${action == null}")
         val act = action ?: return
         if(lastDest == actionFrom) {
             action = null

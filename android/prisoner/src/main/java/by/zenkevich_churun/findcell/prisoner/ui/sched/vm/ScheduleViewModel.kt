@@ -2,6 +2,7 @@ package by.zenkevich_churun.findcell.prisoner.ui.sched.vm
 
 import android.content.Context
 import android.net.ConnectivityManager
+import android.util.Log
 import androidx.lifecycle.*
 import by.zenkevich_churun.findcell.core.entity.general.Cell
 import by.zenkevich_churun.findcell.core.entity.sched.Schedule
@@ -18,7 +19,7 @@ import javax.inject.Inject
 
 
 class ScheduleViewModel @Inject constructor(
-    @ApplicationContext appContext: Context,
+    @ApplicationContext private val appContext: Context,
     private val repo: ScheduleRepository,
     private val scheduleStore: ScheduleLiveDatasStorage,
     private val changesStore: UnsavedChangesLiveDatasStorage
@@ -31,19 +32,10 @@ class ScheduleViewModel @Inject constructor(
     private val mldLoading = MutableLiveData<Boolean>()
 
 
-    init {
-        AndroidUtil.whenInternetAvailable(appContext) { netMan, callback ->
-            if(scheduleLD.value == null) {
-                getSchedule(netMan, callback)
-            }
-        }
-    }
-
-
     val selectedCellIndexLD: LiveData<Int>
         get() = mldSelectedCellIndex
 
-    val scheduleLD: LiveData<ScheduleModel>
+    val scheduleLD: LiveData<ScheduleModel?>
         get() = scheduleStore.scheduleLD
 
     val errorLD: LiveData<String?>
@@ -63,6 +55,20 @@ class ScheduleViewModel @Inject constructor(
 
     val cellUpdateRequestLD: LiveData<Cell?>
         get() = scheduleStore.cellUpdateRequestLD
+
+
+    fun loadSchedule(arestId: Int) {
+        if(!needFetchSchedule(arestId)) {
+            return
+        }
+
+        // Ensure that old data is not displayed while loading the new data:
+        scheduleStore.clearSchedule()
+
+        AndroidUtil.whenInternetAvailable(appContext) { netMan, callback ->
+            getSchedule(netMan, callback, arestId)
+        }
+    }
 
 
     fun selectCell(cellIndex: Int) {
@@ -122,14 +128,33 @@ class ScheduleViewModel @Inject constructor(
     }
 
 
+    private fun needFetchSchedule(arestId: Int): Boolean {
+        val sched = scheduleLD.value
+        val loading = loadingLD.value ?: false
+
+        if(loading) {
+            return false
+        }
+        if(sched == null) {
+            return true
+        }
+        if(sched.arestId != arestId) {
+            // The previously loaded Schedule is not needed anymore.
+            scheduleStore.clearSchedule()
+            return true
+        }
+        return false
+    }
+
     private fun getSchedule(
         netMan: ConnectivityManager,
-        callback: ConnectivityManager.NetworkCallback ) {
+        callback: ConnectivityManager.NetworkCallback,
+        arestId: Int ) {
 
         mldLoading.postValue(true)
 
         viewModelScope.launch(Dispatchers.IO) {
-            when(val result = repo.getSchedule()) {
+            when(val result = repo.getSchedule(arestId)) {
                 is GetScheduleResult.Success -> {
                     netMan.unregisterNetworkCallback(callback)
 

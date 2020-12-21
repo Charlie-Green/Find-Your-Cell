@@ -74,7 +74,6 @@ class ProfileRepository @Inject constructor(
     fun saveDraft(draft: Prisoner) {
         store.prisonerLD.value?.also { extendedPrisoner ->
             store.submit(draft, extendedPrisoner.passwordHash)
-            mldUnsavedChanges.postValue(true)
         }
     }
 

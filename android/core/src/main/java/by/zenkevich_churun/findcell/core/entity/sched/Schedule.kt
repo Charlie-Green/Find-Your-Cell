@@ -8,6 +8,10 @@ import java.util.*
 
 /** A day-to-day schedule of where a [Prisoner] was kept during 1 their arest. **/
 class Schedule(
+
+    /** The value of [Arest.id] for the [Arest] this [Schedule] is for. **/
+    val arestId: Int,
+
     /** The first day of schedule. **/
     val start: Calendar,
 

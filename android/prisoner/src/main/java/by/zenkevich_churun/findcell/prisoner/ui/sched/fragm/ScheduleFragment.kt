@@ -25,24 +25,32 @@ import kotlinx.android.synthetic.main.schedule_fragm.*
 
 /** Allows viewing interactive editing of the user's arest [Schedule]. **/
 class ScheduleFragment: Fragment(R.layout.schedule_fragm) {
+    // ==================================================================================
+    // Fields:
 
     private lateinit var vm: ScheduleViewModel
     private var selectedCellIndex = -1
 
 
+    // ==================================================================================
+    // Lifecycle:
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         initFields()
         initCellsAdapter()
         initDaysAdapter()
+        loadSchedule()
 
         vm.selectedCellIndexLD.observe(viewLifecycleOwner, Observer { cellIndex ->
             selectedCellIndex = cellIndex
             selectCell()
         })
         vm.scheduleLD.observe(viewLifecycleOwner, Observer { schedule ->
-            displaySchedule(schedule)
-            selectCell()
-            buAddCell.isEnabled = true
+            schedule?.also {
+                displaySchedule(schedule)
+                selectCell()
+                buAddCell.isEnabled = true
+            } ?: clearSchedule()
         })
         vm.errorLD.observe(viewLifecycleOwner, Observer { message ->
             message?.also { notifyError(it) }
@@ -81,6 +89,9 @@ class ScheduleFragment: Fragment(R.layout.schedule_fragm) {
     }
 
 
+    // ==================================================================================
+    // Initialization:
+
     private fun initFields() {
         val appContext = requireContext().applicationContext
         vm = ScheduleViewModel.get(appContext, this)
@@ -106,10 +117,23 @@ class ScheduleFragment: Fragment(R.layout.schedule_fragm) {
         }
     }
 
+    private fun loadSchedule() {
+        val args = ScheduleArguments.of(this)
+        vm.loadSchedule(args.arestId)
+    }
+
+
+    // ==================================================================================
+    // Observers:
 
     private fun displaySchedule(scheduleModel: ScheduleModel) {
         recvCells.adapter = CellsAdapter(scheduleModel.cells, vm)
         recvDays.adapter = ScheduleDaysAdapter(scheduleModel, vm)
+    }
+
+    private fun clearSchedule() {
+        recvCells.adapter = CellsAdapter(listOf(), vm)
+        daysAdapter?.isEnabled = false
     }
 
     private fun selectCell() {
@@ -142,7 +166,6 @@ class ScheduleFragment: Fragment(R.layout.schedule_fragm) {
             show(fragmMan, null)
         }
     }
-
 
     private fun updateCells(update: CellUpdate?) {
         val cellsAdapter = recvCells.adapter as CellsAdapter? ?: return
@@ -184,12 +207,25 @@ class ScheduleFragment: Fragment(R.layout.schedule_fragm) {
     private fun changeDataset(cellsAdapter: CellsAdapter) {
         cellsAdapter.notifyDataSetChanged()
         vm.notifyCellUpdateConsumed()
-
-        val daysAdapter = recvDays.adapter as ScheduleDaysAdapter? ?: return
-        daysAdapter.notifyDataSetChanged()
+        daysAdapter?.notifyDataSetChanged()
     }
 
 
+    // ==================================================================================
+    // Help:
+
+    private val daysAdapter
+        get() = recvDays.adapter as ScheduleDaysAdapter?
+
     private fun dimen(dimenRes: Int): Int
         = resources.getDimensionPixelSize(dimenRes)
+
+
+    // ==================================================================================
+    // Companion:
+
+    companion object {
+        fun arguments(arestId: Int)
+            = ScheduleArguments.createBundle(arestId)
+    }
 }

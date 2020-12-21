@@ -2,6 +2,7 @@
 <navigation
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/graphPrisoner"
     app:startDestination="@id/fragmAuth" >
 
     <fragment
@@ -66,19 +67,19 @@
     <action
         android:id="@+id/actSelectProfileMenu"
         app:destination="@id/fragmProfile"
-        app:popUpTo="@id/fragmProfile"
+        app:popUpTo="@id/graphPrisoner"
         app:popUpToInclusive="true" />
 
     <action
         android:id="@+id/actSelectArestsMenu"
         app:destination="@id/fragmArests"
-        app:popUpTo="@id/fragmArests"
+        app:popUpTo="@id/graphPrisoner"
         app:popUpToInclusive="true" />
 
     <action
         android:id="@+id/actSelectAuthMenu"
         app:destination="@id/fragmAuth"
-        app:popUpTo="@id/fragmAuth"
+        app:popUpTo="@id/graphPrisoner"
         app:popUpToInclusive="true" />
 
 </navigation>

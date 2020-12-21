@@ -17,7 +17,20 @@ internal class ScheduleDaysAdapter(
     private val vm: ScheduleViewModel
 ): RecyclerView.Adapter<ScheduleDaysAdapter.DayViewHolder>() {
 
+    private var enabled = true
     var selectedCellIndex = -1
+
+
+    /** [ScheduleDaysAdapter] is considered enabled if it displays the data.
+      * If not enabled, the [RecyclerView] appears blank. **/
+    var isEnabled: Boolean
+        get() { return enabled }
+        set(value) {
+        if(enabled != value) {
+            enabled = value
+            notifyDataSetChanged()
+        }
+    }
 
 
     inner class DayViewHolder(
@@ -58,7 +71,7 @@ internal class ScheduleDaysAdapter(
 
 
     override fun getItemCount(): Int
-        = schedule.dayCount
+        = if(enabled) schedule.dayCount else 0
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): DayViewHolder {
         val view = LayoutInflater
