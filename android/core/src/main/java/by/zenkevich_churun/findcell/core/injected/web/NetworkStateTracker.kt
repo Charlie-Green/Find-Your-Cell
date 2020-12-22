@@ -1,6 +1,7 @@
 package by.zenkevich_churun.findcell.core.injected.web
 
 import android.Manifest
+import android.annotation.SuppressLint
 import android.content.Context
 import android.net.*
 import android.util.Log
@@ -14,22 +15,21 @@ import javax.inject.Singleton
 class NetworkStateTracker @Inject constructor(
     @ApplicationContext private val appContext: Context ) {
 
-    private var tracking = false
-    private var available = true
+    private var available = false
+
+
+    init {
+        startTrack()
+    }
+
 
     @get:RequiresPermission(Manifest.permission.ACCESS_NETWORK_STATE)
     val isInternetAvailable: Boolean
-        get() {
-            if(!tracking) {
-                tracking = true
-                track()
-            }
-            return available
-        }
+        get() = available
 
 
-    @RequiresPermission(Manifest.permission.ACCESS_NETWORK_STATE)
-    private fun track() {
+    @SuppressLint("MissingPermission")
+    private fun startTrack() {
         val netMan = appContext.getSystemService(ConnectivityManager::class.java)!!
 
         val request = NetworkRequest
@@ -39,12 +39,14 @@ class NetworkStateTracker @Inject constructor(
 
         val callback = object: ConnectivityManager.NetworkCallback() {
             override fun onAvailable(network: Network) {
-                Log.v("CharlieDebug", "Available")
                 available = true
             }
 
+            override fun onLost(network: Network) {
+                available = false
+            }
+
             override fun onUnavailable() {
-                Log.v("CharlieDebug", "Unavailable")
                 available = false
             }
         }

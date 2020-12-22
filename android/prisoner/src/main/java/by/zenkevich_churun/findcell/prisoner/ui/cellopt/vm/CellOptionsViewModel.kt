@@ -3,6 +3,7 @@ package by.zenkevich_churun.findcell.prisoner.ui.cellopt.vm
 import android.content.Context
 import androidx.lifecycle.*
 import by.zenkevich_churun.findcell.core.entity.general.Cell
+import by.zenkevich_churun.findcell.core.injected.web.NetworkStateTracker
 import by.zenkevich_churun.findcell.prisoner.repo.jail.JailsRepository
 import by.zenkevich_churun.findcell.prisoner.repo.sched.ScheduleRepository
 import by.zenkevich_churun.findcell.prisoner.ui.cellopt.model.CellOptionsMode
@@ -16,7 +17,8 @@ import javax.inject.Inject
 class CellOptionsViewModel @Inject constructor(
     private val scheduleStore: ScheduleLiveDatasStorage,
     private val jailRepo: JailsRepository,
-    private val scheduleRepo: ScheduleRepository
+    private val scheduleRepo: ScheduleRepository,
+    private val netTracker: NetworkStateTracker
 ): ViewModel() {
 
     private val mldData = MutableLiveData<Cell>()
@@ -83,8 +85,12 @@ class CellOptionsViewModel @Inject constructor(
 
 
     private fun loadData(jailId: Int, cellNumber: Short) {
-        // TODO: Provide the real value of 'internet' parameter.
-        jailRepo.cell(jailId, cellNumber, true)?.also { cell ->
+        jailRepo.cell(
+            jailId,
+            cellNumber,
+            netTracker.isInternetAvailable
+
+        )?.also { cell ->
             mldData.postValue(cell)
         }
     }

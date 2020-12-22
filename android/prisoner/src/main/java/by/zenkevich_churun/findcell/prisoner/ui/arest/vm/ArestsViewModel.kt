@@ -3,6 +3,7 @@ package by.zenkevich_churun.findcell.prisoner.ui.arest.vm
 import android.content.Context
 import androidx.lifecycle.*
 import by.zenkevich_churun.findcell.core.entity.arest.Arest
+import by.zenkevich_churun.findcell.core.injected.web.NetworkStateTracker
 import by.zenkevich_churun.findcell.prisoner.repo.arest.ArestsRepository
 import by.zenkevich_churun.findcell.prisoner.repo.arest.GetArestsResult
 import by.zenkevich_churun.findcell.prisoner.ui.arest.state.ArestsListState
@@ -12,7 +13,8 @@ import javax.inject.Inject
 
 
 class ArestsViewModel @Inject constructor(
-    private val repo: ArestsRepository
+    private val repo: ArestsRepository,
+    private val netTracker: NetworkStateTracker
 ): ViewModel() {
 
     private val mldListState = MutableLiveData<ArestsListState>().apply {
@@ -32,9 +34,10 @@ class ArestsViewModel @Inject constructor(
         if(mldListState.value !is ArestsListState.Idle) {
             return
         }
+        if(!netTracker.isInternetAvailable) {
+            mldListState.value = ArestsListState.NoInternet()
+        }
         mldListState.value = ArestsListState.Loading
-
-        // TODO: Check internet.
 
         viewModelScope.launch(Dispatchers.IO) {
             val result = repo.arestsList()

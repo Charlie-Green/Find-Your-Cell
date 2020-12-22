@@ -4,6 +4,7 @@ import android.content.Context
 import androidx.lifecycle.*
 import by.zenkevich_churun.findcell.core.entity.general.Contact
 import by.zenkevich_churun.findcell.core.entity.general.Prisoner
+import by.zenkevich_churun.findcell.core.injected.web.NetworkStateTracker
 import by.zenkevich_churun.findcell.prisoner.repo.profile.ProfileRepository
 import by.zenkevich_churun.findcell.prisoner.repo.profile.SavePrisonerResult
 import by.zenkevich_churun.findcell.prisoner.ui.common.change.UnsavedChangesLiveDatasStorage
@@ -14,7 +15,8 @@ import javax.inject.Inject
 
 
 class ProfileViewModel @Inject constructor(
-    private val repo: ProfileRepository
+    private val repo: ProfileRepository,
+    private val netTracker: NetworkStateTracker
 ): ViewModel() {
 
     private val mldLoading = MutableLiveData<Boolean>().apply {
@@ -52,8 +54,7 @@ class ProfileViewModel @Inject constructor(
         mldLoading.value = true
 
         viewModelScope.launch(Dispatchers.IO) {
-            repo.save(data)
-
+            repo.save(data, netTracker.isInternetAvailable)
             mldLoading.postValue(false)
         }
     }

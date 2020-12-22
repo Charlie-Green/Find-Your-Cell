@@ -4,6 +4,7 @@ import android.content.Context
 import androidx.lifecycle.*
 import by.zenkevich_churun.findcell.core.entity.general.Cell
 import by.zenkevich_churun.findcell.core.entity.general.Jail
+import by.zenkevich_churun.findcell.core.injected.web.NetworkStateTracker
 import by.zenkevich_churun.findcell.core.util.std.max
 import by.zenkevich_churun.findcell.prisoner.ui.common.sched.ScheduleLiveDatasStorage
 import by.zenkevich_churun.findcell.prisoner.repo.jail.GetJailsResult
@@ -21,7 +22,8 @@ class CellEditorViewModel @Inject constructor(
     @ApplicationContext appContext: Context,
     private val repo: JailsRepository,
     private val scheduleRepo: ScheduleRepository,
-    private val scheduleStore: ScheduleLiveDatasStorage
+    private val scheduleStore: ScheduleLiveDatasStorage,
+    private val netTracker: NetworkStateTracker
 ): ViewModel() {
 
     private val mapping = CellEditorVMMapping(appContext)
@@ -54,8 +56,7 @@ class CellEditorViewModel @Inject constructor(
         mldError.value = null
 
         viewModelScope.launch(Dispatchers.IO) {
-            // TODO: Provide the real value of 'internet' parameter.
-            val result = repo.jailsList(true)
+            val result = repo.jailsList(netTracker.isInternetAvailable)
 
             when(result) {
                 is GetJailsResult.Success -> {
@@ -185,11 +186,10 @@ class CellEditorViewModel @Inject constructor(
 
 
     private fun cell(editorState: CellEditorState): Cell? {
-        // TODO: Get the real value of 'internet' parameter.
         return repo.cell(
             editorState.selectedJail.id,
             editorState.cellNumber,
-            true
+            netTracker.isInternetAvailable
         )
     }
 

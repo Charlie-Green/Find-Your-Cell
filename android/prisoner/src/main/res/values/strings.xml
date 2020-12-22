@@ -59,6 +59,9 @@
     <string name="get_arests_failed_msg">
         Не удалось загрузить список арестов: ошибка сети.
     </string>
+    <string name="save_prisoner_needs_internet_msg">
+        Чтобы сохранить информацию Вашего профиля, нужно соединение с интернетом.
+    </string>
 
     <!-- Navigation Labels: -->
     <string name="auth_navlabel">Авторизация</string>

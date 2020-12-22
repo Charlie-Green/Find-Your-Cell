@@ -77,8 +77,11 @@ class ProfileRepository @Inject constructor(
         }
     }
 
-    /** @return success **/
-    fun save(data: Prisoner) {
+    fun save(data: Prisoner, internet: Boolean) {
+        if(!internet) {
+            mldSaveResult.postValue(SavePrisonerResult.NO_INTERNET)
+        }
+
         val passHash = store.prisonerLD.value?.passwordHash ?: return
 
         mldUnsavedChanges.postValue(false)
@@ -86,7 +89,6 @@ class ProfileRepository @Inject constructor(
             api.update(data, passHash)
 
             store.submit(data, passHash)
-            mldUnsavedChanges.postValue(false)
             mldSaveResult.postValue(SavePrisonerResult.SUCCESS)
         } catch(exc: IOException) {
             Log.w(LOGTAG, "Failed to save ${Prisoner::class.java.simpleName}")
@@ -97,7 +99,7 @@ class ProfileRepository @Inject constructor(
 
 
     fun notifySaveResultConsumed() {
-        mldSaveResult.postValue(SavePrisonerResult.IGNORED)
+        mldSaveResult.postValue(SavePrisonerResult.IDLE)
     }
 
     fun notifyDataChanged() {

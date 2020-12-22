@@ -46,8 +46,9 @@ class ProfileFragment: Fragment(R.layout.profile_fragm) {
             prBar.isVisible = isLoading
         })
         vm.saveResultLD.observe(viewLifecycleOwner, Observer { result ->
-            if(result == SavePrisonerResult.ERROR) {
-                notifySaveError()
+            when(result) {
+                SavePrisonerResult.ERROR       -> notifySaveError()
+                SavePrisonerResult.NO_INTERNET -> notifySaveNeedsInternet()
             }
         })
 
@@ -115,10 +116,17 @@ class ProfileFragment: Fragment(R.layout.profile_fragm) {
     }
 
 
-    private fun notifySaveError() {
+    private fun notifySaveError()
+        = notifyError(R.string.error_title, R.string.save_prisoner_error_msg)
+
+    private fun notifySaveNeedsInternet()
+        = notifyError(R.string.no_internet_title, R.string.save_prisoner_needs_internet_msg)
+
+
+    private fun notifyError(titleRes: Int, messageRes: Int) {
         AlertDialog.Builder(requireContext())
-            .setTitle(R.string.error_title)
-            .setMessage(R.string.save_prisoner_error_msg)
+            .setTitle(titleRes)
+            .setMessage(messageRes)
             .setPositiveButton(R.string.ok) { dialog, _ ->
                 dialog.dismiss()
             }.setOnDismissListener {

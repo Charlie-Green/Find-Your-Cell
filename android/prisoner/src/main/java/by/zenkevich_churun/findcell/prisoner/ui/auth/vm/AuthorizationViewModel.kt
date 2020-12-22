@@ -4,6 +4,7 @@ import android.content.Context
 import androidx.lifecycle.*
 import by.zenkevich_churun.findcell.core.api.auth.LogInResponse
 import by.zenkevich_churun.findcell.core.api.auth.SignUpResponse
+import by.zenkevich_churun.findcell.core.injected.web.NetworkStateTracker
 import by.zenkevich_churun.findcell.prisoner.repo.profile.ProfileRepository
 import by.zenkevich_churun.findcell.prisoner.ui.auth.model.AuthorizationState
 import by.zenkevich_churun.findcell.prisoner.ui.auth.model.PrisonerCredentials
@@ -13,7 +14,8 @@ import javax.inject.Inject
 
 
 class AuthorizationViewModel @Inject constructor(
-    private val repo: ProfileRepository
+    private val repo: ProfileRepository,
+    private val netTracker: NetworkStateTracker
 ): ViewModel() {
 
     private val mldState = MutableLiveData<AuthorizationState>().apply {
@@ -56,13 +58,10 @@ class AuthorizationViewModel @Inject constructor(
         password: String,
         crossinline makeNetworkCall: () -> AuthorizationState ) {
 
-        if(mldState.value != AuthorizationState.Idle) {
-            return
-        }
+        if(mldState.value != AuthorizationState.Idle ||
+            !netTracker.isInternetAvailable ||
+            !validate(username, password) ) {
 
-        // TODO: Check internet.
-
-        if(!validate(username, password)) {
             return
         }
 
