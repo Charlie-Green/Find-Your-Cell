@@ -9,6 +9,7 @@ import androidx.navigation.NavController
 import androidx.navigation.findNavController
 import by.zenkevich_churun.findcell.prisoner.R
 import by.zenkevich_churun.findcell.core.entity.general.Prisoner
+import by.zenkevich_churun.findcell.core.util.android.AndroidUtil
 import by.zenkevich_churun.findcell.core.util.android.NavigationUtil
 import by.zenkevich_churun.findcell.prisoner.repo.profile.SavePrisonerResult
 import by.zenkevich_churun.findcell.prisoner.ui.common.interrupt.EditInterruptState
@@ -32,6 +33,7 @@ class PrisonerActivity: AppCompatActivity(R.layout.prisoner_activity) {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        window?.also { AndroidUtil.defaultHideKeyboard(it) }
 
         initFields()
         navMan.setup( vm.prisonerLD.value != null )

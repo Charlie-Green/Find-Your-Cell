@@ -11,7 +11,8 @@ import android.os.Build
 import android.util.DisplayMetrics
 import android.util.Size
 import android.util.TypedValue
-import android.view.WindowInsets
+import android.view.*
+import android.widget.EditText
 import androidx.annotation.RequiresPermission
 
 
@@ -74,5 +75,12 @@ object AndroidUtil {
         )
 
         return if(res == 0) null else context.getString(res)
+    }
+
+
+    /** Sets a special mode to the given [Window] so that it's keyboard
+      * is hidden unless the user explicitly makes it show up (touches an [EditText]) **/
+    fun defaultHideKeyboard(target: Window) {
+        target.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN)
     }
 }
