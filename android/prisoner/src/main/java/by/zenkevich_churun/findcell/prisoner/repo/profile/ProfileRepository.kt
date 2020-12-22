@@ -5,9 +5,11 @@ import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import by.zenkevich_churun.findcell.core.api.auth.*
+import by.zenkevich_churun.findcell.core.entity.general.Contact
 import by.zenkevich_churun.findcell.core.entity.general.Prisoner
 import by.zenkevich_churun.findcell.prisoner.R
 import by.zenkevich_churun.findcell.prisoner.repo.common.PrisonerStorage
+import by.zenkevich_churun.findcell.prisoner.ui.profile.fragm.PrisonerDraft
 import dagger.hilt.android.qualifiers.ApplicationContext
 import java.io.IOException
 import javax.inject.Inject
@@ -53,7 +55,11 @@ class ProfileRepository @Inject constructor(
         return response
     }
 
-    fun signUp(username: String, password: String): SignUpResponse {
+    fun signUp(
+        username: String,
+        password: String
+    ): SignUpResponse {
+
         val passHash = password.toByteArray(Charsets.UTF_16)
         val defaultName = appContext.getString(R.string.prisoner_default_name)
 
@@ -84,14 +90,13 @@ class ProfileRepository @Inject constructor(
         }
 
         val passHash = store.prisonerLD.value?.passwordHash ?: return
+        val deletedPositions = mutableListOf<Int>()
+        val clearData = removeBlankContacts(data, deletedPositions)
 
         mldUnsavedChanges.postValue(false)
         try {
-            api.update(data, passHash)
-
-            store.submit(data, passHash)
-            val deletedPositions = listOf<Int>()  // TODO
-            mldSaveResult.postValue( SavePrisonerResult.Success(deletedPositions) )
+            api.update(clearData, passHash)
+            mldSaveResult.postValue( SavePrisonerResult.Success(deletedPositions, clearData) )
         } catch(exc: IOException) {
             Log.w(LOGTAG, "Failed to save ${Prisoner::class.java.simpleName}")
             mldUnsavedChanges.postValue(true)
@@ -106,6 +111,32 @@ class ProfileRepository @Inject constructor(
 
     fun notifyDataChanged() {
         mldUnsavedChanges.postValue(true)
+    }
+
+
+    private fun removeBlankContacts(
+        data: Prisoner,
+        positions: MutableList<Int>
+    ): Prisoner {
+
+        val clearedContacts = mutableListOf<Contact>()
+
+        for(j in data.contacts.indices) {
+            val contact = data.contacts[j]
+
+            if(contact.data.isBlank()) {
+                positions.add(j - positions.size)
+            } else {
+                clearedContacts.add(contact)
+            }
+        }
+
+        return PrisonerDraft(
+            data.id,
+            data.name,
+            clearedContacts,
+            data.info
+        )
     }
 
 

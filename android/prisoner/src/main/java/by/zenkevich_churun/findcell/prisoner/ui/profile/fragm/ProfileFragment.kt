@@ -7,7 +7,6 @@ import androidx.core.view.isVisible
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
-import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import by.zenkevich_churun.findcell.core.entity.general.Contact
 import by.zenkevich_churun.findcell.core.entity.general.Prisoner
@@ -47,7 +46,7 @@ class ProfileFragment: Fragment(R.layout.profile_fragm) {
         })
         vm.saveResultLD.observe(viewLifecycleOwner, Observer { result ->
             when(result) {
-                // is SavePrisonerResult.Success    -> playDeleteAnimations(result.deletePositions)
+                is SavePrisonerResult.Success    -> deleteContacts(result.deletePositions)
                 is SavePrisonerResult.Error      -> notifySaveError()
                 is SavePrisonerResult.NoInternet -> notifySaveNeedsInternet()
             }
@@ -114,6 +113,29 @@ class ProfileFragment: Fragment(R.layout.profile_fragm) {
         val contactTypes = addedContactTypes ?: return
         val draft = collectData() ?: return
         vm?.saveDraft(draft, contactTypes)
+    }
+
+    private fun deleteContacts(positions: List<Int>) {
+        if(positions.isEmpty()) {
+            // Nothing to change.
+            return
+        }
+
+        val adapter = recyclerView.adapter as ProfileRecyclerAdapter? ?: return
+
+        for(position in positions) {
+            if(position !in adapter.contacts.indices) {
+                continue
+            }
+
+            val contactType = adapter.contacts[position].type
+            adapter.contacts.removeAt(position)
+            adapter.notifyItemRemoved(position)
+            addedContactTypes?.add(contactType)
+        }
+
+        // Modify addedContactTypes:
+        adapter.notifyItemChanged(adapter.itemCount - 1)
     }
 
 
