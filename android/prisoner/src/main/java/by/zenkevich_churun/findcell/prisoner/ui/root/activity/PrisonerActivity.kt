@@ -28,7 +28,6 @@ class PrisonerActivity: AppCompatActivity(R.layout.prisoner_activity) {
     private lateinit var vm: PrisonerRootViewModel
     private lateinit var navMan: PrisonerNavigationManager
     private var thereAreUnsavedChanges = false
-    private var interruptedDest = 0
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -61,8 +60,8 @@ class PrisonerActivity: AppCompatActivity(R.layout.prisoner_activity) {
 
         vm.editInterruptStateLD.observe(this, Observer { state ->
             when(state) {
-                EditInterruptState.CONFIRMED -> interruptAndNavigateBack()
-                EditInterruptState.ASKING    -> warnEditInterrupt()
+                is EditInterruptState.Confirmed -> interruptAndNavigate(state)
+                is EditInterruptState.Asking    -> warnEditInterrupt()
             }
         })
 
@@ -73,10 +72,9 @@ class PrisonerActivity: AppCompatActivity(R.layout.prisoner_activity) {
 
     override fun onBackPressed() {
         if(interruptingEdit) {
-            interruptedDest = navController.currentDestination?.id ?: 0
-            vm.notifyEditInterrupted()
+            val currentDest = navController.currentDestination?.id ?: 0
+            vm.notifyEditInterrupted(currentDest, 0)
         } else {
-            interruptedDest = 0
             super.onBackPressed()
         }
     }
@@ -98,7 +96,7 @@ class PrisonerActivity: AppCompatActivity(R.layout.prisoner_activity) {
 
     private fun initFields() {
         vm = PrisonerRootViewModel.get(applicationContext, this)
-        navMan = PrisonerNavigationManager(toolbar, navDrawer, navController)
+        navMan = PrisonerNavigationManager(vm, toolbar, navDrawer, navController)
     }
 
     private fun notifySavePrisonerSuccess()
@@ -125,14 +123,21 @@ class PrisonerActivity: AppCompatActivity(R.layout.prisoner_activity) {
         ) { null }
     }
 
-    private fun interruptAndNavigateBack() {
-        navMan.doOnce(interruptedDest) {
+    private fun interruptAndNavigate(state: EditInterruptState.Confirmed) {
+        navMan.doOnce(state.source) {
             cdltRoot.post {  // In order to avoid the FragmentManager-in-Transaction failure.
-                interruptedDest = 0
-                super.onBackPressed()
+                navigate(state.dest)
                 vm.notifyInterruptConfirmationConsumed()
             }
         }
+    }
+
+    private fun navigate(destRes: Int) {
+        if(destRes == 0) {
+            super.onBackPressed()
+            return
+        }
+        navController.navigate(destRes)
     }
 
 

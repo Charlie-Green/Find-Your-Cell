@@ -10,32 +10,30 @@ import javax.inject.Singleton
 class InterruptLiveDataStorage @Inject constructor() {
 
     private val mldState = MutableLiveData<EditInterruptState>().apply {
-        value = EditInterruptState.NOT_REQUESTED
+        value = EditInterruptState.NotRequested
     }
 
     val stateLD: LiveData<EditInterruptState>
         get() = mldState
 
 
-    fun interrupt()
-        = transmith(EditInterruptState.NOT_REQUESTED, EditInterruptState.ASKING)
+    fun interrupt(source: Int, dest: Int) {
+        val state = mldState.value as? EditInterruptState.NotRequested ?: return
+        mldState.value = EditInterruptState.Asking(source, dest)
+    }
 
-    fun confirm()
-        = transmith(EditInterruptState.ASKING, EditInterruptState.CONFIRMED)
+    fun confirm() {
+        val state = mldState.value as? EditInterruptState.Asking ?: return
+        mldState.value = EditInterruptState.Confirmed(state.source, state.dest)
+    }
 
-    fun decline()
-        = transmith(EditInterruptState.ASKING, EditInterruptState.NOT_REQUESTED)
+    fun decline() {
+        val state = mldState.value as? EditInterruptState.Asking ?: return
+        mldState.value = EditInterruptState.NotRequested
+    }
 
-    fun notifyConfirmationConsumed()
-        = transmith(EditInterruptState.CONFIRMED, EditInterruptState.NOT_REQUESTED)
-
-
-    private fun transmith(
-        expectedCurrentState: EditInterruptState,
-        nextState: EditInterruptState) {
-
-        if(mldState.value == expectedCurrentState) {
-            mldState.value = nextState
-        }
+    fun notifyConfirmationConsumed() {
+        val state = mldState.value as? EditInterruptState.Confirmed ?: return
+        mldState.value = EditInterruptState.NotRequested
     }
 }

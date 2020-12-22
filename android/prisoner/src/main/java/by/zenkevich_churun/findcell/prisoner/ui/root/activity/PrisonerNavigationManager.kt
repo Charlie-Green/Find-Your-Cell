@@ -6,10 +6,12 @@ import androidx.navigation.NavController
 import by.zenkevich_churun.findcell.core.util.android.AndroidUtil
 import by.zenkevich_churun.findcell.core.util.android.NavigationUtil
 import by.zenkevich_churun.findcell.prisoner.R
+import by.zenkevich_churun.findcell.prisoner.ui.root.vm.PrisonerRootViewModel
 import com.google.android.material.navigation.NavigationView
 
 
 internal class PrisonerNavigationManager(
+    private val vm: PrisonerRootViewModel,
     private val toolbar: Toolbar,
     private val drawer: NavigationView,
     private val controller: NavController ) {
@@ -23,9 +25,9 @@ internal class PrisonerNavigationManager(
         inflateGraph( if(authorized) R.id.fragmProfile else R.id.fragmAuth )
 
         drawer.setNavigationItemSelectedListener { item ->
-            navigate(item.itemId)
-            (drawer.parent as DrawerLayout).closeDrawers()
-            true  // Yes, display this item as the selected one.
+            navigate(item.itemId).also {
+                (drawer.parent as DrawerLayout).closeDrawers()
+            }
         }
 
         controller.addOnDestinationChangedListener { _, dest, _ ->
@@ -55,7 +57,10 @@ internal class PrisonerNavigationManager(
         controller.graph = prisonerGraph
     }
 
-    private fun navigate(itemId: Int) {
+    private fun navigate(itemId: Int): Boolean {
+        val currentDest = controller.currentDestination?.id ?: 0
+        val unsavedChanges = vm.unsavedChangesLD.value ?: false
+
         when(itemId) {
             R.id.miProfile -> {
                 NavigationUtil.navigateIfNotYet(
@@ -66,6 +71,11 @@ internal class PrisonerNavigationManager(
             }
 
             R.id.miArests  -> {
+                if(unsavedChanges) {
+                    vm.notifyEditInterrupted(currentDest, R.id.actSelectArestsMenu)
+                    return false
+                }
+
                 NavigationUtil.navigateIfNotYet(
                     controller,
                     R.id.fragmArests,
@@ -74,6 +84,11 @@ internal class PrisonerNavigationManager(
             }
 
             R.id.miAuth -> {
+                if(unsavedChanges) {
+                    vm.notifyEditInterrupted(currentDest, R.id.actSelectAuthMenu)
+                    return false
+                }
+
                 NavigationUtil.navigateIfNotYet(
                     controller,
                     R.id.fragmAuth,
@@ -85,6 +100,8 @@ internal class PrisonerNavigationManager(
                 throw NotImplementedError("Unknown menu item $itemId")
             }
         }
+
+        return true
     }
 
     private fun select(destId: Int) {

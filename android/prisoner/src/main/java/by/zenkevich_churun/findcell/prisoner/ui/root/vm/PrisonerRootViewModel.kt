@@ -49,8 +49,8 @@ class PrisonerRootViewModel @Inject constructor(
     fun notifyCellUpdateConsumed()
         = scheduleStore.notifyCellUpdateConsumed()
 
-    fun notifyEditInterrupted()
-        = interruptStore.interrupt()
+    fun notifyEditInterrupted(currentDest: Int, desiredDest: Int)
+        = interruptStore.interrupt(currentDest, desiredDest)
 
     fun notifyInterruptConfirmationConsumed()
         = interruptStore.notifyConfirmationConsumed()
