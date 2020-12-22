@@ -10,7 +10,7 @@ import javax.inject.Singleton
 
 @Singleton
 class PrisonerStorage @Inject constructor() {
-    private val mldPrisoner = MutableLiveData<ExtendedPrisoner>()/*.apply {
+    private val mldPrisoner = MutableLiveData<ExtendedPrisoner?>()/*.apply {
         // TODO: Remove when Log In is implemented.
         value = ExtendedPrisoner(
             Prisoner.INVALID_ID + 1,
@@ -24,7 +24,7 @@ class PrisonerStorage @Inject constructor() {
         )
     }*/
 
-    val prisonerLD: LiveData<ExtendedPrisoner>
+    val prisonerLD: LiveData<ExtendedPrisoner?>
         get() = mldPrisoner
 
     fun submit(prisoner: Prisoner, passwordHash: ByteArray) {
@@ -37,5 +37,9 @@ class PrisonerStorage @Inject constructor() {
         )
 
         mldPrisoner.postValue(ep)
+    }
+
+    fun clear() {
+        mldPrisoner.postValue(null)
     }
 }

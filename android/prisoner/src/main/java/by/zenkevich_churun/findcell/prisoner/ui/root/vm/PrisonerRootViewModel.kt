@@ -1,6 +1,7 @@
 package by.zenkevich_churun.findcell.prisoner.ui.root.vm
 
 import android.content.Context
+import android.util.Log
 import androidx.lifecycle.*
 import by.zenkevich_churun.findcell.core.entity.general.Prisoner
 import by.zenkevich_churun.findcell.prisoner.repo.profile.ProfileRepository
@@ -40,6 +41,11 @@ class PrisonerRootViewModel @Inject constructor(
         = UnsavedPrisonerChangesLiveData(unsavedChangesStore, repo)
 
 
+    var lastDestination: Int
+        get() { return PrisonerRootVMStorage.lastDestination }
+        set(value) { PrisonerRootVMStorage.lastDestination = value }
+
+
     fun notifySaveResultConsumed()
         = repo.notifySaveResultConsumed()
 
@@ -54,6 +60,9 @@ class PrisonerRootViewModel @Inject constructor(
 
     fun notifyInterruptConfirmationConsumed()
         = interruptStore.notifyConfirmationConsumed()
+
+    fun signOut()
+        = repo.signOut()
 
 
     companion object {

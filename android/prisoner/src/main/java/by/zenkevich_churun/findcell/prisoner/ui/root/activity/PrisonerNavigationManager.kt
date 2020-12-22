@@ -16,13 +16,12 @@ internal class PrisonerNavigationManager(
     private val drawer: NavigationView,
     private val controller: NavController ) {
 
-    private var lastDest = 0
     private var actionFrom = 0
     private var action: (() -> Unit)? = null
 
 
-    fun setup(authorized: Boolean) {
-        inflateGraph( if(authorized) R.id.fragmProfile else R.id.fragmAuth )
+    fun setup() {
+        inflateGraph()
 
         drawer.setNavigationItemSelectedListener { item ->
             navigate(item.itemId).also {
@@ -35,8 +34,8 @@ internal class PrisonerNavigationManager(
             setTitle(dest.label)
             setDrawerEnabled()
 
-            lastDest = dest.id
-            optionallyNavigateBack()
+            vm.lastDestination = dest.id
+            optionallyInvokeAction()
         }
     }
 
@@ -44,14 +43,20 @@ internal class PrisonerNavigationManager(
     fun doOnce(destId: Int, what: () -> Unit) {
         actionFrom = destId
         action = what
-        optionallyNavigateBack()
+        optionallyInvokeAction()
     }
 
 
     private val appName: String
         get() = AndroidUtil.stringByResourceName(toolbar.context, "app_name") ?: ""
 
-    private fun inflateGraph(startDest: Int) {
+    private fun inflateGraph() {
+        val startDest = when {
+            vm.prisonerLD.value == null            -> R.id.fragmAuth
+            vm.lastDestination == R.id.fragmArests -> R.id.fragmArests
+            else                                   -> R.id.fragmProfile
+        }
+
         val prisonerGraph = controller.navInflater.inflate(R.navigation.prisoner)
         prisonerGraph.startDestination = startDest
         controller.graph = prisonerGraph
@@ -94,6 +99,7 @@ internal class PrisonerNavigationManager(
                     R.id.fragmAuth,
                     R.id.actSelectAuthMenu
                 ) { null }
+                vm.signOut()
             }
 
             else -> {
@@ -117,9 +123,9 @@ internal class PrisonerNavigationManager(
         }
     }
 
-    private fun optionallyNavigateBack() {
+    private fun optionallyInvokeAction() {
         val act = action ?: return
-        if(lastDest == actionFrom) {
+        if(vm.lastDestination == actionFrom) {
             action = null
             act()
         }

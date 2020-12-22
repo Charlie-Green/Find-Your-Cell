@@ -16,7 +16,7 @@ class UnsavedChangesLiveDatasStorage @Inject constructor() {
 
 
     fun setSchedule(hasUnsavedChanges: Boolean) {
-        mldSchedule.value = hasUnsavedChanges
+        mldSchedule.postValue(hasUnsavedChanges)
     }
 
 

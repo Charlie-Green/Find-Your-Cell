@@ -35,7 +35,7 @@ class PrisonerActivity: AppCompatActivity(R.layout.prisoner_activity) {
         window?.also { AndroidUtil.defaultHideKeyboard(it) }
 
         initFields()
-        navMan.setup( vm.prisonerLD.value != null )
+        navMan.setup()
 
         vm.savePrisonerResultLD.observe(this, Observer { result ->
             if(result is SavePrisonerResult.Success) {

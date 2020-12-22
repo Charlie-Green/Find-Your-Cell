@@ -29,7 +29,7 @@ class ProfileRepository @Inject constructor(
     private val mldSaveResult = MutableLiveData<SavePrisonerResult>()
 
 
-    val prisonerLD: LiveData<out Prisoner>
+    val prisonerLD: LiveData<out Prisoner?>
         get() = store.prisonerLD
 
     val unsavedChangesLD: LiveData<Boolean>
@@ -75,6 +75,10 @@ class ProfileRepository @Inject constructor(
         }
 
         return response
+    }
+
+    fun signOut() {
+        store.clear()
     }
 
     fun saveDraft(draft: Prisoner) {

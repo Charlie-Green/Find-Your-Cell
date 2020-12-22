@@ -26,7 +26,7 @@ class ProfileViewModel @Inject constructor(
     private var lastPrisonerId = Prisoner.INVALID_ID
 
 
-    val prisonerLD: LiveData<out Prisoner>
+    val prisonerLD: LiveData<out Prisoner?>
         get() = repo.prisonerLD
 
     val addedContactTypesLD: LiveData< List<Contact.Type> >
@@ -81,9 +81,12 @@ class ProfileViewModel @Inject constructor(
             // Publish new list only if the Prisoner changed
             // (or this is the first Prisoner emission).
             // In rest of cases, the list is updated on fly by the UI level.
-            if(prisoner.id != lastPrisonerId) {
-                lastPrisonerId = prisoner.id
-                ld.value = ProfileVMUtil.addedContactTypes(prisoner.contacts)
+            if(prisoner?.id != lastPrisonerId) {
+                lastPrisonerId = prisoner?.id ?: Prisoner.INVALID_ID
+                prisoner?.contacts?.also { contacts ->
+                    ld.value = ProfileVMUtil.addedContactTypes(contacts)
+                }
+
             }
         }
 

@@ -13,6 +13,7 @@
     <string name="specify_cell">Укажите камеру:</string>
     <string name="log_in">Войти</string>
     <string name="sign_up">Зарегистрироваться</string>
+    <string name="sign_out">Выход</string>
     <string name="find_prisoners">Найти сокамерников!</string>
 
     <!-- Notifications (Authorization): -->
