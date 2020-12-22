@@ -29,6 +29,9 @@ class Arest(
 
     companion object {
 
+        const val INVALID_ID = 0
+
+
         /** @return [Arest] entity obtained from the given [LightArest] entity
           *         by substituting [Jail]s from the [Collection] instead of [Jail] IDs.
           *         Null is returned if a [Jail] couldn't be found for an ID. **/

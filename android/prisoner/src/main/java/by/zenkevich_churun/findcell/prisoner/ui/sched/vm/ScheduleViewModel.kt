@@ -2,6 +2,7 @@ package by.zenkevich_churun.findcell.prisoner.ui.sched.vm
 
 import android.content.Context
 import androidx.lifecycle.*
+import by.zenkevich_churun.findcell.core.entity.arest.Arest
 import by.zenkevich_churun.findcell.core.entity.general.Cell
 import by.zenkevich_churun.findcell.core.entity.sched.Schedule
 import by.zenkevich_churun.findcell.core.injected.web.NetworkStateTracker
@@ -25,10 +26,10 @@ class ScheduleViewModel @Inject constructor(
 ): ViewModel() {
 
     private val mapping = ScheduleVMMapping(appContext)
-
     private val mldSelectedCellIndex = MutableLiveData<Int>()
     private val mldError = MutableLiveData<String?>()
     private val mldLoading = MutableLiveData<Boolean>()
+    private var requestedArestId = Arest.INVALID_ID
 
 
     val selectedCellIndexLD: LiveData<Int>
@@ -60,9 +61,6 @@ class ScheduleViewModel @Inject constructor(
         if(!needFetchSchedule(arestId)) {
             return
         }
-
-        // Ensure that old data is not displayed while loading the new data:
-        scheduleStore.clearSchedule()
 
         netTracker.doOnAvailable {
             getSchedule(arestId)
@@ -128,21 +126,15 @@ class ScheduleViewModel @Inject constructor(
 
 
     private fun needFetchSchedule(arestId: Int): Boolean {
-        val sched = scheduleLD.value
-        val loading = loadingLD.value ?: false
-
-        if(loading) {
+        if(arestId == requestedArestId) {
             return false
         }
-        if(sched == null) {
-            return true
-        }
-        if(sched.arestId != arestId) {
-            // The previously loaded Schedule is not needed anymore.
-            scheduleStore.clearSchedule()
-            return true
-        }
-        return false
+
+        // Ensure that old data is not displayed while loading the new data:
+        scheduleStore.clearSchedule()
+
+        requestedArestId = arestId
+        return true
     }
 
     private fun getSchedule(arestId: Int) {
