@@ -1,11 +1,10 @@
 package by.zenkevich_churun.findcell.prisoner.ui.sched.vm
 
 import android.content.Context
-import android.net.ConnectivityManager
 import androidx.lifecycle.*
 import by.zenkevich_churun.findcell.core.entity.general.Cell
 import by.zenkevich_churun.findcell.core.entity.sched.Schedule
-import by.zenkevich_churun.findcell.core.util.android.AndroidUtil
+import by.zenkevich_churun.findcell.core.injected.web.NetworkStateTracker
 import by.zenkevich_churun.findcell.prisoner.ui.common.sched.ScheduleLiveDatasStorage
 import by.zenkevich_churun.findcell.prisoner.repo.sched.*
 import by.zenkevich_churun.findcell.prisoner.ui.common.change.UnsavedChangesLiveDatasStorage
@@ -21,7 +20,8 @@ class ScheduleViewModel @Inject constructor(
     @ApplicationContext private val appContext: Context,
     private val repo: ScheduleRepository,
     private val scheduleStore: ScheduleLiveDatasStorage,
-    private val changesStore: UnsavedChangesLiveDatasStorage
+    private val changesStore: UnsavedChangesLiveDatasStorage,
+    private val netTracker: NetworkStateTracker
 ): ViewModel() {
 
     private val mapping = ScheduleVMMapping(appContext)
@@ -64,8 +64,8 @@ class ScheduleViewModel @Inject constructor(
         // Ensure that old data is not displayed while loading the new data:
         scheduleStore.clearSchedule()
 
-        AndroidUtil.whenInternetAvailable(appContext) { netMan, callback ->
-            getSchedule(netMan, callback, arestId)
+        netTracker.doOnAvailable {
+            getSchedule(arestId)
         }
     }
 
@@ -145,18 +145,13 @@ class ScheduleViewModel @Inject constructor(
         return false
     }
 
-    private fun getSchedule(
-        netMan: ConnectivityManager,
-        callback: ConnectivityManager.NetworkCallback,
-        arestId: Int ) {
+    private fun getSchedule(arestId: Int) {
 
         mldLoading.postValue(true)
 
         viewModelScope.launch(Dispatchers.IO) {
             when(val result = repo.getSchedule(arestId)) {
                 is GetScheduleResult.Success -> {
-                    netMan.unregisterNetworkCallback(callback)
-
                     val scheduleModel = ScheduleModel.from(result.schedule)
                     scheduleStore.submitSchedule(scheduleModel)
                 }

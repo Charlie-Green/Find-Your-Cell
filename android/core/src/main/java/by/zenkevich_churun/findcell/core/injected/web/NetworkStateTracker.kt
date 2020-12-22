@@ -4,6 +4,8 @@ import android.Manifest
 import android.annotation.SuppressLint
 import android.content.Context
 import android.net.*
+import android.os.Handler
+import android.os.Looper
 import android.util.Log
 import androidx.annotation.RequiresPermission
 import dagger.hilt.android.qualifiers.ApplicationContext
@@ -15,6 +17,8 @@ import javax.inject.Singleton
 class NetworkStateTracker @Inject constructor(
     @ApplicationContext private val appContext: Context ) {
 
+    private val onAvailable = hashSetOf<() -> Unit>()
+    private val mainHadler = Handler(Looper.getMainLooper())
     private var available = false
 
 
@@ -26,6 +30,14 @@ class NetworkStateTracker @Inject constructor(
     @get:RequiresPermission(Manifest.permission.ACCESS_NETWORK_STATE)
     val isInternetAvailable: Boolean
         get() = available
+
+    fun doOnAvailable(action: () -> Unit) {
+        if(available) {
+            action()
+        } else {
+            onAvailable.add(action)
+        }
+    }
 
 
     @SuppressLint("MissingPermission")
@@ -40,6 +52,7 @@ class NetworkStateTracker @Inject constructor(
         val callback = object: ConnectivityManager.NetworkCallback() {
             override fun onAvailable(network: Network) {
                 available = true
+                invokeAvailable()
             }
 
             override fun onLost(network: Network) {
@@ -52,5 +65,15 @@ class NetworkStateTracker @Inject constructor(
         }
 
         netMan.registerNetworkCallback(request, callback)
+    }
+
+    private fun invokeAvailable() {
+        mainHadler.post {
+            for(action in onAvailable) {
+                action()
+            }
+
+            onAvailable.clear()
+        }
     }
 }

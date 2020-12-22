@@ -37,12 +37,8 @@ class ArestsViewModel @Inject constructor(
         if(!netTracker.isInternetAvailable) {
             mldListState.value = ArestsListState.NoInternet()
         }
-        mldListState.value = ArestsListState.Loading
 
-        viewModelScope.launch(Dispatchers.IO) {
-            val result = repo.arestsList()
-            applyResult(result)
-        }
+        netTracker.doOnAvailable(this::loadDataInternal)
     }
 
     fun openSchedule(position: Int) {
@@ -67,8 +63,16 @@ class ArestsViewModel @Inject constructor(
             return state.arests
         }
 
-    private fun applyResult(result: GetArestsResult) {
+    private fun loadDataInternal() {
+        mldListState.value = ArestsListState.Loading
 
+        viewModelScope.launch(Dispatchers.IO) {
+            val result = repo.arestsList()
+            applyResult(result)
+        }
+    }
+
+    private fun applyResult(result: GetArestsResult) {
         when(result) {
             is GetArestsResult.Success -> {
                 val newState = ArestsListState.Loaded(result.arests)

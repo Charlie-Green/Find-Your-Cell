@@ -80,6 +80,7 @@ class ProfileRepository @Inject constructor(
     fun save(data: Prisoner, internet: Boolean) {
         if(!internet) {
             mldSaveResult.postValue(SavePrisonerResult.NO_INTERNET)
+            return
         }
 
         val passHash = store.prisonerLD.value?.passwordHash ?: return

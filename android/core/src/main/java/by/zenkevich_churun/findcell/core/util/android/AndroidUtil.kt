@@ -37,28 +37,6 @@ object AndroidUtil {
     }
 
 
-    @RequiresPermission(Manifest.permission.ACCESS_NETWORK_STATE)
-    fun whenInternetAvailable(
-        appContext: Context,
-        action: (ConnectivityManager, ConnectivityManager.NetworkCallback) -> Unit ) {
-
-        val connectMan = appContext.getSystemService(ConnectivityManager::class.java)!!
-
-        val request = NetworkRequest
-            .Builder()
-            .addCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET)
-            .build()
-
-        val callback = object: ConnectivityManager.NetworkCallback() {
-            override fun onAvailable(network: Network) {
-                action(connectMan, this)
-            }
-        }
-
-        connectMan.registerNetworkCallback(request, callback)
-    }
-
-
     fun themeColor(appContext: Context, attrRes: Int): Int {
         appContext.theme.resolveAttribute(attrRes, typval, true)
         return typval.data

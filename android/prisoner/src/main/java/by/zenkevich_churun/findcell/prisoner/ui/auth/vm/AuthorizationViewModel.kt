@@ -59,8 +59,8 @@ class AuthorizationViewModel @Inject constructor(
         crossinline makeNetworkCall: () -> AuthorizationState ) {
 
         if(mldState.value != AuthorizationState.Idle ||
-            !netTracker.isInternetAvailable ||
-            !validate(username, password) ) {
+            !validate(username, password) ||
+            !checkInternet() ) {
 
             return
         }
@@ -88,6 +88,15 @@ class AuthorizationViewModel @Inject constructor(
         }
 
         return true
+    }
+
+    private fun checkInternet(): Boolean {
+        if(netTracker.isInternetAvailable) {
+            return true
+        }
+
+        mldState.value = AuthorizationState.NoInternet
+        return false
     }
 
 
