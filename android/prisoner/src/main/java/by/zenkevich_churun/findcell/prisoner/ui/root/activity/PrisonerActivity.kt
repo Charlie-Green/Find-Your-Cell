@@ -38,7 +38,7 @@ class PrisonerActivity: AppCompatActivity(R.layout.prisoner_activity) {
         navMan.setup( vm.prisonerLD.value != null )
 
         vm.savePrisonerResultLD.observe(this, Observer { result ->
-            if(result == SavePrisonerResult.SUCCESS) {
+            if(result is SavePrisonerResult.Success) {
                 notifySavePrisonerSuccess()
                 vm.notifySaveResultConsumed()
             }

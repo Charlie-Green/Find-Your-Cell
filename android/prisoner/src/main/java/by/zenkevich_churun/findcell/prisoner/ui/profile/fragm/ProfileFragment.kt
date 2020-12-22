@@ -47,8 +47,9 @@ class ProfileFragment: Fragment(R.layout.profile_fragm) {
         })
         vm.saveResultLD.observe(viewLifecycleOwner, Observer { result ->
             when(result) {
-                SavePrisonerResult.ERROR       -> notifySaveError()
-                SavePrisonerResult.NO_INTERNET -> notifySaveNeedsInternet()
+                // is SavePrisonerResult.Success    -> playDeleteAnimations(result.deletePositions)
+                is SavePrisonerResult.Error      -> notifySaveError()
+                is SavePrisonerResult.NoInternet -> notifySaveNeedsInternet()
             }
         })
 

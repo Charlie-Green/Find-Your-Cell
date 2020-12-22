@@ -79,7 +79,7 @@ class ProfileRepository @Inject constructor(
 
     fun save(data: Prisoner, internet: Boolean) {
         if(!internet) {
-            mldSaveResult.postValue(SavePrisonerResult.NO_INTERNET)
+            mldSaveResult.postValue(SavePrisonerResult.NoInternet)
             return
         }
 
@@ -90,17 +90,18 @@ class ProfileRepository @Inject constructor(
             api.update(data, passHash)
 
             store.submit(data, passHash)
-            mldSaveResult.postValue(SavePrisonerResult.SUCCESS)
+            val deletedPositions = listOf<Int>()  // TODO
+            mldSaveResult.postValue( SavePrisonerResult.Success(deletedPositions) )
         } catch(exc: IOException) {
             Log.w(LOGTAG, "Failed to save ${Prisoner::class.java.simpleName}")
             mldUnsavedChanges.postValue(true)
-            mldSaveResult.postValue(SavePrisonerResult.ERROR)
+            mldSaveResult.postValue(SavePrisonerResult.Error)
         }
     }
 
 
     fun notifySaveResultConsumed() {
-        mldSaveResult.postValue(SavePrisonerResult.IDLE)
+        mldSaveResult.postValue(SavePrisonerResult.Idle)
     }
 
     fun notifyDataChanged() {
