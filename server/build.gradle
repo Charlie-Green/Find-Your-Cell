@@ -4,4 +4,7 @@ ext {
 
     libKotlin = "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlinVersion"
     libSpring = "org.springframework.boot:spring-boot-starter-web"
+
+    libHibernate = "org.hibernate:hibernate-gradle-plugin:5.4.26.Final"
+    libMysqlJdbc = "mysql:mysql-connector-java:5.1.6"
 }
