@@ -1,4 +1,4 @@
-package by.zenkevich_churun.findcell.server
+package by.zenkevich_churun.findcell.server.protocol
 
 import org.springframework.boot.autoconfigure.SpringBootApplication
 

@@ -1,0 +1,36 @@
+plugins {
+	id 'org.springframework.boot' version '2.3.3.RELEASE'
+	id 'io.spring.dependency-management' version '1.0.8.RELEASE'
+	id "org.jetbrains.kotlin.jvm" version "1.4.21"
+	id "java"
+}
+
+group = "by.zenkevich_churun.findcell.server.protocol"
+version = "1.0"
+
+repositories {
+	mavenCentral()
+	jcenter()
+}
+
+dependencies {
+	def Deps = rootProject.ext
+
+	implementation Deps.libKotlin
+	implementation Deps.libSpring
+
+	implementation project(":internal")
+}
+
+compileKotlin {
+	sourceCompatibility = JavaVersion.VERSION_1_8
+	targetCompatibility = JavaVersion.VERSION_1_8
+
+	kotlinOptions {
+		jvmTarget = "1.8"
+	}
+}
+
+bootJar {
+	mainClassName = "by.zenkevich_churun.findcell.server.protocol.ServerMainKt"
+}

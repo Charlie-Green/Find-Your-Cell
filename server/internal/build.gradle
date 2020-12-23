@@ -1,0 +1,27 @@
+plugins {
+	id "org.jetbrains.kotlin.jvm" version "1.4.21"
+	id "java"
+}
+
+group = "by.zenkevich_churun.findcell.server.internal"
+version = "1.0"
+
+repositories {
+	mavenCentral()
+	jcenter()
+}
+
+dependencies {
+	def Deps = rootProject.ext
+
+	implementation Deps.libKotlin
+}
+
+//compileKotlin {
+//	sourceCompatibility = JavaVersion.VERSION_1_8
+//	targetCompatibility = JavaVersion.VERSION_1_8
+//
+//	kotlinOptions {
+//		jvmTarget = "1.8"
+//	}
+//}
