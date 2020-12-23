@@ -1,44 +1,45 @@
 create table `Prisoners` (
-  `id` int primary key,
-  `username` varchar(10),
-  `pass` blob,
-  `name` text,
-  `info` text
+  `id` int not null primary key auto_increment,
+  `username` varchar(10) not null,
+  `pass` blob not null,
+  `name` text not null,
+  `info` text not null,
+  unique (`username`)
 );
 
 create table `Contacts` (
-  `id` int primary key,
-  `prisoner` Int,
-  `type` smallint,
-  `data` text
+  `prisoner` int not null,
+  `type`smallint not null,
+  `data`text not null,
+  primary key(`prisoner`, `type`)
 );
 
 create table `Arests` (
-  `id` Int primary key,
-  `prisoner` int,
-  `start` bigint,
-  `end` bigint
+  `id` int not null primary key auto_increment,
+  `prisoner` int not null,
+  `start` bigint not null,
+  `end` bigint not null
 );
 
 create table `Periods` (
-  `arest` int,
-  `start` bigint,
-  `end` bigint,
-  `jail` int,
-  `cell` smallint,
+  `arest` int not null,
+  `start` bigint not null,
+  `end` bigint not null,
+  `jail` int not null,
+  `cell` smallint not null,
   primary key (`arest`, `start`, `end`)
 );
 
 create table `Cells` (
-  `jail` int,
-  `number` smallint,
-  `seats` smallint,
+  `jail` int not null,
+  `number` smallint not null,
+  `seats` smallint not null,
   primary key (`jail`, `number`)
 );
 
 create table `Jails` (
-  `id` int primary key,
-  `name` text
+  `id` int not null primary key auto_increment,
+  `name` text not null
 );
 
 alter table `Contacts` add foreign key (`prisoner`) references `Prisoners` (`id`);
