@@ -5,10 +5,8 @@ import by.zenkevich_churun.findcell.server.internal.entity.PrisonerEntity
 import by.zenkevich_churun.findcell.server.internal.util.ServerInternalUtil.optionalResult
 
 
-class AuthorizationDao {
-    // TODO: DI this.
-    private val connection = DatabaseConnection()
-
+class AuthorizationDao(
+    private val connection: DatabaseConnection ) {
 
     fun getPrisoner(
         username: String,

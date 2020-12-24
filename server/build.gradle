@@ -7,4 +7,8 @@ ext {
 
     libHibernate = "org.hibernate:hibernate-gradle-plugin:5.4.26.Final"
     libMysqlJdbc = "mysql:mysql-connector-java:5.1.6"
+
+    def koinVersion = "2.2.2"
+    libKoin    = "org.koin:koin-core:$koinVersion"
+    libKoinExt = "org.koin:koin-core-ext:$koinVersion"
 }

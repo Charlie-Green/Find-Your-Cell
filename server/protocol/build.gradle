@@ -17,7 +17,10 @@ dependencies {
 	def Deps = rootProject.ext
 
 	implementation Deps.libKotlin
+
 	implementation Deps.libSpring
+	implementation Deps.libKoin
+	implementation Deps.libKoinExt
 
 	implementation project(":internal")
 }
