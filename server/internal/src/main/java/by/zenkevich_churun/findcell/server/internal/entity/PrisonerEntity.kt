@@ -1,11 +1,11 @@
-package by.zenkevich_churun.findcell.server.internal
+package by.zenkevich_churun.findcell.server.internal.entity
 
 import javax.persistence.*
 
 
 @Entity
 @Table(name = "Prisoners")
-class Prisoner {
+class PrisonerEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     var id: Int = 0

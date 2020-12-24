@@ -17,7 +17,7 @@
                       value="jdbc:mysql://localhost:3306/Find-Your-Cell" />
 
             <property name="javax.persistence.jdbc.user"
-                      value="root"/>
+                      value="root" />
 
             <property name="javax.persistence.jdbc.password"
                       value="MySQL Root" />
