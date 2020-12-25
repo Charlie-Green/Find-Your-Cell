@@ -23,6 +23,10 @@ dependencies {
 	implementation Deps.libKoinExt
 
 	implementation project(":internal")
+
+	// Obtained by compiling the protocol project.
+	// Used by both clients and the server apps.
+	implementation files("../../protocol/build/libs/protocol.jar")
 }
 
 compileKotlin {

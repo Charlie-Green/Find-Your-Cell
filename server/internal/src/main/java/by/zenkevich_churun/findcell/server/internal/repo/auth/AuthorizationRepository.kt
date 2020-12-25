@@ -15,7 +15,8 @@ class AuthorizationRepository(
         val prisoner = dao.getPrisoner(username, passwordHash)
         if(prisoner != null) {
             val contacts = dao.getContacts(prisoner.id)
-            return LogInResponse.Success(prisoner, contacts)
+            val prisonerInstance = prisoner.toPrisoner(contacts)
+            return LogInResponse.Success(prisonerInstance)
         }
 
         val usernameRight = dao.checkUsername(username)

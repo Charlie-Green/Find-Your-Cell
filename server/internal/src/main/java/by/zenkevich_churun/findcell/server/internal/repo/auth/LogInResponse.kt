@@ -1,14 +1,12 @@
 package by.zenkevich_churun.findcell.server.internal.repo.auth
 
-import by.zenkevich_churun.findcell.server.internal.entity.ContactEntity
-import by.zenkevich_churun.findcell.server.internal.entity.PrisonerEntity
+import by.zenkevich_churun.findcell.protocol.prisoner.entity.Prisoner
 
 
 sealed class LogInResponse {
 
     class Success(
-        val prisoner: PrisonerEntity,
-        val contacts: List<ContactEntity>
+        val prisoner: Prisoner
     ): LogInResponse()
 
     object WrongUsername: LogInResponse()
