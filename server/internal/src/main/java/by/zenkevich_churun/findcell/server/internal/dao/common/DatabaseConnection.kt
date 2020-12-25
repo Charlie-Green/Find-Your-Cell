@@ -3,8 +3,7 @@ package by.zenkevich_churun.findcell.server.internal.dao.common
 import javax.persistence.*
 
 
-// @Singleton
-class DatabaseConnection /* @Inject constructor() */ {
+class DatabaseConnection {
 
     val entityMan by lazy {
         Persistence
@@ -17,7 +16,10 @@ class DatabaseConnection /* @Inject constructor() */ {
         val t = entityMan.transaction
 
         t.begin()
-        action(entityMan)
-        t.commit()
+        try {
+            action(entityMan)
+        } finally {
+            t.commit()
+        }
     }
 }

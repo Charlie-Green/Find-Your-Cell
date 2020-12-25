@@ -13,7 +13,6 @@ class AuthorizationDao(
     private val queryGetPrisoner   = GetPrisonerQuery()
     private val queryCheckUsername = CheckUsernameQuery()
     private val queryGetContacts   = GetContactsQuery()
-    private val queryAddPrisoner   = AddPrisonerQuery()
 
 
     fun getPrisoner(
@@ -55,8 +54,7 @@ class AuthorizationDao(
             man.persist(entity)
         }
 
-        // TODO: Return actual ID
-        return 0
+        return entity.id
     }
 
 
