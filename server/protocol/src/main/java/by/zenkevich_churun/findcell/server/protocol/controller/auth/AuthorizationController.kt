@@ -1,9 +1,9 @@
 package by.zenkevich_churun.findcell.server.protocol.controller.auth
 
+import by.zenkevich_churun.findcell.protocol.prisoner.util.ProtocolUtil
 import by.zenkevich_churun.findcell.server.internal.repo.auth.AuthorizationRepository
 import by.zenkevich_churun.findcell.server.protocol.di.ServerKoin
 import by.zenkevich_churun.findcell.server.protocol.encode.AuthorizationEncoder
-import by.zenkevich_churun.findcell.server.protocol.util.ControllerUtil
 import org.springframework.web.bind.annotation.*
 
 
@@ -27,7 +27,7 @@ class AuthorizationController {
         val encoder = AuthorizationEncoder.forVersion(version)
         val response = repo.logIn(
             username,
-            ControllerUtil.decodeBase64(passwordHash)
+            ProtocolUtil.decodeBase64(passwordHash)
         )
 
         return encoder.encode(response)
@@ -46,7 +46,7 @@ class AuthorizationController {
         val encoder = AuthorizationEncoder.forVersion(version)
         val response = repo.signUp(
             username,
-            ControllerUtil.decodeBase64(passwordHash),
+            ProtocolUtil.decodeBase64(passwordHash),
             initialName
         )
 

@@ -5,7 +5,7 @@ import java.util.Base64
 import kotlin.jvm.Throws
 
 
-object ControllerUtil {
+object ProtocolUtil {
 
     @Throws(IllegalServerParameterException::class)
     fun decodeBase64(
