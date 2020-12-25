@@ -31,4 +31,23 @@ class AuthorizationController {
 
         return encoder.encode(response)
     }
+
+    @PostMapping("/auth/signup")
+    fun signUp(
+        @RequestParam("v") version: Int,
+        @RequestParam("uname") username: String,
+        @RequestParam("pass") passwordHash: String,
+        @RequestParam("name") initialName: String
+    ): String {
+
+        val encoder = AuthorizationEncoder.forVersion(version)
+
+        val response = repo.signUp(
+            username,
+            ControllerUtil.decodeBase64(passwordHash),
+            initialName
+        )
+
+        return encoder.encode(response)
+    }
 }

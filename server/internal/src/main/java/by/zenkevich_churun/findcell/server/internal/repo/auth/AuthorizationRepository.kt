@@ -1,6 +1,7 @@
 package by.zenkevich_churun.findcell.server.internal.repo.auth
 
 import by.zenkevich_churun.findcell.server.internal.dao.auth.AuthorizationDao
+import javax.persistence.PersistenceException
 
 
 class AuthorizationRepository(
@@ -23,5 +24,20 @@ class AuthorizationRepository(
         }
 
         return LogInResponse.WrongPassword
+    }
+
+
+    fun signUp(
+        username: String,
+        passwordHash: ByteArray,
+        initialName: String
+    ): SignUpResponse {
+
+        try {
+            val id = dao.addPrisoner(username, passwordHash, initialName)
+            return SignUpResponse.Success(id)
+        } catch(exc: PersistenceException) {
+            return SignUpResponse.UsernameTaken
+        }
     }
 }

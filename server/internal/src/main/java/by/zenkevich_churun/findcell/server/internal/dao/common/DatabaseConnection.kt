@@ -1,6 +1,6 @@
 package by.zenkevich_churun.findcell.server.internal.dao.common
 
-import javax.persistence.Persistence
+import javax.persistence.*
 
 
 // @Singleton
@@ -10,5 +10,14 @@ class DatabaseConnection /* @Inject constructor() */ {
         Persistence
             .createEntityManagerFactory("FindCell")
             .createEntityManager()
+    }
+
+
+    inline fun withTransaction(action: (entityMan: EntityManager) -> Unit) {
+        val t = entityMan.transaction
+
+        t.begin()
+        action(entityMan)
+        t.commit()
     }
 }

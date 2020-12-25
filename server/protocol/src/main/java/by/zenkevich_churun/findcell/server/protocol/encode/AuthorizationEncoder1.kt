@@ -3,6 +3,7 @@ package by.zenkevich_churun.findcell.server.protocol.encode
 import by.zenkevich_churun.findcell.server.internal.entity.ContactEntity
 import by.zenkevich_churun.findcell.server.internal.entity.PrisonerEntity
 import by.zenkevich_churun.findcell.server.internal.repo.auth.LogInResponse
+import by.zenkevich_churun.findcell.server.internal.repo.auth.SignUpResponse
 
 
 internal class AuthorizationEncoder1: AuthorizationEncoder {
@@ -29,6 +30,14 @@ internal class AuthorizationEncoder1: AuthorizationEncoder {
         is LogInResponse.Success       -> encodePrisoner(response.prisoner, response.contacts)
         is LogInResponse.WrongUsername -> "U"
         is LogInResponse.WrongPassword -> "P"
+    }
+
+    override fun encode(
+        response: SignUpResponse
+    ): String = when(response) {
+
+        is SignUpResponse.Success       -> "${response.prisonerId}"
+        is SignUpResponse.UsernameTaken -> "U"
     }
 
 

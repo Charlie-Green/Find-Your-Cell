@@ -11,6 +11,12 @@ class PrisonerEntity {
     @Column(name = "id")
     var id: Int = 0
 
+    @Column(name = "username")
+    lateinit var username: String
+
+    @Column(name = "pass")
+    lateinit var passwordHash: ByteArray
+
     @Column(name = "name")
     lateinit var name: String
 
