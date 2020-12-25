@@ -18,4 +18,22 @@ class ContactEntity {
     /** Converts this to [Contact] entity from Protocol the project. **/
     fun toContact()
         = Contact(key.type, data)
+
+
+    companion object {
+
+        fun fromContact(
+            contact: Contact,
+            prisonerId: Int
+        ): ContactEntity {
+
+            return ContactEntity().apply {
+                key = ContactKey()
+                key.prisonerId = prisonerId
+                key.type = contact.type
+
+                data = contact.data
+            }
+        }
+    }
 }

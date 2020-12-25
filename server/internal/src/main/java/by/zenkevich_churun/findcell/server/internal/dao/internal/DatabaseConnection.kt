@@ -1,4 +1,4 @@
-package by.zenkevich_churun.findcell.server.internal.dao.common
+package by.zenkevich_churun.findcell.server.internal.dao.internal
 
 import javax.persistence.*
 
@@ -18,8 +18,10 @@ class DatabaseConnection {
         t.begin()
         try {
             action(entityMan)
-        } finally {
             t.commit()
+        } catch(thr: Throwable) {
+            t.rollback()
+            throw thr
         }
     }
 }

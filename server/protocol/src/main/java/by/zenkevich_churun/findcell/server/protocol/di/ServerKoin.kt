@@ -1,8 +1,11 @@
 package by.zenkevich_churun.findcell.server.protocol.di
 
 import by.zenkevich_churun.findcell.server.internal.dao.auth.AuthorizationDao
-import by.zenkevich_churun.findcell.server.internal.dao.common.DatabaseConnection
+import by.zenkevich_churun.findcell.server.internal.dao.common.CommonDao
+import by.zenkevich_churun.findcell.server.internal.dao.internal.DatabaseConnection
+import by.zenkevich_churun.findcell.server.internal.dao.profile.ProfileDao
 import by.zenkevich_churun.findcell.server.internal.repo.auth.AuthorizationRepository
+import by.zenkevich_churun.findcell.server.internal.repo.profile.ProfileRepository
 import org.koin.core.Koin
 import org.koin.core.context.startKoin
 import org.koin.dsl.module
@@ -26,6 +29,10 @@ object ServerKoin {
             single {
                 DatabaseConnection()
             }
+
+            single {
+                CommonDao(get())
+            }
         }
 
         val authModule = module {
@@ -35,6 +42,16 @@ object ServerKoin {
 
             single {
                 AuthorizationDao(get())
+            }
+        }
+
+        val profileModule = module {
+            single {
+                ProfileRepository(get(), get())
+            }
+
+            single {
+                ProfileDao(get())
             }
         }
 
@@ -50,6 +67,7 @@ object ServerKoin {
             modules( listOf(
                 commonModule,
                 authModule,
+                profileModule,
                 arestModule,
                 schedModule
             ))

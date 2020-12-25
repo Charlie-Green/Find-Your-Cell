@@ -1,11 +1,11 @@
-package by.zenkevich_churun.findcell.server.internal.dao.common
+package by.zenkevich_churun.findcell.server.internal.dao.internal
 
 import javax.persistence.EntityManager
 import javax.persistence.TypedQuery
 
 
 /** Allows caching [TypedQuery] objects without code duplication. **/
-abstract class LazyQuery<T>(
+abstract class LazyTypedQuery<T>(
     private val sql: String,
     private val klass: Class<T> ) {
 

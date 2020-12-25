@@ -1,12 +1,13 @@
 package by.zenkevich_churun.findcell.server.internal.dao.auth
 
-import by.zenkevich_churun.findcell.server.internal.dao.common.LazyQuery
+import by.zenkevich_churun.findcell.server.internal.dao.internal.LazyTypedQuery
 import by.zenkevich_churun.findcell.server.internal.entity.PrisonerEntity
+import java.lang.Long
 import javax.persistence.EntityManager
 import javax.persistence.TypedQuery
 
 
-internal class CheckUsernameQuery: LazyQuery<java.lang.Long>(
+internal class CheckUsernameQuery: LazyTypedQuery<Long>(
     "select count(*) from ${PrisonerEntity::class.java.simpleName} p where username=?0",
     java.lang.Long::class.java ) {
 
