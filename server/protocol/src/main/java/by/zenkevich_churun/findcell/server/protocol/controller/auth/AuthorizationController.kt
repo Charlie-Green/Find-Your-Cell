@@ -22,8 +22,9 @@ class AuthorizationController {
         @RequestParam("pass") passwordHash: String
     ): String {
 
-        val encoder = AuthorizationEncoder.forVersion(version)
+        AuthorizationValidator.validateCredentials(username, null)
 
+        val encoder = AuthorizationEncoder.forVersion(version)
         val response = repo.logIn(
             username,
             ControllerUtil.decodeBase64(passwordHash)
@@ -40,8 +41,9 @@ class AuthorizationController {
         @RequestParam("name") initialName: String
     ): String {
 
-        val encoder = AuthorizationEncoder.forVersion(version)
+        AuthorizationValidator.validateCredentials(username, initialName)
 
+        val encoder = AuthorizationEncoder.forVersion(version)
         val response = repo.signUp(
             username,
             ControllerUtil.decodeBase64(passwordHash),
