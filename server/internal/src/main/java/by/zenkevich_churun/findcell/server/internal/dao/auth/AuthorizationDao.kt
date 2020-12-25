@@ -1,41 +1,45 @@
 package by.zenkevich_churun.findcell.server.internal.dao.auth
 
 import by.zenkevich_churun.findcell.server.internal.dao.common.DatabaseConnection
+import by.zenkevich_churun.findcell.server.internal.entity.ContactEntity
 import by.zenkevich_churun.findcell.server.internal.entity.PrisonerEntity
 import by.zenkevich_churun.findcell.server.internal.util.ServerInternalUtil.optionalResult
+import javax.persistence.EntityManager
 
 
 class AuthorizationDao(
     private val connection: DatabaseConnection ) {
+
+    private val queryGetPrisoner   = GetPrisonerQuery()
+    private val queryCheckUsername = CheckUsernameQuery()
+    private val queryGetContacts   = GetContactsQuery()
+
 
     fun getPrisoner(
         username: String,
         passwordHash: ByteArray
     ): PrisonerEntity? {
 
-        val man = connection.entityMan
-
-        val prisonerClass = PrisonerEntity::class.java
-        val q = man.createQuery(
-            "select p from ${prisonerClass.simpleName} p where username=?0 and pass=?1",
-            prisonerClass
+        val q = queryGetPrisoner.getTypedQuery(
+            entityMan,
+            username,
+            passwordHash
         )
-        q.setParameter(0, username)
-        q.setParameter(1, passwordHash)
-
         return q.optionalResult
     }
 
     fun checkUsername(username: String): Boolean {
-        val man = connection.entityMan
-
-        val prisonerClass = PrisonerEntity::class.java
-        val q = man.createQuery(
-            "select count(*) from ${prisonerClass.simpleName} p where username=?0",
-            java.lang.Long::class.java
-        )
-        q.setParameter(0, username)
-
+        val q = queryCheckUsername.getTypedQuery(entityMan, username)
         return q.singleResult >= 1
     }
+
+
+    fun getContacts(prisonerId: Int): List<ContactEntity> {
+        val q = queryGetContacts.getTypedQuery(entityMan, prisonerId)
+        return q.resultList
+    }
+
+
+    private val entityMan: EntityManager
+        get() = connection.entityMan
 }

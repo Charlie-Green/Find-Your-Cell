@@ -8,9 +8,12 @@ import javax.persistence.*
 class PrisonerEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
     var id: Int = 0
 
+    @Column(name = "name")
     lateinit var name: String
 
+    @Column(name = "info")
     lateinit var info: String
 }

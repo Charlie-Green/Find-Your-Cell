@@ -2,6 +2,7 @@ package by.zenkevich_churun.findcell.server.protocol.controller.auth
 
 import by.zenkevich_churun.findcell.server.internal.repo.auth.AuthorizationRepository
 import by.zenkevich_churun.findcell.server.protocol.di.ServerKoin
+import by.zenkevich_churun.findcell.server.protocol.encode.AuthorizationEncoder
 import by.zenkevich_churun.findcell.server.protocol.util.ControllerUtil
 import org.springframework.web.bind.annotation.*
 
@@ -21,11 +22,13 @@ class AuthorizationController {
         @RequestParam("pass") passwordHash: String
     ): String {
 
+        val encoder = AuthorizationEncoder.forVersion(version)
+
         val response = repo.logIn(
             username,
             ControllerUtil.decodeBase64(passwordHash)
         )
 
-        return AuthorizationMapping.encode(response)
+        return encoder.encode(response)
     }
 }
