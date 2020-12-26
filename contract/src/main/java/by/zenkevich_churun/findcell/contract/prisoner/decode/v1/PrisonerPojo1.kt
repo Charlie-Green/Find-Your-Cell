@@ -1,26 +1,27 @@
 package by.zenkevich_churun.findcell.contract.prisoner.decode.v1
 
+import by.zenkevich_churun.findcell.contract.prisoner.contract.PrisonerContract1
 import by.zenkevich_churun.findcell.contract.prisoner.entity.Contact
 import by.zenkevich_churun.findcell.contract.prisoner.entity.Prisoner
-import by.zenkevich_churun.findcell.contract.prisoner.internal.PrisonerContract1
+import by.zenkevich_churun.findcell.contract.prisoner.internal.InternalPrisonerContract1
 import by.zenkevich_churun.findcell.contract.prisoner.util.ProtocolUtil
 import com.google.gson.annotations.SerializedName
 
 
 internal class PrisonerPojo1 {
-    @SerializedName(PrisonerContract1.KEY_PRISONER_ID)
+    @SerializedName(InternalPrisonerContract1.KEY_PRISONER_ID)
     var id: Int = 0
 
-    @SerializedName(PrisonerContract1.KEY_PRISONER_USERNAME)
+    @SerializedName(InternalPrisonerContract1.KEY_PRISONER_USERNAME)
     var username: String? = null
 
-    @SerializedName(PrisonerContract1.KEY_PRISONER_PASSWORD_HASH)
+    @SerializedName(InternalPrisonerContract1.KEY_PRISONER_PASSWORD_HASH)
     lateinit var passwordBase64: String
 
-    @SerializedName(PrisonerContract1.KEY_PRISONER_NAME)
+    @SerializedName(InternalPrisonerContract1.KEY_PRISONER_NAME)
     lateinit var name: String
 
-    @SerializedName(PrisonerContract1.KEY_PRISONER_INFO)
+    @SerializedName(InternalPrisonerContract1.KEY_PRISONER_INFO)
     lateinit var info: String
 
 

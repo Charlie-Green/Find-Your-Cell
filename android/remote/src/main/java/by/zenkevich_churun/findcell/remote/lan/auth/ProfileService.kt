@@ -1,10 +1,7 @@
 package by.zenkevich_churun.findcell.remote.lan.auth
 
-import by.zenkevich_churun.findcell.remote.lan.auth.pojo.PrisonerPojo
 import retrofit2.Call
-import retrofit2.http.Field
-import retrofit2.http.FormUrlEncoded
-import retrofit2.http.POST
+import retrofit2.http.*
 
 
 internal interface ProfileService {
@@ -15,5 +12,5 @@ internal interface ProfileService {
         @Field("v") version: Int,
         @Field("uname") username: String,
         @Field("pass") passwordBase64: String
-    ): Call<PrisonerPojo>
+    ): Call<String>
 }
