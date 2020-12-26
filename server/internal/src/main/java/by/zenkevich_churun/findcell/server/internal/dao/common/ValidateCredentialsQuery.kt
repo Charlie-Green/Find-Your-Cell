@@ -1,7 +1,7 @@
 package by.zenkevich_churun.findcell.server.internal.dao.common
 
 import by.zenkevich_churun.findcell.server.internal.dao.internal.LazyTypedQuery
-import by.zenkevich_churun.findcell.server.internal.entity.PrisonerEntity
+import by.zenkevich_churun.findcell.server.internal.entity.table.PrisonerEntity
 import javax.persistence.EntityManager
 import javax.persistence.TypedQuery
 

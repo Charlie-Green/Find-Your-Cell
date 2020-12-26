@@ -1,4 +1,4 @@
-package by.zenkevich_churun.findcell.server.protocol.encode
+package by.zenkevich_churun.findcell.server.protocol.encode.auth
 
 import by.zenkevich_churun.findcell.contract.prisoner.encode.PrisonerEncoder
 import by.zenkevich_churun.findcell.server.internal.repo.auth.LogInResponse
@@ -7,7 +7,7 @@ import by.zenkevich_churun.findcell.server.internal.repo.auth.SignUpResponse
 
 internal class AuthorizationEncoder1: AuthorizationEncoder {
 
-    private val encoder by lazy {
+    private val prisonerEncoder by lazy {
         PrisonerEncoder.forVersion(1)
             ?: throw Error("No ${PrisonerEncoder::class.java.simpleName} for version 1")
     }
@@ -17,7 +17,7 @@ internal class AuthorizationEncoder1: AuthorizationEncoder {
         response: LogInResponse
     ): String = when(response) {
 
-        is LogInResponse.Success       -> encoder.encode(response.prisoner)
+        is LogInResponse.Success       -> prisonerEncoder.encode(response.prisoner)
         is LogInResponse.WrongUsername -> "U"
         is LogInResponse.WrongPassword -> "P"
     }

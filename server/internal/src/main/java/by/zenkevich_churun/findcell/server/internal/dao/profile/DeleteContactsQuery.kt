@@ -1,7 +1,7 @@
 package by.zenkevich_churun.findcell.server.internal.dao.profile
 
 import by.zenkevich_churun.findcell.server.internal.dao.internal.LazyQuery
-import by.zenkevich_churun.findcell.server.internal.entity.ContactEntity
+import by.zenkevich_churun.findcell.server.internal.entity.table.ContactEntity
 import javax.persistence.*
 
 

@@ -3,6 +3,8 @@ package by.zenkevich_churun.findcell.server.protocol.controller.arest
 import by.zenkevich_churun.findcell.contract.prisoner.util.ProtocolUtil
 import by.zenkevich_churun.findcell.server.internal.repo.arest.ArestsRepository
 import by.zenkevich_churun.findcell.server.protocol.di.ServerKoin
+import by.zenkevich_churun.findcell.server.protocol.encode.arest.ArestsEncoder
+import by.zenkevich_churun.findcell.server.protocol.exc.IllegalServerParameterException
 import org.springframework.web.bind.annotation.*
 
 
@@ -22,6 +24,14 @@ class ArestsController {
     ): String {
 
         val passwordHash = ProtocolUtil.decodeBase64(passwordBase64)
-        TODO()
+
+        try {
+            val arests = repo.getArests(prisonerId, passwordHash)
+            val encoder = ArestsEncoder.forVersion(version)
+            return encoder.encode(arests)
+        } catch(exc: IllegalArgumentException) {
+            println(exc.message)
+            throw IllegalServerParameterException()
+        }
     }
 }

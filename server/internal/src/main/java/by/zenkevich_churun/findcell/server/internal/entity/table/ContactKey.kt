@@ -1,4 +1,4 @@
-package by.zenkevich_churun.findcell.server.internal.entity
+package by.zenkevich_churun.findcell.server.internal.entity.table
 
 import java.io.Serializable
 import javax.persistence.Column

@@ -1,4 +1,4 @@
-package by.zenkevich_churun.findcell.server.protocol.encode
+package by.zenkevich_churun.findcell.server.protocol.encode.auth
 
 import by.zenkevich_churun.findcell.server.internal.repo.auth.LogInResponse
 import by.zenkevich_churun.findcell.server.internal.repo.auth.SignUpResponse
