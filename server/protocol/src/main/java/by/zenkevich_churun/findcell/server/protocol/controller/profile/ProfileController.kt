@@ -1,6 +1,6 @@
 package by.zenkevich_churun.findcell.server.protocol.controller.profile
 
-import by.zenkevich_churun.findcell.protocol.prisoner.decode.PrisonerDecoder
+import by.zenkevich_churun.findcell.contract.prisoner.decode.PrisonerDecoder
 import by.zenkevich_churun.findcell.server.internal.repo.profile.ProfileRepository
 import by.zenkevich_churun.findcell.server.protocol.di.ServerKoin
 import by.zenkevich_churun.findcell.server.protocol.exc.IllegalServerParameterException

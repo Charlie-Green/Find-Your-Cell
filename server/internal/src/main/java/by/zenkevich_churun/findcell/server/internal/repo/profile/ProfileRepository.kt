@@ -1,6 +1,6 @@
 package by.zenkevich_churun.findcell.server.internal.repo.profile
 
-import by.zenkevich_churun.findcell.protocol.prisoner.entity.Prisoner
+import by.zenkevich_churun.findcell.contract.prisoner.entity.Prisoner
 import by.zenkevich_churun.findcell.server.internal.dao.common.CommonDao
 import by.zenkevich_churun.findcell.server.internal.dao.profile.ProfileDao
 import by.zenkevich_churun.findcell.server.internal.entity.ContactEntity

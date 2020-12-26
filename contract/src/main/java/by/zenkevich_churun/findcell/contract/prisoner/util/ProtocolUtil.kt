@@ -1,13 +1,12 @@
-package by.zenkevich_churun.findcell.server.protocol.util
+package by.zenkevich_churun.findcell.contract.prisoner.util
 
-import by.zenkevich_churun.findcell.server.protocol.exc.IllegalServerParameterException
 import java.util.Base64
 import kotlin.jvm.Throws
 
 
 object ProtocolUtil {
 
-    @Throws(IllegalServerParameterException::class)
+    @Throws(IllegalArgumentException::class)
     fun decodeBase64(
         base64: String,
         operation: String? = null
@@ -21,7 +20,11 @@ object ProtocolUtil {
             }
             println("Can't decode Base64")
 
-            throw IllegalServerParameterException()
+            throw exc
         }
     }
+
+
+    fun encodeBase64(data: ByteArray): String
+        = Base64.getEncoder().encodeToString(data)
 }

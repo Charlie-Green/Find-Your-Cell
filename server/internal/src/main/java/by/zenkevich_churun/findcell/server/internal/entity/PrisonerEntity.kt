@@ -1,6 +1,6 @@
 package by.zenkevich_churun.findcell.server.internal.entity
 
-import by.zenkevich_churun.findcell.protocol.prisoner.entity.Prisoner
+import by.zenkevich_churun.findcell.contract.prisoner.entity.Prisoner
 import javax.persistence.*
 
 

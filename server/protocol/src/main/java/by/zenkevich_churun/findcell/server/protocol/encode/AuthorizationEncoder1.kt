@@ -1,6 +1,6 @@
 package by.zenkevich_churun.findcell.server.protocol.encode
 
-import by.zenkevich_churun.findcell.protocol.prisoner.encode.PrisonerEncoder
+import by.zenkevich_churun.findcell.contract.prisoner.encode.PrisonerEncoder
 import by.zenkevich_churun.findcell.server.internal.repo.auth.LogInResponse
 import by.zenkevich_churun.findcell.server.internal.repo.auth.SignUpResponse
 
