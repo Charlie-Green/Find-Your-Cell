@@ -2,4 +2,8 @@ include ':result'
 include ':prisoner'
 include ':core'
 include ':app'
+include ':remote'
 rootProject.name = "Find Your Cell"
+
+include ":contract"
+project(":contract").projectDir = new File("../contract")

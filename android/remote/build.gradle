@@ -1,0 +1,58 @@
+apply plugin: "com.android.library"
+apply plugin: "kotlin-android"
+apply plugin: "kotlin-android-extensions"
+apply plugin: "kotlin-kapt"
+apply plugin: "dagger.hilt.android.plugin"
+
+
+android {
+    def Deps = rootProject.ext
+
+    compileSdkVersion Deps.targetSdk
+    buildToolsVersion Deps.buildTools
+
+    defaultConfig {
+        minSdkVersion Deps.minSdk
+        targetSdkVersion Deps.targetSdk
+        versionCode Deps.versionCode
+        versionName Deps.versionName
+
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+    kotlinOptions {
+        jvmTarget = "1.8"
+    }
+}
+
+
+dependencies {
+    def Deps = rootProject.ext
+
+    implementation fileTree(dir: "libs", include: ["*.jar"])
+    implementation Deps.libKotlin
+    implementation Deps.libAndroidX
+    implementation Deps.libAppCompat
+
+    implementation Deps.libHilt
+    kapt           Deps.kaptHilt
+
+    implementation Deps.libRetrofit
+    implementation Deps.libRetrofitGson
+
+    testImplementation Deps.testJUnit
+
+    implementation project(":core")
+    implementation project(":contract")
+}
