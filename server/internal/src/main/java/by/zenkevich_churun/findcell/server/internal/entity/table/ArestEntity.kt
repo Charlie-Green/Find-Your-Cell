@@ -1,6 +1,5 @@
 package by.zenkevich_churun.findcell.server.internal.entity.table
 
-import java.util.Calendar
 import javax.persistence.*
 
 
@@ -8,26 +7,14 @@ import javax.persistence.*
 @Table(name = "Arests")
 class ArestEntity {
 
-    @Transient
-    val start = Calendar.getInstance()
-
-    @Transient
-    val end = Calendar.getInstance()
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     var id: Int = 0
 
-    // TODO: This is only for me to know how to implement such case.
-    // Then I'm gonna remove all the Calendars!
-    @get:Column(name = "start")
-    var startMillis: Long
-        get() { return start.timeInMillis }
-        set(value) { start.timeInMillis = value }
+    @Column(name = "start")
+    var start: Long = 0L
 
-    @get:Column(name = "end")
-    var endMillis: Long
-        get() { return end.timeInMillis }
-        set(value) { end.timeInMillis = value }
+    @Column(name = "end")
+    var end: Long = 0L
 }

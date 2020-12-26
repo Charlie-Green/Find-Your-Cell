@@ -28,8 +28,9 @@ internal class ArestsEncoder1: ArestsEncoder {
     private fun appendArest(sb: StringBuilder, arestView: ArestView) {
         sb.append(
             "\n{" +
-                   "\"${ArestContract1.KEY_AREST_START}\": ${arestView.arest.startMillis}\n" +
-                   "\"${ArestContract1.KEY_AREST_END}\": ${arestView.arest.endMillis}\n" +
+                   "\"${ArestContract1.KEY_AREST_ID}\": ${arestView.arest.id}\n" +
+                   "\"${ArestContract1.KEY_AREST_START}\": ${arestView.arest.start}\n" +
+                   "\"${ArestContract1.KEY_AREST_END}\": ${arestView.arest.end}\n" +
                    "\"${ArestContract1.KEY_JAIL_IDS}\": ["
         )
 

@@ -7,7 +7,7 @@ import javax.persistence.TypedQuery
 
 
 internal class JailIdsForArestQuery: LazyTypedQuery<java.lang.Integer>(
-    "select distinct jail from ${PeriodEntity::class.java.simpleName} p where arest=?0",
+    "select distinct jailId from ${PeriodEntity::class.java.simpleName} p where arest=?0",
     java.lang.Integer::class.java ) {
 
     fun getTypedQuery(
