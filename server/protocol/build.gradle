@@ -26,7 +26,7 @@ dependencies {
 
 	// Obtained by compiling the protocol project.
 	// Used by both clients and the server apps.
-	implementation files("../../contract/build/libs/contract.jar")
+	implementation project(":contract")
 }
 
 compileKotlin {

@@ -1,2 +1,4 @@
 rootProject.name = "server"
 include "internal", "protocol"
+include "contract"
+project(":contract").projectDir = new File("../contract")
