@@ -15,7 +15,11 @@ class ArestsRepository(
     ): List<ArestView> {
 
         commonDao.validateCredentials(prisonerId, passwordHash)
-        val arests = dao.getArests(prisonerId)
-        TODO()
+        val arests = dao.arests(prisonerId)
+
+        return arests.map { arest ->
+            val jailIds = dao.jailIds(arest.id)
+            ArestView(arest, jailIds)
+        }
     }
 }

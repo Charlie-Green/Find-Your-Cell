@@ -1,9 +1,11 @@
 package by.zenkevich_churun.findcell.server.protocol.di
 
+import by.zenkevich_churun.findcell.server.internal.dao.arest.ArestsDao
 import by.zenkevich_churun.findcell.server.internal.dao.auth.AuthorizationDao
 import by.zenkevich_churun.findcell.server.internal.dao.common.CommonDao
 import by.zenkevich_churun.findcell.server.internal.dao.internal.DatabaseConnection
 import by.zenkevich_churun.findcell.server.internal.dao.profile.ProfileDao
+import by.zenkevich_churun.findcell.server.internal.repo.arest.ArestsRepository
 import by.zenkevich_churun.findcell.server.internal.repo.auth.AuthorizationRepository
 import by.zenkevich_churun.findcell.server.internal.repo.profile.ProfileRepository
 import org.koin.core.Koin
@@ -56,7 +58,13 @@ object ServerKoin {
         }
 
         val arestModule = module {
-            // TODO
+            single {
+                ArestsDao(get())
+            }
+
+            single {
+                ArestsRepository(get(), get())
+            }
         }
 
         val schedModule = module {

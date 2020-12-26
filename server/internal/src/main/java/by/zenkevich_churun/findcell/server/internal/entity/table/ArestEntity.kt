@@ -1,6 +1,5 @@
 package by.zenkevich_churun.findcell.server.internal.entity.table
 
-import jdk.nashorn.internal.ir.annotations.Ignore
 import java.util.Calendar
 import javax.persistence.*
 
@@ -9,10 +8,10 @@ import javax.persistence.*
 @Table(name = "Arests")
 class ArestEntity {
 
-    @Ignore
+    @Transient
     val start = Calendar.getInstance()
 
-    @Ignore
+    @Transient
     val end = Calendar.getInstance()
 
     @Id

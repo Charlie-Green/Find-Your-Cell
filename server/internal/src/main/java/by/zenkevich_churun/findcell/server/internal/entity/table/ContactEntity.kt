@@ -1,6 +1,7 @@
 package by.zenkevich_churun.findcell.server.internal.entity.table
 
 import by.zenkevich_churun.findcell.contract.prisoner.entity.Contact
+import by.zenkevich_churun.findcell.server.internal.entity.key.ContactKey
 import javax.persistence.*
 
 

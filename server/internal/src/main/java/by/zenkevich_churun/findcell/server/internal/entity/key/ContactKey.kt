@@ -1,5 +1,6 @@
-package by.zenkevich_churun.findcell.server.internal.entity.table
+package by.zenkevich_churun.findcell.server.internal.entity.key
 
+import by.zenkevich_churun.findcell.server.internal.entity.table.ContactEntity
 import java.io.Serializable
 import javax.persistence.Column
 import javax.persistence.Embeddable
