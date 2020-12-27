@@ -1,6 +1,7 @@
 package by.zenkevich_churun.findcell.server.internal.repo.auth
 
 import by.zenkevich_churun.findcell.server.internal.dao.auth.AuthorizationDao
+import by.zenkevich_churun.findcell.server.internal.entity.view.PrisonerView
 import javax.persistence.PersistenceException
 
 
@@ -12,10 +13,10 @@ class AuthorizationRepository(
         passwordHash: ByteArray
     ): LogInResponse {
 
-        val prisoner = dao.getPrisoner(username, passwordHash)
-        if(prisoner != null) {
-            val contacts = dao.getContacts(prisoner.id)
-            val prisonerInstance = prisoner.toPrisoner(contacts)
+        val prisonerEntity = dao.getPrisoner(username, passwordHash)
+        if(prisonerEntity != null) {
+            val contacts = dao.getContacts(prisonerEntity.id)
+            val prisonerInstance = PrisonerView(prisonerEntity, contacts)
             return LogInResponse.Success(prisonerInstance)
         }
 

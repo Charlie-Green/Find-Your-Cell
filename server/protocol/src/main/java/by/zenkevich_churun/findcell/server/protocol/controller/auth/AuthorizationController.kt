@@ -1,6 +1,6 @@
 package by.zenkevich_churun.findcell.server.protocol.controller.auth
 
-import by.zenkevich_churun.findcell.contract.util.protocol.ProtocolUtil
+import by.zenkevich_churun.findcell.serial.util.protocol.ProtocolUtil
 import by.zenkevich_churun.findcell.server.internal.repo.auth.AuthorizationRepository
 import by.zenkevich_churun.findcell.server.protocol.di.ServerKoin
 import by.zenkevich_churun.findcell.server.protocol.encode.auth.AuthorizationEncoder

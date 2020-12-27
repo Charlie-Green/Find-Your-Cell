@@ -1,6 +1,5 @@
 package by.zenkevich_churun.findcell.server.internal.entity.table
 
-import by.zenkevich_churun.findcell.contract.entity.Prisoner
 import javax.persistence.*
 
 
@@ -23,21 +22,4 @@ class PrisonerEntity {
 
     @Column(name = "info")
     lateinit var info: String
-
-
-    /** Converts this from [Prisoner] instance from the 'protocol' project. **/
-    fun toPrisoner(contacts: List<ContactEntity>): Prisoner {
-        val contactInstances = contacts.map { c ->
-            c.toContact()
-        }
-
-        return Prisoner(
-            id,
-            username,
-            passwordHash,
-            name,
-            info,
-            contactInstances
-        )
-    }
 }
