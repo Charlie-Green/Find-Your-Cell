@@ -27,7 +27,7 @@ class RetrofitProfileApi @Inject constructor(): ProfileApi {
         val response = service.login(1, username, passwordBase64).execute()
         RetrofitApisUtil.assertResponseCode(response.code())
 
-        val result = response.body()!!
+        val result = response.body()!!.string()
         if(result[0] == 'U') {
             return LogInResponse.WrongUsername
         }

@@ -35,6 +35,7 @@ internal class PrisonerEncoder1: PrisonerEncoder {
             sb.append(",\n\"$key\": \"$base64\"")
         }
 
+        sb.append("}")
         return sb.toString()
     }
 

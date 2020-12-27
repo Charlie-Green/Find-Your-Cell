@@ -40,7 +40,7 @@ class ProfileRepository @Inject constructor(
 
 
     fun logIn(username: String, password: String): LogInResponse {
-        val passHash = password.toByteArray(Charsets.UTF_16)
+        val passHash = password.toByteArray()  // TODO: Bring this to the API implementation.
         val response = try {
             api.logIn(username, passHash)
         } catch(exc: IOException) {

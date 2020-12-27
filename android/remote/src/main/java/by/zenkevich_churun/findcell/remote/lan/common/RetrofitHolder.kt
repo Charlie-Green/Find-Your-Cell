@@ -8,7 +8,7 @@ object RetrofitHolder {
 
     val retrofit by lazy {
         Retrofit.Builder()
-            .baseUrl("192.168.1.167:8080/")  // TODO: Replace with real server domain name
+            .baseUrl("http://192.168.1.167:8080/")  // TODO: Replace with real server domain name
             .addConverterFactory(GsonConverterFactory.create())
             .build()
     }

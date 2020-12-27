@@ -51,5 +51,6 @@ dependencies {
 
     implementation project(":prisoner")
     implementation project(":result")
+    implementation project(":remote")
     implementation project(":core")
 }
