@@ -1,19 +1,19 @@
 package by.zenkevich_churun.findcell.remote.retrofit.profile
 
 import by.zenkevich_churun.findcell.serial.util.protocol.ProtocolUtil
-import by.zenkevich_churun.findcell.core.api.auth.LogInResponse
-import by.zenkevich_churun.findcell.core.api.auth.ProfileApi
-import by.zenkevich_churun.findcell.core.api.auth.SignUpResponse
+import by.zenkevich_churun.findcell.core.api.auth.*
 import by.zenkevich_churun.findcell.entity.Prisoner
 import by.zenkevich_churun.findcell.remote.retrofit.common.RetrofitApisUtil
-import by.zenkevich_churun.findcell.remote.retrofit.common.RetrofitHolder.retrofit
+import by.zenkevich_churun.findcell.remote.retrofit.common.RetrofitHolder
 import by.zenkevich_churun.findcell.serial.prisoner.common.PrisonerDeserializer
 import javax.inject.Inject
 import javax.inject.Singleton
 
 
 @Singleton
-class RetrofitProfileApi @Inject constructor(): ProfileApi {
+class RetrofitProfileApi @Inject constructor(
+    private val retrofitHolder: RetrofitHolder
+): ProfileApi {
 
     override fun logIn(
         username: String,
@@ -48,4 +48,8 @@ class RetrofitProfileApi @Inject constructor(): ProfileApi {
     override fun update(prisoner: Prisoner, passwordHash: ByteArray) {
         TODO()
     }
+
+
+    private val retrofit
+        get() = retrofitHolder.retrofit
 }

@@ -1,23 +1,24 @@
 package by.zenkevich_churun.findcell.remote.retrofit.common
 
 import android.content.Context
+import dagger.hilt.android.qualifiers.ApplicationContext
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import java.security.KeyStore
 import java.security.cert.CertificateFactory
 import java.security.cert.X509Certificate
+import javax.inject.Inject
+import javax.inject.Singleton
 import javax.net.ssl.SSLContext
 import javax.net.ssl.TrustManager
 import javax.net.ssl.TrustManagerFactory
 import javax.net.ssl.X509TrustManager
 
 
-object RetrofitHolder {
-
-    // TODO:
-    private lateinit var context: Context
-
+@Singleton
+class RetrofitHolder @Inject constructor(
+    @ApplicationContext private val appContext: Context ) {
 
     val retrofit by lazy {
         val okhttpClient = OkHttpClient
@@ -36,7 +37,7 @@ object RetrofitHolder {
     /** Configures the [OkHttpClient] to accept the Sviazen server certificate. **/
     private fun OkHttpClient.Builder.configForHttps(): OkHttpClient.Builder {
         val certFact = CertificateFactory.getInstance("X.509")
-        val certificate = context.assets.open("cert/findcell.p12").use { istream ->
+        val certificate = appContext.assets.open("crt/findcell.crt").use { istream ->
             certFact.generateCertificate(istream)
         } as X509Certificate
 
