@@ -9,7 +9,7 @@ import by.zenkevich_churun.findcell.entity.Contact
 import by.zenkevich_churun.findcell.entity.Prisoner
 import by.zenkevich_churun.findcell.prisoner.R
 import by.zenkevich_churun.findcell.prisoner.repo.common.PrisonerStorage
-import by.zenkevich_churun.findcell.prisoner.ui.profile.fragm.PrisonerDraft
+import by.zenkevich_churun.findcell.prisoner.ui.profile.model.PrisonerDraft
 import dagger.hilt.android.qualifiers.ApplicationContext
 import java.io.IOException
 import javax.inject.Inject

@@ -13,6 +13,7 @@ import by.zenkevich_churun.findcell.entity.Contact
 import by.zenkevich_churun.findcell.entity.Prisoner
 import by.zenkevich_churun.findcell.prisoner.R
 import by.zenkevich_churun.findcell.prisoner.repo.profile.SavePrisonerResult
+import by.zenkevich_churun.findcell.prisoner.ui.profile.model.PrisonerDraft
 import by.zenkevich_churun.findcell.prisoner.ui.profile.vm.ProfileViewModel
 import kotlinx.android.synthetic.main.profile_fragm.*
 

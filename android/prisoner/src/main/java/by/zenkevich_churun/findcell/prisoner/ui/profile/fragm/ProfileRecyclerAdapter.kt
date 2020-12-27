@@ -9,9 +9,9 @@ import androidx.core.view.updateLayoutParams
 import androidx.core.widget.addTextChangedListener
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
-import by.zenkevich_churun.findcell.core.entity.general.Contact
-import by.zenkevich_churun.findcell.core.entity.general.Prisoner
 import by.zenkevich_churun.findcell.core.util.view.contact.ContactView
+import by.zenkevich_churun.findcell.entity.Contact
+import by.zenkevich_churun.findcell.entity.Prisoner
 import by.zenkevich_churun.findcell.prisoner.R
 import by.zenkevich_churun.findcell.prisoner.ui.profile.vm.ProfileViewModel
 import by.zenkevich_churun.findcell.prisoner.util.view.add_contact.ContactTypesScrollView

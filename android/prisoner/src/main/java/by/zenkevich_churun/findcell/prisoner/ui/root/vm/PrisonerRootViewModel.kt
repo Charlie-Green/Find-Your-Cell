@@ -1,9 +1,8 @@
 package by.zenkevich_churun.findcell.prisoner.ui.root.vm
 
 import android.content.Context
-import android.util.Log
 import androidx.lifecycle.*
-import by.zenkevich_churun.findcell.core.entity.general.Prisoner
+import by.zenkevich_churun.findcell.entity.Prisoner
 import by.zenkevich_churun.findcell.prisoner.repo.profile.ProfileRepository
 import by.zenkevich_churun.findcell.prisoner.repo.profile.SavePrisonerResult
 import by.zenkevich_churun.findcell.prisoner.repo.sched.UpdateScheduleResult

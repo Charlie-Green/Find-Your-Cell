@@ -1,4 +1,4 @@
-package by.zenkevich_churun.findcell.prisoner.ui.profile.fragm
+package by.zenkevich_churun.findcell.prisoner.ui.profile.model
 
 import by.zenkevich_churun.findcell.entity.Contact
 import by.zenkevich_churun.findcell.entity.Prisoner

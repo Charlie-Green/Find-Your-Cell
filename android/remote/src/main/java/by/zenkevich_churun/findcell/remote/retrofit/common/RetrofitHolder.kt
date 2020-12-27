@@ -1,4 +1,4 @@
-package by.zenkevich_churun.findcell.remote.lan.common
+package by.zenkevich_churun.findcell.remote.retrofit.common
 
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory

@@ -6,6 +6,7 @@ import android.view.View
 import android.widget.*
 import androidx.core.widget.addTextChangedListener
 import by.zenkevich_churun.findcell.core.R
+import by.zenkevich_churun.findcell.core.model.contact.ContactModel
 import by.zenkevich_churun.findcell.entity.Contact
 import kotlinx.android.synthetic.main.contact_view.view.*
 
@@ -15,7 +16,7 @@ class ContactView: LinearLayout {
 
     private val imgv: ImageView
     private val et: EditText
-    private var lastValue: UiContact? = null
+    private var lastValue: ContactModel? = null
 
 
     constructor(context: Context):
@@ -33,7 +34,7 @@ class ContactView: LinearLayout {
     }
 
 
-    val value: Contact?
+    val value: ContactModel?
         get() = lastValue?.apply {
             data = et.text.toString()
         }
@@ -43,7 +44,10 @@ class ContactView: LinearLayout {
         set(value) { et.isEnabled = value }
 
     fun show(what: Contact) {
-        val value = UiContact.from(what).also { lastValue = it }
+        val value = ContactModel
+            .from(what)
+            .also { lastValue = it }
+
         imgv.setImageResource(value.iconRes)
         et.setText(value.data)
     }

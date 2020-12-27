@@ -4,7 +4,7 @@ import android.content.Context
 import android.util.AttributeSet
 import android.view.View
 import android.widget.LinearLayout
-import by.zenkevich_churun.findcell.core.entity.general.Cell
+import by.zenkevich_churun.findcell.entity.Cell
 import by.zenkevich_churun.findcell.prisoner.R
 import kotlinx.android.synthetic.main.cell_view.view.*
 

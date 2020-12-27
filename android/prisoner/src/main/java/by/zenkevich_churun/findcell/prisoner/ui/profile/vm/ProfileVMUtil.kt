@@ -1,6 +1,7 @@
 package by.zenkevich_churun.findcell.prisoner.ui.profile.vm
 
-import by.zenkevich_churun.findcell.core.entity.general.Contact
+import by.zenkevich_churun.findcell.entity.Contact
+import by.zenkevich_churun.findcell.prisoner.ui.profile.model.ContactDraft
 
 
 internal object ProfileVMUtil {
@@ -10,16 +11,16 @@ internal object ProfileVMUtil {
         existingContacts: Collection<Contact>
     ): Contact {
 
-        return when(type) {
-            Contact.Type.TELEGRAM  -> Contact.Telegram("t.me/")
-            Contact.Type.SKYPE     -> Contact.Skype("live:")
-            Contact.Type.VK        -> Contact.VK("")
-            Contact.Type.FACEBOOK  -> Contact.Facebook("")
-            Contact.Type.INSTAGRAM -> Contact.Instagram("")
-            Contact.Type.PHONE     -> Contact.Phone("+375 ")
-            Contact.Type.VIBER     -> Contact.Viber(phoneNumber(existingContacts))
-            Contact.Type.WHATSAPP  -> Contact.WhatsApp(phoneNumber(existingContacts))
+        val autofilledData = when(type) {
+            Contact.Type.TELEGRAM  -> "t.me/"
+            Contact.Type.SKYPE     -> "live:"
+            Contact.Type.VK        -> "+375"
+            Contact.Type.VIBER     -> phoneNumber(existingContacts)
+            Contact.Type.WHATSAPP  -> phoneNumber(existingContacts)
+            else                   -> ""
         }
+
+        return ContactDraft(type, autofilledData)
     }
 
     /** Obtains list of [Contact.Type]s the user is suggested to add
@@ -43,7 +44,7 @@ internal object ProfileVMUtil {
 
     private fun phoneNumber(contacts: Collection<Contact>): String {
         for(contact in contacts) {
-            if(contact is Contact.Phone) {
+            if(contact.type == Contact.Type.PHONE) {
                 return contact.data
             }
         }

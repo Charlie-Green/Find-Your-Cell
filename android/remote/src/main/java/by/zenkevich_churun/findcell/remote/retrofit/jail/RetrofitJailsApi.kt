@@ -1,11 +1,14 @@
-package by.zenkevich_churun.findcell.remote.lan.jail
+package by.zenkevich_churun.findcell.remote.retrofit.jail
 
 import by.zenkevich_churun.findcell.core.api.jail.JailsApi
 import by.zenkevich_churun.findcell.entity.Cell
 import by.zenkevich_churun.findcell.entity.Jail
+import javax.inject.Inject
+import javax.inject.Singleton
 
 
-class RetrofitJailsApi: JailsApi {
+@Singleton
+class RetrofitJailsApi @Inject constructor(): JailsApi {
 
     override fun jailsList(): List<Jail> {
         TODO("Not yet implemented")

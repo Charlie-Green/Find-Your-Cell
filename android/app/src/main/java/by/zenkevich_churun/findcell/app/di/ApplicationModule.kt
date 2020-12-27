@@ -4,10 +4,10 @@ import by.zenkevich_churun.findcell.core.api.arest.ArestsApi
 import by.zenkevich_churun.findcell.core.api.jail.JailsApi
 import by.zenkevich_churun.findcell.core.api.auth.ProfileApi
 import by.zenkevich_churun.findcell.core.api.sched.ScheduleApi
-import by.zenkevich_churun.findcell.remote.lan.arest.RetrofitArestsApi
-import by.zenkevich_churun.findcell.remote.lan.jail.RetrofitJailsApi
-import by.zenkevich_churun.findcell.remote.lan.profile.RetrofitProfileApi
-import by.zenkevich_churun.findcell.remote.lan.sched.RetrofitScheduleApi
+import by.zenkevich_churun.findcell.remote.retrofit.arest.RetrofitArestsApi
+import by.zenkevich_churun.findcell.remote.retrofit.jail.RetrofitJailsApi
+import by.zenkevich_churun.findcell.remote.retrofit.profile.RetrofitProfileApi
+import by.zenkevich_churun.findcell.remote.retrofit.sched.RetrofitScheduleApi
 import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn

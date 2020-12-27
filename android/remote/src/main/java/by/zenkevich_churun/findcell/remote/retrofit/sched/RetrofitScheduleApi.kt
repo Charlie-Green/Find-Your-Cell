@@ -1,10 +1,13 @@
-package by.zenkevich_churun.findcell.remote.lan.sched
+package by.zenkevich_churun.findcell.remote.retrofit.sched
 
 import by.zenkevich_churun.findcell.core.api.sched.ScheduleApi
 import by.zenkevich_churun.findcell.entity.Schedule
+import javax.inject.Inject
+import javax.inject.Singleton
 
 
-class RetrofitScheduleApi: ScheduleApi {
+@Singleton
+class RetrofitScheduleApi @Inject constructor(): ScheduleApi {
 
     override fun get(
         prisonerId: Int,
