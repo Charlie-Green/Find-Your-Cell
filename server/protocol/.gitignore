@@ -3,3 +3,6 @@
 /build
 /gradle
 gradlew*
+
+#Ignore it, because HTTPS certificate password is specified within.
+src/main/resources/application.properties
