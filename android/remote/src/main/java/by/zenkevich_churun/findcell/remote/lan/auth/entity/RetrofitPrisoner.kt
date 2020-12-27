@@ -1,7 +1,7 @@
 package by.zenkevich_churun.findcell.remote.lan.auth.entity
 
 import android.util.Log
-import by.zenkevich_churun.findcell.contract.prisoner.contract.PrisonerContract1
+import by.zenkevich_churun.findcell.serial.prisoner.contract.PrisonerContract1
 import by.zenkevich_churun.findcell.core.entity.general.Contact
 import by.zenkevich_churun.findcell.core.entity.general.Prisoner
 
@@ -14,7 +14,7 @@ internal class RetrofitPrisoner(
 ): Prisoner() {
 
     companion object {
-        fun from(p: by.zenkevich_churun.findcell.contract.prisoner.entity.Prisoner): RetrofitPrisoner {
+        fun from(p: by.zenkevich_churun.findcell.serial.prisoner.entity.Prisoner): RetrofitPrisoner {
 
             val mappedContacts = mutableListOf<Contact>()
             for(rawContact in p.contacts) {
@@ -32,7 +32,7 @@ internal class RetrofitPrisoner(
         }
 
 
-        private fun contactFrom(c: by.zenkevich_churun.findcell.contract.prisoner.entity.Contact): Contact? {
+        private fun contactFrom(c: by.zenkevich_churun.findcell.serial.prisoner.entity.Contact): Contact? {
             return when(c.type) {
                 PrisonerContract1.CONTACT_TYPE_PHONE     -> Contact.Phone(c.data)
                 PrisonerContract1.CONTACT_TYPE_TELEGRAM  -> Contact.Telegram(c.data)

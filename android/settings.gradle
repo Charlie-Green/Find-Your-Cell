@@ -5,5 +5,8 @@ include ':app'
 include ':remote'
 rootProject.name = "Find Your Cell"
 
-include ":contract"
-project(":contract").projectDir = new File("../contract")
+include ":serial"
+project(":serial").projectDir = new File("../contract/serial")
+
+include ":entity"
+project(":entity").projectDir = new File("../contract/entity")

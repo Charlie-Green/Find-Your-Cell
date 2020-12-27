@@ -1,7 +1,6 @@
 package by.zenkevich_churun.findcell.remote.lan.auth
 
-import by.zenkevich_churun.findcell.contract.prisoner.decode.PrisonerDecoder
-import by.zenkevich_churun.findcell.contract.prisoner.util.protocol.ProtocolUtil
+import by.zenkevich_churun.findcell.serial.util.protocol.ProtocolUtil
 import by.zenkevich_churun.findcell.core.api.auth.LogInResponse
 import by.zenkevich_churun.findcell.core.api.auth.ProfileApi
 import by.zenkevich_churun.findcell.core.api.auth.SignUpResponse

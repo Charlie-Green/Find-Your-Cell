@@ -47,4 +47,6 @@ dependencies {
     implementation Deps.libNavigationFragm
 
     implementation Deps.libHilt
+
+    api project(":entity")
 }
