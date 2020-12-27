@@ -10,10 +10,7 @@ import java.security.cert.CertificateFactory
 import java.security.cert.X509Certificate
 import javax.inject.Inject
 import javax.inject.Singleton
-import javax.net.ssl.SSLContext
-import javax.net.ssl.TrustManager
-import javax.net.ssl.TrustManagerFactory
-import javax.net.ssl.X509TrustManager
+import javax.net.ssl.*
 
 
 @Singleton
@@ -27,7 +24,7 @@ class RetrofitHolder @Inject constructor(
             .build()
 
         Retrofit.Builder()
-            .baseUrl("https://192.168.1.167:8080/")  // TODO: Replace with real server domain name
+            .baseUrl("https://$IP:8080/")  // TODO: Replace with real server domain name
             .addConverterFactory(GsonConverterFactory.create())
             .client(okhttpClient)
             .build()
@@ -58,5 +55,17 @@ class RetrofitHolder @Inject constructor(
 
         return this
             .sslSocketFactory(sslContext.socketFactory, trustMan)
+            .hostnameVerifier { hostname, session ->
+                hostname.contains(IP) ||
+                HttpsURLConnection.getDefaultHostnameVerifier().verify(hostname, session)
+            }
+    }
+
+
+    companion object {
+
+        /** IP of the developer's machine within his testing environment.
+          * Should be removed when the app is released to production!!! **/
+        private const val IP = "192.168.1.167"
     }
 }
