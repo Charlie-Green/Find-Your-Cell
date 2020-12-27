@@ -1,15 +1,16 @@
-package by.zenkevich_churun.findcell.contract.prisoner.encode
+package by.zenkevich_churun.findcell.contract.prisoner.v1.serial
 
-import by.zenkevich_churun.findcell.contract.prisoner.entity.Contact
-import by.zenkevich_churun.findcell.contract.prisoner.entity.Prisoner
-import by.zenkevich_churun.findcell.contract.prisoner.internal.InternalPrisonerContract1
-import by.zenkevich_churun.findcell.contract.prisoner.util.protocol.ProtocolUtil
+import by.zenkevich_churun.findcell.contract.entity.Contact
+import by.zenkevich_churun.findcell.contract.entity.Prisoner
+import by.zenkevich_churun.findcell.contract.prisoner.common.PrisonerSerializer
+import by.zenkevich_churun.findcell.contract.prisoner.contract.InternalPrisonerContract1
+import by.zenkevich_churun.findcell.contract.util.protocol.ProtocolUtil
 
 
 /** Converts a Prisoner into JSON format. **/
-internal class PrisonerEncoder1: PrisonerEncoder {
+internal class PrisonerSerializer1: PrisonerSerializer {
 
-    override fun encode(prisoner: Prisoner): String {
+    override fun serialize(prisoner: Prisoner): String {
         val sb = StringBuilder(
             "{" +
                 "\"${InternalPrisonerContract1.KEY_PRISONER_ID  }\": \"${prisoner.id}\",\n" +

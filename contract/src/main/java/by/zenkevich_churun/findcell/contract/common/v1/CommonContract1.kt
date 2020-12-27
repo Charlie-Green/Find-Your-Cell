@@ -1,4 +1,4 @@
-package by.zenkevich_churun.findcell.contract.prisoner.contract
+package by.zenkevich_churun.findcell.contract.common.v1
 
 
 object CommonContract1 {

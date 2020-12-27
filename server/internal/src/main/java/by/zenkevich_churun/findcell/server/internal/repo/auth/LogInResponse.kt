@@ -1,6 +1,6 @@
 package by.zenkevich_churun.findcell.server.internal.repo.auth
 
-import by.zenkevich_churun.findcell.contract.prisoner.entity.Prisoner
+import by.zenkevich_churun.findcell.contract.entity.Prisoner
 
 
 sealed class LogInResponse {

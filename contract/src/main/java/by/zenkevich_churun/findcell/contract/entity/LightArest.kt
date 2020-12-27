@@ -1,6 +1,5 @@
-package by.zenkevich_churun.findcell.contract.prisoner.entity
+package by.zenkevich_churun.findcell.contract.entity
 
-import by.zenkevich_churun.findcell.core.entity.general.Jail
 import java.util.Calendar
 
 

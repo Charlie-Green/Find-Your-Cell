@@ -1,4 +1,4 @@
-package by.zenkevich_churun.findcell.core.entity.general
+package by.zenkevich_churun.findcell.contract.entity
 
 
 /** A place where [Prisoner]s can be placed. **/

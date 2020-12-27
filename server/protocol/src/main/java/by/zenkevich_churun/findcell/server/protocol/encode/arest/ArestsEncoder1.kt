@@ -1,6 +1,6 @@
 package by.zenkevich_churun.findcell.server.protocol.encode.arest
 
-import by.zenkevich_churun.findcell.contract.prisoner.contract.ArestContract1
+import by.zenkevich_churun.findcell.contract.arest.v1.ArestContract1
 import by.zenkevich_churun.findcell.server.internal.entity.view.ArestView
 
 

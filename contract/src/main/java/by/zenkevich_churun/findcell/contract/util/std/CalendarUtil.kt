@@ -1,4 +1,4 @@
-package by.zenkevich_churun.findcell.contract.prisoner.util.std
+package by.zenkevich_churun.findcell.contract.util.std
 
 import java.util.Calendar
 

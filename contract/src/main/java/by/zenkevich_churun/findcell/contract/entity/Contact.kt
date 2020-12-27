@@ -1,4 +1,4 @@
-package by.zenkevich_churun.findcell.contract.prisoner.entity
+package by.zenkevich_churun.findcell.contract.entity
 
 
 abstract class Contact {
