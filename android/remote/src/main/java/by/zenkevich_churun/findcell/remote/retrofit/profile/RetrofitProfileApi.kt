@@ -23,14 +23,14 @@ class RetrofitProfileApi @Inject constructor(
         val passwordBase64 = ProtocolUtil.encodeBase64(passwordHash)
 
         val service = retrofit.create(ProfileService::class.java)
-        val response = service.login(1, username, passwordBase64).execute()
+        val response = service.logIn(1, username, passwordBase64).execute()
         RetrofitApisUtil.assertResponseCode(response.code())
 
         val result = response.body()!!.string()
-        if(result[0] == 'U') {
+        if(result == "U") {
             return LogInResponse.WrongUsername
         }
-        if(result[0] == 'P') {
+        if(result == "P") {
             return LogInResponse.WrongPassword
         }
 
@@ -41,8 +41,28 @@ class RetrofitProfileApi @Inject constructor(
         return LogInResponse.Success(prisoner)
     }
 
-    override fun signUp(username: String, name: String, passwordHash: ByteArray): SignUpResponse {
-        TODO()
+    override fun signUp(
+        username: String,
+        name: String,
+        passwordHash: ByteArray
+    ): SignUpResponse {
+
+        val passwordBase64 = ProtocolUtil.encodeBase64(passwordHash)
+
+        val service = retrofit.create(ProfileService::class.java)
+        val response = service
+            .signUp(1, username, passwordBase64, name)
+            .execute()
+        RetrofitApisUtil.assertResponseCode(response.code())
+
+        val result = response.body()!!.string()
+        if(result == "U") {
+            return SignUpResponse.UsernameExists
+        }
+
+        val id = result.toInt()
+        val prisoner = SignedUpPrisoner(id, username, passwordHash, name)
+        return SignUpResponse.Success(prisoner)
     }
 
     override fun update(prisoner: Prisoner, passwordHash: ByteArray) {

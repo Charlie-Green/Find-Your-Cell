@@ -9,9 +9,18 @@ internal interface ProfileService {
 
     @FormUrlEncoded
     @POST("auth/login")
-    fun login(
-        @Field("v") version: Int,
+    fun logIn(
+        @Field("v")     version: Int,
         @Field("uname") username: String,
-        @Field("pass") passwordBase64: String
+        @Field("pass")  passwordBase64: String
+    ): Call<ResponseBody>
+
+    @FormUrlEncoded
+    @POST("auth/signup")
+    fun signUp(
+        @Field("v")     version: Int,
+        @Field("uname") username: String,
+        @Field("pass")  passwordBase64: String,
+        @Field("name")  initialName: String
     ): Call<ResponseBody>
 }
