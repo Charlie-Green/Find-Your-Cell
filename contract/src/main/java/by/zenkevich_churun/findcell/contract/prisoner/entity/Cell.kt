@@ -1,4 +1,4 @@
-package by.zenkevich_churun.findcell.core.entity.general
+package by.zenkevich_churun.findcell.contract.prisoner.entity
 
 
 /** A room within a [Jail] where [Prisoner]s live. **/

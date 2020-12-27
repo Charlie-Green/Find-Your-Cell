@@ -1,4 +1,4 @@
-package by.zenkevich_churun.findcell.contract.prisoner.util
+package by.zenkevich_churun.findcell.contract.prisoner.util.protocol
 
 import java.util.Base64
 import kotlin.jvm.Throws

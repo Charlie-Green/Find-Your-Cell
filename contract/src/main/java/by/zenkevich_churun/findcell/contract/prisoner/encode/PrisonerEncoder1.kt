@@ -3,7 +3,7 @@ package by.zenkevich_churun.findcell.contract.prisoner.encode
 import by.zenkevich_churun.findcell.contract.prisoner.entity.Contact
 import by.zenkevich_churun.findcell.contract.prisoner.entity.Prisoner
 import by.zenkevich_churun.findcell.contract.prisoner.internal.InternalPrisonerContract1
-import by.zenkevich_churun.findcell.contract.prisoner.util.ProtocolUtil
+import by.zenkevich_churun.findcell.contract.prisoner.util.protocol.ProtocolUtil
 
 
 /** Converts a Prisoner into JSON format. **/

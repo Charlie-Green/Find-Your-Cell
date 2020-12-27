@@ -1,6 +1,6 @@
 package by.zenkevich_churun.findcell.server.protocol.controller.arest
 
-import by.zenkevich_churun.findcell.contract.prisoner.util.ProtocolUtil
+import by.zenkevich_churun.findcell.contract.prisoner.util.protocol.ProtocolUtil
 import by.zenkevich_churun.findcell.server.internal.repo.arest.ArestsRepository
 import by.zenkevich_churun.findcell.server.protocol.di.ServerKoin
 import by.zenkevich_churun.findcell.server.protocol.encode.arest.ArestsEncoder
