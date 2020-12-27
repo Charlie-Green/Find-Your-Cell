@@ -19,7 +19,7 @@ dependencies {
 	implementation Deps.libMysqlJdbc
 	implementation Deps.libHibernate
 
-	implementation project(":contract")
+	implementation project(":entity")
 }
 
 compileKotlin {

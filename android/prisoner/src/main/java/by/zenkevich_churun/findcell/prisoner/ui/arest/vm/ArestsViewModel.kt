@@ -2,8 +2,8 @@ package by.zenkevich_churun.findcell.prisoner.ui.arest.vm
 
 import android.content.Context
 import androidx.lifecycle.*
-import by.zenkevich_churun.findcell.core.entity.arest.Arest
 import by.zenkevich_churun.findcell.core.injected.web.NetworkStateTracker
+import by.zenkevich_churun.findcell.entity.Arest
 import by.zenkevich_churun.findcell.prisoner.repo.arest.ArestsRepository
 import by.zenkevich_churun.findcell.prisoner.repo.arest.GetArestsResult
 import by.zenkevich_churun.findcell.prisoner.ui.arest.state.ArestsListState

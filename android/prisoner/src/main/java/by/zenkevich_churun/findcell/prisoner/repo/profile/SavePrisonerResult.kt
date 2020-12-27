@@ -1,7 +1,6 @@
 package by.zenkevich_churun.findcell.prisoner.repo.profile
 
-import by.zenkevich_churun.findcell.core.entity.general.Contact
-import by.zenkevich_churun.findcell.core.entity.general.Prisoner
+import by.zenkevich_churun.findcell.entity.Prisoner
 
 
 /** Return type for [ProfileRepository.save] method. **/

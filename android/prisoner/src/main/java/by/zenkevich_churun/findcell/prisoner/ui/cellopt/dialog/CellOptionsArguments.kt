@@ -3,7 +3,7 @@ package by.zenkevich_churun.findcell.prisoner.ui.cellopt.dialog
 import android.os.Bundle
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
-import by.zenkevich_churun.findcell.core.entity.general.Cell
+import by.zenkevich_churun.findcell.entity.Cell
 
 
 internal class CellOptionsArguments private constructor(

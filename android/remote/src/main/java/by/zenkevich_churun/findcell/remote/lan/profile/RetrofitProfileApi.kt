@@ -1,12 +1,13 @@
-package by.zenkevich_churun.findcell.remote.lan.auth
+package by.zenkevich_churun.findcell.remote.lan.profile
 
 import by.zenkevich_churun.findcell.serial.util.protocol.ProtocolUtil
 import by.zenkevich_churun.findcell.core.api.auth.LogInResponse
 import by.zenkevich_churun.findcell.core.api.auth.ProfileApi
 import by.zenkevich_churun.findcell.core.api.auth.SignUpResponse
-import by.zenkevich_churun.findcell.remote.lan.auth.entity.RetrofitPrisoner
+import by.zenkevich_churun.findcell.entity.Prisoner
 import by.zenkevich_churun.findcell.remote.lan.common.RetrofitApisUtil
 import by.zenkevich_churun.findcell.remote.lan.common.RetrofitHolder.retrofit
+import by.zenkevich_churun.findcell.serial.prisoner.common.PrisonerDeserializer
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -34,9 +35,10 @@ class RetrofitProfileApi @Inject constructor(): ProfileApi {
         }
 
         val resultStream = result.byteInputStream()
-        val contractPrisoner = PrisonerDecoder.create().decode(resultStream)
-        val retrofitPrisoner = RetrofitPrisoner.from(contractPrisoner)
-        return LogInResponse.Success(retrofitPrisoner)
+        val prisoner = PrisonerDeserializer
+            .forVersion(1)
+            .deserialize(resultStream)
+        return LogInResponse.Success(prisoner)
     }
 
     override fun signUp(username: String, name: String, passwordHash: ByteArray): SignUpResponse {

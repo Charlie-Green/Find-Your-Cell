@@ -6,8 +6,8 @@ import android.widget.LinearLayout
 import androidx.core.view.*
 import androidx.fragment.app.DialogFragment
 import androidx.lifecycle.Observer
-import by.zenkevich_churun.findcell.core.entity.general.Cell
 import by.zenkevich_churun.findcell.core.util.android.DialogUtil
+import by.zenkevich_churun.findcell.entity.Cell
 import by.zenkevich_churun.findcell.prisoner.R
 import by.zenkevich_churun.findcell.prisoner.ui.cellopt.model.CellOptionsMode
 import by.zenkevich_churun.findcell.prisoner.ui.cellopt.vm.CellOptionsViewModel

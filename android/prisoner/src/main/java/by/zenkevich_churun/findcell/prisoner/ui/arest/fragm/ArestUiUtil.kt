@@ -1,6 +1,6 @@
 package by.zenkevich_churun.findcell.prisoner.ui.arest.fragm
 
-import by.zenkevich_churun.findcell.core.entity.general.Jail
+import by.zenkevich_churun.findcell.entity.Jail
 
 
 internal object ArestUiUtil {

@@ -3,8 +3,8 @@ package by.zenkevich_churun.findcell.prisoner.repo.jail
 import android.content.Context
 import android.util.Log
 import by.zenkevich_churun.findcell.core.api.jail.JailsApi
-import by.zenkevich_churun.findcell.core.entity.general.Cell
-import by.zenkevich_churun.findcell.core.entity.general.Jail
+import by.zenkevich_churun.findcell.entity.Cell
+import by.zenkevich_churun.findcell.entity.Jail
 import by.zenkevich_churun.findcell.prisoner.db.JailsDatabase
 import by.zenkevich_churun.findcell.prisoner.db.entity.CellEntity
 import by.zenkevich_churun.findcell.prisoner.db.entity.JailEntity

@@ -1,7 +1,7 @@
 package by.zenkevich_churun.findcell.prisoner.ui.profile.fragm
 
-import by.zenkevich_churun.findcell.core.entity.general.Contact
-import by.zenkevich_churun.findcell.core.entity.general.Prisoner
+import by.zenkevich_churun.findcell.entity.Contact
+import by.zenkevich_churun.findcell.entity.Prisoner
 
 
 internal class PrisonerDraft(
@@ -9,4 +9,11 @@ internal class PrisonerDraft(
     override val name: String,
     override val contacts: List<Contact>,
     override val info: String
-): Prisoner()
+): Prisoner() {
+
+    override val username: String?
+        get() = throw NotImplementedError("Username is not displayed on Profile screen")
+
+    override val passwordHash: ByteArray?
+        get() = throw NotImplementedError("Password has nothing to do with Profile screen")
+}

@@ -1,5 +1,7 @@
 package by.zenkevich_churun.findcell.core.api.auth
 
+import by.zenkevich_churun.findcell.entity.Prisoner
+
 
 /** Performs remote CRUD of [Prisoner] data.
   * All calls should be wrapped with try-catch. **/

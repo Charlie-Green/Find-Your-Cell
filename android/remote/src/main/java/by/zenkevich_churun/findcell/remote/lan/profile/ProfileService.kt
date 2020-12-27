@@ -1,4 +1,4 @@
-package by.zenkevich_churun.findcell.remote.lan.auth
+package by.zenkevich_churun.findcell.remote.lan.profile
 
 import okhttp3.ResponseBody
 import retrofit2.Call

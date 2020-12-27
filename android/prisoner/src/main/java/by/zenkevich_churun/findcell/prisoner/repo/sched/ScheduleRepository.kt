@@ -2,7 +2,7 @@ package by.zenkevich_churun.findcell.prisoner.repo.sched
 
 import android.util.Log
 import by.zenkevich_churun.findcell.core.api.sched.ScheduleApi
-import by.zenkevich_churun.findcell.core.entity.sched.Schedule
+import by.zenkevich_churun.findcell.entity.Schedule
 import by.zenkevich_churun.findcell.prisoner.repo.common.PrisonerStorage
 import java.io.IOException
 import javax.inject.Inject

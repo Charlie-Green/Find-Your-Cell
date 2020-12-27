@@ -1,15 +1,19 @@
 package by.zenkevich_churun.findcell.prisoner.ui.common.sched
 
 import androidx.core.graphics.ColorUtils
-import by.zenkevich_churun.findcell.core.entity.general.Cell
-import by.zenkevich_churun.findcell.core.entity.general.Jail
-import by.zenkevich_churun.findcell.core.entity.sched.Schedule
-import by.zenkevich_churun.findcell.core.entity.sched.SchedulePeriod
 import by.zenkevich_churun.findcell.core.util.std.CalendarUtil
+import by.zenkevich_churun.findcell.entity.*
 import java.util.Calendar
 import kotlin.collections.HashSet
 
 
+/** Corresponds to [Schedule] displayed and edited on UI.
+  * The class cannot be an implementation of [Schedule] itself
+  * because of different [SchedulePeriod]s storage paradigms:
+  * [Schedule] stores a list of [SchedulePeriod]s, where as [ScheduleModel]
+  * stores the data on day-to-day basis.
+  * However, this class can be mapped to [Schedule].
+  * @see UiSchedule **/
 class ScheduleModel private constructor(
     val arestId: Int,
     val start: Calendar,
@@ -19,7 +23,7 @@ class ScheduleModel private constructor(
     /** Element j corresponds to the day start+j.
       * The element is the set of [Cell] indices for all [Cell]s
       * the user was kept in during this day. **/
-    private val days: Array< HashSet<Int> > ) {
+    internal val days: Array< HashSet<Int> > ) {
 
 
     init {
@@ -53,17 +57,6 @@ class ScheduleModel private constructor(
             backColors(dayData)
         )
     }
-
-    fun toSchedule(): Schedule {
-        return Schedule(
-            arestId,
-            start,
-            end,
-            cells,
-            resolvePeriods()
-        )
-    }
-
 
     fun addCell(jail: Jail, cellNumber: Short, seats: Short) {
         val existingCell = cells.find { cell ->
@@ -128,41 +121,7 @@ class ScheduleModel private constructor(
     }
 
 
-    private fun resolvePeriods(): List<SchedulePeriod> {
-        val periods = mutableListOf<SchedulePeriod>()
 
-        val mapCellToPeriod = hashMapOf<Int, SchedulePeriod>()
-        val today = start.clone() as Calendar
-
-        for(dayCells in days) {
-            for(cellIndex in dayCells) {
-                val period = mapCellToPeriod[cellIndex]
-                if(period == null) {
-                    val newPeriod = SchedulePeriodModel(
-                        today.clone() as Calendar,
-                        today.clone() as Calendar,
-                        cellIndex
-                    )
-
-                    periods.add(newPeriod)
-                    mapCellToPeriod[cellIndex] = newPeriod
-                } else {
-                    period.endDate.add(Calendar.DATE, 1)
-                }
-            }
-
-            for(cellIndex in cells.indices) {
-                if(!dayCells.contains(cellIndex)) {
-                    // If there was a Period with this Cell, it's over.
-                    mapCellToPeriod.remove(cellIndex)
-                }
-            }
-
-            today.add(Calendar.DATE, 1)
-        }
-
-        return periods
-    }
 
     private fun dayIndex(day: Calendar): Int {
         return CalendarUtil.daysDifference(start, day)
@@ -200,6 +159,10 @@ class ScheduleModel private constructor(
 
         return newIndices
     }
+
+
+    fun toSchedule(): Schedule
+        = UiSchedule.from(this)
 
 
     private fun dayData(day: Calendar, dayData: HashSet<Int>): String {

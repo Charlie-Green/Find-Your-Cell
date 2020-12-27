@@ -5,8 +5,8 @@ import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import by.zenkevich_churun.findcell.core.api.auth.*
-import by.zenkevich_churun.findcell.core.entity.general.Contact
-import by.zenkevich_churun.findcell.core.entity.general.Prisoner
+import by.zenkevich_churun.findcell.entity.Contact
+import by.zenkevich_churun.findcell.entity.Prisoner
 import by.zenkevich_churun.findcell.prisoner.R
 import by.zenkevich_churun.findcell.prisoner.repo.common.PrisonerStorage
 import by.zenkevich_churun.findcell.prisoner.ui.profile.fragm.PrisonerDraft
@@ -124,7 +124,6 @@ class ProfileRepository @Inject constructor(
     ): Prisoner {
 
         val clearedContacts = mutableListOf<Contact>()
-
         for(j in data.contacts.indices) {
             val contact = data.contacts[j]
 

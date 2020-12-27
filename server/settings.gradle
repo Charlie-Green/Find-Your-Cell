@@ -14,5 +14,9 @@ buildscript {
 
 rootProject.name = "server"
 include "internal", "protocol"
-include "contract"
-project(":contract").projectDir = new File("../contract")
+
+include "entity"
+project(":entity").projectDir = new File("../contract/entity")
+
+include "serial"
+project(":serial").projectDir = new File("../contract/serial")

@@ -1,6 +1,6 @@
 package by.zenkevich_churun.findcell.core.api.sched
 
-import by.zenkevich_churun.findcell.core.entity.sched.Schedule
+import by.zenkevich_churun.findcell.entity.Schedule
 
 
 /** Performs CRUD operations on user's [Schedule]. **/
