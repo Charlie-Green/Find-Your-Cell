@@ -6,6 +6,7 @@ import by.zenkevich_churun.findcell.entity.Prisoner
 import by.zenkevich_churun.findcell.remote.retrofit.common.RetrofitApisUtil
 import by.zenkevich_churun.findcell.remote.retrofit.common.RetrofitHolder
 import by.zenkevich_churun.findcell.serial.prisoner.common.PrisonerDeserializer
+import by.zenkevich_churun.findcell.serial.prisoner.common.PrisonerSerializer
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -65,8 +66,16 @@ class RetrofitProfileApi @Inject constructor(
         return SignUpResponse.Success(prisoner)
     }
 
-    override fun update(prisoner: Prisoner, passwordHash: ByteArray) {
-        TODO()
+    override fun update(prisoner: Prisoner) {
+        val serialized = PrisonerSerializer
+            .forVersion(1)
+            .serialize(prisoner)
+
+        val service = retrofit.create(ProfileService::class.java)
+        val response = service
+            .update(serialized)
+            .execute()
+        RetrofitApisUtil.assertResponseCode(response.code())
     }
 
 

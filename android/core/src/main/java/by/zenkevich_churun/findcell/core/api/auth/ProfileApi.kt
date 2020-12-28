@@ -27,5 +27,5 @@ interface ProfileApi {
       * written to the server database.
       * Password hash is used to validate the client's right
       * to mutate information about this user. **/
-    fun update(prisoner: Prisoner, passwordHash: ByteArray)
+    fun update(prisoner: Prisoner)
 }

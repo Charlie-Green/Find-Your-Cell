@@ -93,13 +93,12 @@ class ProfileRepository @Inject constructor(
             return
         }
 
-        val passHash = store.prisonerLD.value?.passwordHash ?: return
         val deletedPositions = mutableListOf<Int>()
         val clearData = removeBlankContacts(data, deletedPositions)
 
         mldUnsavedChanges.postValue(false)
         try {
-            api.update(clearData, passHash)
+            api.update(clearData)
             mldSaveResult.postValue( SavePrisonerResult.Success(deletedPositions, clearData) )
         } catch(exc: IOException) {
             Log.w(LOGTAG, "Failed to save ${Prisoner::class.java.simpleName}")
@@ -136,6 +135,7 @@ class ProfileRepository @Inject constructor(
 
         return PrisonerDraft(
             data.id,
+            data.passwordHash ?: throw NullPointerException("Password must be present"),
             data.name,
             clearedContacts,
             data.info

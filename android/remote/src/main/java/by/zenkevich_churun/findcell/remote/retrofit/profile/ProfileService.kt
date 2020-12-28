@@ -23,4 +23,9 @@ internal interface ProfileService {
         @Field("pass")  passwordBase64: String,
         @Field("name")  initialName: String
     ): Call<ResponseBody>
+
+    @POST("profile/update")
+    fun update(
+        @Body prisoner: String
+    ): Call<ResponseBody>
 }

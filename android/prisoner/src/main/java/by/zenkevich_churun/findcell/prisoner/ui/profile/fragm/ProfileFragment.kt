@@ -104,6 +104,7 @@ class ProfileFragment: Fragment(R.layout.profile_fragm) {
 
         return PrisonerDraft(
             prisoner.id,
+            prisoner.passwordHash ?: throw NullPointerException("Missing password hash"),
             tietName.text.toString(),
             adapter.contacts,
             adapter.prisonerInfo

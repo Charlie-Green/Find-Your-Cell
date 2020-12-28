@@ -6,14 +6,13 @@ import by.zenkevich_churun.findcell.entity.Prisoner
 
 internal class PrisonerDraft(
     override val id: Int,
+    override val passwordHash: ByteArray,
     override val name: String,
     override val contacts: List<Contact>,
     override val info: String
 ): Prisoner() {
 
+    // Username is not needed to update profile.
     override val username: String?
-        get() = throw NotImplementedError("Username is not displayed on Profile screen")
-
-    override val passwordHash: ByteArray?
-        get() = throw NotImplementedError("Password has nothing to do with Profile screen")
+        get() = null
 }
