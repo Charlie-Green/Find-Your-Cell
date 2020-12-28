@@ -18,4 +18,18 @@ class PeriodKey: Serializable {
 
     @Column(name = "end")
     var end: Long = 0L
+
+
+    override fun equals(other: Any?): Boolean {
+        return (other is PeriodKey) &&
+            (arestId == other.arestId) &&
+            (start == other.start) &&
+            (end == other.end)
+    }
+
+    override fun hashCode(): Int {
+        return arestId.hashCode() xor
+            start.hashCode() xor
+            end.hashCode()
+    }
 }

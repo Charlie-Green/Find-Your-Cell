@@ -69,6 +69,7 @@ internal class PrisonerPojo1: Prisoner() {
             addIfDefined(contactTelegram,  Contact.Type.TELEGRAM)
             addIfDefined(contactViber,     Contact.Type.VIBER)
             addIfDefined(contactWhatsApp,  Contact.Type.WHATSAPP)
+            addIfDefined(contactSkype,     Contact.Type.SKYPE)
             addIfDefined(contactVk,        Contact.Type.VK)
             addIfDefined(contactFacebook,  Contact.Type.FACEBOOK)
             addIfDefined(contactInstagram, Contact.Type.INSTAGRAM)

@@ -16,4 +16,14 @@ class ContactKey: Serializable {
     @Column(name = "type")
     var type: Short = 0
 
+
+    override fun equals(other: Any?): Boolean {
+        return (other is ContactKey) &&
+            (prisonerId == other.prisonerId) &&
+            (type == other.type)
+    }
+
+    override fun hashCode(): Int {
+        return prisonerId.hashCode() xor type.hashCode()
+    }
 }
