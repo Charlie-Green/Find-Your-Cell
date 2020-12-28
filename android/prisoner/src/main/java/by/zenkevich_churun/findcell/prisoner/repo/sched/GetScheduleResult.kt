@@ -1,6 +1,6 @@
 package by.zenkevich_churun.findcell.prisoner.repo.sched
 
-import by.zenkevich_churun.findcell.entity.Schedule
+import by.zenkevich_churun.findcell.entity.entity.Schedule
 import java.io.IOException
 
 

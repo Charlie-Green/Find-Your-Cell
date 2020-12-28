@@ -3,7 +3,9 @@ package by.zenkevich_churun.findcell.prisoner.ui.sched.vm
 import android.content.Context
 import androidx.lifecycle.*
 import by.zenkevich_churun.findcell.core.injected.web.NetworkStateTracker
-import by.zenkevich_churun.findcell.entity.*
+import by.zenkevich_churun.findcell.entity.entity.Arest
+import by.zenkevich_churun.findcell.entity.entity.Cell
+import by.zenkevich_churun.findcell.entity.entity.Schedule
 import by.zenkevich_churun.findcell.prisoner.ui.common.sched.ScheduleLiveDatasStorage
 import by.zenkevich_churun.findcell.prisoner.repo.sched.*
 import by.zenkevich_churun.findcell.prisoner.ui.common.change.UnsavedChangesLiveDatasStorage

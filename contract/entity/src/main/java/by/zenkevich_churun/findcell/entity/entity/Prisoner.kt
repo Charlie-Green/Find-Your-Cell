@@ -1,4 +1,6 @@
-package by.zenkevich_churun.findcell.entity
+package by.zenkevich_churun.findcell.entity.entity
+
+import by.zenkevich_churun.findcell.entity.entity.Contact
 
 
 abstract class Prisoner {

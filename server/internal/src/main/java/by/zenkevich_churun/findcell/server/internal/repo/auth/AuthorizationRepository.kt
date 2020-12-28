@@ -1,6 +1,9 @@
 package by.zenkevich_churun.findcell.server.internal.repo.auth
 
+import by.zenkevich_churun.findcell.entity.response.LogInResponse
+import by.zenkevich_churun.findcell.entity.response.SignUpResponse
 import by.zenkevich_churun.findcell.server.internal.dao.auth.AuthorizationDao
+import by.zenkevich_churun.findcell.server.internal.entity.table.PrisonerEntity
 import by.zenkevich_churun.findcell.server.internal.entity.view.PrisonerView
 import javax.persistence.PersistenceException
 
@@ -16,6 +19,7 @@ class AuthorizationRepository(
         val prisonerEntity = dao.getPrisoner(username, passwordHash)
         if(prisonerEntity != null) {
             val contacts = dao.getContacts(prisonerEntity.id)
+            prisonerEntity.passwordHash = null
             val prisonerInstance = PrisonerView(prisonerEntity, contacts)
             return LogInResponse.Success(prisonerInstance)
         }
@@ -35,11 +39,17 @@ class AuthorizationRepository(
         initialName: String
     ): SignUpResponse {
 
-        try {
-            val id = dao.addPrisoner(username, passwordHash, initialName)
-            return SignUpResponse.Success(id)
+        val id = try {
+            dao.addPrisoner(username, passwordHash, initialName)
         } catch(exc: PersistenceException) {
             return SignUpResponse.UsernameTaken
         }
+
+        val createdEntity = PrisonerEntity()
+        createdEntity.id = id
+        // Other fields don't have to be sent, because they can be filled in by the client.
+
+        val createdPrisoner = PrisonerView(createdEntity, listOf())
+        return SignUpResponse.Success(createdPrisoner)
     }
 }

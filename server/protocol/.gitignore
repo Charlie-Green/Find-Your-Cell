@@ -5,4 +5,4 @@
 gradlew*
 
 #Ignore it, because HTTPS certificate password is specified within.
-src/main/resources/application.properties
+src/main/resources/confidential.properties

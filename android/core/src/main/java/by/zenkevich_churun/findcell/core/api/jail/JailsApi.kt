@@ -1,7 +1,7 @@
 package by.zenkevich_churun.findcell.core.api.jail
 
-import by.zenkevich_churun.findcell.entity.Cell
-import by.zenkevich_churun.findcell.entity.Jail
+import by.zenkevich_churun.findcell.entity.entity.Cell
+import by.zenkevich_churun.findcell.entity.entity.Jail
 
 
 /** Fetches information about [Jail]s and [Cell]s. **/

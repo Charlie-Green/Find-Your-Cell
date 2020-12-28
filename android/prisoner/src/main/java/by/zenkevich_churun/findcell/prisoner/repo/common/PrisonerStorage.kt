@@ -2,7 +2,7 @@ package by.zenkevich_churun.findcell.prisoner.repo.common
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import by.zenkevich_churun.findcell.entity.Prisoner
+import by.zenkevich_churun.findcell.entity.entity.Prisoner
 import javax.inject.Inject
 import javax.inject.Singleton
 

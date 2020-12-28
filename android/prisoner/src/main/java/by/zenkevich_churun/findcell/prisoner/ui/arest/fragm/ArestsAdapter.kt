@@ -3,7 +3,7 @@ package by.zenkevich_churun.findcell.prisoner.ui.arest.fragm
 import android.annotation.SuppressLint
 import android.view.*
 import androidx.recyclerview.widget.RecyclerView
-import by.zenkevich_churun.findcell.entity.Arest
+import by.zenkevich_churun.findcell.entity.entity.Arest
 import by.zenkevich_churun.findcell.prisoner.R
 import by.zenkevich_churun.findcell.prisoner.ui.arest.vm.ArestsViewModel
 import kotlinx.android.synthetic.main.arest_item.view.*

@@ -1,7 +1,7 @@
 package by.zenkevich_churun.findcell.prisoner.repo.common
 
-import by.zenkevich_churun.findcell.entity.Contact
-import by.zenkevich_churun.findcell.entity.Prisoner
+import by.zenkevich_churun.findcell.entity.entity.Contact
+import by.zenkevich_churun.findcell.entity.entity.Prisoner
 
 
 class ExtendedPrisoner(

@@ -1,4 +1,4 @@
-package by.zenkevich_churun.findcell.entity
+package by.zenkevich_churun.findcell.entity.util
 
 import java.util.Calendar
 

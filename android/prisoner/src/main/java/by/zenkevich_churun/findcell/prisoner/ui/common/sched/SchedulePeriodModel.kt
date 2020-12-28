@@ -1,7 +1,7 @@
 package by.zenkevich_churun.findcell.prisoner.ui.common.sched
 
 import by.zenkevich_churun.findcell.core.util.std.CalendarUtil
-import by.zenkevich_churun.findcell.entity.SchedulePeriod
+import by.zenkevich_churun.findcell.entity.entity.SchedulePeriod
 import java.util.*
 
 

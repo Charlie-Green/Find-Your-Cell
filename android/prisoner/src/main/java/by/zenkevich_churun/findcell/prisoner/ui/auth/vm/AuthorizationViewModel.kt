@@ -2,8 +2,8 @@ package by.zenkevich_churun.findcell.prisoner.ui.auth.vm
 
 import android.content.Context
 import androidx.lifecycle.*
-import by.zenkevich_churun.findcell.core.api.auth.LogInResponse
-import by.zenkevich_churun.findcell.core.api.auth.SignUpResponse
+import by.zenkevich_churun.findcell.entity.response.LogInResponse
+import by.zenkevich_churun.findcell.entity.response.SignUpResponse
 import by.zenkevich_churun.findcell.core.injected.web.NetworkStateTracker
 import by.zenkevich_churun.findcell.prisoner.repo.profile.ProfileRepository
 import by.zenkevich_churun.findcell.prisoner.ui.auth.model.AuthorizationState
@@ -40,9 +40,9 @@ class AuthorizationViewModel @Inject constructor(
     fun signUp(username: String, password: String) {
         authorize(username, password) {
             when(val response = repo.signUp(username, password)) {
-                is SignUpResponse.NetworkError   -> AuthorizationState.NetworkError(false)
-                is SignUpResponse.UsernameExists -> AuthorizationState.UsernameTaken(username)
-                is SignUpResponse.Success        -> AuthorizationState.Success
+                is SignUpResponse.NetworkError  -> AuthorizationState.NetworkError(false)
+                is SignUpResponse.UsernameTaken -> AuthorizationState.UsernameTaken(username)
+                is SignUpResponse.Success       -> AuthorizationState.Success
             }
         }
     }

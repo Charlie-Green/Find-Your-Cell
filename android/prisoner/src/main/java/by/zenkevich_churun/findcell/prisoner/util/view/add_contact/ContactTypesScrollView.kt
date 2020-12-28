@@ -5,7 +5,7 @@ import android.util.AttributeSet
 import android.view.View
 import android.widget.*
 import by.zenkevich_churun.findcell.core.model.contact.ContactModel
-import by.zenkevich_churun.findcell.entity.Contact
+import by.zenkevich_churun.findcell.entity.entity.Contact
 import by.zenkevich_churun.findcell.prisoner.R
 import kotlinx.android.synthetic.main.add_contact_view.view.*
 

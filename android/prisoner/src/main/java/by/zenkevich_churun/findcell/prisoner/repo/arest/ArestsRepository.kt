@@ -4,7 +4,9 @@ import android.content.Context
 import android.util.Log
 import by.zenkevich_churun.findcell.core.api.arest.ArestsApi
 import by.zenkevich_churun.findcell.core.api.jail.JailsApi
-import by.zenkevich_churun.findcell.entity.*
+import by.zenkevich_churun.findcell.entity.entity.Arest
+import by.zenkevich_churun.findcell.entity.entity.Jail
+import by.zenkevich_churun.findcell.entity.entity.LightArest
 import by.zenkevich_churun.findcell.prisoner.db.JailsDatabase
 import by.zenkevich_churun.findcell.prisoner.db.entity.JailEntity
 import by.zenkevich_churun.findcell.prisoner.repo.common.PrisonerStorage

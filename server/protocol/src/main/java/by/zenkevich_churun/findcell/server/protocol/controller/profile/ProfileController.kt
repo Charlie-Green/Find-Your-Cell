@@ -23,7 +23,7 @@ class ProfileController {
 
         val prisoner = PrisonerDeserializer
             .forVersion(1)
-            .deserialize(istream)
+            .deserializePrisoner(istream)
 
         try {
             repo.update(prisoner)

@@ -23,6 +23,7 @@ dependencies {
 	implementation Deps.libKoinExt
 
 	implementation project(":internal")
+	implementation project(":entity")
 	implementation project(":serial")
 }
 

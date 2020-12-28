@@ -1,6 +1,6 @@
 package by.zenkevich_churun.findcell.core.api.arest
 
-import by.zenkevich_churun.findcell.entity.Arest
+import by.zenkevich_churun.findcell.entity.entity.Arest
 
 
 sealed class CreateOrUpdateArestResponse {

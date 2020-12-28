@@ -1,6 +1,6 @@
 package by.zenkevich_churun.findcell.server.internal.dao.common
 
-import by.zenkevich_churun.findcell.entity.Prisoner
+import by.zenkevich_churun.findcell.entity.entity.Prisoner
 import by.zenkevich_churun.findcell.server.internal.dao.internal.DatabaseConnection
 import by.zenkevich_churun.findcell.server.internal.entity.table.PrisonerEntity
 import by.zenkevich_churun.findcell.server.internal.util.ServerInternalUtil.optionalResult
@@ -24,8 +24,10 @@ class CommonDao(
         val q = queryValidateCredentials
             .getTypedQuery(entityMan, id, passwordHash)
 
-        return q.optionalResult
-            ?: throw IllegalArgumentException("User ID or password hash are invalid")
+        val match = q.optionalResult
+        match?.passwordHash = passwordHash
+
+        return match ?: throw IllegalArgumentException("User ID or password hash are invalid")
     }
 
 

@@ -1,6 +1,6 @@
 package by.zenkevich_churun.findcell.prisoner.ui.cellopt.model
 
-import by.zenkevich_churun.findcell.entity.Cell
+import by.zenkevich_churun.findcell.entity.entity.Cell
 
 
 /** The dialog can be at one of these modes at a moment.

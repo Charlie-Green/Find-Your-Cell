@@ -1,7 +1,7 @@
 package by.zenkevich_churun.findcell.server.internal.entity.view
 
-import by.zenkevich_churun.findcell.entity.Contact
-import by.zenkevich_churun.findcell.entity.Prisoner
+import by.zenkevich_churun.findcell.entity.entity.Contact
+import by.zenkevich_churun.findcell.entity.entity.Prisoner
 import by.zenkevich_churun.findcell.server.internal.entity.table.PrisonerEntity
 
 

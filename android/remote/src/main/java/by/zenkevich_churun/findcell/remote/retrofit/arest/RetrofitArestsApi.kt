@@ -2,7 +2,7 @@ package by.zenkevich_churun.findcell.remote.retrofit.arest
 
 import by.zenkevich_churun.findcell.core.api.arest.ArestsApi
 import by.zenkevich_churun.findcell.core.api.arest.CreateOrUpdateArestResponse
-import by.zenkevich_churun.findcell.entity.LightArest
+import by.zenkevich_churun.findcell.entity.entity.LightArest
 import java.util.Calendar
 import javax.inject.Inject
 import javax.inject.Singleton

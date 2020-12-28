@@ -1,6 +1,6 @@
 package by.zenkevich_churun.findcell.core.api.arest
 
-import by.zenkevich_churun.findcell.entity.LightArest
+import by.zenkevich_churun.findcell.entity.entity.LightArest
 import java.util.Calendar
 
 

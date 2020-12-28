@@ -1,6 +1,6 @@
 package by.zenkevich_churun.findcell.prisoner.ui.common.sched
 
-import by.zenkevich_churun.findcell.entity.Cell
+import by.zenkevich_churun.findcell.entity.entity.Cell
 
 
 class CellModel(

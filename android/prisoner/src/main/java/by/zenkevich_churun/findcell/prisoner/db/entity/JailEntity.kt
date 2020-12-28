@@ -1,7 +1,7 @@
 package by.zenkevich_churun.findcell.prisoner.db.entity
 
 import androidx.room.*
-import by.zenkevich_churun.findcell.entity.Jail
+import by.zenkevich_churun.findcell.entity.entity.Jail
 
 
 @Entity(tableName = "Jails")

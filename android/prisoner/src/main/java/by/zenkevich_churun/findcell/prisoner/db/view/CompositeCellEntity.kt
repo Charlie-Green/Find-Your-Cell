@@ -1,6 +1,6 @@
 package by.zenkevich_churun.findcell.prisoner.db.view
 
-import by.zenkevich_churun.findcell.entity.Cell
+import by.zenkevich_churun.findcell.entity.entity.Cell
 
 
 class CompositeCellEntity(

@@ -4,8 +4,8 @@ import android.content.Context
 import androidx.lifecycle.*
 import by.zenkevich_churun.findcell.core.injected.web.NetworkStateTracker
 import by.zenkevich_churun.findcell.core.util.std.max
-import by.zenkevich_churun.findcell.entity.Cell
-import by.zenkevich_churun.findcell.entity.Jail
+import by.zenkevich_churun.findcell.entity.entity.Cell
+import by.zenkevich_churun.findcell.entity.entity.Jail
 import by.zenkevich_churun.findcell.prisoner.ui.common.sched.ScheduleLiveDatasStorage
 import by.zenkevich_churun.findcell.prisoner.repo.jail.GetJailsResult
 import by.zenkevich_churun.findcell.prisoner.repo.jail.JailsRepository

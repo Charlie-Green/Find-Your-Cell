@@ -7,7 +7,7 @@ import android.widget.*
 import androidx.core.widget.addTextChangedListener
 import by.zenkevich_churun.findcell.core.R
 import by.zenkevich_churun.findcell.core.model.contact.ContactModel
-import by.zenkevich_churun.findcell.entity.Contact
+import by.zenkevich_churun.findcell.entity.entity.Contact
 import kotlinx.android.synthetic.main.contact_view.view.*
 
 

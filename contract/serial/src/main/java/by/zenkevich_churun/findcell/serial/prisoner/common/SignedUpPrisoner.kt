@@ -1,7 +1,7 @@
-package by.zenkevich_churun.findcell.remote.retrofit.profile
+package by.zenkevich_churun.findcell.serial.prisoner.common
 
-import by.zenkevich_churun.findcell.entity.Contact
-import by.zenkevich_churun.findcell.entity.Prisoner
+import by.zenkevich_churun.findcell.entity.entity.Contact
+import by.zenkevich_churun.findcell.entity.entity.Prisoner
 
 
 /** Implementation of [Prisoner] used internally

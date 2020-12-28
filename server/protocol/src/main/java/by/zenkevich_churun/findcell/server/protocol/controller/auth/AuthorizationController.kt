@@ -1,9 +1,9 @@
 package by.zenkevich_churun.findcell.server.protocol.controller.auth
 
+import by.zenkevich_churun.findcell.serial.prisoner.common.PrisonerSerializer
 import by.zenkevich_churun.findcell.serial.util.protocol.ProtocolUtil
 import by.zenkevich_churun.findcell.server.internal.repo.auth.AuthorizationRepository
 import by.zenkevich_churun.findcell.server.protocol.di.ServerKoin
-import by.zenkevich_churun.findcell.server.protocol.encode.auth.AuthorizationEncoder
 import org.springframework.web.bind.annotation.*
 
 
@@ -24,14 +24,14 @@ class AuthorizationController {
 
         AuthorizationValidator.validateCredentials(username, null)
 
-        val encoder = AuthorizationEncoder.forVersion(version)
+        val serialer = PrisonerSerializer.forVersion(version)
         val response = repo.logIn(
             username,
             ProtocolUtil.decodeBase64(passwordHash)
         )
         println("Response is ${response.javaClass.simpleName}")
 
-        return encoder.encode(response)
+        return serialer.serialize(response)
     }
 
     @PostMapping("/auth/signup")
@@ -44,13 +44,13 @@ class AuthorizationController {
 
         AuthorizationValidator.validateCredentials(username, initialName)
 
-        val encoder = AuthorizationEncoder.forVersion(version)
+        val serialer = PrisonerSerializer.forVersion(version)
         val response = repo.signUp(
             username,
             ProtocolUtil.decodeBase64(passwordHash),
             initialName
         )
 
-        return encoder.encode(response)
+        return serialer.serialize(response)
     }
 }

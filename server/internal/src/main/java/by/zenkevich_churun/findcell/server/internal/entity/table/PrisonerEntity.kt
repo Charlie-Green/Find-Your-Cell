@@ -12,10 +12,10 @@ class PrisonerEntity {
     var id: Int = 0
 
     @Column(name = "username")
-    lateinit var username: String
+    var username: String? = null
 
     @Column(name = "pass")
-    lateinit var passwordHash: ByteArray
+    var passwordHash: ByteArray? = null
 
     @Column(name = "name")
     lateinit var name: String

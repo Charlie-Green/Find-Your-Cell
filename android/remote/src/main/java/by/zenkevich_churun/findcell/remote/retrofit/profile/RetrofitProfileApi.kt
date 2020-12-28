@@ -2,11 +2,15 @@ package by.zenkevich_churun.findcell.remote.retrofit.profile
 
 import by.zenkevich_churun.findcell.serial.util.protocol.ProtocolUtil
 import by.zenkevich_churun.findcell.core.api.auth.*
-import by.zenkevich_churun.findcell.entity.Prisoner
+import by.zenkevich_churun.findcell.entity.entity.Prisoner
+import by.zenkevich_churun.findcell.entity.response.LogInResponse
+import by.zenkevich_churun.findcell.entity.response.SignUpResponse
 import by.zenkevich_churun.findcell.remote.retrofit.common.RetrofitApisUtil
 import by.zenkevich_churun.findcell.remote.retrofit.common.RetrofitHolder
 import by.zenkevich_churun.findcell.serial.prisoner.common.PrisonerDeserializer
 import by.zenkevich_churun.findcell.serial.prisoner.common.PrisonerSerializer
+import okhttp3.MediaType
+import okhttp3.RequestBody
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -27,19 +31,10 @@ class RetrofitProfileApi @Inject constructor(
         val response = service.logIn(1, username, passwordBase64).execute()
         RetrofitApisUtil.assertResponseCode(response.code())
 
-        val result = response.body()!!.string()
-        if(result == "U") {
-            return LogInResponse.WrongUsername
-        }
-        if(result == "P") {
-            return LogInResponse.WrongPassword
-        }
-
-        val resultStream = result.byteInputStream()
-        val prisoner = PrisonerDeserializer
+        val resultStream = response.body()!!.byteStream()
+        return PrisonerDeserializer
             .forVersion(1)
-            .deserialize(resultStream)
-        return LogInResponse.Success(prisoner)
+            .deserializeLogIn(resultStream)
     }
 
     override fun signUp(
@@ -56,24 +51,21 @@ class RetrofitProfileApi @Inject constructor(
             .execute()
         RetrofitApisUtil.assertResponseCode(response.code())
 
-        val result = response.body()!!.string()
-        if(result == "U") {
-            return SignUpResponse.UsernameExists
-        }
-
-        val id = result.toInt()
-        val prisoner = SignedUpPrisoner(id, username, passwordHash, name)
-        return SignUpResponse.Success(prisoner)
+        val resultStream = response.body()!!.byteStream()
+        return PrisonerDeserializer
+            .forVersion(1)
+            .deserializeSignUp(resultStream, username, passwordHash, name)
     }
 
     override fun update(prisoner: Prisoner) {
         val serialized = PrisonerSerializer
             .forVersion(1)
             .serialize(prisoner)
+        val bodyType = MediaType.get("text/plain")
 
         val service = retrofit.create(ProfileService::class.java)
         val response = service
-            .update(serialized)
+            .update( RequestBody.create(bodyType, serialized) )
             .execute()
         RetrofitApisUtil.assertResponseCode(response.code())
     }

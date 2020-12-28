@@ -1,6 +1,6 @@
 package by.zenkevich_churun.findcell.prisoner.repo.jail
 
-import by.zenkevich_churun.findcell.entity.Jail
+import by.zenkevich_churun.findcell.entity.entity.Jail
 
 
 sealed class GetJailsResult {

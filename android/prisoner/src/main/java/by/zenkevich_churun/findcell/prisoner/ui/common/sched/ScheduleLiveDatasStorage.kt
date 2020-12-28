@@ -2,7 +2,7 @@ package by.zenkevich_churun.findcell.prisoner.ui.common.sched
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import by.zenkevich_churun.findcell.entity.Cell
+import by.zenkevich_churun.findcell.entity.entity.Cell
 import by.zenkevich_churun.findcell.prisoner.repo.sched.UpdateScheduleResult
 import javax.inject.Inject
 import javax.inject.Singleton

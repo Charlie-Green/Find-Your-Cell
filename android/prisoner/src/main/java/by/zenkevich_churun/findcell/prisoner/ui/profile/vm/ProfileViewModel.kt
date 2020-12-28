@@ -3,8 +3,8 @@ package by.zenkevich_churun.findcell.prisoner.ui.profile.vm
 import android.content.Context
 import androidx.lifecycle.*
 import by.zenkevich_churun.findcell.core.injected.web.NetworkStateTracker
-import by.zenkevich_churun.findcell.entity.Contact
-import by.zenkevich_churun.findcell.entity.Prisoner
+import by.zenkevich_churun.findcell.entity.entity.Contact
+import by.zenkevich_churun.findcell.entity.entity.Prisoner
 import by.zenkevich_churun.findcell.prisoner.repo.profile.ProfileRepository
 import by.zenkevich_churun.findcell.prisoner.repo.profile.SavePrisonerResult
 import kotlinx.coroutines.Dispatchers

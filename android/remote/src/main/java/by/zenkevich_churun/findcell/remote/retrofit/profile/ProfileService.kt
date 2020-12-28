@@ -1,5 +1,6 @@
 package by.zenkevich_churun.findcell.remote.retrofit.profile
 
+import okhttp3.RequestBody
 import okhttp3.ResponseBody
 import retrofit2.Call
 import retrofit2.http.*
@@ -26,6 +27,6 @@ internal interface ProfileService {
 
     @POST("profile/update")
     fun update(
-        @Body prisoner: String
+        @Body prisoner: RequestBody
     ): Call<ResponseBody>
 }

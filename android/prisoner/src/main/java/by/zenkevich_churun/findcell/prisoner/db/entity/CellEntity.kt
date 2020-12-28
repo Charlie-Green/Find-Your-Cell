@@ -3,7 +3,7 @@ package by.zenkevich_churun.findcell.prisoner.db.entity
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.ForeignKey
-import by.zenkevich_churun.findcell.entity.Cell
+import by.zenkevich_churun.findcell.entity.entity.Cell
 
 
 @Entity(

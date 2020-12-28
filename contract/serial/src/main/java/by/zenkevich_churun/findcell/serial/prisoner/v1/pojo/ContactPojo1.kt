@@ -1,6 +1,6 @@
 package by.zenkevich_churun.findcell.serial.prisoner.v1.pojo
 
-import by.zenkevich_churun.findcell.entity.Contact
+import by.zenkevich_churun.findcell.entity.entity.Contact
 
 
 /** Not a POJO, basically, because, as of protocol version 1, [Contact]s are represented

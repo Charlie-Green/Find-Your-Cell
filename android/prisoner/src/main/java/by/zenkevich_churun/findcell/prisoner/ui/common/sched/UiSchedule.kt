@@ -1,8 +1,8 @@
 package by.zenkevich_churun.findcell.prisoner.ui.common.sched
 
-import by.zenkevich_churun.findcell.entity.Cell
-import by.zenkevich_churun.findcell.entity.Schedule
-import by.zenkevich_churun.findcell.entity.SchedulePeriod
+import by.zenkevich_churun.findcell.entity.entity.Cell
+import by.zenkevich_churun.findcell.entity.entity.Schedule
+import by.zenkevich_churun.findcell.entity.entity.SchedulePeriod
 import java.util.*
 
 

@@ -1,7 +1,7 @@
 package by.zenkevich_churun.findcell.remote.retrofit.sched
 
 import by.zenkevich_churun.findcell.core.api.sched.ScheduleApi
-import by.zenkevich_churun.findcell.entity.Schedule
+import by.zenkevich_churun.findcell.entity.entity.Schedule
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -20,7 +20,7 @@ class RetrofitScheduleApi @Inject constructor(): ScheduleApi {
     override fun update(
         prisonerId: Int,
         passwordHash: ByteArray,
-        schedule: Schedule ) {
+        schedule: Schedule) {
 
     }
 

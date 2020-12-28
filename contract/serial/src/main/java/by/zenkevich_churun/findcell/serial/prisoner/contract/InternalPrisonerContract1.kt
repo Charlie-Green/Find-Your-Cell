@@ -1,6 +1,6 @@
 package by.zenkevich_churun.findcell.serial.prisoner.contract
 
-import by.zenkevich_churun.findcell.entity.Contact
+import by.zenkevich_churun.findcell.entity.entity.Contact
 
 
 internal object InternalPrisonerContract1 {
