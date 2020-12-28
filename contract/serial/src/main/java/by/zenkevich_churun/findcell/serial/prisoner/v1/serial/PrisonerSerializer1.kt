@@ -40,14 +40,6 @@ internal class PrisonerSerializer1: PrisonerSerializer {
         Gson().toJson(pojo, pojo.javaClass, jsonWriter)
         jsonWriter.flush()
 
-        val bytes = ostream.toByteArray()
-        print("Serialized: ")
-        for(b in bytes) {
-            print(" ${b.toString(16)}")
-        }
-
-        return String(ostream.toByteArray(), CommonContract1.ENCODING).also {
-            println("  $it")
-        }
+        return String(ostream.toByteArray(), CommonContract1.ENCODING)
     }
 }

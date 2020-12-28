@@ -17,12 +17,7 @@ internal class PrisonerDeserializer1: PrisonerDeserializer {
         input: InputStream
     ): LogInResponse {
 
-        val bytes = input.readBytes()
-        val data = String(bytes, CommonContract1.ENCODING)
-        println("Deserializing:")
-        for(b in bytes) {
-            println("  ${b.toString(16)}")
-        }
+        val data = String(input.readBytes(), CommonContract1.ENCODING)
 
         if(data == "U") {
             return LogInResponse.WrongUsername

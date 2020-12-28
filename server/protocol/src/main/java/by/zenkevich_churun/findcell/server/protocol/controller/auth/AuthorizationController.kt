@@ -29,7 +29,6 @@ class AuthorizationController {
             username,
             ProtocolUtil.decodeBase64(passwordHash)
         )
-        println("Response is ${response.javaClass.simpleName}")
 
         return serialer.serialize(response)
     }

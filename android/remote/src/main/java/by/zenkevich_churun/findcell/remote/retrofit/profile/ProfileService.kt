@@ -11,9 +11,9 @@ internal interface ProfileService {
     @FormUrlEncoded
     @POST("auth/login")
     fun logIn(
-        @Field("v")     version: Int,
-        @Field("uname") username: String,
-        @Field("pass")  passwordBase64: String
+        @Field("v",     encoded = true) version: Int,
+        @Field("uname", encoded = true) username: String,
+        @Field("pass",  encoded = true) passwordBase64: String
     ): Call<ResponseBody>
 
     @FormUrlEncoded
