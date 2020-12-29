@@ -8,6 +8,8 @@ import javax.persistence.*
 @Table(name = "Jails")
 class JailEntity: Jail() {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     override var id: Int = 0
 

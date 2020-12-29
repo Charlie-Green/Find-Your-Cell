@@ -4,9 +4,11 @@ import by.zenkevich_churun.findcell.server.internal.dao.arest.ArestsDao
 import by.zenkevich_churun.findcell.server.internal.dao.auth.AuthorizationDao
 import by.zenkevich_churun.findcell.server.internal.dao.common.CommonDao
 import by.zenkevich_churun.findcell.server.internal.dao.internal.DatabaseConnection
+import by.zenkevich_churun.findcell.server.internal.dao.jail.JailsDao
 import by.zenkevich_churun.findcell.server.internal.dao.profile.ProfileDao
 import by.zenkevich_churun.findcell.server.internal.repo.arest.ArestsRepository
 import by.zenkevich_churun.findcell.server.internal.repo.auth.AuthorizationRepository
+import by.zenkevich_churun.findcell.server.internal.repo.jail.JailsRepository
 import by.zenkevich_churun.findcell.server.internal.repo.profile.ProfileRepository
 import org.koin.core.Koin
 import org.koin.core.context.startKoin
@@ -67,6 +69,16 @@ object ServerKoin {
             }
         }
 
+        val jailModule = module {
+            single {
+                JailsDao(get())
+            }
+
+            single {
+                JailsRepository(get())
+            }
+        }
+
         val schedModule = module {
             // TODO
         }
@@ -77,6 +89,7 @@ object ServerKoin {
                 authModule,
                 profileModule,
                 arestModule,
+                jailModule,
                 schedModule
             ))
         }

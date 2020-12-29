@@ -7,10 +7,6 @@ import java.util.Calendar
 
 class ArestPojo1: LightArest() {
 
-    private val calStart by lazy { Calendar.getInstance() }
-    private val calEnd   by lazy { Calendar.getInstance() }
-
-
     @SerializedName("id")
     override var id: Int = 0
 
@@ -25,10 +21,10 @@ class ArestPojo1: LightArest() {
 
 
     override val start: Calendar
-        get() = calStart.apply { timeInMillis = startMillis }
+        get() = Calendar.getInstance().apply { timeInMillis = startMillis }
 
     override val end: Calendar
-        get() = calEnd.apply { timeInMillis = endMillis }
+        get() = Calendar.getInstance().apply { timeInMillis = endMillis }
 
     override val jailsCount: Int
         get() = jailIds.size

@@ -19,11 +19,11 @@ internal class ArestsSerializer1: ArestsSerializer {
         val jsonWriter = JsonWriter(printWriter)
 
         // TODO: Do I have to wrap list into a POJO?
-        val arestPojos = arests.map { arest ->
-            ArestPojo1.from(arest)
-        }
+        val listPojo = ArestsListPojo1.wrap(arests)
 
-        Gson().toJson(arestPojos, ArestsListPojo1::class.java, jsonWriter)
+        Gson().toJson(listPojo, ArestsListPojo1::class.java, jsonWriter)
+        jsonWriter.flush()
+
         return String(ostream.toByteArray(), CommonContract1.ENCODING)
     }
 }
