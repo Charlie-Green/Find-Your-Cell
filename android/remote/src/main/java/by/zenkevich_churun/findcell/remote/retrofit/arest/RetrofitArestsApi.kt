@@ -24,7 +24,8 @@ class RetrofitArestsApi @Inject constructor(): ArestsApi {
         prisonerId: Int,
         passwordHash: ByteArray
     ): List<LightArest> {
-        TODO("Not yet implemented")
+
+
     }
 
     override fun update(

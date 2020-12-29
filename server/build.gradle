@@ -11,4 +11,7 @@ ext {
     def koinVersion = "2.2.2"
     libKoin    = "org.koin:koin-core:$koinVersion"
     libKoinExt = "org.koin:koin-core-ext:$koinVersion"
+
+    def gsonVersion = "2.8.6"
+    libGson = "com.google.code.gson:gson:$gsonVersion"
 }

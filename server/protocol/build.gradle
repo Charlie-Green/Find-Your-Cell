@@ -21,6 +21,7 @@ dependencies {
 	implementation Deps.libSpring
 	implementation Deps.libKoin
 	implementation Deps.libKoinExt
+	implementation Deps.libGson
 
 	implementation project(":internal")
 	implementation project(":entity")
