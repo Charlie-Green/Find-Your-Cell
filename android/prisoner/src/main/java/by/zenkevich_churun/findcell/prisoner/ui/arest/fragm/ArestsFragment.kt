@@ -2,17 +2,20 @@ package by.zenkevich_churun.findcell.prisoner.ui.arest.fragm
 
 import android.content.DialogInterface
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
+import by.zenkevich_churun.findcell.core.util.android.DialogUtil
 import by.zenkevich_churun.findcell.prisoner.R
 import by.zenkevich_churun.findcell.prisoner.ui.arest.state.ArestsListState
 import by.zenkevich_churun.findcell.prisoner.ui.arest.vm.ArestsViewModel
 import by.zenkevich_churun.findcell.prisoner.ui.sched.fragm.ScheduleFragment
 import kotlinx.android.synthetic.main.arests_fragm.*
+import java.util.*
 import javax.inject.Inject
 
 
@@ -36,6 +39,9 @@ class ArestsFragment: Fragment(R.layout.arests_fragm) {
                 vm.notifyScheduleOpened()
             }
         })
+
+        fabAdd.setOnClickListener { addArest() }
+        restoreArestDateRangePicker()
     }
 
 
@@ -86,6 +92,15 @@ class ArestsFragment: Fragment(R.layout.arests_fragm) {
         findNavController().navigate(R.id.actOpenArest, args)
     }
 
+    private fun addArest() {
+        DialogUtil.pickDateRange(
+            parentFragmentManager,
+            Calendar.getInstance().apply { add(Calendar.DATE, -15) },
+            Calendar.getInstance(),
+            this::onArestDateRangeSelected
+        )
+    }
+
 
     private fun notifyError(
         titleRes: Int,
@@ -99,5 +114,16 @@ class ArestsFragment: Fragment(R.layout.arests_fragm) {
                 dialog.dismiss()
             }.setOnDismissListener(onDismiss)
             .show()
+    }
+
+    private fun restoreArestDateRangePicker() {
+        DialogUtil.restoreDateRangePicker(
+            parentFragmentManager,
+            this::onArestDateRangeSelected
+        )
+    }
+
+    private fun onArestDateRangeSelected(start: Long, end: Long) {
+       // TODO
     }
 }

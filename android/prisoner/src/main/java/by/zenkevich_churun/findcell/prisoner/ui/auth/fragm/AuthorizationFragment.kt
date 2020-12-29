@@ -10,7 +10,6 @@ import by.zenkevich_churun.findcell.core.util.android.NavigationUtil
 import by.zenkevich_churun.findcell.prisoner.R
 import by.zenkevich_churun.findcell.prisoner.ui.auth.model.AuthorizationState
 import by.zenkevich_churun.findcell.prisoner.ui.auth.vm.AuthorizationViewModel
-import com.google.android.material.datepicker.MaterialDatePicker
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.authorization_fragm.*
 import javax.inject.Inject
@@ -39,12 +38,6 @@ class AuthorizationFragment: Fragment(R.layout.authorization_fragm) {
         }
         onClickShowInfo(imgvUsernameInfo, R.string.username_info)
         onClickShowInfo(imgvPasswordInfo, R.string.password_info)
-
-        // TODO: CharlieDebug: Move away from here.
-        val picker = MaterialDatePicker.Builder.dateRangePicker()
-            .setTheme(R.style.datepicker_dialog_theme)
-            .build()
-        picker.show(parentFragmentManager, null)
     }
 
 
