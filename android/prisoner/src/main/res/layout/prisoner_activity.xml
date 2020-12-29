@@ -6,7 +6,7 @@
     android:id="@+id/cdltRoot"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="by.zenkevich_churun.findcell.prisoner.ui.root.activity.PrisonerActivity">
+    tools:context="by.zenkevich_churun.findcell.prisoner.ui.root.activity.PrisonerActivity" >
 
     <LinearLayout
         android:orientation="vertical"
@@ -48,14 +48,5 @@
         </androidx.drawerlayout.widget.DrawerLayout>
 
     </LinearLayout>
-
-
-    <fragment
-        android:id="@+id/bshAdd"
-        android:name="by.zenkevich_churun.findcell.prisoner.ui.arest.fragm.AddArestBottomSheet"
-        android:layout_width="match_parent"
-        android:layout_height="96dp"
-        app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior"
-        app:behavior_peekHeight="72dp" />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
