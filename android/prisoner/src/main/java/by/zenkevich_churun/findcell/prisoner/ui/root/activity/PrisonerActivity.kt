@@ -15,6 +15,7 @@ import by.zenkevich_churun.findcell.prisoner.repo.profile.SavePrisonerResult
 import by.zenkevich_churun.findcell.prisoner.ui.common.interrupt.EditInterruptState
 import by.zenkevich_churun.findcell.prisoner.ui.common.sched.CellUpdate
 import by.zenkevich_churun.findcell.prisoner.ui.root.vm.PrisonerRootViewModel
+import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.prisoner_activity.*
@@ -33,6 +34,9 @@ class PrisonerActivity: AppCompatActivity(R.layout.prisoner_activity) {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         window?.also { AndroidUtil.defaultHideKeyboard(it) }
+
+        // TODO: CharlieDebug:
+        BottomSheetBehavior.from(bshAdd.requireView()).state = BottomSheetBehavior.STATE_EXPANDED
 
         initFields()
         navMan.setup()

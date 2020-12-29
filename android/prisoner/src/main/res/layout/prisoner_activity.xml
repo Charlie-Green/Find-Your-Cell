@@ -49,4 +49,13 @@
 
     </LinearLayout>
 
+
+    <fragment
+        android:id="@+id/bshAdd"
+        android:name="by.zenkevich_churun.findcell.prisoner.ui.arest.fragm.AddArestBottomSheet"
+        android:layout_width="match_parent"
+        android:layout_height="96dp"
+        app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior"
+        app:behavior_peekHeight="72dp" />
+
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
