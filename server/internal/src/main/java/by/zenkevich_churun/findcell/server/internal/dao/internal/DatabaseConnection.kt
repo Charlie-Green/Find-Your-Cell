@@ -22,6 +22,8 @@ class DatabaseConnection {
         } catch(thr: Throwable) {
             t.rollback()
             throw thr
+        } finally {
+            entityMan.clear()
         }
     }
 }
