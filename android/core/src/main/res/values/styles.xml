@@ -5,8 +5,12 @@
         <item name="colorAccent">?colorPrimary</item>
     </style>
 
-    <style name="datepicker_dialog_theme" parent="Theme.MaterialComponents.Dialog">
+    <style name="datepicker_dialog_theme" parent="Theme.MaterialComponents.Light.Dialog">
         <item name="android:windowFullscreen">false</item>
+        <item name="colorPrimary">@color/primary</item>
+
+        <!-- Calendar's mode button background: -->
+        <item name="backgroundTint">@color/primary</item>
     </style>
 
 </resources>
