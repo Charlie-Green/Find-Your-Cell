@@ -1,4 +1,4 @@
-package by.zenkevich_churun.findcell.server.protocol.serial.arest.v1.pojo
+package by.zenkevich_churun.findcell.serial.arest.v1.pojo
 
 import by.zenkevich_churun.findcell.serial.arest.v1.ArestContract1
 import com.google.gson.annotations.SerializedName

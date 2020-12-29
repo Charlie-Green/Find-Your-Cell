@@ -3,8 +3,8 @@ package by.zenkevich_churun.findcell.server.protocol.serial.arest.v1
 import by.zenkevich_churun.findcell.entity.entity.LightArest
 import by.zenkevich_churun.findcell.serial.common.v1.CommonContract1
 import by.zenkevich_churun.findcell.server.protocol.serial.arest.abstr.ArestsSerializer
-import by.zenkevich_churun.findcell.server.protocol.serial.arest.v1.pojo.ArestPojo1
-import by.zenkevich_churun.findcell.server.protocol.serial.arest.v1.pojo.ArestsListPojo1
+import by.zenkevich_churun.findcell.serial.arest.v1.pojo.ArestPojo1
+import by.zenkevich_churun.findcell.serial.arest.v1.pojo.ArestsListPojo1
 import com.google.gson.Gson
 import com.google.gson.stream.JsonWriter
 import java.io.ByteArrayOutputStream

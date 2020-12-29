@@ -3,13 +3,18 @@ package by.zenkevich_churun.findcell.remote.retrofit.arest
 import by.zenkevich_churun.findcell.core.api.arest.ArestsApi
 import by.zenkevich_churun.findcell.core.api.arest.CreateOrUpdateArestResponse
 import by.zenkevich_churun.findcell.entity.entity.LightArest
+import by.zenkevich_churun.findcell.remote.retrofit.common.RetrofitApisUtil
+import by.zenkevich_churun.findcell.remote.retrofit.common.RetrofitHolder
+import by.zenkevich_churun.findcell.serial.util.protocol.ProtocolUtil
 import java.util.Calendar
 import javax.inject.Inject
 import javax.inject.Singleton
 
 
 @Singleton
-class RetrofitArestsApi @Inject constructor(): ArestsApi {
+class RetrofitArestsApi @Inject constructor(
+    private val retrofitHolder: RetrofitHolder
+): ArestsApi {
 
     override fun create(
         prisonerId: Int,
@@ -25,7 +30,15 @@ class RetrofitArestsApi @Inject constructor(): ArestsApi {
         passwordHash: ByteArray
     ): List<LightArest> {
 
+        val passwordBase64 = ProtocolUtil.encodeBase64(passwordHash)
 
+        val service = retrofit.create(ArestsService::class.java)
+        val response = service
+            .getArests(1, prisonerId, passwordBase64)
+            .execute()
+        RetrofitApisUtil.assertResponseCode(response.code())
+
+        return response.body()!!.arests
     }
 
     override fun update(
@@ -35,6 +48,7 @@ class RetrofitArestsApi @Inject constructor(): ArestsApi {
         newStart: Calendar,
         newEnd: Calendar
     ): CreateOrUpdateArestResponse {
+
         TODO("Not yet implemented")
     }
 
@@ -44,4 +58,8 @@ class RetrofitArestsApi @Inject constructor(): ArestsApi {
         id: Int ) {
         TODO("Not yet implemented")
     }
+
+
+    private val retrofit
+        get() = retrofitHolder.retrofit
 }
