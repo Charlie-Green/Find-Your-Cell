@@ -5,7 +5,8 @@ import by.zenkevich_churun.findcell.core.api.arest.CreateOrUpdateArestResponse
 import by.zenkevich_churun.findcell.entity.entity.LightArest
 import by.zenkevich_churun.findcell.remote.retrofit.common.RetrofitApisUtil
 import by.zenkevich_churun.findcell.remote.retrofit.common.RetrofitHolder
-import by.zenkevich_churun.findcell.serial.util.protocol.ProtocolUtil
+import by.zenkevich_churun.findcell.serial.arest.abstr.ArestsDeserializer
+import by.zenkevich_churun.findcell.serial.util.protocol.Base64Util
 import java.util.Calendar
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -30,7 +31,7 @@ class RetrofitArestsApi @Inject constructor(
         passwordHash: ByteArray
     ): List<LightArest> {
 
-        val passwordBase64 = ProtocolUtil.encodeBase64(passwordHash)
+        val passwordBase64 = Base64Util.encode(passwordHash)
 
         val service = retrofit.create(ArestsService::class.java)
         val response = service
@@ -38,7 +39,9 @@ class RetrofitArestsApi @Inject constructor(
             .execute()
         RetrofitApisUtil.assertResponseCode(response.code())
 
-        return response.body()!!.arests
+        return ArestsDeserializer
+            .forVersion(1)
+            .deserializeList(response.body()!!.byteStream())
     }
 
     override fun update(

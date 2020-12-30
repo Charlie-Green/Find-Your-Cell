@@ -3,12 +3,9 @@ package by.zenkevich_churun.findcell.serial.prisoner.v1.serial
 import by.zenkevich_churun.findcell.entity.entity.Prisoner
 import by.zenkevich_churun.findcell.entity.response.LogInResponse
 import by.zenkevich_churun.findcell.entity.response.SignUpResponse
-import by.zenkevich_churun.findcell.serial.common.v1.CommonContract1
 import by.zenkevich_churun.findcell.serial.prisoner.common.PrisonerSerializer
 import by.zenkevich_churun.findcell.serial.prisoner.v1.pojo.PrisonerPojo1
-import com.google.gson.Gson
-import com.google.gson.stream.JsonWriter
-import java.io.ByteArrayOutputStream
+import by.zenkevich_churun.findcell.serial.util.protocol.ProtocolUtil
 
 
 /** Converts a Prisoner into JSON format. **/
@@ -32,14 +29,7 @@ internal class PrisonerSerializer1: PrisonerSerializer {
     }
 
     override fun serialize(prisoner: Prisoner): String {
-        val ostream = ByteArrayOutputStream()
-        val streamWriter = ostream.writer(CommonContract1.ENCODING)
-        val jsonWriter = JsonWriter(streamWriter)
         val pojo = PrisonerPojo1.from(prisoner)
-
-        Gson().toJson(pojo, pojo.javaClass, jsonWriter)
-        jsonWriter.flush()
-
-        return String(ostream.toByteArray(), CommonContract1.ENCODING)
+        return ProtocolUtil.toJson(pojo, 192)
     }
 }

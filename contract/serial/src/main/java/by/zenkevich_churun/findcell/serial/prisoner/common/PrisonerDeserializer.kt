@@ -3,7 +3,7 @@ package by.zenkevich_churun.findcell.serial.prisoner.common
 import by.zenkevich_churun.findcell.entity.entity.Prisoner
 import by.zenkevich_churun.findcell.entity.response.LogInResponse
 import by.zenkevich_churun.findcell.entity.response.SignUpResponse
-import by.zenkevich_churun.findcell.serial.prisoner.v1.deserial.PrisonerDeserializer1
+import by.zenkevich_churun.findcell.serial.prisoner.v1.serial.PrisonerDeserializer1
 import java.io.InputStream
 
 

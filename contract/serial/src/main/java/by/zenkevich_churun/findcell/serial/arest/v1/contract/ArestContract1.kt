@@ -1,4 +1,4 @@
-package by.zenkevich_churun.findcell.serial.arest.v1
+package by.zenkevich_churun.findcell.serial.arest.v1.contract
 
 
 object ArestContract1 {

@@ -1,7 +1,7 @@
 package by.zenkevich_churun.findcell.serial.arest.v1.pojo
 
 import by.zenkevich_churun.findcell.entity.entity.LightArest
-import by.zenkevich_churun.findcell.serial.arest.v1.ArestContract1
+import by.zenkevich_churun.findcell.serial.arest.v1.contract.ArestContract1
 import com.google.gson.annotations.SerializedName
 
 

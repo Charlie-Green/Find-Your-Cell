@@ -1,4 +1,4 @@
-package by.zenkevich_churun.findcell.serial.prisoner.v1.deserial
+package by.zenkevich_churun.findcell.serial.prisoner.v1.serial
 
 import by.zenkevich_churun.findcell.entity.entity.Prisoner
 import by.zenkevich_churun.findcell.entity.response.LogInResponse

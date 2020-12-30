@@ -1,11 +1,12 @@
-package by.zenkevich_churun.findcell.server.protocol.serial.arest.abstr
+package by.zenkevich_churun.findcell.serial.arest.abstr
 
 import by.zenkevich_churun.findcell.entity.entity.LightArest
-import by.zenkevich_churun.findcell.server.protocol.serial.arest.v1.ArestsSerializer1
+import by.zenkevich_churun.findcell.serial.arest.v1.serial.ArestsSerializer1
 
 
 interface ArestsSerializer {
     fun serialize(arests: List<LightArest>): String
+    fun serialize(arest: LightArest): String
 
 
     companion object {

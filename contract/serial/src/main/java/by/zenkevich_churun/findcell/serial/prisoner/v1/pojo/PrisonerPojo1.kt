@@ -4,7 +4,7 @@ import by.zenkevich_churun.findcell.serial.prisoner.contract.PrisonerContract1
 import by.zenkevich_churun.findcell.entity.entity.Contact
 import by.zenkevich_churun.findcell.entity.entity.Prisoner
 import by.zenkevich_churun.findcell.serial.prisoner.contract.InternalPrisonerContract1
-import by.zenkevich_churun.findcell.serial.util.protocol.ProtocolUtil
+import by.zenkevich_churun.findcell.serial.util.protocol.Base64Util
 import com.google.gson.annotations.SerializedName
 
 
@@ -54,11 +54,11 @@ internal class PrisonerPojo1: Prisoner() {
         get() {
             val base64 = passwordBase64
                 ?: throw NullPointerException("Password hash not specified")
-            return ProtocolUtil.decodeBase64(base64)
+            return Base64Util.decode(base64)
         }
         set(value) {
             passwordBase64 = value?.let {
-                ProtocolUtil.encodeBase64(it)
+                Base64Util.encode(it)
             }
         }
 

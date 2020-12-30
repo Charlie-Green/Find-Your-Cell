@@ -1,11 +1,13 @@
 package by.zenkevich_churun.findcell.server.protocol.controller.arest
 
-import by.zenkevich_churun.findcell.serial.util.protocol.ProtocolUtil
+import by.zenkevich_churun.findcell.serial.arest.abstr.ArestsDeserializer
+import by.zenkevich_churun.findcell.serial.util.protocol.Base64Util
 import by.zenkevich_churun.findcell.server.internal.repo.arest.ArestsRepository
 import by.zenkevich_churun.findcell.server.protocol.di.ServerKoin
 import by.zenkevich_churun.findcell.server.protocol.exc.IllegalServerParameterException
-import by.zenkevich_churun.findcell.server.protocol.serial.arest.abstr.ArestsSerializer
+import by.zenkevich_churun.findcell.serial.arest.abstr.ArestsSerializer
 import org.springframework.web.bind.annotation.*
+import java.io.InputStream
 
 
 @RestController
@@ -16,6 +18,17 @@ class ArestsController {
     }
 
 
+    @PostMapping("/arest/add")
+    fun addArest(istream: InputStream) {
+
+        val arest = ArestsDeserializer
+            .forVersion(1)
+            .deserializeOne(istream)
+
+        // repo.addArest(arest)
+    }
+
+
     @PostMapping("/arest/get")
     fun getArests(
         @RequestParam("v") version: Int,
@@ -23,7 +36,7 @@ class ArestsController {
         @RequestParam("pass") passwordBase64: String
     ): String {
 
-        val passwordHash = ProtocolUtil.decodeBase64(passwordBase64)
+        val passwordHash = Base64Util.decode(passwordBase64)
 
         val arests = try {
             repo.getArests(prisonerId, passwordHash)

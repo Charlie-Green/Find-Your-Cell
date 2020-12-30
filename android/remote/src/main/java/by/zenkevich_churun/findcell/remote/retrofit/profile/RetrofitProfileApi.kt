@@ -1,6 +1,5 @@
 package by.zenkevich_churun.findcell.remote.retrofit.profile
 
-import by.zenkevich_churun.findcell.serial.util.protocol.ProtocolUtil
 import by.zenkevich_churun.findcell.core.api.auth.*
 import by.zenkevich_churun.findcell.entity.entity.Prisoner
 import by.zenkevich_churun.findcell.entity.response.LogInResponse
@@ -9,6 +8,7 @@ import by.zenkevich_churun.findcell.remote.retrofit.common.RetrofitApisUtil
 import by.zenkevich_churun.findcell.remote.retrofit.common.RetrofitHolder
 import by.zenkevich_churun.findcell.serial.prisoner.common.PrisonerDeserializer
 import by.zenkevich_churun.findcell.serial.prisoner.common.PrisonerSerializer
+import by.zenkevich_churun.findcell.serial.util.protocol.Base64Util
 import okhttp3.MediaType
 import okhttp3.RequestBody
 import javax.inject.Inject
@@ -25,7 +25,7 @@ class RetrofitProfileApi @Inject constructor(
         passwordHash: ByteArray
     ): LogInResponse {
 
-        val passwordBase64 = ProtocolUtil.encodeBase64(passwordHash)
+        val passwordBase64 = Base64Util.encode(passwordHash)
 
         val service = retrofit.create(ProfileService::class.java)
         val response = service.logIn(1, username, passwordBase64).execute()
@@ -43,7 +43,7 @@ class RetrofitProfileApi @Inject constructor(
         passwordHash: ByteArray
     ): SignUpResponse {
 
-        val passwordBase64 = ProtocolUtil.encodeBase64(passwordHash)
+        val passwordBase64 = Base64Util.encode(passwordHash)
 
         val service = retrofit.create(ProfileService::class.java)
         val response = service
