@@ -15,7 +15,7 @@ class ArestsListPojo1(
 
         fun wrap(arests: List<LightArest>): ArestsListPojo1 {
             val arestPojos = arests.map { a ->
-                ArestPojo1.from(a)
+                ArestPojo1.from(a, null, null)
             }
             return ArestsListPojo1(arestPojos)
         }

@@ -14,8 +14,12 @@ internal class ArestsSerializer1: ArestsSerializer {
         return ProtocolUtil.toJson(listPojo, 4 + APPROX_BYTES_PER_AREST*arests.size)
     }
 
-    override fun serialize(arest: LightArest): String {
-        val pojo = ArestPojo1.from(arest)
+    override fun serialize(
+        arest: LightArest,
+        prisonerId: Int,
+        passwordHash: ByteArray
+    ): String {
+        val pojo = ArestPojo1.from(arest, prisonerId, passwordHash)
         return ProtocolUtil.toJson(pojo, APPROX_BYTES_PER_AREST)
     }
 

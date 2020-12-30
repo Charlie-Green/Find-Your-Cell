@@ -2,6 +2,7 @@ package by.zenkevich_churun.findcell.server.internal.dao.arest
 
 import by.zenkevich_churun.findcell.server.internal.dao.internal.DatabaseConnection
 import by.zenkevich_churun.findcell.server.internal.entity.table.ArestEntity
+import javax.persistence.PersistenceException
 
 
 class ArestsDao(private val connection: DatabaseConnection) {
@@ -21,6 +22,18 @@ class ArestsDao(private val connection: DatabaseConnection) {
         // TODO: Can this mapping be avoided?
         return q.resultList.map { javaInteger ->
             javaInteger.toInt()
+        }
+    }
+
+    fun add(arest: ArestEntity) {
+        connection.withTransaction { entityMan ->
+            try {
+                entityMan.persist(arest)
+            } catch(exc: PersistenceException) {
+                val notPersistMsg = "Could not persist an ${ArestEntity::class.java}"
+                val idMessage = "Prisoner ID ${arest.prisonerId} is probably invalid"
+                throw IllegalArgumentException("$notPersistMsg. $idMessage")
+            }
         }
     }
 }

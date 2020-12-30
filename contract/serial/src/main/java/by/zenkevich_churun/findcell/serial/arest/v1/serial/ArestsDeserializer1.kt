@@ -18,7 +18,7 @@ internal class ArestsDeserializer1: ArestsDeserializer {
             .arests
     }
 
-    override fun deserializeOne(input: InputStream): LightArest {
+    override fun deserializeOne(input: InputStream): ArestPojo1 {
         return ProtocolUtil.fromJson(input, ArestPojo1::class.java)
     }
 }

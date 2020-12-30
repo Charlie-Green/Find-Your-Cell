@@ -25,7 +25,13 @@ class ArestsController {
             .forVersion(1)
             .deserializeOne(istream)
 
-        // repo.addArest(arest)
+        val prisonerId = arest.prisonerId
+        if(prisonerId == null) {
+            println("Add Arest: prisoner ID not specified")
+            throw IllegalServerParameterException()
+        }
+
+        repo.addArest(arest, prisonerId)
     }
 
 

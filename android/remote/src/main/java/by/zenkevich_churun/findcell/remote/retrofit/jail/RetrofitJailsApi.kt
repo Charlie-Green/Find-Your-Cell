@@ -1,5 +1,6 @@
 package by.zenkevich_churun.findcell.remote.retrofit.jail
 
+import android.util.Log
 import by.zenkevich_churun.findcell.core.api.jail.JailsApi
 import by.zenkevich_churun.findcell.entity.entity.Cell
 import by.zenkevich_churun.findcell.entity.entity.Jail

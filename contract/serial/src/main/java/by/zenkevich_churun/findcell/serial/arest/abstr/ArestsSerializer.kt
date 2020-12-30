@@ -6,7 +6,12 @@ import by.zenkevich_churun.findcell.serial.arest.v1.serial.ArestsSerializer1
 
 interface ArestsSerializer {
     fun serialize(arests: List<LightArest>): String
-    fun serialize(arest: LightArest): String
+
+    fun serialize(
+        arest: LightArest,
+        prisonerId: Int,
+        passwordHash: ByteArray
+    ): String
 
 
     companion object {

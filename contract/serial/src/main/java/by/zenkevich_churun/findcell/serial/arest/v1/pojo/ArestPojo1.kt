@@ -1,11 +1,19 @@
 package by.zenkevich_churun.findcell.serial.arest.v1.pojo
 
 import by.zenkevich_churun.findcell.entity.entity.LightArest
+import by.zenkevich_churun.findcell.entity.entity.Prisoner
+import by.zenkevich_churun.findcell.serial.util.protocol.Base64Util
 import com.google.gson.annotations.SerializedName
 import java.util.Calendar
 
 
 class ArestPojo1: LightArest() {
+
+    @SerializedName("prisoner")
+    var prisonerId: Int? = null
+
+    @SerializedName("pass")
+    var passwordBase64: String? = null
 
     @SerializedName("id")
     override var id: Int = 0
@@ -35,17 +43,29 @@ class ArestPojo1: LightArest() {
 
     companion object {
 
-        fun from(a: LightArest): ArestPojo1 {
+        fun from(
+            a: LightArest,
+            prisonerId: Int?,
+            passwordHash: ByteArray?
+        ): ArestPojo1 {
+
+            val passwordBase64 = passwordHash?.let { Base64Util.encode(it) }
+
             if(a is ArestPojo1) {
+                a.prisonerId = prisonerId
+                a.passwordBase64 = passwordBase64
                 return a
             }
 
-            return ArestPojo1().apply {
-                id          = a.id
-                startMillis = a.start.timeInMillis
-                endMillis   = a.end.timeInMillis
-                jailIds     = a.jailIds
-            }
+            val pojo = ArestPojo1()
+            pojo.prisonerId     = prisonerId
+            pojo.passwordBase64 = passwordBase64
+            pojo.id             = a.id
+            pojo.startMillis    = a.start.timeInMillis
+            pojo.endMillis      = a.end.timeInMillis
+            pojo.jailIds        = a.jailIds
+
+            return pojo
         }
 
         private val LightArest.jailIds: IntArray

@@ -1,7 +1,9 @@
 package by.zenkevich_churun.findcell.server.internal.repo.arest
 
+import by.zenkevich_churun.findcell.entity.entity.LightArest
 import by.zenkevich_churun.findcell.server.internal.dao.arest.ArestsDao
 import by.zenkevich_churun.findcell.server.internal.dao.common.CommonDao
+import by.zenkevich_churun.findcell.server.internal.entity.table.ArestEntity
 import by.zenkevich_churun.findcell.server.internal.entity.view.ArestView
 
 
@@ -21,5 +23,10 @@ class ArestsRepository(
             val jailIds = dao.jailIds(arest.id)
             ArestView(arest, jailIds)
         }
+    }
+
+    fun addArest(arest: LightArest, prisonerId: Int) {
+        val entity = ArestEntity.from(arest, prisonerId)
+        dao.add(entity)
     }
 }
