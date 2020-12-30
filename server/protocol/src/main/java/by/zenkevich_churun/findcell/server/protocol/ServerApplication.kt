@@ -10,8 +10,9 @@ open class ServerApplication: SpringApplication() {
 
     @Configuration
     @PropertySources(
-        PropertySource("classpath:public.properties"),
-        PropertySource("classpath:confidential.properties")
+        // TODO: CharlieDebug: Uncomment
+        PropertySource("classpath:public.properties")/*,
+        PropertySource("classpath:confidential.properties")*/
     )
     open class Config
 }

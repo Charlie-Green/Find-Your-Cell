@@ -8,6 +8,7 @@ import javax.persistence.PersistenceException
 class ArestsDao(private val connection: DatabaseConnection) {
 
     private val queryGetArests = GetArestsQuery()
+    private val queryIntersectArests = GetIntersectingArestsQuery()
     private val queryJailsForArest = JailIdsForArestQuery()
 
 
@@ -16,13 +17,16 @@ class ArestsDao(private val connection: DatabaseConnection) {
         return  q.resultList
     }
 
-    fun arests(
+    fun intersectingArests(
         prisonerId: Int,
         start: Long,
         end: Long
-    ): List<ArestEntity> {
+    ): List<Int> {
 
-        TODO()
+        return queryIntersectArests
+            .getTypedQuery(connection.entityMan, prisonerId, start, end)
+            .resultList
+            .map { javaInteger -> javaInteger.toInt() }  // TODO: Can I get rid of this mapping?
     }
 
     fun jailIds(arestId: Int): List<Int> {

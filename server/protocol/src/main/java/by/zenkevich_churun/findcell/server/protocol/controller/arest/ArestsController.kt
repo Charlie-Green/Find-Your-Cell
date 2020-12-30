@@ -19,7 +19,7 @@ class ArestsController {
 
 
     @PostMapping("/arest/add")
-    fun addArest(istream: InputStream) {
+    fun addArest(istream: InputStream): String {
 
         val arest = ArestsDeserializer
             .forVersion(1)
@@ -33,7 +33,11 @@ class ArestsController {
         }
         val passwordHash = Base64Util.decode(passwordBase64, "add arests")
 
-        repo.addArest(arest, prisonerId, passwordHash)
+        val response = repo.addArest(arest, prisonerId, passwordHash)
+
+        return ArestsSerializer
+            .forVersion(1)
+            .sertialize(response)
     }
 
 
