@@ -16,6 +16,15 @@ class ArestsDao(private val connection: DatabaseConnection) {
         return  q.resultList
     }
 
+    fun arests(
+        prisonerId: Int,
+        start: Long,
+        end: Long
+    ): List<ArestEntity> {
+
+        TODO()
+    }
+
     fun jailIds(arestId: Int): List<Int> {
         val q = queryJailsForArest.getTypedQuery(connection.entityMan, arestId)
 

@@ -1,6 +1,7 @@
 package by.zenkevich_churun.findcell.serial.arest.abstr
 
 import by.zenkevich_churun.findcell.entity.entity.LightArest
+import by.zenkevich_churun.findcell.entity.response.CreateOrUpdateArestResponse
 import by.zenkevich_churun.findcell.serial.arest.v1.serial.ArestsSerializer1
 
 
@@ -12,6 +13,8 @@ interface ArestsSerializer {
         prisonerId: Int,
         passwordHash: ByteArray
     ): String
+
+    fun sertialize(response: CreateOrUpdateArestResponse): String
 
 
     companion object {

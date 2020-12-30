@@ -1,6 +1,7 @@
 package by.zenkevich_churun.findcell.serial.arest.v1.serial
 
 import by.zenkevich_churun.findcell.entity.entity.LightArest
+import by.zenkevich_churun.findcell.entity.response.CreateOrUpdateArestResponse
 import by.zenkevich_churun.findcell.serial.arest.abstr.ArestsSerializer
 import by.zenkevich_churun.findcell.serial.arest.v1.pojo.ArestPojo1
 import by.zenkevich_churun.findcell.serial.arest.v1.pojo.ArestsListPojo1
@@ -21,6 +22,24 @@ internal class ArestsSerializer1: ArestsSerializer {
     ): String {
         val pojo = ArestPojo1.from(arest, prisonerId, passwordHash)
         return ProtocolUtil.toJson(pojo, APPROX_BYTES_PER_AREST)
+    }
+
+    override fun sertialize(response: CreateOrUpdateArestResponse): String {
+        return when(response) {
+            is CreateOrUpdateArestResponse.ArestsIntersect -> {
+                return "I${response.intersectedId}"
+            }
+
+            is CreateOrUpdateArestResponse.Success -> {
+                return "S${response.arestId}"
+            }
+
+            else -> {
+                throw IllegalArgumentException(
+                    "Unknown response ${response.javaClass.simpleName}"
+                )
+            }
+        }
     }
 
 

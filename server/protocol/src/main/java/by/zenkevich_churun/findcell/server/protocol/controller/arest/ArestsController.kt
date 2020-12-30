@@ -26,12 +26,14 @@ class ArestsController {
             .deserializeOne(istream)
 
         val prisonerId = arest.prisonerId
-        if(prisonerId == null) {
-            println("Add Arest: prisoner ID not specified")
+        val passwordBase64 = arest.passwordBase64
+        if(prisonerId == null || passwordBase64 == null) {
+            println("Add Arest: credentials not specified")
             throw IllegalServerParameterException()
         }
+        val passwordHash = Base64Util.decode(passwordBase64, "add arests")
 
-        repo.addArest(arest, prisonerId)
+        repo.addArest(arest, prisonerId, passwordHash)
     }
 
 
