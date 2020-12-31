@@ -45,6 +45,10 @@ class ArestsFragment: Fragment(R.layout.arests_fragm) {
     }
 
 
+    private val adapter
+        get() = recvArests.adapter as ArestsAdapter
+
+
     private fun initFields() {
         val appContext = requireContext().applicationContext
         vm = ArestsViewModel.get(appContext, this)
@@ -102,6 +106,16 @@ class ArestsFragment: Fragment(R.layout.arests_fragm) {
                     getString(R.string.network_error_msg)
                 )
 
+                vm.notifyAddOrUpdateStateConsumed()
+            }
+
+            is CreateOrUpdateArestState.Created -> {
+                adapter.notifyItemInserted(state.position)
+                vm.notifyAddOrUpdateStateConsumed()
+            }
+
+            is CreateOrUpdateArestState.Updated -> {
+                adapter.notifyItemMoved(state.oldPosition, state.newPosition)
                 vm.notifyAddOrUpdateStateConsumed()
             }
         }

@@ -75,9 +75,8 @@ class ArestsViewModel @Inject constructor(
     fun notifyAddOrUpdateStateConsumed() {
         val state = mldAddState.value
 
-        if(state is CreateOrUpdateArestState.NoInternet ||
-            state is CreateOrUpdateArestState.NetworkError ||
-            state is CreateOrUpdateArestState.ArestsIntersectError ) {
+        if(state !is CreateOrUpdateArestState.Idle &&
+            state !is CreateOrUpdateArestState.Loading ) {
 
             mldAddState.value = CreateOrUpdateArestState.Idle
         }

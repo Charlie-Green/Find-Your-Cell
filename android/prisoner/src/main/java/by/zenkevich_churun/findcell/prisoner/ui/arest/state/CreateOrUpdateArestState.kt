@@ -18,8 +18,12 @@ sealed class CreateOrUpdateArestState {
         val intersectedEnd:   Calendar
     ): CreateOrUpdateArestState()
 
-    class Success(
-        val operationCreate: Boolean,
-        val listPosition: Int
+    class Created(
+        val position: Int
+    ): CreateOrUpdateArestState()
+
+    class Updated(
+        val oldPosition: Int,
+        val newPosition: Int
     ): CreateOrUpdateArestState()
 }

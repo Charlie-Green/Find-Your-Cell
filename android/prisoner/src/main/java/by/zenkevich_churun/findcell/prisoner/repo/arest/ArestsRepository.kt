@@ -23,6 +23,8 @@ class ArestsRepository @Inject constructor(
     private val jailsApi: JailsApi,
     private val prisonerStore: PrisonerStorage ) {
 
+    private var arests: List<Arest>? = null
+
 
     fun arestsList(): GetArestsResult {
         val prisoner = prisonerStore.prisonerLD.value
@@ -37,7 +39,12 @@ class ArestsRepository @Inject constructor(
             return GetArestsResult.NetworkError
         }
 
-        val arests = mapArests(lightArests, jails, jailsResult.cached)
+        val arests = mapArests(lightArests, jails, jailsResult.cached).also {
+            synchronized(this) {
+                this.arests = it
+            }
+        }
+
         return GetArestsResult.Success(arests)
     }
 
