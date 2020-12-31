@@ -6,7 +6,6 @@ import by.zenkevich_churun.findcell.core.api.arest.ArestsApi
 import by.zenkevich_churun.findcell.core.api.jail.JailsApi
 import by.zenkevich_churun.findcell.entity.entity.Arest
 import by.zenkevich_churun.findcell.entity.entity.Jail
-import by.zenkevich_churun.findcell.entity.entity.LightArest
 import by.zenkevich_churun.findcell.prisoner.db.JailsDatabase
 import by.zenkevich_churun.findcell.prisoner.db.entity.JailEntity
 import by.zenkevich_churun.findcell.prisoner.repo.common.PrisonerStorage
@@ -29,8 +28,8 @@ class ArestsRepository @Inject constructor(
     fun arestsList(): GetArestsResult {
         val prisoner = prisonerStore.prisonerLD.value
             ?: return GetArestsResult.NotAuthorized
-        val jailsResult = jailsList(true)
-        val jails = jailsResult.jails ?: return GetArestsResult.NetworkError
+        var jailsResult = jailsList(true)
+        var jails = jailsResult.jails ?: return GetArestsResult.NetworkError
 
         val lightArests = try {
             arestsApi.get(prisoner.id, prisoner.passwordHash)
@@ -39,13 +38,18 @@ class ArestsRepository @Inject constructor(
             return GetArestsResult.NetworkError
         }
 
-        val arests = mapArests(lightArests, jails, jailsResult.cached).also {
-            synchronized(this) {
-                this.arests = it
-            }
+        if( jailsResult.cached &&
+            !ArestsMapper.areAllJailsPresent(lightArests, jails) ) {
+
+            // Jails were fetched from cache, but some Jails are missing.
+            // Thus, the cache is outdated. Force to fetch Jails from the server.
+            jailsResult = jailsList(false)
+            jails = jailsResult.jails ?: jails
         }
 
-        return GetArestsResult.Success(arests)
+        val arests = ArestsMapper.map(lightArests, jails)
+        ArestsCache.submit(arests)
+        return GetArestsResult.Success( ArestsCache.cachedList )
     }
 
 
@@ -65,7 +69,7 @@ class ArestsRepository @Inject constructor(
         val fetched = try {
             jailsApi.jailsList()
         } catch(exc: IOException) {
-            Log.w(LOGTAG, "Failed to fetche jails list: ${exc.javaClass.name}: ${exc.message}")
+            Log.w(LOGTAG, "Failed to fetch jails list: ${exc.javaClass.name}: ${exc.message}")
             return JailsListResult(null, false)
         }
 
@@ -75,46 +79,6 @@ class ArestsRepository @Inject constructor(
         dao.addOrUpdate(entities)
 
         return JailsListResult(entities, false)
-    }
-
-    private fun mapArests(
-        lightArests: List<LightArest>,
-        jailsList: List<Jail>,
-        jailsCached: Boolean
-    ): List<Arest> {
-
-        val arests = mutableListOf<Arest>()
-        var jails = jailsList
-        var cached = jailsCached
-
-        for(la in lightArests) {
-
-            var arest = Arest.from(la, jails)
-
-            if(arest == null && cached) {
-                Log.w(LOGTAG, "Missing a Jail for arest ID ${la.id}. Trying to update cache.")
-
-                // Some Jail is missing in the cache.
-                // Try to update the cache (FORCE a network call now):
-                jails = jailsList(false).jails ?: jails
-                cached = false
-
-                // Cache is updated (or just simply can't be updated).
-                // Try once again:
-                arest = Arest.from(la, jails)
-            }
-
-            if(arest == null) {
-                // The jails list is already up-to-date, or can't be updated,
-                // or updating it didn't change anything. Skip this arest.
-                Log.w(LOGTAG, "Skip arest of ID ${la.id}: missing a Jail.")
-                continue
-            }
-
-            arests.add(arest)
-        }
-
-        return arests
     }
 
 
