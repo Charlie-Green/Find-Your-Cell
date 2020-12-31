@@ -1,9 +1,19 @@
 package by.zenkevich_churun.findcell.prisoner.ui.arest.fragm
 
+import android.annotation.SuppressLint
 import by.zenkevich_churun.findcell.entity.entity.Jail
+import java.text.DateFormat
+import java.text.SimpleDateFormat
+import java.util.*
 
 
+@SuppressLint("SimpleDateFormat")
 internal object ArestUiUtil {
+
+    private val dateFormat: DateFormat by lazy {
+        SimpleDateFormat("dd.MM.yyyy")
+    }
+
 
     fun jailsText(jails: Collection<Jail>): String {
         if(jails.isEmpty()) {
@@ -27,5 +37,10 @@ internal object ArestUiUtil {
         }
 
         return sb.toString()
+    }
+
+
+    fun format(cal: Calendar): String {
+        return dateFormat.format(cal.time)
     }
 }

@@ -47,7 +47,7 @@ class ArestsAdapter(
         }
 
         private fun formatDate(cal: Calendar): String {
-            return dateFormat.format(cal.time)
+            return ArestUiUtil.format(cal)
         }
     }
 
@@ -71,11 +71,5 @@ class ArestsAdapter(
     fun submitList(list: List<Arest>) {
         arests = list
         notifyDataSetChanged()
-    }
-
-
-    companion object {
-        @SuppressLint("SimpleDateFormat")  // Only digits, so no need for Locale.
-        private val dateFormat = SimpleDateFormat("dd.MM.yyyy")
     }
 }

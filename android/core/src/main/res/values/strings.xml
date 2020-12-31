@@ -14,5 +14,8 @@
 
     <string name="error_title">Ошибка</string>
     <string name="no_internet_title">Нет интернета</string>
+    <string name="network_error_msg">
+        Возникла ошибка сети. Возможно, Ваше интернет-соединение нестабильно.
+    </string>
 
 </resources>

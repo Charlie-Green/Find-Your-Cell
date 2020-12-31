@@ -11,12 +11,6 @@ sealed class ArestsListState {
 
     object Idle: ArestsListState()
     object Loading: ArestsListState()
-
-    class NetworkError: ArestsListState() {
-        var consumed = false
-    }
-
-    class NoInternet: ArestsListState() {
-        var consumed = false
-    }
+    object NetworkError: ArestsListState()
+    object NoInternet: ArestsListState()
 }

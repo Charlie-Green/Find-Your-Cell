@@ -7,6 +7,7 @@ import by.zenkevich_churun.findcell.entity.entity.Arest
 import by.zenkevich_churun.findcell.prisoner.repo.arest.ArestsRepository
 import by.zenkevich_churun.findcell.prisoner.repo.arest.GetArestsResult
 import by.zenkevich_churun.findcell.prisoner.ui.arest.state.ArestsListState
+import by.zenkevich_churun.findcell.prisoner.ui.arest.state.CreateOrUpdateArestState
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -20,14 +21,23 @@ class ArestsViewModel @Inject constructor(
     private val mldListState = MutableLiveData<ArestsListState>().apply {
         value = ArestsListState.Idle
     }
+    private val mldAddState = MutableLiveData<CreateOrUpdateArestState>().apply {
+        value = CreateOrUpdateArestState.Idle
+    }
     private val mldOpenedArest = MutableLiveData<Arest?>()
 
 
     val listStateLD: LiveData<ArestsListState>
         get() = mldListState
 
+    val addOrUpdateStateLD: LiveData<CreateOrUpdateArestState>
+        get() = mldAddState
+
     val openedArestLD: LiveData<Arest?>
         get() = mldOpenedArest
+
+    val loadingLD: LiveData<Boolean>
+        = ArestLoadingMediatorLiveData(listStateLD, addOrUpdateStateLD)
 
 
     fun loadData() {
@@ -35,7 +45,7 @@ class ArestsViewModel @Inject constructor(
             return
         }
         if(!netTracker.isInternetAvailable) {
-            mldListState.value = ArestsListState.NoInternet()
+            mldListState.value = ArestsListState.NoInternet
         }
 
         netTracker.doOnAvailable(this::loadDataInternal)
@@ -50,6 +60,27 @@ class ArestsViewModel @Inject constructor(
 
     fun notifyScheduleOpened() {
         mldOpenedArest.value = null
+    }
+
+
+    fun notifyListStateConsumed() {
+        val state = mldListState.value
+
+        if(state is ArestsListState.NoInternet ||
+            state is ArestsListState.NetworkError) {
+            mldListState.value = ArestsListState.Idle
+        }
+    }
+
+    fun notifyAddOrUpdateStateConsumed() {
+        val state = mldAddState.value
+
+        if(state is CreateOrUpdateArestState.NoInternet ||
+            state is CreateOrUpdateArestState.NetworkError ||
+            state is CreateOrUpdateArestState.ArestsIntersectError ) {
+
+            mldAddState.value = CreateOrUpdateArestState.Idle
+        }
     }
 
 
@@ -80,7 +111,7 @@ class ArestsViewModel @Inject constructor(
             }
 
             is GetArestsResult.NetworkError -> {
-                mldListState.postValue( ArestsListState.NetworkError() )
+                mldListState.postValue( ArestsListState.NetworkError )
             }
 
             is GetArestsResult.NotAuthorized -> {
