@@ -6,8 +6,14 @@ import javax.persistence.EntityManager
 
 
 internal class GetIntersectingArestsQuery: LazyTypedQuery<java.lang.Integer>(
-    "select id from ${ArestEntity::class.java.simpleName} a where ('prisoner' = ?2) and not ('end' <= ?0 or 'start' >= ?1)",
+
+    // A intersects B  <=>  (A.start between B.start and B.end) or (B.start between A.start and A.end)
+    // Don't use between because it's inclusive (need exclusive compare)
+    "select id from ${ArestEntity::class.java.simpleName} a "+
+    "where ('prisoner' = ?0) and ( ('start' > ?1 and 'start' < ?2) or (?1 > 'start' and ?1 < 'end') )",
+
     java.lang.Integer::class.java ) {
+
 
     fun getTypedQuery(
         entityMan: EntityManager,
@@ -16,10 +22,9 @@ internal class GetIntersectingArestsQuery: LazyTypedQuery<java.lang.Integer>(
         end: Long
     ) = getTypedQuery(entityMan).apply {
 
-        // Note 1. A !intersects B  <=>  (A.end <= B.start) || (A.start >= B.end)
-        // Note 2. Have to write toString() - otherwise get "Parameter doesn't match expected type" error.
-        setParameter(0, start.toString())
-        setParameter(1, end.toString())
-        setParameter(2, prisonerId.toString())
+        // Have to write toString() - otherwise get "Parameter doesn't match expected type" error.
+        setParameter(0, prisonerId.toString())
+        setParameter(1, start.toString())
+        setParameter(2, end.toString())
     }
 }
