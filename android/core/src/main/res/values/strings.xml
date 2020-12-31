@@ -8,6 +8,7 @@
     <string name="add">Добавить</string>
     <string name="save">Сохранить</string>
     <string name="replace">Заменить</string>
+    <string name="retry">Ещё раз</string>
     <string name="delete">Удалить</string>
     <string name="delete_yes">Удалить</string>
     <string name="delete_no">Оставить</string>

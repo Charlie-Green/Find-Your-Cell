@@ -40,14 +40,14 @@ class ArestsViewModel @Inject constructor(
         = ArestLoadingMediatorLiveData(listStateLD, addOrUpdateStateLD)
 
 
-    fun loadData() {
-        if(mldListState.value !is ArestsListState.Idle) {
+    fun loadData(isRetrying: Boolean) {
+        if( !isStateAppropriateToLoadData(isRetrying) ) {
             return
         }
-        if(!netTracker.isInternetAvailable) {
-            mldListState.value = ArestsListState.NoInternet
-        }
 
+        if(!netTracker.isInternetAvailable) {
+            mldListState.value = ArestsListState.NoInternet()
+        }
         netTracker.doOnAvailable(this::loadDataInternal)
     }
 
@@ -63,26 +63,6 @@ class ArestsViewModel @Inject constructor(
     }
 
 
-    fun notifyListStateConsumed() {
-        val state = mldListState.value
-
-        if(state is ArestsListState.NoInternet ||
-            state is ArestsListState.NetworkError) {
-            mldListState.value = ArestsListState.Idle
-        }
-    }
-
-    fun notifyAddOrUpdateStateConsumed() {
-        val state = mldAddState.value
-
-        if(state !is CreateOrUpdateArestState.Idle &&
-            state !is CreateOrUpdateArestState.Loading ) {
-
-            mldAddState.value = CreateOrUpdateArestState.Idle
-        }
-    }
-
-
     private val arests: List<Arest>?
         get() {
             val state = mldListState.value
@@ -92,6 +72,17 @@ class ArestsViewModel @Inject constructor(
 
             return state.arests
         }
+
+    private fun isStateAppropriateToLoadData(isRetrying: Boolean): Boolean {
+            val state = mldListState.value ?: return true
+            return when(state) {
+                is ArestsListState.Idle         -> true
+                is ArestsListState.NoInternet   -> false
+                is ArestsListState.NetworkError -> isRetrying && state.notified
+                else                            -> false
+            }
+        }
+
 
     private fun loadDataInternal() {
         mldListState.value = ArestsListState.Loading
@@ -110,7 +101,7 @@ class ArestsViewModel @Inject constructor(
             }
 
             is GetArestsResult.NetworkError -> {
-                mldListState.postValue( ArestsListState.NetworkError )
+                mldListState.postValue( ArestsListState.NetworkError() )
             }
 
             is GetArestsResult.NotAuthorized -> {

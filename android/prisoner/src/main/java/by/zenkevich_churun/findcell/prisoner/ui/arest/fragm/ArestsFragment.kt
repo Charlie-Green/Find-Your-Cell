@@ -2,8 +2,10 @@ package by.zenkevich_churun.findcell.prisoner.ui.arest.fragm
 
 import android.content.DialogInterface
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import androidx.appcompat.app.AlertDialog
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
@@ -29,7 +31,7 @@ class ArestsFragment: Fragment(R.layout.arests_fragm) {
         initFields()
         initRecycler()
 
-        vm.loadData()
+        vm.loadData(false)
         vm.listStateLD.observe(viewLifecycleOwner, Observer { state ->
             renderState(state)
         })
@@ -38,6 +40,9 @@ class ArestsFragment: Fragment(R.layout.arests_fragm) {
                 openSchedule(id)
                 vm.notifyScheduleOpened()
             }
+        })
+        vm.loadingLD.observe(viewLifecycleOwner, Observer { loading ->
+            prBar.isVisible = loading
         })
 
         fabAdd.setOnClickListener { addArest() }
@@ -62,20 +67,39 @@ class ArestsFragment: Fragment(R.layout.arests_fragm) {
 
     private fun renderState(state: ArestsListState) {
         when(state) {
+            is ArestsListState.Loading -> {
+                vlltError.visibility = View.GONE
+                // ProgressBar visibility is set in a standalone Observer.
+            }
+
             is ArestsListState.Loaded -> {
+                vlltError.visibility = View.GONE
+
                 val adapter = recvArests.adapter as ArestsAdapter
                 adapter.submitList(state.arests)
             }
 
             is ArestsListState.NoInternet -> {
-                notifyError(R.string.no_internet_title, R.string.arests_need_internet_msg) {
-                    vm.notifyListStateConsumed()
+                vlltError.visibility = View.VISIBLE
+                buRetry.visibility = View.GONE
+
+                if(!state.notified) {
+                    notifyError(R.string.no_internet_title, R.string.arests_need_internet_msg) {
+                        state.notified = true
+                    }
                 }
             }
 
             is ArestsListState.NetworkError -> {
-                notifyError(R.string.error_title, R.string.get_arests_failed_msg) {
-                    vm.notifyListStateConsumed()
+                vlltError.visibility = View.VISIBLE
+                buRetry.visibility = View.VISIBLE
+
+                if(!state.notified) {
+                    notifyListStateNetworkError(state)
+                }
+
+                buRetry.setOnClickListener {
+                    vm.loadData(true)
                 }
             }
         }
@@ -84,41 +108,59 @@ class ArestsFragment: Fragment(R.layout.arests_fragm) {
     private fun renderState(state: CreateOrUpdateArestState) {
         when(state) {
             is CreateOrUpdateArestState.ArestsIntersectError -> {
-                val msg = getString(
-                    R.string.arests_intersect_msg,
-                    ArestUiUtil.format(state.intersectedStart),
-                    ArestUiUtil.format(state.intersectedEnd)
-                )
-                notifyCreateOrUpdateError(state.operationCreate, msg)
-
-                vm.notifyAddOrUpdateStateConsumed()
+                if(!state.notified) {
+                    notifyArestsIntersect(state)
+                }
             }
 
             is CreateOrUpdateArestState.NoInternet -> {
-                notifyError(R.string.no_internet_title, R.string.arests_need_internet_msg) {
-                    vm.notifyAddOrUpdateStateConsumed()
+                if(!state.notified) {
+                    notifyError(R.string.no_internet_title, R.string.arests_need_internet_msg) {
+                        state.notified = true
+                    }
                 }
             }
 
             is CreateOrUpdateArestState.NetworkError -> {
-                notifyCreateOrUpdateError(
-                    state.operationCreate,
-                    getString(R.string.network_error_msg)
-                )
-
-                vm.notifyAddOrUpdateStateConsumed()
+                if(!state.notified) {
+                    notifyCreateOrUpdateError(
+                        state.operationCreate,
+                        getString(R.string.network_error_msg)
+                    )
+                    state.notified = true
+                }
             }
 
             is CreateOrUpdateArestState.Created -> {
-                adapter.notifyItemInserted(state.position)
-                vm.notifyAddOrUpdateStateConsumed()
+                if(!state.notified) {
+                    adapter.notifyItemInserted(state.position)
+                    state.notified = true
+                }
             }
 
             is CreateOrUpdateArestState.Updated -> {
-                adapter.notifyItemMoved(state.oldPosition, state.newPosition)
-                vm.notifyAddOrUpdateStateConsumed()
+                if(!state.notified) {
+                    adapter.notifyItemMoved(state.oldPosition, state.newPosition)
+                    state.notified = true
+                }
+
             }
         }
+    }
+
+    private fun notifyListStateNetworkError(state: ArestsListState.NetworkError) {
+        notifyError(R.string.error_title, R.string.get_arests_failed_msg) {
+            state.notified = true
+        }
+    }
+
+    private fun notifyArestsIntersect(state: CreateOrUpdateArestState.ArestsIntersectError) {
+        val msg = getString(
+            R.string.arests_intersect_msg,
+            ArestUiUtil.format(state.intersectedStart),
+            ArestUiUtil.format(state.intersectedEnd)
+        )
+        notifyCreateOrUpdateError(state.operationCreate, msg)
     }
 
 
@@ -155,8 +197,6 @@ class ArestsFragment: Fragment(R.layout.arests_fragm) {
             .setMessage(message)
             .setPositiveButton(R.string.ok) { dialog, _ ->
                 dialog.dismiss()
-            }.setOnDismissListener {
-                vm.notifyAddOrUpdateStateConsumed()
             }.show()
     }
 
