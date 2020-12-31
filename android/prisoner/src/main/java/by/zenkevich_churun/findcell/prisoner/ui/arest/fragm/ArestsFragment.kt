@@ -218,6 +218,6 @@ class ArestsFragment: Fragment(R.layout.arests_fragm) {
     }
 
     private fun onArestDateRangeSelected(start: Long, end: Long) {
-       // TODO
+       vm.addArest(start, end)
     }
 }

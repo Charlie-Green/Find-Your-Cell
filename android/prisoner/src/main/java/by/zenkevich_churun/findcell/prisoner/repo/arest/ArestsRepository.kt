@@ -6,11 +6,14 @@ import by.zenkevich_churun.findcell.core.api.arest.ArestsApi
 import by.zenkevich_churun.findcell.core.api.jail.JailsApi
 import by.zenkevich_churun.findcell.entity.entity.Arest
 import by.zenkevich_churun.findcell.entity.entity.Jail
+import by.zenkevich_churun.findcell.entity.response.CreateOrUpdateArestResponse
 import by.zenkevich_churun.findcell.prisoner.db.JailsDatabase
 import by.zenkevich_churun.findcell.prisoner.db.entity.JailEntity
+import by.zenkevich_churun.findcell.prisoner.repo.common.ExtendedPrisoner
 import by.zenkevich_churun.findcell.prisoner.repo.common.PrisonerStorage
 import dagger.hilt.android.qualifiers.ApplicationContext
 import java.io.IOException
+import java.util.*
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -28,6 +31,7 @@ class ArestsRepository @Inject constructor(
     fun arestsList(): GetArestsResult {
         val prisoner = prisonerStore.prisonerLD.value
             ?: return GetArestsResult.NotAuthorized
+
         var jailsResult = jailsList(true)
         var jails = jailsResult.jails ?: return GetArestsResult.NetworkError
 
@@ -50,6 +54,48 @@ class ArestsRepository @Inject constructor(
         val arests = ArestsMapper.map(lightArests, jails)
         ArestsCache.submit(arests)
         return GetArestsResult.Success( ArestsCache.cachedList )
+    }
+
+
+    /** @return a pair of (response; int) where:
+      *         - response notifies if the call succeeded;
+      *         - int is list position of the newly created [Arest],
+      *                 or any integer if the call failed., **/
+    fun addArest(
+        start: Long,
+        end: Long
+    ): Pair<CreateOrUpdateArestResponse, Int> {
+
+        val prisoner = prisonerStore.prisonerLD.value
+            ?: throw IllegalStateException("Not authorized")
+
+        val startCal = Calendar.getInstance().apply { timeInMillis = start }
+        val endCal   = Calendar.getInstance().apply { timeInMillis = end }
+
+        val response = try {
+            arestsApi.create(
+                prisoner.id,
+                prisoner.passwordHash,
+                startCal,
+                endCal
+            )
+        } catch(exc: IOException) {
+            return Pair(CreateOrUpdateArestResponse.NetworkError, -1)
+        }
+
+        if(response !is CreateOrUpdateArestResponse.Success) {
+            return Pair(response, -1)
+        }
+
+        val arest = Arest(
+            response.arestId,
+            startCal,
+            endCal,
+            listOf()  // Jails list is empty because the Arest was just created.
+        )
+        val position = ArestsCache.insert(arest)
+
+        return Pair(response, position)
     }
 
 
