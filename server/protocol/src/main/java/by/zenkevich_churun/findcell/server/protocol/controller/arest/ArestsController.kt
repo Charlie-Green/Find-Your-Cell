@@ -31,9 +31,14 @@ class ArestsController {
             println("Add Arest: credentials not specified")
             throw IllegalServerParameterException()
         }
-        val passwordHash = Base64Util.decode(passwordBase64, "add arests")
 
-        val response = repo.addArest(arest, prisonerId, passwordHash)
+        val response = try{
+            val passwordHash = Base64Util.decode(passwordBase64, "add arests")
+            repo.addArest(arest, prisonerId, passwordHash)
+        } catch(exc: IllegalArgumentException) {
+            println(exc.message)
+            throw IllegalServerParameterException()
+        }
 
         return ArestsSerializer
             .forVersion(1)

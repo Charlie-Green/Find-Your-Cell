@@ -34,17 +34,20 @@ class ArestsRepository(
 
         commonDao.validateCredentials(prisonerId, passwordHash)
 
+        ArestsUtil.validate(arest)
+        val entity = ArestEntity.from(arest, prisonerId)
+        ArestsUtil.normalize(entity)
+
         val intersectingArests = dao.intersectingArests(
             prisonerId,
-            arest.start.timeInMillis,
-            arest.end.timeInMillis
+            entity.start,
+            entity.end
         )
         if(!intersectingArests.isEmpty()) {
             val id = intersectingArests[0]
             return CreateOrUpdateArestResponse.ArestsIntersect(id)
         }
 
-        val entity = ArestEntity.from(arest, prisonerId)
         dao.add(entity)
         println("Assigned id ${entity.id}")
         return CreateOrUpdateArestResponse.Success(entity.id)
