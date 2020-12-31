@@ -41,6 +41,9 @@ class ArestsFragment: Fragment(R.layout.arests_fragm) {
                 vm.notifyScheduleOpened()
             }
         })
+        vm.addOrUpdateStateLD.observe(viewLifecycleOwner, Observer { state ->
+            renderState(state)
+        })
         vm.loadingLD.observe(viewLifecycleOwner, Observer { loading ->
             prBar.isVisible = loading
         })
@@ -66,6 +69,8 @@ class ArestsFragment: Fragment(R.layout.arests_fragm) {
 
 
     private fun renderState(state: ArestsListState) {
+        fabAdd.isVisible = state is ArestsListState.Loaded
+
         when(state) {
             is ArestsListState.Loading -> {
                 vlltError.visibility = View.GONE
@@ -82,6 +87,7 @@ class ArestsFragment: Fragment(R.layout.arests_fragm) {
             is ArestsListState.NoInternet -> {
                 vlltError.visibility = View.VISIBLE
                 buRetry.visibility = View.GONE
+                txtvError.setText(R.string.arests_need_internet_msg)
 
                 if(!state.notified) {
                     notifyError(R.string.no_internet_title, R.string.arests_need_internet_msg) {
@@ -93,6 +99,7 @@ class ArestsFragment: Fragment(R.layout.arests_fragm) {
             is ArestsListState.NetworkError -> {
                 vlltError.visibility = View.VISIBLE
                 buRetry.visibility = View.VISIBLE
+                txtvError.setText(R.string.get_arests_failed_msg)
 
                 if(!state.notified) {
                     notifyListStateNetworkError(state)
@@ -126,8 +133,7 @@ class ArestsFragment: Fragment(R.layout.arests_fragm) {
                     notifyCreateOrUpdateError(
                         state.operationCreate,
                         getString(R.string.network_error_msg)
-                    )
-                    state.notified = true
+                    ) { state.notified = true }
                 }
             }
 
@@ -160,7 +166,10 @@ class ArestsFragment: Fragment(R.layout.arests_fragm) {
             ArestUiUtil.format(state.intersectedStart),
             ArestUiUtil.format(state.intersectedEnd)
         )
-        notifyCreateOrUpdateError(state.operationCreate, msg)
+
+        notifyCreateOrUpdateError(state.operationCreate, msg) {
+            state.notified = true
+        }
     }
 
 
@@ -186,7 +195,8 @@ class ArestsFragment: Fragment(R.layout.arests_fragm) {
 
     private fun notifyCreateOrUpdateError(
         operationCreate: Boolean,
-        message: String ) {
+        message: String,
+        onDismiss: (DialogInterface) -> Unit ) {
 
         val titleRes =
             if(operationCreate) R.string.add_arest_failed_title
@@ -197,7 +207,8 @@ class ArestsFragment: Fragment(R.layout.arests_fragm) {
             .setMessage(message)
             .setPositiveButton(R.string.ok) { dialog, _ ->
                 dialog.dismiss()
-            }.show()
+            }.setOnDismissListener(onDismiss)
+            .show()
     }
 
 
@@ -218,6 +229,7 @@ class ArestsFragment: Fragment(R.layout.arests_fragm) {
     }
 
     private fun onArestDateRangeSelected(start: Long, end: Long) {
+        Log.v("CharlieDebug", "addArest($start; $end)")
        vm.addArest(start, end)
     }
 }

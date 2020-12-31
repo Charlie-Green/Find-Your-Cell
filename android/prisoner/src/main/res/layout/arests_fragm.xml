@@ -24,13 +24,13 @@
         android:visibility="gone" >
 
         <TextView
+            android:id="@+id/txtvError"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="8dp"
             android:gravity="center_horizontal"
             android:textColor="?android:textColorSecondary"
-            android:textSize="12sp"
-            android:text="@string/get_arests_failed_msg" />
+            android:textSize="12sp" />
 
         <Button
             android:id="@+id/buRetry"
@@ -55,7 +55,8 @@
         android:layout_margin="16dp"
         app:fabCustomSize="48dp"
         android:src="@drawable/ic_add"
-        android:tint="#f0f0f0" />
+        android:tint="#f0f0f0"
+        android:visibility="gone" />
 
     <ProgressBar
         android:id="@+id/prBar"

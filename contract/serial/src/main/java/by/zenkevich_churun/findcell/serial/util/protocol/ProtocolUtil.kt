@@ -14,8 +14,8 @@ internal object ProtocolUtil {
     ): String {
 
         val ostream = ByteArrayOutputStream(initialBufferSize)
-        val printWriter = PrintWriter(ostream, false, CommonContract1.ENCODING)
-        val jsonWriter = JsonWriter(printWriter)
+        val streamWriter = OutputStreamWriter(ostream, CommonContract1.ENCODING)
+        val jsonWriter = JsonWriter(streamWriter)
 
         Gson().toJson(pojo, pojo.javaClass, jsonWriter)
         jsonWriter.flush()

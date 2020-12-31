@@ -13,7 +13,8 @@ internal class GetIntersectingArestsQuery: LazyTypedQuery<java.lang.Integer>(
         "(a.start > ?1 and a.start < ?2) " +    // - A.start between B.start and B.end
         "or (?1 > a.start and ?1 < a.end) " +   // - B.start between A.start and A.end
         "or (a.end > ?1 and a.end < ?2) " +     // - A.end   between B.start and B.end
-        "or (?2 > a.start and ?2 < a.end)" +    // - B.end   between A.start and A.end
+        "or (?2 > a.start and ?2 < a.end) " +   // - B.end   between A.start and A.end
+        "or (a.start = ?1 and a.end = ?2)" +    // - A equals B
     ")",
 
     java.lang.Integer::class.java ) {

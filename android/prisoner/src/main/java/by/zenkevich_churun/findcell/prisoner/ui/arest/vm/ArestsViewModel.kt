@@ -1,6 +1,7 @@
 package by.zenkevich_churun.findcell.prisoner.ui.arest.vm
 
 import android.content.Context
+import android.util.Log
 import androidx.lifecycle.*
 import by.zenkevich_churun.findcell.core.injected.web.NetworkStateTracker
 import by.zenkevich_churun.findcell.entity.entity.Arest
@@ -53,6 +54,8 @@ class ArestsViewModel @Inject constructor(
     }
 
     fun addArest(start: Long, end: Long) {
+        val arests = this.arests ?: return
+
         if(!netTracker.isInternetAvailable) {
             mldAddState.value = CreateOrUpdateArestState.NoInternet()
             return
@@ -61,7 +64,7 @@ class ArestsViewModel @Inject constructor(
         mldAddState.value = CreateOrUpdateArestState.Loading
         viewModelScope.launch(Dispatchers.IO) {
             val response = repo.addArest(start, end)
-            applyResponse(response.first, null, response.second)
+            applyResponse(arests, response.first, null, response.second)
         }
     }
 
@@ -126,9 +129,12 @@ class ArestsViewModel @Inject constructor(
     }
 
     private fun applyResponse(
+        arests: List<Arest>,
         response: CreateOrUpdateArestResponse,
         oldPosition: Int?,
         newPosition: Int ) {
+
+        Log.v("CharlieDebug", "Response = ${response.javaClass.simpleName}, position = $newPosition")
 
         when(response) {
             is CreateOrUpdateArestResponse.NetworkError -> {
@@ -137,20 +143,22 @@ class ArestsViewModel @Inject constructor(
             }
 
             is CreateOrUpdateArestResponse.ArestsIntersect -> {
-                val intersectedArest = arestById(response.intersectedId)
+                val intersectedArest = arests.find { a ->
+                    a.id == response.intersectedId
+                }
                 val state = arestsIntersectState(intersectedArest, oldPosition == null)
+                mldAddState.postValue(state)
+            }
+
+            is CreateOrUpdateArestResponse.Success -> {
+                val state = oldPosition?.let {
+                    CreateOrUpdateArestState.Updated(it, newPosition)
+                } ?: CreateOrUpdateArestState.Created(newPosition)
                 mldAddState.postValue(state)
             }
         }
     }
 
-
-    private fun arestById(id: Int): Arest? {
-        val state = mldListState.value as? ArestsListState.Loaded ?: return null
-        return state.arests.find { a ->
-            a.id == id
-        }
-    }
 
     private fun arestsIntersectState(
         intersectedArest: Arest?,

@@ -7,7 +7,7 @@ sealed class CreateOrUpdateArestState {
     object Idle:       CreateOrUpdateArestState()
     object Loading:    CreateOrUpdateArestState()
 
-    class NoInternet(): CreateOrUpdateArestState() {
+    class NoInternet: CreateOrUpdateArestState() {
         var notified = false
     }
 
