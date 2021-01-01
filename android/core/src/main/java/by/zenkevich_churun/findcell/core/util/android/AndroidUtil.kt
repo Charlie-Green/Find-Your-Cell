@@ -1,19 +1,13 @@
 package by.zenkevich_churun.findcell.core.util.android
 
-import android.Manifest
 import android.app.Activity
-import android.app.Dialog
 import android.content.Context
-import android.graphics.Color
-import android.graphics.drawable.ColorDrawable
-import android.net.*
 import android.os.Build
 import android.util.DisplayMetrics
 import android.util.Size
 import android.util.TypedValue
 import android.view.*
 import android.widget.EditText
-import androidx.annotation.RequiresPermission
 
 
 object AndroidUtil {

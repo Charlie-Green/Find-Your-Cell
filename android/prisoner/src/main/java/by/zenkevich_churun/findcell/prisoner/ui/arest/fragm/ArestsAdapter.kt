@@ -34,12 +34,12 @@ class ArestsAdapter(
 
         init {
             itemView.setOnClickListener {
-                openSchedule()
+             // TODO: CharlieDebug: Uncomment
+            // openSchedule()
             }
 
             itemView.setOnLongClickListener {
-                // TODO: Do it via ViewModel
-                setCheckable(true)
+                vm.makeCheckable()
                 true
             }
         }
@@ -75,12 +75,12 @@ class ArestsAdapter(
             animatedViews: Sequence<View> ) {
 
             val res = itemView.context.resources
-            val desiredTranslate = res
+            val desiredTranslate = -1f * res
                 .getDimensionPixelSize(R.dimen.delete_arest_checkbox_width)
-                .times(-1f)
+            val duration = res.getInteger(R.integer.arest_delete_animation_duration).toLong()
 
             ValueAnimator.ofFloat(chbDelete.translationX, desiredTranslate)
-                .setDuration(2000L)
+                .setDuration(duration)
                 .apply { addUpdateListener { animer ->
                     val translate = animer.animatedValue as Float
                     chbDelete.translationX = translate

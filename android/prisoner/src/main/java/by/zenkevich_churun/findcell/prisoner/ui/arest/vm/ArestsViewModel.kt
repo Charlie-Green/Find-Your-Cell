@@ -86,6 +86,19 @@ class ArestsViewModel @Inject constructor(
     }
 
 
+    fun makeCheckable() {
+        mldCheckable.value = true
+    }
+
+    fun delete() {
+        // TODO
+    }
+
+    fun cancelDelete() {
+        mldCheckable.value = false
+    }
+
+
     private val arests: List<Arest>?
         get() {
             val state = mldListState.value

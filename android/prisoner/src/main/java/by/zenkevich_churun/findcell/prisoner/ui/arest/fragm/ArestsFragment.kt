@@ -2,7 +2,6 @@ package by.zenkevich_churun.findcell.prisoner.ui.arest.fragm
 
 import android.content.DialogInterface
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import android.view.animation.AnimationUtils
 import androidx.appcompat.app.AlertDialog
@@ -10,7 +9,6 @@ import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
-import androidx.recyclerview.widget.LinearLayoutManager
 import by.zenkevich_churun.findcell.core.util.android.DialogUtil
 import by.zenkevich_churun.findcell.prisoner.R
 import by.zenkevich_churun.findcell.prisoner.ui.arest.state.ArestsListState
@@ -50,11 +48,23 @@ class ArestsFragment: Fragment(R.layout.arests_fragm) {
         vm.loadingLD.observe(viewLifecycleOwner, Observer { loading ->
             prBar.isVisible = loading
         })
-        vm.checkableLD.observe(viewLifecycleOwner, Observer { checkable ->
-            checksAnimer.setCheckable(checkable)
-        })
 
-        fabAdd.setOnClickListener { addArest() }
+        val layoutListener = object: View.OnLayoutChangeListener {
+            override fun onLayoutChange(
+                v: View?,
+                left: Int, top: Int, right: Int, bottom: Int,
+                oldLeft: Int, oldTop: Int, oldRight: Int, oldBottom: Int ) {
+
+                recvArests.removeOnLayoutChangeListener(this)
+                observeCheckableState(bottom - top)
+            }
+        }
+        recvArests.addOnLayoutChangeListener(layoutListener)
+
+        fabAdd.setOnClickListener   { addArest() }
+        buDelete.setOnClickListener { vm.delete() }
+        buCancel.setOnClickListener { vm.cancelDelete() }
+
         restoreArestDateRangePicker()
     }
 
@@ -66,7 +76,6 @@ class ArestsFragment: Fragment(R.layout.arests_fragm) {
     private fun initFields() {
         val appContext = requireContext().applicationContext
         vm = ArestsViewModel.get(appContext, this)
-        checksAnimer = ArestsCheckableStateAnimator()
     }
 
     private fun initRecycler() {
@@ -75,7 +84,22 @@ class ArestsFragment: Fragment(R.layout.arests_fragm) {
 
     private fun animateRecycler() {
         recvArests.layoutAnimation = AnimationUtils
-            .loadLayoutAnimation(requireContext(), R.anim.layoutanim_translate_from_end)
+            .loadLayoutAnimation(requireContext(), R.anim.layoutanim_arests)
+    }
+
+
+    private fun observeCheckableState(screenHeight: Int) {
+        val listMargin = resources.getDimensionPixelSize(R.dimen.arests_screen_padding)
+        checksAnimer = ArestsCheckableStateAnimator
+            .Builder(screenHeight, buDelete, buCancel)
+            .setContentView(recvArests, listMargin)
+            .setFadingView(fabAdd)
+            .build()
+
+        vm.checkableLD.observe(viewLifecycleOwner, Observer { checkable ->
+            checksAnimer.setCheckable(checkable)  // Animate buttons in the bottom.
+            adapter.isCheckable = checkable       // Animate item checkboxes.
+        })
     }
 
 
@@ -245,7 +269,6 @@ class ArestsFragment: Fragment(R.layout.arests_fragm) {
     }
 
     private fun onArestDateRangeSelected(start: Long, end: Long) {
-        Log.v("CharlieDebug", "addArest($start; $end)")
        vm.addArest(start, end)
     }
 }

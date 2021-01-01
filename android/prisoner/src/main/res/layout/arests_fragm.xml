@@ -2,7 +2,7 @@
 <FrameLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:orientation="vertical"
+    android:id="@+id/frltRoot"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:paddingLeft="@dimen/arests_screen_padding"
@@ -13,7 +13,6 @@
         android:id="@+id/recvArests"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginBottom="@dimen/arests_screen_padding"
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
 
 
@@ -75,7 +74,7 @@
     <Button
         android:id="@+id/buDelete"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="@dimen/arest_deletebutton_height"
         android:background="?colorError"
         android:textColor="?backgroundColor"
         android:textSize="16sp"
@@ -86,7 +85,7 @@
     <Button
         android:id="@+id/buCancel"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="@dimen/arest_deletebutton_height"
         android:background="?backgroundColor"
         android:textColor="?colorPrimary"
         android:textSize="16sp"
