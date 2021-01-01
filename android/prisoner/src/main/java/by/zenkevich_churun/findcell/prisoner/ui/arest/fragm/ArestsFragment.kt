@@ -4,6 +4,7 @@ import android.content.DialogInterface
 import android.os.Bundle
 import android.util.Log
 import android.view.View
+import android.view.animation.AnimationUtils
 import androidx.appcompat.app.AlertDialog
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
@@ -63,8 +64,12 @@ class ArestsFragment: Fragment(R.layout.arests_fragm) {
     }
 
     private fun initRecycler() {
-        recvArests.layoutManager = LinearLayoutManager(requireContext())
         recvArests.adapter = ArestsAdapter(vm)
+    }
+
+    private fun animateRecycler() {
+        recvArests.layoutAnimation = AnimationUtils
+            .loadLayoutAnimation(requireContext(), R.anim.layoutanim_translate_from_end)
     }
 
 
@@ -79,6 +84,11 @@ class ArestsFragment: Fragment(R.layout.arests_fragm) {
 
             is ArestsListState.Loaded -> {
                 vlltError.visibility = View.GONE
+
+                if(!state.animated) {
+                    state.animated = true
+                    animateRecycler()
+                }
 
                 val adapter = recvArests.adapter as ArestsAdapter
                 adapter.submitList(state.arests)

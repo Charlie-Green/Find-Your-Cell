@@ -10,7 +10,10 @@ sealed class ArestsListState {
 
     class Loaded(
         val arests: List<Arest>
-    ): ArestsListState()
+    ): ArestsListState() {
+
+        var animated = false
+    }
 
     class NetworkError: ArestsListState() {
         var notified = false
