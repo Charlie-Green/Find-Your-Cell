@@ -6,6 +6,7 @@ import android.util.Log
 import android.view.View
 import android.view.animation.AnimationUtils
 import androidx.appcompat.app.AlertDialog
+import androidx.core.text.HtmlCompat
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
@@ -63,7 +64,7 @@ class ArestsFragment: Fragment(R.layout.arests_fragm) {
         recvArests.addOnLayoutChangeListener(layoutListener)
 
         fabAdd.setOnClickListener   { addArest() }
-        buDelete.setOnClickListener { vm.delete() }
+        buDelete.setOnClickListener { suggestDelete() }
         buCancel.setOnClickListener { vm.cancelDelete() }
 
         restoreArestDateRangePicker()
@@ -124,7 +125,7 @@ class ArestsFragment: Fragment(R.layout.arests_fragm) {
                 }
 
                 val adapter = recvArests.adapter as ArestsAdapter
-                adapter.submitList(state.arests)
+                adapter.submitList(state.arests, state.checkedIds)
             }
 
             is ArestsListState.NoInternet -> {
@@ -219,6 +220,32 @@ class ArestsFragment: Fragment(R.layout.arests_fragm) {
     private fun openSchedule(arestId: Int) {
         val args = ScheduleFragment.arguments(arestId)
         findNavController().navigate(R.id.actOpenArest, args)
+    }
+
+    private fun suggestDelete() {
+        val checks = adapter.checkedIds
+        if(checks.isEmpty()) {
+            return
+        }
+
+        val title = resources.getQuantityString(
+            R.plurals.delete_arests_title, checks.size )
+        val messageHtml1 = resources.getQuantityString(
+            R.plurals.delete_arests_msg_1, checks.size, checks.size )
+        val messageHtml2 = resources.getQuantityString(
+            R.plurals.delete_arests_msg_2, checks.size, checks.size )
+        val messageHtml = "$messageHtml1 $messageHtml2"
+
+        AlertDialog.Builder(requireContext())
+            .setTitle(title)
+            .setMessage( HtmlCompat.fromHtml(messageHtml, 0) )
+            .setPositiveButton(R.string.delete_yes) { dialog, _ ->
+                vm.delete()
+                dialog.dismiss()
+            }.setNegativeButton(R.string.delete_no) { dialog, _ ->
+                vm.cancelDelete()
+                dialog.dismiss()
+            }.show()
     }
 
 

@@ -17,7 +17,8 @@ class ArestsAdapter(
     private val vm: ArestsViewModel
 ): RecyclerView.Adapter<ArestsAdapter.ArestViewHolder>() {
 
-    private var arests = listOf<Arest>()
+    private var arests: List<Arest>? = null
+    private var checks: HashSet<Int>? = null
     private var checkable = false
     private var checkableSetCount = 0
 
@@ -44,6 +45,10 @@ class ArestsAdapter(
                 vm.makeCheckable()
                 true
             }
+
+            chbDelete.setOnCheckedChangeListener { _, isChecked ->
+                onCheckedChanged(isChecked)
+            }
         }
 
 
@@ -51,6 +56,7 @@ class ArestsAdapter(
             txtvStart.text = formatDate(arest.start)
             txtvEnd.text   = formatDate(arest.end)
             txtvJails.text = ArestUiUtil.jailsText(arest.jails)
+            chbDelete.isChecked = checks?.contains(arest.id) ?: false
 
             setCheckable(false)
         }
@@ -135,11 +141,21 @@ class ArestsAdapter(
         private fun formatDate(cal: Calendar): String {
             return ArestUiUtil.format(cal)
         }
+
+
+        private fun onCheckedChanged(isChecked: Boolean) {
+            val id = arestAt(adapterPosition)?.id ?: return
+            if(isChecked) {
+                checks?.add(id)
+            } else {
+                checks?.remove(id)
+            }
+        }
     }
 
 
     override fun getItemCount(): Int
-        = arests.size
+        = arests?.size ?: 0
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ArestViewHolder {
         val view = LayoutInflater
@@ -150,7 +166,8 @@ class ArestsAdapter(
     }
 
     override fun onBindViewHolder(holder: ArestViewHolder, position: Int) {
-        holder.bind(arests[position])
+        val arest = arestAt(position) ?: return
+        holder.bind(arest)
     }
 
     override fun onBindViewHolder(
@@ -169,6 +186,9 @@ class ArestsAdapter(
     }
 
 
+    val checkedIds: HashSet<Int>
+        get() = checks ?: hashSetOf()
+
     var isCheckable: Boolean
         get() { return checkable }
         set(value) {
@@ -180,9 +200,20 @@ class ArestsAdapter(
         }
 
 
-    fun submitList(list: List<Arest>) {
+    fun submitList(list: List<Arest>, checkedIds: HashSet<Int>) {
         arests = list
+        checks = checkedIds
         notifyDataSetChanged()
+    }
+
+
+    private fun arestAt(position: Int): Arest? {
+        val arests = this.arests ?: return null
+        if(position !in arests.indices) {
+            return null
+        }
+
+        return arests[position]
     }
 
 

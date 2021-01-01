@@ -16,6 +16,41 @@
     <string name="sign_out">Выход</string>
     <string name="find_prisoners">Найти сокамерников!</string>
 
+    <plurals name="delete_arests_title">
+        <item quantity="one">Убрать арест?</item>
+        <item quantity="other">Убрать аресты?</item>
+    </plurals>
+
+    <plurals name="delete_arests_msg_1">
+        <item quantity="one">
+            Вы собираетесь удалить %d арест.&lt;br/>
+        </item>
+
+        <item quantity="two">
+            Вы собираетесь удалить %d ареста.&lt;br/>
+        </item>
+
+        <item quantity="few">
+            Вы собираетесь удалить %d ареста.&lt;br/>
+        </item>
+
+        <item quantity="other">
+            Вы собираетесь удалить %d арестов.&lt;br/>
+        </item>
+    </plurals>
+
+    <plurals name="delete_arests_msg_2">
+        <item quantity="one">
+            &lt;b>Расписание этого ареста также будет удалено.&lt;/b>
+            Вашем сокамерникам, сидевшим с Вами в этот раз, не отобразится ваш профиль.
+        </item>
+
+        <item quantity="other">
+            &lt;b>Сопутствующие расписания также будут удалены.&lt;/b>
+            Вашем сокамерникам, сидевшим с Вами во время данных арестов, не отобразится ваш профиль.
+        </item>
+    </plurals>
+
     <!-- Notifications (Authorization): -->
     <string name="login_failed_msg">Не удалось выполнить вход: ошибка сети.</string>
     <string name="signup_failed_msg">Не удалось зарегистрироваться: ошибка сети.</string>
