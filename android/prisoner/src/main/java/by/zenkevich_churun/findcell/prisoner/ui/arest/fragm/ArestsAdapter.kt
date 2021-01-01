@@ -2,6 +2,7 @@ package by.zenkevich_churun.findcell.prisoner.ui.arest.fragm
 
 import android.animation.ValueAnimator
 import android.util.LayoutDirection
+import android.util.Log
 import android.view.*
 import androidx.core.view.updatePadding
 import androidx.recyclerview.widget.RecyclerView
@@ -18,9 +19,10 @@ class ArestsAdapter(
 
     private var arests = listOf<Arest>()
     private var checkable = false
+    private var checkableSetCount = 0
 
 
-    class ArestViewHolder(
+    inner class ArestViewHolder(
         private val vm: ArestsViewModel,
         itemView: View
     ): RecyclerView.ViewHolder(itemView) {
@@ -49,18 +51,31 @@ class ArestsAdapter(
             txtvStart.text = formatDate(arest.start)
             txtvEnd.text   = formatDate(arest.end)
             txtvJails.text = ArestUiUtil.jailsText(arest.jails)
+
+            setCheckable(false)
         }
 
-        fun setCheckable(checkable: Boolean) {
-            val animatedTextViews =
+        fun setCheckable(animate: Boolean) {
+            val affectedViews =
                 if(isLayoutExpanded) sequenceOf(txtvEnd, txtvJails)
                 else sequenceOf(txtvStart, txtvEnd,txtvJails)
 
-            if(checkable) {
-                translateIn(animatedTextViews)
+            val desiredTranslate = if(checkable) {
+                val res = itemView.context.resources
+                -1f * res.getDimensionPixelSize(R.dimen.delete_arest_checkbox_width)
             } else {
-                translateOut()
+                0f
             }
+
+            if(animate) {
+                Log.v("CharlieDebug", "Animate to $desiredTranslate")
+                animateCheckBox(affectedViews, desiredTranslate)
+            } else {
+                Log.v("CharlieDebug", "Translate to $desiredTranslate")
+                translateCheckBox(affectedViews, desiredTranslate)
+            }
+
+            itemView
         }
 
 
@@ -71,12 +86,11 @@ class ArestsAdapter(
                 else -> throw Error("Cannot determine layout for column count $columnCount")
             }
 
-        private fun translateIn(
-            animatedViews: Sequence<View> ) {
+        private fun animateCheckBox(
+            animatedViews: Sequence<View>,
+            desiredTranslate: Float ) {
 
             val res = itemView.context.resources
-            val desiredTranslate = -1f * res
-                .getDimensionPixelSize(R.dimen.delete_arest_checkbox_width)
             val duration = res.getInteger(R.integer.arest_delete_animation_duration).toLong()
 
             ValueAnimator.ofFloat(chbDelete.translationX, desiredTranslate)
@@ -93,8 +107,16 @@ class ArestsAdapter(
                 }}.start()
         }
 
-        private fun translateOut() {
-            // TODO
+        private fun translateCheckBox(
+            affectedViews: Sequence<View>,
+            desiredTranslate: Float ) {
+
+            chbDelete.translationX = desiredTranslate
+
+            val desiredPadding = -desiredTranslate.toInt()
+            for(v in affectedViews) {
+                setEndPadding(v, desiredPadding)
+            }
         }
 
         private fun setEndPadding(target: View, padding: Int) {
@@ -139,10 +161,10 @@ class ArestsAdapter(
         if(payloads.size == 1 &&
             payloads[0] === PAYLOAD_CHECKABLE ) {
 
-            holder.setCheckable(checkable)
+            holder.setCheckable(checkableSetCount >= 2)
 
         } else {
-            super.onBindViewHolder(holder, position, payloads)
+            onBindViewHolder(holder, position)
         }
     }
 
@@ -150,6 +172,7 @@ class ArestsAdapter(
     var isCheckable: Boolean
         get() { return checkable }
         set(value) {
+            ++checkableSetCount
             if(checkable != value) {
                 checkable = value
                 notifyItemRangeChanged(0, itemCount, PAYLOAD_CHECKABLE)

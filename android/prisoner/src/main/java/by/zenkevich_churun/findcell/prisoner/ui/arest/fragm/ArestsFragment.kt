@@ -2,6 +2,7 @@ package by.zenkevich_churun.findcell.prisoner.ui.arest.fragm
 
 import android.content.DialogInterface
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.view.animation.AnimationUtils
 import androidx.appcompat.app.AlertDialog
@@ -98,7 +99,9 @@ class ArestsFragment: Fragment(R.layout.arests_fragm) {
 
         vm.checkableLD.observe(viewLifecycleOwner, Observer { checkable ->
             checksAnimer.setCheckable(checkable)  // Animate buttons in the bottom.
-            adapter.isCheckable = checkable       // Animate item checkboxes.
+            recvArests.post {
+                adapter.isCheckable = checkable       // Animate item checkboxes.
+            }
         })
     }
 
