@@ -22,4 +22,6 @@
 
     <dimen name="auth_info_width">210dp</dimen>
 
+    <dimen name="delete_arest_checkbox_width">42dp</dimen>
+
 </resources>

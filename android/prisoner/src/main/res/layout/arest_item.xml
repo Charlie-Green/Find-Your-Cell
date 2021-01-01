@@ -1,30 +1,40 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
+<GridLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
+    android:id="@+id/grltRoot"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    android:columnCount="2" >
 
     <TextView
         android:id="@+id/txtvStart"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         style="@style/arest_date_textappear" />
 
+
+    <CheckBox
+        android:id="@+id/chbDelete"
+        android:layout_width="@dimen/delete_arest_checkbox_width"
+        android:layout_gravity="center_vertical"
+        android:layout_rowSpan="3" />
+
+
     <TextView
         android:id="@+id/txtvEnd"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="0dp"
+        android:layout_gravity="fill_horizontal"
         style="@style/arest_date_textappear" />
 
 
     <TextView
         android:id="@+id/txtvJails"
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_gravity="fill_horizontal"
         android:layout_marginTop="4dp"
         android:layout_marginBottom="16dp"
         android:singleLine="true"
         style="@style/arest_jails_textappear" />
 
-</LinearLayout>
+</GridLayout>
