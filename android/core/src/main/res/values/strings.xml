@@ -6,6 +6,7 @@
     </string>
     <string name="ok">ОК</string>
     <string name="add">Добавить</string>
+    <string name="cancel">Отменить</string>
     <string name="save">Сохранить</string>
     <string name="replace">Заменить</string>
     <string name="retry">Ещё раз</string>

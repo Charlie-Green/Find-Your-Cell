@@ -2,6 +2,7 @@ package by.zenkevich_churun.findcell.prisoner.repo.common
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import by.zenkevich_churun.findcell.entity.entity.Contact
 import by.zenkevich_churun.findcell.entity.entity.Prisoner
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -9,19 +10,26 @@ import javax.inject.Singleton
 
 @Singleton
 class PrisonerStorage @Inject constructor() {
-    private val mldPrisoner = MutableLiveData<ExtendedPrisoner?>()/*.apply {
-        // TODO: Remove when Log In is implemented.
+    private val mldPrisoner = MutableLiveData<ExtendedPrisoner?>().apply {
+        // TODO: CharlieDebug:
         value = ExtendedPrisoner(
-            Prisoner.INVALID_ID + 1,
-            "Charlie",
+            3,
+            "Романчик",
             listOf(
-                Contact.Telegram("@my_teleg"),
-                Contact.VK("vk.com/myvk")
+                object: Contact() {
+                    override val type: Type = Contact.Type.VK
+                    override val data: String = "vk.com/myvk"
+                },
+
+                object: Contact() {
+                    override val type: Type = Contact.Type.TELEGRAM
+                    override val data: String = "t.me/mytelega"
+                },
             ),
-            "This is a fake test user.",
-            "pass".toByteArray(Charsets.UTF_16)
+            "This is a fake test user. Remove it from PrisonerStorage class when not needed.",
+            "789".toByteArray(Charsets.UTF_8)
         )
-    }*/
+    }
 
     val prisonerLD: LiveData<ExtendedPrisoner?>
         get() = mldPrisoner

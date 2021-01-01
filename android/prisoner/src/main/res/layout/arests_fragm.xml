@@ -5,12 +5,15 @@
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="8dp">
+    android:paddingLeft="@dimen/arests_screen_padding"
+    android:paddingTop="@dimen/arests_screen_padding"
+    android:paddingRight="@dimen/arests_screen_padding" >
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recvArests"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_marginBottom="@dimen/arests_screen_padding"
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
 
 
@@ -66,5 +69,28 @@
         android:layout_gravity="center"
         android:theme="@style/primary_tinted_progressbar_theme"
         android:visibility="gone" />
+
+
+    <!-- Positioned programmatically -->
+    <Button
+        android:id="@+id/buDelete"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="?colorError"
+        android:textColor="?backgroundColor"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        android:text="@string/delete" />
+
+    <!-- Positioned programmatically -->
+    <Button
+        android:id="@+id/buCancel"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="?backgroundColor"
+        android:textColor="?colorPrimary"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        android:text="@string/cancel" />
 
 </FrameLayout>

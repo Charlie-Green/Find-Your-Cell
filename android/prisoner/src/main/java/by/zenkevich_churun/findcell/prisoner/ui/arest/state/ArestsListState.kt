@@ -9,10 +9,14 @@ sealed class ArestsListState {
     object Loading: ArestsListState()
 
     class Loaded(
-        val arests: List<Arest>
+        val arests: List<Arest>,
     ): ArestsListState() {
 
         var animated = false
+
+        /** Contains IDs of those [Arest]s which the user marked.
+          * Later, these items can be deleted. **/
+        var checkedIds = hashSetOf<Int>()
     }
 
     class NetworkError: ArestsListState() {

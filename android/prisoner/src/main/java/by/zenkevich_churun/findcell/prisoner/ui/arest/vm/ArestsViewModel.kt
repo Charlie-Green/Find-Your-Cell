@@ -27,6 +27,9 @@ class ArestsViewModel @Inject constructor(
         value = CreateOrUpdateArestState.Idle
     }
     private val mldOpenedArest = MutableLiveData<Arest?>()
+    private val mldCheckable = MutableLiveData<Boolean>().apply {
+        value = false
+    }
 
 
     val listStateLD: LiveData<ArestsListState>
@@ -40,6 +43,9 @@ class ArestsViewModel @Inject constructor(
 
     val loadingLD: LiveData<Boolean>
         = ArestLoadingMediatorLiveData(listStateLD, addOrUpdateStateLD)
+
+    val checkableLD: LiveData<Boolean>
+        get() = mldCheckable
 
 
     fun loadData(isRetrying: Boolean) {

@@ -27,6 +27,8 @@ class ArestsFragment: Fragment(R.layout.arests_fragm) {
     @Inject
     lateinit var vm: ArestsViewModel
 
+    private lateinit var checksAnimer: ArestsCheckableStateAnimator
+
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         initFields()
@@ -48,6 +50,9 @@ class ArestsFragment: Fragment(R.layout.arests_fragm) {
         vm.loadingLD.observe(viewLifecycleOwner, Observer { loading ->
             prBar.isVisible = loading
         })
+        vm.checkableLD.observe(viewLifecycleOwner, Observer { checkable ->
+            checksAnimer.setCheckable(checkable)
+        })
 
         fabAdd.setOnClickListener { addArest() }
         restoreArestDateRangePicker()
@@ -61,6 +66,7 @@ class ArestsFragment: Fragment(R.layout.arests_fragm) {
     private fun initFields() {
         val appContext = requireContext().applicationContext
         vm = ArestsViewModel.get(appContext, this)
+        checksAnimer = ArestsCheckableStateAnimator()
     }
 
     private fun initRecycler() {
