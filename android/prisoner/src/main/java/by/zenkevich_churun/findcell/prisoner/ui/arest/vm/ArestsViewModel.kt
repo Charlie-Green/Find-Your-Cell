@@ -10,6 +10,7 @@ import by.zenkevich_churun.findcell.prisoner.repo.arest.ArestsRepository
 import by.zenkevich_churun.findcell.prisoner.repo.arest.GetArestsResult
 import by.zenkevich_churun.findcell.prisoner.ui.arest.state.ArestsListState
 import by.zenkevich_churun.findcell.prisoner.ui.arest.state.CreateOrUpdateArestState
+import by.zenkevich_churun.findcell.prisoner.ui.arest.state.DeleteArestsState
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -26,6 +27,9 @@ class ArestsViewModel @Inject constructor(
     private val mldAddState = MutableLiveData<CreateOrUpdateArestState>().apply {
         value = CreateOrUpdateArestState.Idle
     }
+    private val mldDeleteState = MutableLiveData<DeleteArestsState>().apply {
+        value = DeleteArestsState.Idle
+    }
     private val mldOpenedArest = MutableLiveData<Arest?>()
     private val mldCheckable = MutableLiveData<Boolean>().apply {
         value = false
@@ -41,8 +45,11 @@ class ArestsViewModel @Inject constructor(
     val openedArestLD: LiveData<Arest?>
         get() = mldOpenedArest
 
+    val deleteStateLD: LiveData<DeleteArestsState>
+        get() = mldDeleteState
+
     val loadingLD: LiveData<Boolean>
-        = ArestLoadingMediatorLiveData(listStateLD, addOrUpdateStateLD)
+        = ArestLoadingMediatorLiveData(listStateLD, addOrUpdateStateLD, deleteStateLD)
 
     val checkableLD: LiveData<Boolean>
         get() = mldCheckable
@@ -71,6 +78,23 @@ class ArestsViewModel @Inject constructor(
         viewModelScope.launch(Dispatchers.IO) {
             val response = repo.addArest(start, end)
             applyResponse(arests, response.first, null, response.second)
+        }
+    }
+
+    fun deleteArests() {
+        val listState = mldListState.value as? ArestsListState.Loaded ?: return
+        val checkedIds = listState.checkedIds
+
+        if(!isStateAppropriateToDelete()) {
+            return
+        }
+        if(!netTracker.isInternetAvailable) {
+            mldDeleteState.value = DeleteArestsState.NoInternet()
+            return
+        }
+
+        viewModelScope.launch(Dispatchers.IO) {
+            // TODO
         }
     }
 
@@ -110,14 +134,24 @@ class ArestsViewModel @Inject constructor(
         }
 
     private fun isStateAppropriateToLoadData(isRetrying: Boolean): Boolean {
-            val state = mldListState.value ?: return true
-            return when(state) {
-                is ArestsListState.Idle         -> true
-                is ArestsListState.NoInternet   -> false
-                is ArestsListState.NetworkError -> isRetrying && state.notified
-                else                            -> false
-            }
+        val state = mldListState.value ?: return true
+        return when(state) {
+            is ArestsListState.Idle         -> true
+            is ArestsListState.NoInternet   -> false
+            is ArestsListState.NetworkError -> isRetrying && state.notified
+            else                            -> false
         }
+    }
+
+    private fun isStateAppropriateToDelete(): Boolean {
+        val state = mldDeleteState.value ?: return true
+        return when(state) {
+            is DeleteArestsState.Idle         -> true
+            is DeleteArestsState.NoInternet   -> state.notified
+            is DeleteArestsState.NetworkError -> state.notified
+            else                              -> false
+        }
+    }
 
 
     private fun loadDataInternal() {

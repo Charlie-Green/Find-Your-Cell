@@ -8,11 +8,13 @@ import by.zenkevich_churun.findcell.prisoner.ui.arest.state.*
 
 internal class ArestLoadingMediatorLiveData(
     listStateLD: LiveData<ArestsListState>,
-    addStateLD: LiveData<CreateOrUpdateArestState>
+    addStateLD: LiveData<CreateOrUpdateArestState>,
+    deleteStateLD: LiveData<DeleteArestsState>
 ): MediatorLiveData<Boolean>() {
 
-    private var listLoading = false
-    private var addLoading = false
+    private var listLoading   = false
+    private var addLoading    = false
+    private var deleteLoading = false
 
 
     init {
@@ -21,6 +23,9 @@ internal class ArestLoadingMediatorLiveData(
         }
         listen(addStateLD) { state ->
             addLoading = (state is CreateOrUpdateArestState.Loading)
+        }
+        listen(deleteStateLD) { state ->
+            deleteLoading = (state is DeleteArestsState.InProgress)
         }
     }
 
@@ -36,6 +41,6 @@ internal class ArestLoadingMediatorLiveData(
     }
 
     private fun updateValue() {
-        postValue(listLoading || addLoading)
+        postValue(listLoading || addLoading || deleteLoading)
     }
 }
