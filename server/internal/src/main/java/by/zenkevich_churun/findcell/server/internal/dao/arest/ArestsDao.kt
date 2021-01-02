@@ -10,6 +10,7 @@ class ArestsDao(private val connection: DatabaseConnection) {
     private val queryGetArests = GetArestsQuery()
     private val queryIntersectArests = GetIntersectingArestsQuery()
     private val queryJailsForArest = JailIdsForArestQuery()
+    private val queryDeleteArests = DeleteArestsQuery()
 
 
     fun arests(prisonerId: Int): List<ArestEntity> {
@@ -47,6 +48,14 @@ class ArestsDao(private val connection: DatabaseConnection) {
                 val idMessage = "Prisoner ID ${arest.prisonerId} is probably invalid"
                 throw IllegalArgumentException("$notPersistMsg. $idMessage")
             }
+        }
+    }
+
+    fun delete(ids: List<Int>) {
+        connection.withTransaction { entityMan ->
+            queryDeleteArests
+                .getQuery(entityMan, ids)
+                .executeUpdate()
         }
     }
 }

@@ -2,10 +2,8 @@ package by.zenkevich_churun.findcell.serial.arest.v1.serial
 
 import by.zenkevich_churun.findcell.entity.entity.LightArest
 import by.zenkevich_churun.findcell.entity.response.CreateOrUpdateArestResponse
-import by.zenkevich_churun.findcell.serial.arest.abstr.ArestsSerializer
-import by.zenkevich_churun.findcell.serial.arest.v1.pojo.ArestIdsPojo1
-import by.zenkevich_churun.findcell.serial.arest.v1.pojo.ArestPojo1
-import by.zenkevich_churun.findcell.serial.arest.v1.pojo.ArestsListPojo1
+import by.zenkevich_churun.findcell.serial.arest.serial.ArestsSerializer
+import by.zenkevich_churun.findcell.serial.arest.v1.pojo.*
 import by.zenkevich_churun.findcell.serial.util.protocol.ProtocolUtil
 
 

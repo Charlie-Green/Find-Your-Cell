@@ -1,11 +1,10 @@
 package by.zenkevich_churun.findcell.server.protocol.controller.arest
 
-import by.zenkevich_churun.findcell.serial.arest.abstr.ArestsDeserializer
 import by.zenkevich_churun.findcell.serial.util.protocol.Base64Util
 import by.zenkevich_churun.findcell.server.internal.repo.arest.ArestsRepository
 import by.zenkevich_churun.findcell.server.protocol.di.ServerKoin
 import by.zenkevich_churun.findcell.server.protocol.exc.IllegalServerParameterException
-import by.zenkevich_churun.findcell.serial.arest.abstr.ArestsSerializer
+import by.zenkevich_churun.findcell.serial.arest.serial.*
 import org.springframework.web.bind.annotation.*
 import java.io.InputStream
 
@@ -65,5 +64,24 @@ class ArestsController {
         return ArestsSerializer
             .forVersion(version)
             .serialize(arests)
+    }
+
+
+    @PostMapping("/arest/delete")
+    fun deleteArests(input: InputStream) {
+        val pojo = ArestsDeserializer
+            .forVersion(1)
+            .deserializeIds(input)
+
+        try {
+            repo.deleteArests(
+                pojo.prisonerId,
+                pojo.passwordHash,
+                pojo.arestIds
+            )
+        } catch(exc: IllegalArgumentException) {
+            println(exc.message)
+            throw IllegalServerParameterException()
+        }
     }
 }

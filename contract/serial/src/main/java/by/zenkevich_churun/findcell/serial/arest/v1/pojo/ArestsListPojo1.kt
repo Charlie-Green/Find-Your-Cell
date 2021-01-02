@@ -5,7 +5,7 @@ import by.zenkevich_churun.findcell.serial.arest.v1.contract.ArestContract1
 import com.google.gson.annotations.SerializedName
 
 
-class ArestsListPojo1(
+internal class ArestsListPojo1(
 
     @SerializedName(ArestContract1.KEY_ARESTS_LIST)
     var arests: List<ArestPojo1> = listOf() ) {

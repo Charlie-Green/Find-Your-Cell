@@ -6,10 +6,12 @@ import by.zenkevich_churun.findcell.server.internal.dao.common.CommonDao
 import by.zenkevich_churun.findcell.server.internal.dao.internal.DatabaseConnection
 import by.zenkevich_churun.findcell.server.internal.dao.jail.JailsDao
 import by.zenkevich_churun.findcell.server.internal.dao.profile.ProfileDao
+import by.zenkevich_churun.findcell.server.internal.dao.sched.ScheduleDao
 import by.zenkevich_churun.findcell.server.internal.repo.arest.ArestsRepository
 import by.zenkevich_churun.findcell.server.internal.repo.auth.AuthorizationRepository
 import by.zenkevich_churun.findcell.server.internal.repo.jail.JailsRepository
 import by.zenkevich_churun.findcell.server.internal.repo.profile.ProfileRepository
+import by.zenkevich_churun.findcell.server.internal.repo.sched.ScheduleRepository
 import org.koin.core.Koin
 import org.koin.core.context.startKoin
 import org.koin.dsl.module
@@ -65,7 +67,7 @@ object ServerKoin {
             }
 
             single {
-                ArestsRepository(get(), get())
+                ArestsRepository(get(), get(), get())
             }
         }
 
@@ -80,8 +82,15 @@ object ServerKoin {
         }
 
         val schedModule = module {
-            // TODO
+            single {
+                ScheduleDao(get())
+            }
+
+            single {
+                ScheduleRepository(get(), get())
+            }
         }
+
 
         val koinApp = startKoin {
             modules( listOf(
@@ -93,6 +102,7 @@ object ServerKoin {
                 schedModule
             ))
         }
+
 
         return koinApp.koin
     }

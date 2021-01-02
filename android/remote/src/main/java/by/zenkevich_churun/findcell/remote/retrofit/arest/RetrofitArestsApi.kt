@@ -5,8 +5,8 @@ import by.zenkevich_churun.findcell.entity.response.CreateOrUpdateArestResponse
 import by.zenkevich_churun.findcell.entity.entity.LightArest
 import by.zenkevich_churun.findcell.remote.retrofit.common.RetrofitApisUtil
 import by.zenkevich_churun.findcell.remote.retrofit.common.RetrofitHolder
-import by.zenkevich_churun.findcell.serial.arest.abstr.ArestsDeserializer
-import by.zenkevich_churun.findcell.serial.arest.abstr.ArestsSerializer
+import by.zenkevich_churun.findcell.serial.arest.serial.ArestsDeserializer
+import by.zenkevich_churun.findcell.serial.arest.serial.ArestsSerializer
 import by.zenkevich_churun.findcell.serial.arest.v1.pojo.ArestPojo1
 import by.zenkevich_churun.findcell.serial.util.protocol.Base64Util
 import okhttp3.MediaType

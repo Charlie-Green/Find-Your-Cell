@@ -1,19 +1,19 @@
 package by.zenkevich_churun.findcell.serial.arest.v1.pojo
 
 import by.zenkevich_churun.findcell.entity.entity.LightArest
-import by.zenkevich_churun.findcell.entity.entity.Prisoner
+import by.zenkevich_churun.findcell.serial.arest.pojo.ArestPojo
 import by.zenkevich_churun.findcell.serial.util.protocol.Base64Util
 import com.google.gson.annotations.SerializedName
 import java.util.Calendar
 
 
-class ArestPojo1: LightArest() {
+internal class ArestPojo1: ArestPojo() {
 
     @SerializedName("prisoner")
-    var prisonerId: Int? = null
+    override var prisonerId: Int? = null
 
     @SerializedName("pass")
-    var passwordBase64: String? = null
+    override var passwordBase64: String? = null
 
     @SerializedName("id")
     override var id: Int = 0

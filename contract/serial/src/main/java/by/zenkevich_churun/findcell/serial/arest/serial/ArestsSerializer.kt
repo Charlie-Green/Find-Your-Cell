@@ -1,4 +1,4 @@
-package by.zenkevich_churun.findcell.serial.arest.abstr
+package by.zenkevich_churun.findcell.serial.arest.serial
 
 import by.zenkevich_churun.findcell.entity.entity.LightArest
 import by.zenkevich_churun.findcell.entity.response.CreateOrUpdateArestResponse

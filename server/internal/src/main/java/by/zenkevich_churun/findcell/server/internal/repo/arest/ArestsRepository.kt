@@ -4,13 +4,15 @@ import by.zenkevich_churun.findcell.entity.entity.LightArest
 import by.zenkevich_churun.findcell.entity.response.CreateOrUpdateArestResponse
 import by.zenkevich_churun.findcell.server.internal.dao.arest.ArestsDao
 import by.zenkevich_churun.findcell.server.internal.dao.common.CommonDao
+import by.zenkevich_churun.findcell.server.internal.dao.sched.ScheduleDao
 import by.zenkevich_churun.findcell.server.internal.entity.table.ArestEntity
 import by.zenkevich_churun.findcell.server.internal.entity.view.ArestView
 
 
 class ArestsRepository(
     private val dao: ArestsDao,
-    private val commonDao: CommonDao ) {
+    private val commonDao: CommonDao,
+    private val scheduleDao: ScheduleDao ) {
 
     fun getArests(
         prisonerId: Int,
@@ -51,5 +53,16 @@ class ArestsRepository(
         dao.add(entity)
         println("Assigned id ${entity.id}")
         return CreateOrUpdateArestResponse.Success(entity.id)
+    }
+
+
+    fun deleteArests(
+        prisonerId: Int,
+        passwordHash: ByteArray,
+        arestIds: List<Int> ) {
+
+        commonDao.validateCredentials(prisonerId, passwordHash)
+        scheduleDao.deleteForArests(arestIds)
+        dao.delete(arestIds)
     }
 }
