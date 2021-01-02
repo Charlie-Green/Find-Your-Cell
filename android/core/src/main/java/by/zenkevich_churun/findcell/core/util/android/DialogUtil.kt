@@ -21,6 +21,7 @@ object DialogUtil {
 
     fun removeBackground(target: Dialog) {
         val transparentDrawable = ColorDrawable(Color.TRANSPARENT)
+
         target.window?.setBackgroundDrawable(transparentDrawable)
     }
 
@@ -48,65 +49,6 @@ object DialogUtil {
         updateParams(target) {
             width = w
             height = h
-        }
-    }
-
-
-    fun pickDateRange(
-        fragmentMan: FragmentManager,
-        boundRange:   Pair<Long, Long>,
-        initialRange: Pair<Long, Long>?,
-        onSelected: (start: Long, end: Long) -> Unit ) {
-
-        val constraints = CalendarConstraints
-            .Builder()
-            .setStart(boundRange.first!!)
-            .setEnd(boundRange.second!!)
-            .build()
-
-        val pickerBuilder = MaterialDatePicker
-            .Builder
-            .dateRangePicker()
-            .setCalendarConstraints(constraints)
-        initialRange?.also { pickerBuilder.setSelection(it) }
-        val picker = pickerBuilder.build()
-        picker.show(fragmentMan, TAG_DATE_RANGE_PICKER_DIALOG)
-
-        picker.addOnPositiveButtonClickListener { range ->
-            onSelected(range.first!!, range.second!!)
-        }
-    }
-
-    fun pickDateRange(
-        fragmentMan: FragmentManager,
-        initialStart: Calendar,
-        initialEnd: Calendar,
-        onSelected: (start: Long, end: Long) -> Unit ) {
-
-        val cal = Calendar.getInstance()
-        val now = cal.timeInMillis
-        cal.set(1994, Calendar.JULY, 1)
-        val july1994 = cal.timeInMillis
-
-        pickDateRange(
-            fragmentMan,
-            Pair(july1994, now),
-            Pair(initialStart.timeInMillis, initialEnd.timeInMillis),
-            onSelected
-        )
-    }
-
-    fun restoreDateRangePicker(
-        fragmentMan: FragmentManager,
-        onSelected: (start: Long, end: Long) -> Unit ) {
-
-        val picker = fragmentMan
-            .findFragmentByTag(TAG_DATE_RANGE_PICKER_DIALOG)
-            as? MaterialDatePicker< Pair<Long, Long> >
-            ?: return
-
-        picker.addOnPositiveButtonClickListener { range ->
-            onSelected(range.first!!, range.second!!)
         }
     }
 

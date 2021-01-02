@@ -62,4 +62,10 @@
         <item name="android:textColor">?android:textColorSecondary</item>
     </style>
 
+    <style name="addarest_button">
+        <item name="android:backgroundTint">?backgroundColor</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:textSize">16sp</item>
+    </style>
+
 </resources>

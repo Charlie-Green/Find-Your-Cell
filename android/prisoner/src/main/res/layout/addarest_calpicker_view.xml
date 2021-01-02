@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.savvi.rangedatepicker.CalendarPickerView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/calpicker"
+    app:tsquare_headerTextColor="?colorPrimary"
+    app:tsquare_titleTextColor="?colorPrimary"
+    app:tsquare_dividerColor="?android:textColorSecondary"
+    app:tsquare_orientation_horizontal="false" />

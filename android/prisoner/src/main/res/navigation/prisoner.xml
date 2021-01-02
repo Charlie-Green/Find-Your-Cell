@@ -67,7 +67,7 @@
 
     <dialog
         android:id="@+id/dialogAddArest"
-        android:name="by.zenkevich_churun.findcell.prisoner.ui.addarest.dialog.AddArestDialog" />
+        android:name="by.zenkevich_churun.findcell.prisoner.ui.addarest.dialog.CUArestDialog" />
 
 
     <action

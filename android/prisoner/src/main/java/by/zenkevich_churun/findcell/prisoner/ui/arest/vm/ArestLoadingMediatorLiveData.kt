@@ -4,6 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.Observer
 import by.zenkevich_churun.findcell.prisoner.ui.arest.state.*
+import by.zenkevich_churun.findcell.prisoner.ui.common.arest.ArestsListState
 import by.zenkevich_churun.findcell.prisoner.ui.common.arest.CreateOrUpdateArestState
 
 

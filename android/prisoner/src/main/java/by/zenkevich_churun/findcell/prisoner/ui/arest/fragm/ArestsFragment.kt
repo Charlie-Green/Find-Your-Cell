@@ -12,7 +12,7 @@ import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import by.zenkevich_churun.findcell.core.util.android.NavigationUtil
 import by.zenkevich_churun.findcell.prisoner.R
-import by.zenkevich_churun.findcell.prisoner.ui.arest.state.ArestsListState
+import by.zenkevich_churun.findcell.prisoner.ui.common.arest.ArestsListState
 import by.zenkevich_churun.findcell.prisoner.ui.common.arest.CreateOrUpdateArestState
 import by.zenkevich_churun.findcell.prisoner.ui.arest.state.DeleteArestsState
 import by.zenkevich_churun.findcell.prisoner.ui.arest.vm.ArestsViewModel
@@ -68,8 +68,6 @@ class ArestsFragment: Fragment(R.layout.arests_fragm) {
         fabAdd.setOnClickListener   { addArest() }
         buDelete.setOnClickListener { suggestDelete() }
         buCancel.setOnClickListener { vm.cancelDelete() }
-
-        restoreArestDateRangePicker()
     }
 
 
@@ -322,28 +320,10 @@ class ArestsFragment: Fragment(R.layout.arests_fragm) {
 
 
     private fun addArest() {
-//        DialogUtil.pickDateRange(
-//            parentFragmentManager,
-//            Calendar.getInstance().apply { add(Calendar.DATE, -15) },
-//            Calendar.getInstance(),
-//            this::onArestDateRangeSelected
-//        )
-
         NavigationUtil.safeNavigate(
             findNavController(),
             R.id.fragmArests,
             R.id.dialogAddArest
         ) { null }
-    }
-
-    private fun restoreArestDateRangePicker() {
-//        DialogUtil.restoreDateRangePicker(
-//            parentFragmentManager,
-//            this::onArestDateRangeSelected
-//        )
-    }
-
-    private fun onArestDateRangeSelected(start: Long, end: Long) {
-       vm.addArest(start, end)
     }
 }

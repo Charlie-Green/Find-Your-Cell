@@ -45,6 +45,7 @@ dependencies {
     implementation Deps.libMaterial
 
     implementation Deps.libNavigationFragm
+    implementation Deps.libDateRangePicker
 
     implementation Deps.libHilt
 
