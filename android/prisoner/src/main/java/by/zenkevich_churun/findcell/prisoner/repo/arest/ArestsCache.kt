@@ -3,6 +3,7 @@ package by.zenkevich_churun.findcell.prisoner.repo.arest
 import by.zenkevich_churun.findcell.entity.entity.Arest
 import by.zenkevich_churun.findcell.entity.entity.LightArest
 import java.util.*
+import kotlin.collections.HashSet
 
 
 /** Keeps current list of [Arest]s in RAM.
@@ -46,6 +47,36 @@ internal object ArestsCache {
             arests.add(newPosition, updatedArest)
             return oldPosition to newPosition
         }
+    }
+
+    /** @return [LinkedList] of list positions which the items have been deleted from. **/
+    fun delete(ids: HashSet<Int>): LinkedList<Int> {
+        if(ids.isEmpty()) {
+            return LinkedList()
+        }
+
+        val deletedPositions = LinkedList<Int>()
+
+        synchronized(arests) {
+            val oldArests = List(arests.size) { index ->
+                arests[index]
+            }
+            arests.clear()
+
+            for(j in oldArests.indices) {
+                val arest = oldArests[j]
+
+                if(ids.contains(arest.id)) {
+                    // Delete this arest.
+                    deletedPositions.add(j)
+                } else {
+                    // Leave it.
+                    arests.add(arest)
+                }
+            }
+        }
+
+        return deletedPositions
     }
 
 

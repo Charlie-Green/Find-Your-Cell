@@ -98,6 +98,19 @@ class ArestsRepository @Inject constructor(
         return Pair(response, position)
     }
 
+    fun deleteArests(ids: Collection<Int>) {
+        val prisoner = prisonerStore.prisonerLD.value ?: return
+
+        val response = try {
+            // TODO
+        } catch(exc: IOException) {
+            Log.w(LOGTAG, "Failed to delete arests: ${exc.message}")
+
+        }
+
+        val deletedPositions = ArestsCache.delete(ids)
+    }
+
 
     private fun jailsList(
         checkCache: Boolean
