@@ -8,6 +8,8 @@ import by.zenkevich_churun.findcell.entity.response.CreateOrUpdateArestResponse
 import by.zenkevich_churun.findcell.prisoner.repo.arest.ArestsRepository
 import by.zenkevich_churun.findcell.prisoner.repo.arest.GetArestsResult
 import by.zenkevich_churun.findcell.prisoner.ui.arest.state.*
+import by.zenkevich_churun.findcell.prisoner.ui.common.arest.CUArestStateHolder
+import by.zenkevich_churun.findcell.prisoner.ui.common.arest.CreateOrUpdateArestState
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -15,14 +17,12 @@ import javax.inject.Inject
 
 class ArestsViewModel @Inject constructor(
     private val repo: ArestsRepository,
-    private val netTracker: NetworkStateTracker
+    private val netTracker: NetworkStateTracker,
+    private val cuStateHolder: CUArestStateHolder
 ): ViewModel() {
 
     private val mldListState = MutableLiveData<ArestsListState>().apply {
         value = ArestsListState.Idle
-    }
-    private val mldAddState = MutableLiveData<CreateOrUpdateArestState>().apply {
-        value = CreateOrUpdateArestState.Idle
     }
     private val mldDeleteState = MutableLiveData<DeleteArestsState>().apply {
         value = DeleteArestsState.Idle
@@ -37,7 +37,7 @@ class ArestsViewModel @Inject constructor(
         get() = mldListState
 
     val addOrUpdateStateLD: LiveData<CreateOrUpdateArestState>
-        get() = mldAddState
+        get() = cuStateHolder.stateLD
 
     val openedArestLD: LiveData<Arest?>
         get() = mldOpenedArest
@@ -67,11 +67,11 @@ class ArestsViewModel @Inject constructor(
         val arests = this.arests ?: return
 
         if(!netTracker.isInternetAvailable) {
-            mldAddState.value = CreateOrUpdateArestState.NoInternet()
+            cuStateHolder.submitState( CreateOrUpdateArestState.NoInternet() )
             return
         }
 
-        mldAddState.value = CreateOrUpdateArestState.Loading
+        cuStateHolder.submitState( CreateOrUpdateArestState.Loading )
         viewModelScope.launch(Dispatchers.IO) {
             val response = repo.addArest(start, end)
             applyResponse(arests, response.first, null, response.second)
@@ -186,7 +186,7 @@ class ArestsViewModel @Inject constructor(
         when(response) {
             is CreateOrUpdateArestResponse.NetworkError -> {
                 val state = CreateOrUpdateArestState.NetworkError(oldPosition == null)
-                mldAddState.postValue(state)
+                cuStateHolder.submitState(state)
             }
 
             is CreateOrUpdateArestResponse.ArestsIntersect -> {
@@ -194,14 +194,14 @@ class ArestsViewModel @Inject constructor(
                     a.id == response.intersectedId
                 }
                 val state = arestsIntersectState(intersectedArest, oldPosition == null)
-                mldAddState.postValue(state)
+                cuStateHolder.submitState(state)
             }
 
             is CreateOrUpdateArestResponse.Success -> {
                 val state = oldPosition?.let {
                     CreateOrUpdateArestState.Updated(it, newPosition)
                 } ?: CreateOrUpdateArestState.Created(newPosition)
-                mldAddState.postValue(state)
+                cuStateHolder.submitState(state)
             }
         }
     }

@@ -45,7 +45,9 @@ dependencies {
     implementation Deps.libAndroidX
     implementation Deps.libAppCompat
     implementation Deps.libMaterial
+
     implementation Deps.libRoundedImageView
+    implementation Deps.libDateRangePicker
 
     implementation Deps.libViewModel
     implementation Deps.libLiveData

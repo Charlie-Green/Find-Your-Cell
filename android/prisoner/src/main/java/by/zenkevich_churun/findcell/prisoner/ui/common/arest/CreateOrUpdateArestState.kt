@@ -1,4 +1,4 @@
-package by.zenkevich_churun.findcell.prisoner.ui.arest.state
+package by.zenkevich_churun.findcell.prisoner.ui.common.arest
 
 import java.util.*
 

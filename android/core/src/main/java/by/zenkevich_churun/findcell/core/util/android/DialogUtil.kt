@@ -9,6 +9,7 @@ import android.view.WindowManager
 import androidx.core.util.Pair
 import androidx.fragment.app.FragmentManager
 import by.zenkevich_churun.findcell.core.R
+import com.google.android.material.datepicker.CalendarConstraints
 import com.google.android.material.datepicker.MaterialDatePicker
 import java.util.*
 
@@ -38,23 +39,35 @@ object DialogUtil {
 
 
     fun setWidth(target: Dialog, w: Int) {
-        val params = target.window?.attributes
-            ?: WindowManager.LayoutParams(w, WRAP_CONTENT)
-        params.width = w
+        updateParams(target) {
+            width = w
+        }
+    }
 
-        target.window?.attributes = params
+    fun setDimensions(target: Dialog, w: Int, h: Int) {
+        updateParams(target) {
+            width = w
+            height = h
+        }
     }
 
 
     fun pickDateRange(
         fragmentMan: FragmentManager,
+        boundRange:   Pair<Long, Long>,
         initialRange: Pair<Long, Long>?,
         onSelected: (start: Long, end: Long) -> Unit ) {
+
+        val constraints = CalendarConstraints
+            .Builder()
+            .setStart(boundRange.first!!)
+            .setEnd(boundRange.second!!)
+            .build()
 
         val pickerBuilder = MaterialDatePicker
             .Builder
             .dateRangePicker()
-            .setTheme(R.style.datepicker_dialog_theme)
+            .setCalendarConstraints(constraints)
         initialRange?.also { pickerBuilder.setSelection(it) }
         val picker = pickerBuilder.build()
         picker.show(fragmentMan, TAG_DATE_RANGE_PICKER_DIALOG)
@@ -68,13 +81,20 @@ object DialogUtil {
         fragmentMan: FragmentManager,
         initialStart: Calendar,
         initialEnd: Calendar,
-        onSelected: (start: Long, end: Long) -> Unit
+        onSelected: (start: Long, end: Long) -> Unit ) {
 
-    ) = pickDateRange(
-        fragmentMan,
-        Pair(initialStart.timeInMillis, initialEnd.timeInMillis),
-        onSelected
-    )
+        val cal = Calendar.getInstance()
+        val now = cal.timeInMillis
+        cal.set(1994, Calendar.JULY, 1)
+        val july1994 = cal.timeInMillis
+
+        pickDateRange(
+            fragmentMan,
+            Pair(july1994, now),
+            Pair(initialStart.timeInMillis, initialEnd.timeInMillis),
+            onSelected
+        )
+    }
 
     fun restoreDateRangePicker(
         fragmentMan: FragmentManager,
@@ -88,5 +108,13 @@ object DialogUtil {
         picker.addOnPositiveButtonClickListener { range ->
             onSelected(range.first!!, range.second!!)
         }
+    }
+
+
+    inline fun updateParams(target: Dialog, update: WindowManager.LayoutParams.() -> Unit) {
+        val params = target.window?.attributes
+            ?: WindowManager.LayoutParams()
+        params.update()
+        target.window?.attributes = params
     }
 }

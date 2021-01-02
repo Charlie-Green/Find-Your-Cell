@@ -2,7 +2,6 @@ package by.zenkevich_churun.findcell.prisoner.ui.arest.fragm
 
 import android.content.DialogInterface
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import android.view.animation.AnimationUtils
 import androidx.appcompat.app.AlertDialog
@@ -11,15 +10,14 @@ import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
-import by.zenkevich_churun.findcell.core.util.android.DialogUtil
+import by.zenkevich_churun.findcell.core.util.android.NavigationUtil
 import by.zenkevich_churun.findcell.prisoner.R
 import by.zenkevich_churun.findcell.prisoner.ui.arest.state.ArestsListState
-import by.zenkevich_churun.findcell.prisoner.ui.arest.state.CreateOrUpdateArestState
+import by.zenkevich_churun.findcell.prisoner.ui.common.arest.CreateOrUpdateArestState
 import by.zenkevich_churun.findcell.prisoner.ui.arest.state.DeleteArestsState
 import by.zenkevich_churun.findcell.prisoner.ui.arest.vm.ArestsViewModel
 import by.zenkevich_churun.findcell.prisoner.ui.sched.fragm.ScheduleFragment
 import kotlinx.android.synthetic.main.arests_fragm.*
-import java.util.*
 import javax.inject.Inject
 
 
@@ -324,19 +322,25 @@ class ArestsFragment: Fragment(R.layout.arests_fragm) {
 
 
     private fun addArest() {
-        DialogUtil.pickDateRange(
-            parentFragmentManager,
-            Calendar.getInstance().apply { add(Calendar.DATE, -15) },
-            Calendar.getInstance(),
-            this::onArestDateRangeSelected
-        )
+//        DialogUtil.pickDateRange(
+//            parentFragmentManager,
+//            Calendar.getInstance().apply { add(Calendar.DATE, -15) },
+//            Calendar.getInstance(),
+//            this::onArestDateRangeSelected
+//        )
+
+        NavigationUtil.safeNavigate(
+            findNavController(),
+            R.id.fragmArests,
+            R.id.dialogAddArest
+        ) { null }
     }
 
     private fun restoreArestDateRangePicker() {
-        DialogUtil.restoreDateRangePicker(
-            parentFragmentManager,
-            this::onArestDateRangeSelected
-        )
+//        DialogUtil.restoreDateRangePicker(
+//            parentFragmentManager,
+//            this::onArestDateRangeSelected
+//        )
     }
 
     private fun onArestDateRangeSelected(start: Long, end: Long) {

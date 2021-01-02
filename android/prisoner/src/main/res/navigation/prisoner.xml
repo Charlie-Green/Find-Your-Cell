@@ -65,6 +65,10 @@
         android:id="@+id/dialogEditInterrupt"
         android:name="by.zenkevich_churun.findcell.prisoner.ui.interrupt.dialog.EditInterruptDialog" />
 
+    <dialog
+        android:id="@+id/dialogAddArest"
+        android:name="by.zenkevich_churun.findcell.prisoner.ui.addarest.dialog.AddArestDialog" />
+
 
     <action
         android:id="@+id/actSelectProfileMenu"
