@@ -6,14 +6,14 @@ import javax.persistence.EntityManager
 import javax.persistence.TypedQuery
 
 
-internal class JailIdsForArestQuery: LazyTypedQuery<java.lang.Integer>(
+internal class JailIdsForArestQuery: LazyTypedQuery<Int>(
     "select distinct jailId from ${PeriodEntity::class.java.simpleName} p where arest=?0",
-    java.lang.Integer::class.java ) {
+    Int::class.javaObjectType ) {
 
     fun getTypedQuery(
         entityMan: EntityManager,
         arestId: Int
-    ): TypedQuery<java.lang.Integer> = getTypedQuery(entityMan).apply {
+    ) = getTypedQuery(entityMan).apply {
         setParameter(0, arestId)
     }
 }

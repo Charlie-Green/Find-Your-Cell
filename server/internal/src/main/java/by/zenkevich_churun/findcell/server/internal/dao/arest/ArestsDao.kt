@@ -32,11 +32,7 @@ class ArestsDao(private val connection: DatabaseConnection) {
 
     fun jailIds(arestId: Int): List<Int> {
         val q = queryJailsForArest.getTypedQuery(connection.entityMan, arestId)
-
-        // TODO: Can this mapping be avoided?
-        return q.resultList.map { javaInteger ->
-            javaInteger.toInt()
-        }
+        return q.resultList
     }
 
     fun add(arest: ArestEntity) {

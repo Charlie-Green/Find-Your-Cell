@@ -5,7 +5,7 @@ import by.zenkevich_churun.findcell.server.internal.entity.table.ArestEntity
 import javax.persistence.EntityManager
 
 
-internal class GetIntersectingArestsQuery: LazyTypedQuery<java.lang.Integer>(
+internal class GetIntersectingArestsQuery: LazyTypedQuery<Int>(
 
     // Don't use between because it's inclusive (need exclusive compare)
     "select id from ${ArestEntity::class.java.simpleName} a " +
@@ -17,7 +17,7 @@ internal class GetIntersectingArestsQuery: LazyTypedQuery<java.lang.Integer>(
         "or (a.start = ?1 and a.end = ?2)" +    // - A equals B
     ")",
 
-    java.lang.Integer::class.java ) {
+    Int::class.javaObjectType ) {
 
 
     fun getTypedQuery(
