@@ -15,6 +15,7 @@ interface ArestsSerializer {
     ): String
 
     fun sertialize(response: CreateOrUpdateArestResponse): String
+    fun serialize(arestIds: Collection<Int>): String
 
 
     companion object {

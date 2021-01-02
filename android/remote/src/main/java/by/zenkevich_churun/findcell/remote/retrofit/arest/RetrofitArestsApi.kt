@@ -41,7 +41,7 @@ class RetrofitArestsApi @Inject constructor(
         val requestBody = RequestBody.create(mediaType, json)
 
         val response = service
-            .createArest(requestBody)
+            .create(requestBody)
             .execute()
         RetrofitApisUtil.assertResponseCode(response.code())
 
@@ -59,7 +59,7 @@ class RetrofitArestsApi @Inject constructor(
 
         val service = retrofit.create(ArestsService::class.java)
         val response = service
-            .getArests(1, prisonerId, passwordBase64)
+            .get(1, prisonerId, passwordBase64)
             .execute()
         RetrofitApisUtil.assertResponseCode(response.code())
 
@@ -82,8 +82,20 @@ class RetrofitArestsApi @Inject constructor(
     override fun delete(
         prisonerId: Int,
         passwordHash: ByteArray,
-        id: Int ) {
-        TODO("Not yet implemented")
+        ids: Collection<Int> ) {
+
+        val service = retrofit.create(ArestsService::class.java)
+
+        val json = ArestsSerializer
+            .forVersion(1)
+            .serialize(ids)
+        val mediaType = MediaType.get("application/json")
+        val request = RequestBody.create(mediaType, json)
+
+        val response = service
+            .delete(request)
+            .execute()
+        RetrofitApisUtil.assertResponseCode(response.code())
     }
 
 

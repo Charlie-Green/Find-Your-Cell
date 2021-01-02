@@ -10,14 +10,19 @@ internal interface ArestsService {
 
     @FormUrlEncoded
     @POST("arest/get")
-    fun getArests(
+    fun get(
         @Field("v") version: Int,
         @Field("id") prisonerId: Int,
         @Field("pass") passwordBase64: String
     ): Call<ResponseBody>
 
     @POST("arest/add")
-    fun createArest(
+    fun create(
+        @Body data: RequestBody
+    ): Call<ResponseBody>
+
+    @POST("arest/delete")
+    fun delete(
         @Body data: RequestBody
     ): Call<ResponseBody>
 }

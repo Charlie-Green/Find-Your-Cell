@@ -32,6 +32,6 @@ interface ArestsApi {
     fun delete(
         prisonerId: Int,
         passwordHash: ByteArray,
-        id: Int
+        ids: Collection<Int>
     )
 }

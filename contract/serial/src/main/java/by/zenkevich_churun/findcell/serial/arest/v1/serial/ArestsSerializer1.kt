@@ -42,6 +42,10 @@ internal class ArestsSerializer1: ArestsSerializer {
         }
     }
 
+    override fun serialize(arestIds: Collection<Int>): String {
+        TODO("Not yet implemented")
+    }
+
 
     companion object {
         private const val APPROX_BYTES_PER_AREST = 73
