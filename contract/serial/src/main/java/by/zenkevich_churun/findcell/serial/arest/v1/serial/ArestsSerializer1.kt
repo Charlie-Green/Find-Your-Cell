@@ -3,6 +3,7 @@ package by.zenkevich_churun.findcell.serial.arest.v1.serial
 import by.zenkevich_churun.findcell.entity.entity.LightArest
 import by.zenkevich_churun.findcell.entity.response.CreateOrUpdateArestResponse
 import by.zenkevich_churun.findcell.serial.arest.abstr.ArestsSerializer
+import by.zenkevich_churun.findcell.serial.arest.v1.pojo.ArestIdsPojo1
 import by.zenkevich_churun.findcell.serial.arest.v1.pojo.ArestPojo1
 import by.zenkevich_churun.findcell.serial.arest.v1.pojo.ArestsListPojo1
 import by.zenkevich_churun.findcell.serial.util.protocol.ProtocolUtil
@@ -42,8 +43,18 @@ internal class ArestsSerializer1: ArestsSerializer {
         }
     }
 
-    override fun serialize(arestIds: Collection<Int>): String {
-        TODO("Not yet implemented")
+    override fun serialize(
+        prisonerId: Int,
+        passwordHash: ByteArray,
+        arestIds: Collection<Int>
+    ): String {
+
+        val pojo = ArestIdsPojo1()
+        pojo.prisonerId   = prisonerId
+        pojo.passwordHash = passwordHash
+        pojo.arestIds     = arestIds.toList()
+
+        return ProtocolUtil.toJson(pojo, 192)
     }
 
 

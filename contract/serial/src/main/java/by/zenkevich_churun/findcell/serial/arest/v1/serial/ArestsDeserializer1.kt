@@ -3,6 +3,7 @@ package by.zenkevich_churun.findcell.serial.arest.v1.serial
 import by.zenkevich_churun.findcell.entity.entity.LightArest
 import by.zenkevich_churun.findcell.entity.response.CreateOrUpdateArestResponse
 import by.zenkevich_churun.findcell.serial.arest.abstr.ArestsDeserializer
+import by.zenkevich_churun.findcell.serial.arest.v1.pojo.ArestIdsPojo1
 import by.zenkevich_churun.findcell.serial.arest.v1.pojo.ArestPojo1
 import by.zenkevich_churun.findcell.serial.arest.v1.pojo.ArestsListPojo1
 import by.zenkevich_churun.findcell.serial.common.v1.CommonContract1
@@ -36,5 +37,9 @@ internal class ArestsDeserializer1: ArestsDeserializer {
             'I' -> CreateOrUpdateArestResponse.ArestsIntersect(id)
             else -> throw IllegalArgumentException("Unknown prefix $prefix")
         }
+    }
+
+    override fun deserializeIds(input: InputStream): ArestIdsPojo1 {
+        return ProtocolUtil.fromJson(input, ArestIdsPojo1::class.java)
     }
 }
