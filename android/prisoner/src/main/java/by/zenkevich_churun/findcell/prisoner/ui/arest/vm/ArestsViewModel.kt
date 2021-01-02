@@ -1,16 +1,13 @@
 package by.zenkevich_churun.findcell.prisoner.ui.arest.vm
 
 import android.content.Context
-import android.util.Log
 import androidx.lifecycle.*
 import by.zenkevich_churun.findcell.core.injected.web.NetworkStateTracker
 import by.zenkevich_churun.findcell.entity.entity.Arest
 import by.zenkevich_churun.findcell.entity.response.CreateOrUpdateArestResponse
 import by.zenkevich_churun.findcell.prisoner.repo.arest.ArestsRepository
 import by.zenkevich_churun.findcell.prisoner.repo.arest.GetArestsResult
-import by.zenkevich_churun.findcell.prisoner.ui.arest.state.ArestsListState
-import by.zenkevich_churun.findcell.prisoner.ui.arest.state.CreateOrUpdateArestState
-import by.zenkevich_churun.findcell.prisoner.ui.arest.state.DeleteArestsState
+import by.zenkevich_churun.findcell.prisoner.ui.arest.state.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -81,23 +78,6 @@ class ArestsViewModel @Inject constructor(
         }
     }
 
-    fun deleteArests() {
-        val listState = mldListState.value as? ArestsListState.Loaded ?: return
-        val checkedIds = listState.checkedIds
-
-        if(!isStateAppropriateToDelete()) {
-            return
-        }
-        if(!netTracker.isInternetAvailable) {
-            mldDeleteState.value = DeleteArestsState.NoInternet()
-            return
-        }
-
-        viewModelScope.launch(Dispatchers.IO) {
-            // TODO
-        }
-    }
-
     fun openSchedule(position: Int) {
         val arests = this.arests ?: return
         if(position in arests.indices) {
@@ -115,7 +95,22 @@ class ArestsViewModel @Inject constructor(
     }
 
     fun delete() {
-        // TODO
+        val listState = mldListState.value as? ArestsListState.Loaded ?: return
+        val checkedIds = listState.checkedIds
+
+        if(!isStateAppropriateToDelete()) {
+            return
+        }
+        if(!netTracker.isInternetAvailable) {
+            mldDeleteState.value = DeleteArestsState.NoInternet()
+            return
+        }
+
+        mldDeleteState.value = DeleteArestsState.InProgress
+        viewModelScope.launch(Dispatchers.IO) {
+            val deleteResult = repo.deleteArests(checkedIds)
+            applyDeleteResult(deleteResult)
+        }
     }
 
     fun cancelDelete() {
@@ -147,9 +142,10 @@ class ArestsViewModel @Inject constructor(
         val state = mldDeleteState.value ?: return true
         return when(state) {
             is DeleteArestsState.Idle         -> true
+            is DeleteArestsState.InProgress   -> false
             is DeleteArestsState.NoInternet   -> state.notified
             is DeleteArestsState.NetworkError -> state.notified
-            else                              -> false
+            is DeleteArestsState.Success      -> state.notified
         }
     }
 
@@ -187,8 +183,6 @@ class ArestsViewModel @Inject constructor(
         oldPosition: Int?,
         newPosition: Int ) {
 
-        Log.v("CharlieDebug", "Response = ${response.javaClass.simpleName}, position = $newPosition")
-
         when(response) {
             is CreateOrUpdateArestResponse.NetworkError -> {
                 val state = CreateOrUpdateArestState.NetworkError(oldPosition == null)
@@ -210,6 +204,28 @@ class ArestsViewModel @Inject constructor(
                 mldAddState.postValue(state)
             }
         }
+    }
+
+    private fun applyDeleteResult(deletedPositions: List<Int>?) {
+        if(deletedPositions == null) {
+            mldDeleteState.postValue( DeleteArestsState.NetworkError() )
+            // Remain in Checkable mode.
+            return
+        }
+
+        // Switch off the Checkable mode.
+        mldCheckable.postValue(false)
+
+        // Clean out the IDs that are now garbage:
+        val listState = mldListState.value as? ArestsListState.Loaded
+        listState?.checkedIds?.clear()
+
+        // Publish the Success state:
+        val state = DeleteArestsState.Success(
+            deletedPositions.minByOrNull { it } ?: 0,
+            deletedPositions.maxByOrNull { it } ?: 0
+        )
+        mldDeleteState.postValue(state)
     }
 
 

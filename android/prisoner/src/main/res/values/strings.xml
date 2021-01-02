@@ -15,6 +15,11 @@
     <string name="sign_up">Зарегистрироваться</string>
     <string name="sign_out">Выход</string>
     <string name="find_prisoners">Найти сокамерников!</string>
+    <string name="delete_arests_failed_title">Удаление не удалось</string>
+    <string name="delete_arests_failed_msg">Возникла ошибка сети.</string>
+    <string name="delete_arests_needs_internet">
+        Для удаления арестов нужно подключение к интернету.
+    </string>
 
     <plurals name="delete_arests_title">
         <item quantity="one">Убрать арест?</item>

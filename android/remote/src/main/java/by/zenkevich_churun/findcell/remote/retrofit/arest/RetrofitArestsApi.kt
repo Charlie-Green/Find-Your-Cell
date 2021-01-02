@@ -88,7 +88,7 @@ class RetrofitArestsApi @Inject constructor(
 
         val json = ArestsSerializer
             .forVersion(1)
-            .serialize(ids)
+            .serialize(prisonerId, passwordHash, ids)
         val mediaType = MediaType.get("application/json")
         val request = RequestBody.create(mediaType, json)
 

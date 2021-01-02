@@ -16,7 +16,11 @@ sealed class DeleteArestsState {
     }
 
     class Success(
-        val positions: List<Int>
+        /** Minimumm position of a deleted item. **/
+        val minPosition: Int,
+
+        /** Maximumm position of a deleted item. **/
+        val maxPosition: Int
     ): DeleteArestsState() {
 
         var notified = false

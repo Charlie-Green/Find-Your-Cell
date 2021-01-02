@@ -51,7 +51,6 @@ class ArestsRepository(
         }
 
         dao.add(entity)
-        println("Assigned id ${entity.id}")
         return CreateOrUpdateArestResponse.Success(entity.id)
     }
 

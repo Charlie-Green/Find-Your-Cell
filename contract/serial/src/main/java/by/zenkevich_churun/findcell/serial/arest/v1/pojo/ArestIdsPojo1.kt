@@ -4,7 +4,7 @@ import by.zenkevich_churun.findcell.serial.arest.pojo.ArestIdsPojo
 import com.google.gson.annotations.SerializedName
 
 
-internal class ArestIdsPojo1: ArestIdsPojo() {
+class ArestIdsPojo1: ArestIdsPojo() {
 
     @SerializedName("prisoner")
     override var prisonerId: Int = 0

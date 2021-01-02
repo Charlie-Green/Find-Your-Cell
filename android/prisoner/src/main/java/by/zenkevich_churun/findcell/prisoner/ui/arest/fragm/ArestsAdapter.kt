@@ -2,7 +2,6 @@ package by.zenkevich_churun.findcell.prisoner.ui.arest.fragm
 
 import android.animation.ValueAnimator
 import android.util.LayoutDirection
-import android.util.Log
 import android.view.*
 import androidx.core.view.updatePadding
 import androidx.recyclerview.widget.RecyclerView
@@ -74,10 +73,8 @@ class ArestsAdapter(
             }
 
             if(animate) {
-                Log.v("CharlieDebug", "Animate to $desiredTranslate")
                 animateCheckBox(affectedViews, desiredTranslate)
             } else {
-                Log.v("CharlieDebug", "Translate to $desiredTranslate")
                 translateCheckBox(affectedViews, desiredTranslate)
             }
 

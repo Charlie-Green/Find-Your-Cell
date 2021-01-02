@@ -15,6 +15,7 @@ import by.zenkevich_churun.findcell.core.util.android.DialogUtil
 import by.zenkevich_churun.findcell.prisoner.R
 import by.zenkevich_churun.findcell.prisoner.ui.arest.state.ArestsListState
 import by.zenkevich_churun.findcell.prisoner.ui.arest.state.CreateOrUpdateArestState
+import by.zenkevich_churun.findcell.prisoner.ui.arest.state.DeleteArestsState
 import by.zenkevich_churun.findcell.prisoner.ui.arest.vm.ArestsViewModel
 import by.zenkevich_churun.findcell.prisoner.ui.sched.fragm.ScheduleFragment
 import kotlinx.android.synthetic.main.arests_fragm.*
@@ -45,6 +46,9 @@ class ArestsFragment: Fragment(R.layout.arests_fragm) {
             }
         })
         vm.addOrUpdateStateLD.observe(viewLifecycleOwner, Observer { state ->
+            renderState(state)
+        })
+        vm.deleteStateLD.observe(viewLifecycleOwner, Observer { state ->
             renderState(state)
         })
         vm.loadingLD.observe(viewLifecycleOwner, Observer { loading ->
@@ -198,6 +202,38 @@ class ArestsFragment: Fragment(R.layout.arests_fragm) {
         }
     }
 
+    private fun renderState(state: DeleteArestsState) {
+        when(state) {
+            is DeleteArestsState.Success -> {
+                if(!state.notified) {
+                    notifyArestsDeleted(state.minPosition, state.maxPosition)
+                    state.notified = true
+                }
+            }
+
+            is DeleteArestsState.NetworkError -> {
+                if(!state.notified) {
+                    notifyError(
+                        R.string.delete_arests_failed_title,
+                        R.string.delete_arests_failed_msg
+                    ) { state.notified = true }
+
+                }
+            }
+
+            is DeleteArestsState.NoInternet -> {
+                if(!state.notified) {
+                    notifyError(
+                        R.string.no_internet_title,
+                        R.string.delete_arests_needs_internet
+                    ) { state.notified = true }
+
+                }
+            }
+        }
+    }
+
+
     private fun notifyListStateNetworkError(state: ArestsListState.NetworkError) {
         notifyError(R.string.error_title, R.string.get_arests_failed_msg) {
             state.notified = true
@@ -214,6 +250,11 @@ class ArestsFragment: Fragment(R.layout.arests_fragm) {
         notifyCreateOrUpdateError(state.operationCreate, msg) {
             state.notified = true
         }
+    }
+
+    private fun notifyArestsDeleted(minPosition: Int, maxPosition: Int) {
+        val count = maxPosition-minPosition + 1
+        adapter.notifyItemRangeChanged(minPosition, count)
     }
 
 

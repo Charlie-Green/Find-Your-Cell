@@ -7,7 +7,7 @@ import javax.persistence.Query
 
 
 internal class DeletePeriodsForArestsQuery: LazyQuery(
-    "delete from ${PeriodEntity::class.java.simpleName} where arestId in ?0" ) {
+    "delete from ${PeriodEntity::class.java.simpleName} where key.arestId in ?0" ) {
 
     fun getQuery(
         entityMan: EntityManager,

@@ -68,7 +68,7 @@ class ArestsController {
 
 
     @PostMapping("/arest/delete")
-    fun deleteArests(input: InputStream) {
+    fun deleteArests(input: InputStream): String {
         val pojo = ArestsDeserializer
             .forVersion(1)
             .deserializeIds(input)
@@ -83,5 +83,7 @@ class ArestsController {
             println(exc.message)
             throw IllegalServerParameterException()
         }
+
+        return ""
     }
 }

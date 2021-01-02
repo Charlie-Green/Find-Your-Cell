@@ -7,7 +7,7 @@ import com.google.gson.annotations.SerializedName
 import java.util.Calendar
 
 
-internal class ArestPojo1: ArestPojo() {
+class ArestPojo1: ArestPojo() {
 
     @SerializedName("prisoner")
     override var prisonerId: Int? = null
