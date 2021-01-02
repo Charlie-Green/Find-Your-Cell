@@ -24,7 +24,7 @@ class AddArestDialog: DialogFragment() {
         setDimensions()
         val v = inflater.inflate(R.layout.add_arest_dialog, container, false)
         v.calpicker.init(
-            Calendar.getInstance().apply { set(1994, Calendar.JULY, 1) }.time,
+            Calendar.getInstance().apply { set(1994, Calendar.JULY, 10) }.time,
             Calendar.getInstance().time,
             SimpleDateFormat("MMMM yyyy", Locale.getDefault())
         ).inMode( CalendarPickerView.SelectionMode.RANGE )
@@ -33,7 +33,7 @@ class AddArestDialog: DialogFragment() {
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        // ...
+        view.calpicker.scrollToDate( Calendar.getInstance().apply { set(2020, Calendar.AUGUST, 9) }.time )
     }
 
 

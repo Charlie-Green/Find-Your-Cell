@@ -14,6 +14,6 @@
         app:tsquare_headerTextColor="?colorPrimary"
         app:tsquare_titleTextColor="?colorPrimary"
         app:tsquare_dividerColor="?android:textColorSecondary"
-        app:tsquare_orientation_horizontal="false" />
+        app:tsquare_orientation_horizontal="true" />
 
 </FrameLayout>
