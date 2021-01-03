@@ -11,8 +11,9 @@ import javax.transaction.Transactional
 @org.springframework.stereotype.Repository
 interface ScheduleDao: Repository<PeriodEntity, PeriodKey> {
 
-    @Query("select p from PeriodEntity p")
-    fun get(): List<PeriodEntity>
+    @Query("select p from PeriodEntity p where arest=:arestId")
+    fun periods(arestId: Int): List<PeriodEntity>
+    
 
     @Transactional
     @Modifying

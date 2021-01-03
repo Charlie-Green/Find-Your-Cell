@@ -1,12 +1,10 @@
 package by.zenkevich_churun.findcell.server.internal.entity.key
 
-import by.zenkevich_churun.findcell.server.internal.entity.table.PeriodEntity
 import java.io.Serializable
 import javax.persistence.Column
 import javax.persistence.Embeddable
 
 
-/** Composite primary key for [PeriodEntity]. **/
 @Embeddable
 class PeriodKey: Serializable {
 
