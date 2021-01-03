@@ -8,10 +8,9 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories
 
 
 @SpringBootApplication
-// TODO: CharlieDebug:
 @PropertySources(
-    PropertySource("classpath:public.properties")/*,
-    PropertySource("classpath:confidential.properties")*/
+    PropertySource("classpath:public.properties"),
+    PropertySource("classpath:confidential.properties")
 )
 @EntityScan(value = [
     "${SviazenApplication.ROOT_PACKAGE}.internal.entity"

@@ -1,8 +1,7 @@
 package by.zenkevich_churun.findcell.prisoner.ui.common.model
 
-import by.zenkevich_churun.findcell.core.entity.general.Cell
-import by.zenkevich_churun.findcell.core.entity.sched.Schedule
-import by.zenkevich_churun.findcell.core.entity.sched.SchedulePeriod
+import by.zenkevich_churun.findcell.entity.entity.Cell
+import by.zenkevich_churun.findcell.entity.entity.SchedulePeriod
 import by.zenkevich_churun.findcell.prisoner.ui.common.sched.*
 import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.Test
@@ -16,7 +15,8 @@ class ScheduleModelTest {
         val cell1 = CellModel(1, "Жодино", 7, 0, 0, 0, 0)
         val cell2 = CellModel(2, "Окрестина", 14, 0, 0, 0, 0)
 
-        val schedule = Schedule(
+        val schedule = TestSchedule(
+            1,
             calendar(2020, 11, 18),
             calendar(2020, 11, 22),
             listOf(cell1, cell2),
@@ -45,7 +45,8 @@ class ScheduleModelTest {
 
     @Test
     fun toSchedule() {
-        val schedule = Schedule(
+        val schedule = TestSchedule(
+            1,
             calendar(2020, 11, 18),
             calendar(2020, 11, 22),
             listOf( CellModel(1, "Жодино", 31, 0, 0, 0, 0) ),
@@ -76,8 +77,9 @@ class ScheduleModelTest {
         vararg cells: Cell ) {
 
         val day = where.dayAt(dayIndex)
-        val actualDayCount = day.dayData.count { it == '.' } + 1
-        Assertions.assertEquals(cells.size, actualDayCount)
+        println("days[$dayIndex] = ${day.dayData}")
+        val actualCellCount = day.dayData.count { it == '.' } + 1
+        Assertions.assertEquals(cells.size, actualCellCount)
 
         for(cell in cells) {
             Assertions.assertTrue( day.dayData.contains(cell.toString()) )
