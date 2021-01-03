@@ -4,11 +4,14 @@ import by.zenkevich_churun.findcell.server.internal.entity.table.ArestEntity
 import org.springframework.data.jpa.repository.Modifying
 import org.springframework.data.jpa.repository.Query
 import org.springframework.data.repository.Repository
+import java.util.Optional
 import javax.transaction.Transactional
 
 
 @org.springframework.stereotype.Repository
 interface ArestsDao: Repository<ArestEntity, Int> {
+
+    fun findById(id: Int): Optional<ArestEntity>
 
     @Query("select a from ArestEntity a where prisoner=:prisonerId")
     fun arests(prisonerId: Int): List<ArestEntity>

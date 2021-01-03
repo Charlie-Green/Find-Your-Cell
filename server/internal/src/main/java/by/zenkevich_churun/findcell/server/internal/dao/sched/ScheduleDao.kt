@@ -1,6 +1,7 @@
 package by.zenkevich_churun.findcell.server.internal.dao.sched
 
 import by.zenkevich_churun.findcell.server.internal.entity.key.PeriodKey
+import by.zenkevich_churun.findcell.server.internal.entity.table.CellScheduleEntryEntity
 import by.zenkevich_churun.findcell.server.internal.entity.table.PeriodEntity
 import org.springframework.data.jpa.repository.Modifying
 import org.springframework.data.jpa.repository.Query
@@ -13,7 +14,10 @@ interface ScheduleDao: Repository<PeriodEntity, PeriodKey> {
 
     @Query("select p from PeriodEntity p where arest=:arestId")
     fun periods(arestId: Int): List<PeriodEntity>
-    
+
+    @Query("select c from CellScheduleEntryEntity c where arest=:arestId")
+    fun cells(arestId: Int): List<CellScheduleEntryEntity>
+
 
     @Transactional
     @Modifying

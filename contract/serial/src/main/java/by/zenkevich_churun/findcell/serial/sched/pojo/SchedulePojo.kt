@@ -1,8 +1,12 @@
 package by.zenkevich_churun.findcell.serial.sched.pojo
 
-import by.zenkevich_churun.findcell.entity.entity.Schedule
 
+abstract class SchedulePojo {
 
-abstract class SchedulePojo: Schedule() {
+    abstract var arestId: Int?
     abstract var passwordBase64: String?
+    abstract var start: Long
+    abstract var end: Long
+    abstract var cells: List<CellPojo>
+    abstract var periods: List<PeriodPojo>
 }

@@ -2,7 +2,7 @@ package by.zenkevich_churun.findcell.server.internal.repo.sched
 
 import by.zenkevich_churun.findcell.server.internal.dao.arest.ArestsDao
 import by.zenkevich_churun.findcell.server.internal.dao.sched.ScheduleDao
-import by.zenkevich_churun.findcell.server.internal.entity.table.PeriodEntity
+import by.zenkevich_churun.findcell.server.internal.entity.view.ScheduleView
 import by.zenkevich_churun.findcell.server.internal.repo.common.SviazenRepositiory
 import org.springframework.beans.factory.annotation.Autowired
 
@@ -19,10 +19,15 @@ class ScheduleRepository: SviazenRepositiory() {
     fun get(
         arestId: Int,
         passwordHash: ByteArray
-    ): List<PeriodEntity> {
+    ): ScheduleView {
 
         val prisonerId = arestsDao.prisonerId(arestId)
         validateCredentials(prisonerId, passwordHash)
-        return scheduleDao.get()
+
+        return ScheduleView(
+            arestsDao.findById(arestId).get(),
+            scheduleDao.cells(arestId),
+            scheduleDao.periods(arestId)
+        )
     }
 }

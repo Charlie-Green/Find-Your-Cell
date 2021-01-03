@@ -1,11 +1,12 @@
 package by.zenkevich_churun.findcell.server.internal.entity.key
 
+import java.io.Serializable
 import javax.persistence.Column
 import javax.persistence.Embeddable
 
 
 @Embeddable
-class CellScheduleEntryKey {
+class CellScheduleEntryKey: Serializable {
 
     @Column(name = "arest")
     var arestId: Int = 0

@@ -1,7 +1,10 @@
 package by.zenkevich_churun.findcell.server.protocol.controller.sched
 
+import by.zenkevich_churun.findcell.serial.sched.serial.ScheduleSerializer
 import by.zenkevich_churun.findcell.serial.util.protocol.Base64Util
 import by.zenkevich_churun.findcell.server.internal.repo.sched.ScheduleRepository
+import by.zenkevich_churun.findcell.server.protocol.controller.sched.map.ScheduleMapper
+import by.zenkevich_churun.findcell.server.protocol.exc.IllegalServerParameterException
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.web.bind.annotation.*
 
@@ -20,14 +23,24 @@ class ScheduleController {
         @RequestParam("pass") passwordBase64: String
     ): String {
 
-        val passwordHash = Base64Util.decode(passwordBase64)
-        val periods = repo.get(arestId, passwordHash)
-
-        val sb = StringBuilder("Totally ${periods.size} periods")
-        for(p in periods) {
-            sb.append("\n${p.key.start} - ${p.key.end}")
+        val passwordHash = try {
+            Base64Util.decode(passwordBase64)
+        } catch(exc: IllegalArgumentException) {
+            throw IllegalServerParameterException()
         }
 
-        return sb.toString()
+        val view = repo.get(arestId, passwordHash)
+
+        val pojo = try {
+            ScheduleMapper.forVersion(version)
+                .schedulePojo(view)
+        } catch(exc: IllegalArgumentException) {
+            println(exc.message)
+            throw IllegalServerParameterException()
+        }
+
+        return ScheduleSerializer
+            .forVersion(version)
+            .serialize(pojo)
     }
 }
