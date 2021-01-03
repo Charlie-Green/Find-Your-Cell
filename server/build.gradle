@@ -2,15 +2,14 @@ ext {
     kotlinVersion = "1.4.21"
 
 
-    libKotlin = "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlinVersion"
-    libSpring = "org.springframework.boot:spring-boot-starter-web"
+    libKotlin        = "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlinVersion"
+    libKotlinReflect = "org.jetbrains.kotlin:kotlin-reflect:$kotlinVersion"
+
+    libSpring    = "org.springframework.boot:spring-boot-starter-web"
+    libSpringJpa = "org.springframework.boot:spring-boot-starter-data-jpa:2.4.1"
 
     libHibernate = "org.hibernate:hibernate-gradle-plugin:5.4.26.Final"
     libMysqlJdbc = "mysql:mysql-connector-java:5.1.6"
-
-    def koinVersion = "2.2.2"
-    libKoin    = "org.koin:koin-core:$koinVersion"
-    libKoinExt = "org.koin:koin-core-ext:$koinVersion"
 
     def gsonVersion = "2.8.6"
     libGson = "com.google.code.gson:gson:$gsonVersion"

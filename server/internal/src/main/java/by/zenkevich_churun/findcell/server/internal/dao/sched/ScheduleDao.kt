@@ -1,18 +1,21 @@
 package by.zenkevich_churun.findcell.server.internal.dao.sched
 
-import by.zenkevich_churun.findcell.server.internal.dao.internal.DatabaseConnection
+import by.zenkevich_churun.findcell.server.internal.entity.key.PeriodKey
+import by.zenkevich_churun.findcell.server.internal.entity.table.PeriodEntity
+import org.springframework.data.jpa.repository.Modifying
+import org.springframework.data.jpa.repository.Query
+import org.springframework.data.repository.Repository
+import javax.transaction.Transactional
 
 
-class ScheduleDao(private val connection: DatabaseConnection) {
+@org.springframework.stereotype.Repository
+interface ScheduleDao: Repository<PeriodEntity, PeriodKey> {
 
-    private val queryDeleteForArests = DeletePeriodsForArestsQuery()
+    @Query("select p from PeriodEntity p")
+    fun get(): List<PeriodEntity>
 
-
-    fun deleteForArests(arests: List<Int>) {
-        connection.withTransaction { entityMan ->
-            queryDeleteForArests
-                .getQuery(entityMan, arests)
-                .executeUpdate()
-        }
-    }
+    @Transactional
+    @Modifying
+    @Query("delete from PeriodEntity p where arest in :arests")
+    fun deleteForArests(arests: List<Int>)
 }

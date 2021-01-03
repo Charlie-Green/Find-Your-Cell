@@ -1,17 +1,13 @@
 package by.zenkevich_churun.findcell.server.internal.dao.jail
 
-import by.zenkevich_churun.findcell.entity.entity.Jail
-import by.zenkevich_churun.findcell.server.internal.dao.internal.DatabaseConnection
+import by.zenkevich_churun.findcell.server.internal.entity.table.JailEntity
+import org.springframework.data.jpa.repository.Query
+import org.springframework.data.repository.Repository
 
 
-class JailsDao(private val connection: DatabaseConnection) {
+@org.springframework.stereotype.Repository
+interface JailsDao: Repository<JailEntity, Int> {
 
-    private val queryGetJails = GetJailsQuery()
-
-
-    fun getJails(): List<Jail> {
-        return queryGetJails
-            .getTypedQuery(connection.entityMan)
-            .resultList
-    }
+    @Query("select j from JailEntity j")
+    fun get(): List<JailEntity>
 }

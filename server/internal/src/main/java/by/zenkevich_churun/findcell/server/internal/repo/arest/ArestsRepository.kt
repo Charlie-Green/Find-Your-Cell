@@ -3,27 +3,34 @@ package by.zenkevich_churun.findcell.server.internal.repo.arest
 import by.zenkevich_churun.findcell.entity.entity.LightArest
 import by.zenkevich_churun.findcell.entity.response.CreateOrUpdateArestResponse
 import by.zenkevich_churun.findcell.server.internal.dao.arest.ArestsDao
-import by.zenkevich_churun.findcell.server.internal.dao.common.CommonDao
+import by.zenkevich_churun.findcell.server.internal.dao.prisoner.PrisonerDao
 import by.zenkevich_churun.findcell.server.internal.dao.sched.ScheduleDao
 import by.zenkevich_churun.findcell.server.internal.entity.table.ArestEntity
+import by.zenkevich_churun.findcell.server.internal.entity.table.PrisonerEntity
 import by.zenkevich_churun.findcell.server.internal.entity.view.ArestView
+import by.zenkevich_churun.findcell.server.internal.repo.common.SviazenRepositiory
+import org.springframework.beans.factory.annotation.Autowired
 
 
-class ArestsRepository(
-    private val dao: ArestsDao,
-    private val commonDao: CommonDao,
-    private val scheduleDao: ScheduleDao ) {
+class ArestsRepository: SviazenRepositiory() {
+
+    @Autowired
+    private lateinit var arestsDao: ArestsDao
+
+    @Autowired
+    private lateinit var scheduleDao: ScheduleDao
+
 
     fun getArests(
         prisonerId: Int,
         passwordHash: ByteArray
     ): List<ArestView> {
 
-        commonDao.validateCredentials(prisonerId, passwordHash)
-        val arests = dao.arests(prisonerId)
+        validateCredentials(prisonerId, passwordHash)
+        val arests = arestsDao.arests(prisonerId)
 
         return arests.map { arest ->
-            val jailIds = dao.jailIds(arest.id)
+            val jailIds = arestsDao.jailIds(arest.id)
             ArestView(arest, jailIds)
         }
     }
@@ -34,13 +41,13 @@ class ArestsRepository(
         passwordHash: ByteArray
     ): CreateOrUpdateArestResponse {
 
-        commonDao.validateCredentials(prisonerId, passwordHash)
+        validateCredentials(prisonerId, passwordHash)
 
         ArestsUtil.validate(arest)
         val entity = ArestEntity.from(arest, prisonerId)
         ArestsUtil.normalize(entity)
 
-        val intersectingArests = dao.intersectingArests(
+        val intersectingArests = arestsDao.intersectingArests(
             prisonerId,
             entity.start,
             entity.end
@@ -50,7 +57,7 @@ class ArestsRepository(
             return CreateOrUpdateArestResponse.ArestsIntersect(id)
         }
 
-        dao.add(entity)
+        arestsDao.save(entity)
         return CreateOrUpdateArestResponse.Success(entity.id)
     }
 
@@ -60,8 +67,8 @@ class ArestsRepository(
         passwordHash: ByteArray,
         arestIds: List<Int> ) {
 
-        commonDao.validateCredentials(prisonerId, passwordHash)
+        validateCredentials(prisonerId, passwordHash)
         scheduleDao.deleteForArests(arestIds)
-        dao.delete(arestIds)
+        arestsDao.delete(arestIds)
     }
 }

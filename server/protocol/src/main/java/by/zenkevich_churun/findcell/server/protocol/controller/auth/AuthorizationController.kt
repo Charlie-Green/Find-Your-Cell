@@ -3,16 +3,15 @@ package by.zenkevich_churun.findcell.server.protocol.controller.auth
 import by.zenkevich_churun.findcell.serial.prisoner.common.PrisonerSerializer
 import by.zenkevich_churun.findcell.serial.util.protocol.Base64Util
 import by.zenkevich_churun.findcell.server.internal.repo.auth.AuthorizationRepository
-import by.zenkevich_churun.findcell.server.protocol.di.ServerKoin
+import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.web.bind.annotation.*
 
 
 @RestController
 class AuthorizationController {
 
-    private val repo by lazy {
-        ServerKoin.instance().get(AuthorizationRepository::class)
-    }
+    @Autowired
+    private lateinit var repo: AuthorizationRepository
 
 
     @PostMapping("/auth/login")

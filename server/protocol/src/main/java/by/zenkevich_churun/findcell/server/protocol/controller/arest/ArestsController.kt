@@ -2,9 +2,9 @@ package by.zenkevich_churun.findcell.server.protocol.controller.arest
 
 import by.zenkevich_churun.findcell.serial.util.protocol.Base64Util
 import by.zenkevich_churun.findcell.server.internal.repo.arest.ArestsRepository
-import by.zenkevich_churun.findcell.server.protocol.di.ServerKoin
 import by.zenkevich_churun.findcell.server.protocol.exc.IllegalServerParameterException
 import by.zenkevich_churun.findcell.serial.arest.serial.*
+import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.web.bind.annotation.*
 import java.io.InputStream
 
@@ -12,9 +12,8 @@ import java.io.InputStream
 @RestController
 class ArestsController {
 
-    private val repo by lazy {
-        ServerKoin.instance().get(ArestsRepository::class)
-    }
+    @Autowired
+    private lateinit var repo: ArestsRepository
 
 
     @PostMapping("/arest/add")

@@ -19,6 +19,8 @@ dependencies {
 	implementation Deps.libMysqlJdbc
 	implementation Deps.libHibernate
 
+	implementation Deps.libSpringJpa
+
 	implementation project(":entity")
 }
 
