@@ -32,4 +32,14 @@ internal object ProtocolUtil {
         val reader = InputStreamReader(input, CommonContract1.ENCODING)
         return Gson().fromJson(reader, type)
     }
+
+
+    fun throwWrongVersion(
+        isSerializer: Boolean,
+        actualVersion: Int
+    ): Nothing {
+        val objectType = "${if(isSerializer) "S" else "Des"}erializer"
+        throw IllegalArgumentException(
+            "$objectType of version $actualVersion requires a POJO of the same version" )
+    }
 }
