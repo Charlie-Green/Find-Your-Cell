@@ -1,19 +1,34 @@
 package by.zenkevich_churun.findcell.remote.retrofit.sched.entity
 
 import by.zenkevich_churun.findcell.entity.entity.Cell
+import by.zenkevich_churun.findcell.remote.retrofit.sched.map.SchedulePropertiesAccessor
+import by.zenkevich_churun.findcell.serial.sched.pojo.CellPojo
 
 
-internal class DeserializedCell: Cell() {
+internal class DeserializedCell
+private constructor(): Cell() {
 
-    override val jailId: Int
-        get() = TODO("Not yet implemented")
+    override var jailId: Int = 0
+    override lateinit var jailName: String
+    override var number: Short = 0
+    override var seats: Short = 0
 
-    override val jailName: String
-        get() = TODO("Not yet implemented")
 
-    override val number: Short
-        get() = TODO("Not yet implemented")
+    companion object {
 
-    override val seats: Short
-        get() = TODO("Not yet implemented")
+        fun from(
+            pojo: CellPojo,
+            props: SchedulePropertiesAccessor
+        ): DeserializedCell {
+
+            val cell = DeserializedCell()
+
+            cell.jailId   = pojo.jailId
+            cell.jailName = props.jailName(pojo.jailId)
+            cell.number   = pojo.cellNumber
+            cell.seats    = props.seatCount(pojo.jailId, pojo.cellNumber)
+
+            return cell
+        }
+    }
 }

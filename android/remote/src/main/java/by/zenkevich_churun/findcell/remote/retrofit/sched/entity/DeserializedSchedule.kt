@@ -1,25 +1,59 @@
 package by.zenkevich_churun.findcell.remote.retrofit.sched.entity
 
-import by.zenkevich_churun.findcell.entity.entity.Cell
 import by.zenkevich_churun.findcell.entity.entity.Schedule
-import by.zenkevich_churun.findcell.entity.entity.SchedulePeriod
-import java.util.*
+import by.zenkevich_churun.findcell.remote.retrofit.sched.map.SchedulePropertiesAccessor
+import by.zenkevich_churun.findcell.serial.sched.pojo.CellPojo
+import by.zenkevich_churun.findcell.serial.sched.pojo.PeriodPojo
+import by.zenkevich_churun.findcell.serial.sched.pojo.SchedulePojo
+import java.util.Calendar
 
 
-internal class DeserializedSchedule: Schedule() {
+internal class DeserializedSchedule
+private constructor(): Schedule() {
 
-    override val arestId: Int
-        get() = TODO("Not yet implemented")
+    override var arestId: Int = 0
+    override lateinit var start: Calendar
+    override lateinit var end: Calendar
+    override lateinit var cells: List<DeserializedCell>
+    override lateinit var periods: List<DeserializedPeriod>
 
-    override val start: Calendar
-        get() = TODO("Not yet implemented")
 
-    override val end: Calendar
-        get() = TODO("Not yet implemented")
+    companion object {
 
-    override val cells: List<Cell>
-        get() = TODO("Not yet implemented")
+        fun from(
+            pojo: SchedulePojo,
+            props: SchedulePropertiesAccessor,
+        ): DeserializedSchedule {
 
-    override val periods: List<SchedulePeriod>
-        get() = TODO("Not yet implemented")
+            val sched = DeserializedSchedule()
+
+            sched.arestId = pojo.arestId
+                ?: throw KotlinNullPointerException("Mapping requires arestId")
+            sched.start   = Calendar.getInstance().apply { timeInMillis = pojo.start }
+            sched.end     = Calendar.getInstance().apply { timeInMillis = pojo.end }
+            sched.cells   = deserializedCells(pojo.cells, props)
+            sched.periods = deserializedPeriods(pojo.periods)
+
+            return sched
+        }
+
+        private fun deserializedCells(
+            cells: List<CellPojo>,
+            props: SchedulePropertiesAccessor
+        ): List<DeserializedCell> {
+
+            return cells.map { c ->
+                DeserializedCell.from(c, props)
+            }
+        }
+
+        private fun deserializedPeriods(
+            periods: List<PeriodPojo>,
+        ): List<DeserializedPeriod> {
+
+            return periods.map { p ->
+                DeserializedPeriod.from(p)
+            }
+        }
+    }
 }

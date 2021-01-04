@@ -34,6 +34,11 @@ class RetrofitScheduleApi @Inject constructor(
             .forVersion(1)
             .deserialize(responseStream)
 
+        // These properties are null (not included in the response),
+        // but they are needed for mapping. So, initialize them:
+        pojo.passwordBase64 = passwordBase64
+        pojo.arestId = arestId
+
         return TODO("Map to Schedule")
     }
 
