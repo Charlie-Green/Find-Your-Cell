@@ -11,8 +11,8 @@ import javax.persistence.*
   * In other words, the user may admit they have been imprisoned
   * into this [Cell] some time during this [Arest] **/
 @Entity
-@Table(name = "CellScheduleEntries")
-class CellScheduleEntryEntity {
+@Table(name = "ScheduleCellEntries")
+class ScheduleCellEntryEntity {
 
     @EmbeddedId
     var key: CellScheduleEntryKey? = null

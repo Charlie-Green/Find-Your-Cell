@@ -7,6 +7,6 @@ abstract class SchedulePojo {
     abstract var passwordBase64: String?
     abstract var start: Long
     abstract var end: Long
-    abstract var cells: List<CellPojo>
-    abstract var periods: List<PeriodPojo>
+    abstract val cells: List<CellPojo>
+    abstract val periods: List<PeriodPojo>
 }

@@ -3,7 +3,7 @@ package by.zenkevich_churun.findcell.server.protocol.controller.sched.map
 import by.zenkevich_churun.findcell.entity.entity.*
 import by.zenkevich_churun.findcell.serial.sched.pojo.*
 import by.zenkevich_churun.findcell.serial.sched.v1.pojo.*
-import by.zenkevich_churun.findcell.server.internal.entity.table.CellScheduleEntryEntity
+import by.zenkevich_churun.findcell.server.internal.entity.table.ScheduleCellEntryEntity
 import by.zenkevich_churun.findcell.server.internal.entity.table.PeriodEntity
 import by.zenkevich_churun.findcell.server.internal.entity.view.ScheduleView
 
@@ -36,9 +36,9 @@ internal class ScheduleMapper1: ScheduleMapper {
     }
 
 
-    private fun cellPojo(entry: CellScheduleEntryEntity): CellPojo {
+    private fun cellPojo(entry: ScheduleCellEntryEntity): CellPojo {
         val key = entry.key
-            ?: throw Error("${CellScheduleEntryEntity::class.java.simpleName} not initialized")
+            ?: throw Error("${ScheduleCellEntryEntity::class.java.simpleName} not initialized")
 
         return CellPojo1().apply {
             jailId     = key.jailId

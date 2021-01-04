@@ -13,7 +13,7 @@ class PrisonerStorage @Inject constructor() {
     private val mldPrisoner = MutableLiveData<ExtendedPrisoner?>().apply {
         // TODO: CharlieDebug:
         value = ExtendedPrisoner(
-            3,
+            1,
             "Романчик",
             listOf(
                 object: Contact() {
@@ -27,7 +27,7 @@ class PrisonerStorage @Inject constructor() {
                 },
             ),
             "This is a fake test user. Remove it from PrisonerStorage class when not needed.",
-            "789".toByteArray(Charsets.UTF_8)
+            "111".toByteArray(Charsets.UTF_8)
         )
     }
 

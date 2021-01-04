@@ -19,8 +19,15 @@ class SchedulePojo1: SchedulePojo() {
     override var passwordBase64: String? = null
 
     @SerializedName("cells")
-    override var cells: List<CellPojo> = listOf()
+    var cellPojos: List<CellPojo1> = listOf()
 
     @SerializedName("periods")
-    override var periods: List<PeriodPojo> = listOf()
+    var periodPojos: List<PeriodPojo1> = listOf()
+
+
+    override val cells: List<CellPojo>
+        get() = cellPojos
+
+    override val periods: List<PeriodPojo>
+        get() = periodPojos
 }
