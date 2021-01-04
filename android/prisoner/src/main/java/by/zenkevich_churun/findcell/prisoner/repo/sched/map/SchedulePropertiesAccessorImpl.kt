@@ -16,23 +16,15 @@ class SchedulePropertiesAccessorImpl @Inject constructor(
 ): SchedulePropertiesAccessor {
 
     override fun jailName(jailId: Int): String {
-        val dao = JailsDatabase
+        val jailsDao = JailsDatabase
             .get(appContext)
             .jailsDao
 
-        val name = dao.jailName(jailId)
-        if(name != null) {
-            return name
-        }
-
-        // No such Jail in the cache. Update cache.
-        val jails = JailsRepositoryInternal.fetchJailsList(jailsApi, dao)
-
-        val jail = jails?.find { j ->
-            j.id == jailId
-        }
-        return jail?.name ?: throw IOException(
-            "Jail with ID $jailId was not found, nor could it be fetched from the server" )
+        return JailsRepositoryInternal
+            .jailName(jailsDao, jailsApi, jailId)
+            ?: throw IOException(
+                "Jail with ID $jailId was not found, nor could it be fetched from the server"
+            )
     }
 
 
@@ -42,6 +34,7 @@ class SchedulePropertiesAccessorImpl @Inject constructor(
             appContext,
             jailsApi,
             jailId,
+            jailName(jailId),
             cellNumber,
             true  // Internet is checked before Schedule is fetched.
         )

@@ -34,11 +34,31 @@ internal object JailsRepositoryInternal {
         return fetched
     }
 
+    fun jailName(
+        dao: JailsDao,
+        api: JailsApi,
+        id: Int
+    ): String? {
+
+        val name = dao.jailName(id)
+        if(name != null) {
+            return name
+        }
+
+        val jails = fetchJailsList(api, dao) ?: return null
+
+        val jail = jails.find { j ->
+            j.id == id
+        }
+        return jail?.name
+    }
+
 
     fun cell(
         appContext: Context,
         api: JailsApi,
         jailId: Int,
+        jailName: String,
         cellNumber: Short,
         internet: Boolean
     ): Cell? {
@@ -53,15 +73,20 @@ internal object JailsRepositoryInternal {
             return null
         }
 
-        try {
-            cell = api.cell(jailId, cellNumber)
-            val entity = CellEntity.from(jailId, cell)
-            dao.addOrUpdate( listOf(entity) )
-
-            return cell
+        val cells = try {
+            api.cells(jailId, jailName)
         } catch(exc: IOException) {
             Log.e(JailsRepository.LOGTAG, "Failed to fetch Cell: ${exc.javaClass.name}: ${exc.message}")
             return null
+        }
+
+        val entities = cells.map { c ->
+            CellEntity.from(jailId, c)
+        }
+        dao.addOrUpdate(entities)
+
+        return cells.find { c ->
+            c.number == cellNumber
         }
     }
 }

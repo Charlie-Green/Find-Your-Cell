@@ -5,6 +5,7 @@ import by.zenkevich_churun.findcell.entity.entity.Cell
 import by.zenkevich_churun.findcell.entity.entity.Jail
 import by.zenkevich_churun.findcell.remote.retrofit.common.RetrofitApisUtil
 import by.zenkevich_churun.findcell.remote.retrofit.common.RetrofitHolder
+import by.zenkevich_churun.findcell.remote.retrofit.jail.pojo.Cell1
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -25,8 +26,23 @@ class RetrofitJailsApi @Inject constructor(
         return response.body()!!.jails
     }
 
-    override fun cell(jailId: Int, cellNumber: Short): Cell {
-        TODO("Not yet implemented")
+    override fun cells(jailId: Int, jailName: String): List<Cell> {
+        val service = retrofit.create(JailsService::class.java)
+
+        val response = service
+            .getCells(1, jailId)
+            .execute()
+        RetrofitApisUtil.assertResponseCode(response.code())
+
+        val seats = response.body()!!.seatCounts
+        return seats.mapIndexed { index, seatCount ->
+            Cell1(
+                jailId,
+                (index + 1).toShort(),
+                jailName,
+                seatCount
+            )
+        }
     }
 
 

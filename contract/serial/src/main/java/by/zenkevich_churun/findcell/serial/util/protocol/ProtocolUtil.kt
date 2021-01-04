@@ -6,7 +6,7 @@ import com.google.gson.stream.JsonWriter
 import java.io.*
 
 
-internal object ProtocolUtil {
+object ProtocolUtil {
 
     fun toJson(
         pojo: Any,

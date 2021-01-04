@@ -20,14 +20,27 @@ class JailsController {
     ): String {
 
         val jails = repo.getJails()
+        return serializer(version).serializeJails(jails)
+    }
 
-        val serializer = try {
-            JailsSerializer.forVersion(version)
+
+    @PostMapping("jail/get")
+    fun getCells(
+        @RequestParam("v") version: Int,
+        @RequestParam("id") jailId: Int
+    ): String {
+
+        val cells = repo.getCells(jailId)
+        return serializer(version).serializeCells(cells)
+    }
+
+
+    private fun serializer(version: Int): JailsSerializer {
+        try {
+            return JailsSerializer.forVersion(version)
         } catch(exc: IllegalArgumentException) {
             println(exc.message)
             throw IllegalServerParameterException()
         }
-
-        return serializer.serialize(jails)
     }
 }
