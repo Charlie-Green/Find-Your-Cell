@@ -7,12 +7,12 @@ import androidx.core.view.updatePadding
 import androidx.recyclerview.widget.RecyclerView
 import by.zenkevich_churun.findcell.entity.entity.Arest
 import by.zenkevich_churun.findcell.prisoner.R
+import by.zenkevich_churun.findcell.prisoner.databinding.ArestItemBinding
 import by.zenkevich_churun.findcell.prisoner.ui.arest.vm.ArestsViewModel
-import kotlinx.android.synthetic.main.arest_item.view.*
 import java.util.Calendar
 
 
-class ArestsAdapter(
+internal class ArestsAdapter(
     private val vm: ArestsViewModel
 ): RecyclerView.Adapter<ArestsAdapter.ArestViewHolder>() {
 
@@ -24,15 +24,8 @@ class ArestsAdapter(
 
     inner class ArestViewHolder(
         private val vm: ArestsViewModel,
-        itemView: View
-    ): RecyclerView.ViewHolder(itemView) {
-
-        private val grltRoot  = itemView.grltRoot
-        private val txtvStart = itemView.txtvStart
-        private val txtvEnd   = itemView.txtvEnd
-        private val txtvJails = itemView.txtvJails
-        private val chbDelete = itemView.chbDelete
-
+        private val vb: ArestItemBinding
+    ): RecyclerView.ViewHolder(vb.root) {
 
         init {
             itemView.setOnClickListener {
@@ -45,25 +38,25 @@ class ArestsAdapter(
                 true
             }
 
-            chbDelete.setOnCheckedChangeListener { _, isChecked ->
+            vb.chbDelete.setOnCheckedChangeListener { _, isChecked ->
                 onCheckedChanged(isChecked)
             }
         }
 
 
         fun bind(arest: Arest) {
-            txtvStart.text = formatDate(arest.start)
-            txtvEnd.text   = formatDate(arest.end)
-            txtvJails.text = ArestUiUtil.jailsText(arest.jails)
-            chbDelete.isChecked = checks?.contains(arest.id) ?: false
+            vb.txtvStart.text = formatDate(arest.start)
+            vb.txtvEnd.text   = formatDate(arest.end)
+            vb.txtvJails.text = ArestUiUtil.jailsText(arest.jails)
+            vb.chbDelete.isChecked = checks?.contains(arest.id) ?: false
 
             setCheckable(false)
         }
 
         fun setCheckable(animate: Boolean) {
             val affectedViews =
-                if(isLayoutExpanded) sequenceOf(txtvEnd, txtvJails)
-                else sequenceOf(txtvStart, txtvEnd,txtvJails)
+                if(isLayoutExpanded) sequenceOf(vb.txtvEnd, vb.txtvJails)
+                else sequenceOf(vb.txtvStart, vb.txtvEnd, vb.txtvJails)
 
             val desiredTranslate = if(checkable) {
                 val res = itemView.context.resources
@@ -83,7 +76,7 @@ class ArestsAdapter(
 
 
         private val isLayoutExpanded: Boolean
-            get() = when(val columnCount = grltRoot.columnCount) {
+            get() = when(val columnCount = vb.grltRoot.columnCount) {
                 2 -> false
                 4 -> true
                 else -> throw Error("Cannot determine layout for column count $columnCount")
@@ -96,11 +89,11 @@ class ArestsAdapter(
             val res = itemView.context.resources
             val duration = res.getInteger(R.integer.arest_delete_animation_duration).toLong()
 
-            ValueAnimator.ofFloat(chbDelete.translationX, desiredTranslate)
+            ValueAnimator.ofFloat(vb.chbDelete.translationX, desiredTranslate)
                 .setDuration(duration)
                 .apply { addUpdateListener { animer ->
                     val translate = animer.animatedValue as Float
-                    chbDelete.translationX = translate
+                    vb.chbDelete.translationX = translate
 
                     val pad = -translate.toInt()
                     for(v in animatedViews) {
@@ -114,7 +107,7 @@ class ArestsAdapter(
             affectedViews: Sequence<View>,
             desiredTranslate: Float ) {
 
-            chbDelete.translationX = desiredTranslate
+            vb.chbDelete.translationX = desiredTranslate
 
             val desiredPadding = -desiredTranslate.toInt()
             for(v in affectedViews) {
@@ -155,11 +148,9 @@ class ArestsAdapter(
         = arests?.size ?: 0
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ArestViewHolder {
-        val view = LayoutInflater
-            .from(parent.context)
-            .inflate(R.layout.arest_item, parent, false)
-
-        return ArestViewHolder(vm, view)
+        val inflater = LayoutInflater.from(parent.context)
+        val vb = ArestItemBinding.inflate(inflater)
+        return ArestViewHolder(vm, vb)
     }
 
     override fun onBindViewHolder(holder: ArestViewHolder, position: Int) {

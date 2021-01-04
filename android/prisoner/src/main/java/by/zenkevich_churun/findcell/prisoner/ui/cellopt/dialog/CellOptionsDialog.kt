@@ -4,36 +4,35 @@ import android.os.Bundle
 import android.view.*
 import android.widget.LinearLayout
 import androidx.core.view.*
-import androidx.fragment.app.DialogFragment
 import androidx.lifecycle.Observer
+import by.zenkevich_churun.findcell.core.ui.common.SviazenDialog
 import by.zenkevich_churun.findcell.core.util.android.DialogUtil
 import by.zenkevich_churun.findcell.entity.entity.Cell
 import by.zenkevich_churun.findcell.prisoner.R
+import by.zenkevich_churun.findcell.prisoner.databinding.CellOptionsDialogBinding
 import by.zenkevich_churun.findcell.prisoner.ui.cellopt.model.CellOptionsMode
 import by.zenkevich_churun.findcell.prisoner.ui.cellopt.vm.CellOptionsViewModel
 import by.zenkevich_churun.findcell.prisoner.ui.common.sched.CellUpdate
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.android.synthetic.main.cell_options_dialog.*
 import javax.inject.Inject
 
 
 @AndroidEntryPoint
-class CellOptionsDialog: DialogFragment() {
-
-    @Inject
-    lateinit var vm: CellOptionsViewModel
+class CellOptionsDialog: SviazenDialog<CellOptionsDialogBinding>() {
 
     private var mode = CellOptionsMode.OPTIONS
     private var cell: Cell? = null
 
+    @Inject
+    lateinit var vm: CellOptionsViewModel
 
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
+
+    override fun inflateViewBinding(
+        inflater: LayoutInflater
+    ) = CellOptionsDialogBinding.inflate(inflater)
+
+    override fun customizeDialog(view: View) {
         dialog?.also { DialogUtil.removeBackground(it) }
-        return inflater.inflate(R.layout.cell_options_dialog, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -50,7 +49,7 @@ class CellOptionsDialog: DialogFragment() {
             enterMode()
         })
         vm.loadingLD.observe(viewLifecycleOwner, Observer { isLoading ->
-            prBar.isVisible = isLoading
+            vb.prBar.isVisible = isLoading
         })
         vm.cellUpdateLD.observe(viewLifecycleOwner, Observer { update ->
             handleUpdate(update)
@@ -67,26 +66,26 @@ class CellOptionsDialog: DialogFragment() {
     private fun enterMode() {
         when(mode) {
             CellOptionsMode.OPTIONS -> {
-                txtvUpdateOrYes.setText(R.string.replace)
-                txtvDeleteOrNo.setText(R.string.delete)
+                vb.txtvUpdateOrYes.setText(R.string.replace)
+                vb.txtvDeleteOrNo.setText(R.string.delete)
 
-                txtvUpdateOrYes.setOnClickListener {  // Update
+                vb.txtvUpdateOrYes.setOnClickListener {  // Update
                     dismiss()
                     vm.update()
                 }
-                txtvDeleteOrNo.setOnClickListener {  // Delete
+                vb.txtvDeleteOrNo.setOnClickListener {  // Delete
                     vm.delete()
                 }
             }
 
             CellOptionsMode.CONFIRM_DELETE -> {
-                txtvUpdateOrYes.setText(R.string.delete_yes)
-                txtvDeleteOrNo.setText(R.string.delete_no)
+                vb.txtvUpdateOrYes.setText(R.string.delete_yes)
+                vb.txtvDeleteOrNo.setText(R.string.delete_no)
 
-                txtvUpdateOrYes.setOnClickListener {  // Yes
+                vb.txtvUpdateOrYes.setOnClickListener {  // Yes
                     vm.confirmDelete()
                 }
-                txtvDeleteOrNo.setOnClickListener {   // No
+                vb.txtvDeleteOrNo.setOnClickListener {   // No
                     vm.declineDelete()
                 }
             }
@@ -100,15 +99,15 @@ class CellOptionsDialog: DialogFragment() {
 
         when(mode) {
             CellOptionsMode.OPTIONS -> {
-                txtvCell.text = "${cell.jailName}, ${cell.number}"
-                txtvAlert.visibility = View.GONE
+                vb.txtvCell.text = "${cell.jailName}, ${cell.number}"
+                vb.txtvAlert.visibility = View.GONE
 
-                setBottomMargin(txtvCell, R.dimen.celloptions_title_margin_vertical)
+                setBottomMargin(vb.txtvCell, R.dimen.celloptions_title_margin_vertical)
             }
 
             CellOptionsMode.CONFIRM_DELETE -> {
-                txtvCell.setText(R.string.delete_cell_alert_title)
-                txtvAlert.apply {
+                vb.txtvCell.setText(R.string.delete_cell_alert_title)
+                vb.txtvAlert.apply {
                     visibility = View.VISIBLE
                     text = getString(
                         R.string.delete_cell_alert_message,
@@ -117,8 +116,8 @@ class CellOptionsDialog: DialogFragment() {
                     )
                 }
 
-                setBottomMargin(txtvCell, 0)
-                setBottomMargin(txtvAlert, R.dimen.celloptions_title_margin_vertical)
+                setBottomMargin(vb.txtvCell, 0)
+                setBottomMargin(vb.txtvAlert, R.dimen.celloptions_title_margin_vertical)
             }
         }
     }

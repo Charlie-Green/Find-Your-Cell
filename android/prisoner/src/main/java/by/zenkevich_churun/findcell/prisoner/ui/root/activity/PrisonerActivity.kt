@@ -4,35 +4,43 @@ import android.app.Activity
 import android.graphics.Color
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.View
 import androidx.lifecycle.Observer
 import androidx.navigation.NavController
 import androidx.navigation.findNavController
+import by.zenkevich_churun.findcell.core.ui.common.SviazenActivity
 import by.zenkevich_churun.findcell.prisoner.R
 import by.zenkevich_churun.findcell.core.util.android.AndroidUtil
 import by.zenkevich_churun.findcell.core.util.android.NavigationUtil
 import by.zenkevich_churun.findcell.entity.entity.Prisoner
+import by.zenkevich_churun.findcell.prisoner.databinding.PrisonerActivityBinding
 import by.zenkevich_churun.findcell.prisoner.repo.profile.SavePrisonerResult
 import by.zenkevich_churun.findcell.prisoner.ui.common.interrupt.EditInterruptState
 import by.zenkevich_churun.findcell.prisoner.ui.common.sched.CellUpdate
 import by.zenkevich_churun.findcell.prisoner.ui.root.vm.PrisonerRootViewModel
 import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.android.synthetic.main.prisoner_activity.*
 
 
 /** This [Activity] combines screens that set up
   * [Prisoner]'s schedule and profile. **/
 @AndroidEntryPoint
-class PrisonerActivity: AppCompatActivity(R.layout.prisoner_activity) {
+class PrisonerActivity: SviazenActivity<PrisonerActivityBinding>() {
 
     private lateinit var vm: PrisonerRootViewModel
     private lateinit var navMan: PrisonerNavigationManager
     private var thereAreUnsavedChanges = false
 
 
+    override fun inflateViewBinding()
+        = PrisonerActivityBinding.inflate(layoutInflater)
+
+    override fun customizeView(v: View) {
+        window?.also { AndroidUtil.defaultHideKeyboard(it) }
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        window?.also { AndroidUtil.defaultHideKeyboard(it) }
 
         initFields()
         navMan.setup()
@@ -96,7 +104,12 @@ class PrisonerActivity: AppCompatActivity(R.layout.prisoner_activity) {
 
     private fun initFields() {
         vm = PrisonerRootViewModel.get(applicationContext, this)
-        navMan = PrisonerNavigationManager(vm, toolbar, navDrawer, navController)
+        navMan = PrisonerNavigationManager(
+            vm,
+            vb.toolbar,
+            vb.navDrawer,
+            navController
+        )
     }
 
     private fun notifySavePrisonerSuccess()
@@ -110,7 +123,7 @@ class PrisonerActivity: AppCompatActivity(R.layout.prisoner_activity) {
 
 
     private fun notifySuccess(messageRes: Int) {
-        Snackbar.make(cdltRoot, messageRes, 2000).apply {
+        Snackbar.make(vb.cdltRoot, messageRes, 2000).apply {
             setTextColor(Color.WHITE)
             show()
         }
@@ -125,7 +138,7 @@ class PrisonerActivity: AppCompatActivity(R.layout.prisoner_activity) {
 
     private fun interruptAndNavigate(state: EditInterruptState.Confirmed) {
         navMan.doOnce(state.source) {
-            cdltRoot.post {  // In order to avoid the FragmentManager-in-Transaction failure.
+            vb.cdltRoot.post {  // In order to avoid the FragmentManager-in-Transaction failure.
                 navigate(state.dest)
                 vm.notifyInterruptConfirmationConsumed()
             }
@@ -142,7 +155,7 @@ class PrisonerActivity: AppCompatActivity(R.layout.prisoner_activity) {
 
 
     private fun notifyError(messageRes: Int) {
-        Snackbar.make(cdltRoot, messageRes, 3000).apply {
+        Snackbar.make(vb.cdltRoot, messageRes, 3000).apply {
             setTextColor(Color.RED)
             show()
         }

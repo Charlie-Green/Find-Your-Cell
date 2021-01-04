@@ -5,11 +5,11 @@ import androidx.core.text.HtmlCompat
 import androidx.recyclerview.widget.RecyclerView
 import by.zenkevich_churun.findcell.core.util.android.AndroidUtil
 import by.zenkevich_churun.findcell.prisoner.R
+import by.zenkevich_churun.findcell.prisoner.databinding.ScheduleDayItemBinding
 import by.zenkevich_churun.findcell.prisoner.ui.common.sched.ScheduleDayModel
 import by.zenkevich_churun.findcell.prisoner.ui.common.sched.ScheduleModel
 import by.zenkevich_churun.findcell.prisoner.ui.sched.vm.ScheduleViewModel
 import by.zenkevich_churun.findcell.prisoner.util.draw.MultipleColorsDrawable
-import kotlinx.android.synthetic.main.schedule_day_item.view.*
 
 
 internal class ScheduleDaysAdapter(
@@ -34,11 +34,8 @@ internal class ScheduleDaysAdapter(
 
 
     inner class DayViewHolder(
-        itemView: View
-    ): RecyclerView.ViewHolder(itemView) {
-
-        private val frltRoot = itemView.frltRoot
-        private val txtvData = itemView.txtvData
+        private val vb: ScheduleDayItemBinding
+    ): RecyclerView.ViewHolder(vb.root) {
 
         init {
             itemView.setOnClickListener {
@@ -49,9 +46,9 @@ internal class ScheduleDaysAdapter(
         }
 
         fun bind(day: ScheduleDayModel) {
-            frltRoot.background = MultipleColorsDrawable(day.backColors)
-            txtvData.setTextColor( textColor(day) )
-            txtvData.text = HtmlCompat.fromHtml(day.fullHtml, 0)
+            vb.root.background = MultipleColorsDrawable(day.backColors)
+            vb.txtvData.setTextColor( textColor(day) )
+            vb.txtvData.text = HtmlCompat.fromHtml(day.fullHtml, 0)
         }
 
         private fun textColor(day: ScheduleDayModel): Int {
@@ -74,10 +71,9 @@ internal class ScheduleDaysAdapter(
         = if(enabled) schedule.dayCount else 0
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): DayViewHolder {
-        val view = LayoutInflater
-            .from(parent.context)
-            .inflate(R.layout.schedule_day_item, parent, false)
-        return DayViewHolder(view)
+        val inflater = LayoutInflater.from(parent.context)
+        val vb = ScheduleDayItemBinding.inflate(inflater, parent, false)
+        return DayViewHolder(vb)
     }
 
     override fun onBindViewHolder(holder: DayViewHolder, position: Int) {

@@ -7,32 +7,25 @@ import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import androidx.core.view.isVisible
 import androidx.core.view.updateLayoutParams
-import androidx.fragment.app.DialogFragment
 import androidx.lifecycle.Observer
+import by.zenkevich_churun.findcell.core.ui.common.SviazenDialog
 import by.zenkevich_churun.findcell.core.util.android.AndroidUtil
 import by.zenkevich_churun.findcell.prisoner.R
+import by.zenkevich_churun.findcell.prisoner.databinding.CellEditDialogBinding
 import by.zenkevich_churun.findcell.prisoner.ui.celledit.model.CellEditorState
 import by.zenkevich_churun.findcell.prisoner.ui.celledit.vm.CellEditorViewModel
-import kotlinx.android.synthetic.main.cell_edit_dialog.*
-import kotlinx.android.synthetic.main.cell_edit_dialog.view.*
 
 
-class CellEditorDialog: DialogFragment() {
+class CellEditorDialog: SviazenDialog<CellEditDialogBinding>() {
     private var vm: CellEditorViewModel? = null
 
 
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        val activitySize = AndroidUtil.activitySize(requireActivity())
+    override fun inflateViewBinding(
+        inflater: LayoutInflater
+    ) = CellEditDialogBinding.inflate(inflater)
 
-        return inflater.inflate(R.layout.cell_edit_dialog, container, false).apply {
-            vlltContent.updateLayoutParams {
-                width = (activitySize.width*4)/5
-            }
-        }
+    override fun customizeDialog(view: View) {
+        resizeDialog()
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -46,7 +39,7 @@ class CellEditorDialog: DialogFragment() {
             state?.also { displayState(it) }
         })
         vm.loadingLD.observe(viewLifecycleOwner, Observer { loading ->
-            prBar.isVisible = loading
+            vb.prBar.isVisible = loading
         })
         vm.errorLD.observe(viewLifecycleOwner, Observer { message ->
             notifyError(message)
@@ -57,7 +50,7 @@ class CellEditorDialog: DialogFragment() {
             }
         })
 
-        buSave.setOnClickListener {
+        vb.buSave.setOnClickListener {
             submitDraft()
             vm.save()
         }
@@ -69,42 +62,50 @@ class CellEditorDialog: DialogFragment() {
     }
 
 
+    private fun resizeDialog() {
+        val activitySize = AndroidUtil.activitySize(requireActivity())
+        vb.vlltContent.updateLayoutParams {
+            width = (activitySize.width*4)/5
+        }
+    }
+
+
     private fun displayState(state: CellEditorState) {
-        spJail.adapter = ArrayAdapter(
+        vb.spJail.adapter = ArrayAdapter(
             requireContext(),
             android.R.layout.simple_spinner_dropdown_item,
             state.jails
         )
-        spJail.setSelection(state.jailIndex)
+        vb.spJail.setSelection(state.jailIndex)
 
-        numpCellNumber.apply {
+        vb.numpCellNumber.apply {
             minValue = 1
             maxValue = state.jails[state.jailIndex].cellCount.toInt()
             value = state.cellNumber.toInt()
         }
 
-        spJail.onItemSelectedListener = object: AdapterView.OnItemSelectedListener {
+        vb.spJail.onItemSelectedListener = object: AdapterView.OnItemSelectedListener {
             override fun onItemSelected(
                 parent: AdapterView<*>?,
                 view: View?,
                 position: Int,
                 id: Long ) {
 
-                numpCellNumber.maxValue = state.jails[position].cellCount.toInt()
+                vb.numpCellNumber.maxValue = state.jails[position].cellCount.toInt()
             }
 
             override fun onNothingSelected(parent: AdapterView<*>) {   }
         }
 
-        buSave.setText( if(state.isNew) R.string.add else R.string.save )
+        vb.buSave.setText( if(state.isNew) R.string.add else R.string.save )
     }
 
     private fun notifyError(message: String?) {
         if(message == null) {
-            txtvError.visibility = View.GONE
+            vb.txtvError.visibility = View.GONE
         } else {
-            txtvError.visibility = View.VISIBLE
-            txtvError.text = message
+            vb.txtvError.visibility = View.VISIBLE
+            vb.txtvError.text = message
         }
     }
 
@@ -116,9 +117,9 @@ class CellEditorDialog: DialogFragment() {
         val draft = CellEditorState(
             state.jails,
             state.oldJailIndex,
-            spJail.selectedItemPosition,
+            vb.spJail.selectedItemPosition,
             state.oldCellNumber,
-            numpCellNumber.value.toShort()
+            vb.numpCellNumber.value.toShort()
         )
 
         vm.submitState(draft)

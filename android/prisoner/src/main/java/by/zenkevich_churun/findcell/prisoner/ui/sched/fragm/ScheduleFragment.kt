@@ -1,29 +1,30 @@
 package by.zenkevich_churun.findcell.prisoner.ui.sched.fragm
 
 import android.os.Bundle
+import android.view.LayoutInflater
 import android.view.View
 import androidx.appcompat.app.AlertDialog
 import androidx.core.view.isVisible
-import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
+import by.zenkevich_churun.findcell.core.ui.common.SviazenFragment
 import by.zenkevich_churun.findcell.core.util.android.AndroidUtil
 import by.zenkevich_churun.findcell.core.util.android.NavigationUtil
 import by.zenkevich_churun.findcell.core.util.recycler.autogrid.AutomaticGridLayoutManager
 import by.zenkevich_churun.findcell.entity.entity.Cell
 import by.zenkevich_churun.findcell.prisoner.R
+import by.zenkevich_churun.findcell.prisoner.databinding.ScheduleFragmBinding
 import by.zenkevich_churun.findcell.prisoner.ui.celledit.dialog.CellEditorDialog
 import by.zenkevich_churun.findcell.prisoner.ui.cellopt.dialog.CellOptionsDialog
 import by.zenkevich_churun.findcell.prisoner.ui.common.sched.CellUpdate
 import by.zenkevich_churun.findcell.prisoner.ui.common.sched.ScheduleModel
 import by.zenkevich_churun.findcell.prisoner.ui.sched.vm.ScheduleViewModel
-import kotlinx.android.synthetic.main.schedule_fragm.*
 
 
 /** Allows viewing interactive editing of the user's arest [Schedule]. **/
-class ScheduleFragment: Fragment(R.layout.schedule_fragm) {
+class ScheduleFragment: SviazenFragment<ScheduleFragmBinding>() {
     // ==================================================================================
     // Fields:
 
@@ -33,6 +34,10 @@ class ScheduleFragment: Fragment(R.layout.schedule_fragm) {
 
     // ==================================================================================
     // Lifecycle:
+
+    override fun inflateViewBinding(
+        inflater: LayoutInflater
+    ) = ScheduleFragmBinding.inflate(inflater)
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         initFields()
@@ -48,17 +53,17 @@ class ScheduleFragment: Fragment(R.layout.schedule_fragm) {
             schedule?.also {
                 displaySchedule(schedule)
                 selectCell()
-                buAddCell.isEnabled = true
+                vb.buAddCell.isEnabled = true
             } ?: clearSchedule()
         })
         vm.errorLD.observe(viewLifecycleOwner, Observer { message ->
             message?.also { notifyError(it) }
         })
         vm.unsavedChangesLD.observe(viewLifecycleOwner, Observer { thereAreChanges ->
-            buSave.isEnabled = thereAreChanges
+            vb.buSave.isEnabled = thereAreChanges
         })
         vm.loadingLD.observe(viewLifecycleOwner, Observer { isLoading ->
-            prBar.isVisible = isLoading
+            vb.prBar.isVisible = isLoading
         })
         vm.cellUpdateLD.observe(viewLifecycleOwner, Observer { update ->
             updateCells(update)
@@ -79,10 +84,10 @@ class ScheduleFragment: Fragment(R.layout.schedule_fragm) {
         view.setOnClickListener {
             vm.unselectCell()
         }
-        buAddCell.setOnClickListener {
+        vb.buAddCell.setOnClickListener {
             addCell()
         }
-        buSave.setOnClickListener {
+        vb.buSave.setOnClickListener {
             vm.saveSchedule()
         }
     }
@@ -97,7 +102,7 @@ class ScheduleFragment: Fragment(R.layout.schedule_fragm) {
     }
 
     private fun initCellsAdapter() {
-        recvCells.layoutManager = AutomaticGridLayoutManager(
+        vb.recvCells.layoutManager = AutomaticGridLayoutManager(
             requireActivity(),
             dimen(R.dimen.cellview_width)
         )
@@ -105,12 +110,12 @@ class ScheduleFragment: Fragment(R.layout.schedule_fragm) {
 
     private fun initDaysAdapter() {
         val activitySize = AndroidUtil.activitySize(requireActivity())
-        recvDays.pivotX = 0.5f*activitySize.width
-        recvDays.pivotY = 0.5f*activitySize.height
+        vb.recvDays.pivotX = 0.5f*activitySize.width
+        vb.recvDays.pivotY = 0.5f*activitySize.height
 
         val layoutMan = LinearLayoutManager(requireContext())
         val itemDecoration = DividerItemDecoration(requireContext(), layoutMan.orientation)
-        recvDays.apply {
+        vb.recvDays.apply {
             layoutManager = layoutMan
             addItemDecoration(itemDecoration)
         }
@@ -126,24 +131,24 @@ class ScheduleFragment: Fragment(R.layout.schedule_fragm) {
     // Observers:
 
     private fun displaySchedule(scheduleModel: ScheduleModel) {
-        recvCells.adapter = CellsAdapter(scheduleModel.cells, vm)
-        recvDays.adapter = ScheduleDaysAdapter(scheduleModel, vm)
+        vb.recvCells.adapter = CellsAdapter(scheduleModel.cells, vm)
+        vb.recvDays.adapter = ScheduleDaysAdapter(scheduleModel, vm)
     }
 
     private fun clearSchedule() {
-        recvCells.adapter = CellsAdapter(listOf(), vm)
+        vb.recvCells.adapter = CellsAdapter(listOf(), vm)
         daysAdapter?.isEnabled = false
     }
 
     private fun selectCell() {
-        val adapter1 = recvCells.adapter as CellsAdapter? ?: return
-        val adapter2 = recvDays.adapter as ScheduleDaysAdapter? ?: return
+        val adapter1 = vb.recvCells.adapter as CellsAdapter? ?: return
+        val adapter2 = vb.recvDays.adapter as ScheduleDaysAdapter? ?: return
         val scale = if(selectedCellIndex < 0) 1.0f else 0.9f
 
         adapter1.selectCellAt(selectedCellIndex)
         adapter2.selectedCellIndex = selectedCellIndex
-        recvDays.scaleX = scale
-        recvDays.scaleY = scale
+        vb.recvDays.scaleX = scale
+        vb.recvDays.scaleY = scale
     }
 
     private fun notifyError(message: String) {
@@ -167,13 +172,13 @@ class ScheduleFragment: Fragment(R.layout.schedule_fragm) {
     }
 
     private fun updateCells(update: CellUpdate?) {
-        val cellsAdapter = recvCells.adapter as CellsAdapter? ?: return
+        val cellsAdapter = vb.recvCells.adapter as CellsAdapter? ?: return
 
         when(update) {
             is CellUpdate.Added -> {
                 cellsAdapter.notifyCellProbablyAdded()
                 vm.notifyCellUpdateConsumed()
-                recvCells.scrollToPosition(cellsAdapter.itemCount - 1)
+                vb.recvCells.scrollToPosition(cellsAdapter.itemCount - 1)
             }
 
             is CellUpdate.Updated -> {
@@ -214,7 +219,7 @@ class ScheduleFragment: Fragment(R.layout.schedule_fragm) {
     // Help:
 
     private val daysAdapter
-        get() = recvDays.adapter as ScheduleDaysAdapter?
+        get() = vb.recvDays.adapter as ScheduleDaysAdapter?
 
     private fun dimen(dimenRes: Int): Int
         = resources.getDimensionPixelSize(dimenRes)

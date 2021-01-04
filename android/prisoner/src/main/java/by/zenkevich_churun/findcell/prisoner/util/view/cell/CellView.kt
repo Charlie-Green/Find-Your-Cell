@@ -2,15 +2,19 @@ package by.zenkevich_churun.findcell.prisoner.util.view.cell
 
 import android.content.Context
 import android.util.AttributeSet
+import android.view.LayoutInflater
 import android.view.View
 import android.widget.LinearLayout
 import by.zenkevich_churun.findcell.entity.entity.Cell
 import by.zenkevich_churun.findcell.prisoner.R
-import kotlinx.android.synthetic.main.cell_view.view.*
+import by.zenkevich_churun.findcell.prisoner.databinding.CellViewBinding
 
 
 /** Compund [View] representing a [Cell]. **/
 class CellView: LinearLayout {
+
+    private val vb: CellViewBinding
+
 
     constructor(context: Context):
         super(context)
@@ -21,7 +25,8 @@ class CellView: LinearLayout {
 
 
     init {
-        View.inflate(context, R.layout.cell_view, this)
+        val inflater = LayoutInflater.from(context)
+        vb = CellViewBinding.inflate(inflater, this)
         setBackgroundResource(R.drawable.shape_roundrect_8)
     }
 
@@ -32,17 +37,17 @@ class CellView: LinearLayout {
 
 
     fun setNumberBackgroundColor(color: Int) {
-        setViewBackgroundColor(txtvNumber, color)
+        setViewBackgroundColor(vb.txtvNumber, color)
     }
 
     fun setTextColor(color: Int) {
-        txtvNumber.setTextColor(color)
-        txtvJail.setTextColor(color)
+        vb.txtvNumber.setTextColor(color)
+        vb.txtvJail.setTextColor(color)
     }
 
     fun show(cell: Cell) {
-        txtvNumber.text = cell.number.toString()
-        txtvJail.text = cell.jailName
+        vb.txtvNumber.text = cell.number.toString()
+        vb.txtvJail.text = cell.jailName
     }
 
 

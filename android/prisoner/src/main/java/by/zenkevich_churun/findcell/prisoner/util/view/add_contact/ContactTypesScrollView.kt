@@ -2,22 +2,23 @@ package by.zenkevich_churun.findcell.prisoner.util.view.add_contact
 
 import android.content.Context
 import android.util.AttributeSet
+import android.view.LayoutInflater
 import android.view.View
 import android.widget.*
 import by.zenkevich_churun.findcell.core.model.contact.ContactModel
 import by.zenkevich_churun.findcell.entity.entity.Contact
 import by.zenkevich_churun.findcell.prisoner.R
-import kotlinx.android.synthetic.main.add_contact_view.view.*
+import by.zenkevich_churun.findcell.prisoner.databinding.ContactTypesScrollViewBinding
 
 
 /** A compound [View] the user may use to add a [Contact].
   * This is a [HorizontalScrollView] filled with icons for different [Contact] types. **/
+// TODO: Derive directly from HSV
 class ContactTypesScrollView: FrameLayout {
 
-    private val hlltContactIcons: LinearLayout
+    private val vb: ContactTypesScrollViewBinding
     private val imgSize: Int
     private val imgMargin: Int
-
     private var onContactTypeSelected: ((Contact.Type) -> Unit)? = null
 
 
@@ -29,17 +30,16 @@ class ContactTypesScrollView: FrameLayout {
         super(context, attrs, defStyleAttr)
 
     init {
+        val inflater = LayoutInflater.from(context)
+        vb = ContactTypesScrollViewBinding.inflate(inflater, this)
         imgSize = resources.getDimensionPixelSize(R.dimen.added_contact_size)
         imgMargin = resources.getDimensionPixelSize(R.dimen.added_contact_margin)
-
-        val v = View.inflate(context, R.layout.add_contact_view, this)
-        hlltContactIcons = v.hlltContactIcons
     }
 
 
     fun setContent(types: List<Contact.Type>) {
         for(j in types.indices) {
-            val existingImageView = hlltContactIcons.getChildAt(j) as? ImageView
+            val existingImageView = vb.hlltContactIcons.getChildAt(j) as? ImageView
             val imgv = existingImageView ?: createImageView()
 
             imgv.setOnClickListener {
@@ -50,9 +50,9 @@ class ContactTypesScrollView: FrameLayout {
             imgv.setImageResource(iconRes)
         }
 
-        val itemCount = hlltContactIcons.childCount
+        val itemCount = vb.hlltContactIcons.childCount
         if(itemCount > types.size) {
-            hlltContactIcons.removeViews(types.size, itemCount-types.size)
+            vb.hlltContactIcons.removeViews(types.size, itemCount-types.size)
         }
     }
 
@@ -68,7 +68,7 @@ class ContactTypesScrollView: FrameLayout {
             rightMargin = imgMargin
         }
 
-        hlltContactIcons.addView(imgv, params)
+        vb.hlltContactIcons.addView(imgv, params)
 
         return imgv
     }

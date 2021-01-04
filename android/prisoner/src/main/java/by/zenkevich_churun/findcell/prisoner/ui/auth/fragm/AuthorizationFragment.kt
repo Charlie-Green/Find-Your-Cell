@@ -3,24 +3,28 @@ package by.zenkevich_churun.findcell.prisoner.ui.auth.fragm
 import android.os.Bundle
 import android.view.*
 import androidx.appcompat.app.AlertDialog
-import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
+import by.zenkevich_churun.findcell.core.ui.common.SviazenFragment
 import by.zenkevich_churun.findcell.core.util.android.NavigationUtil
 import by.zenkevich_churun.findcell.prisoner.R
+import by.zenkevich_churun.findcell.prisoner.databinding.AuthorizationFragmBinding
 import by.zenkevich_churun.findcell.prisoner.ui.auth.model.AuthorizationState
 import by.zenkevich_churun.findcell.prisoner.ui.auth.vm.AuthorizationViewModel
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.android.synthetic.main.authorization_fragm.*
 import javax.inject.Inject
 
 
 @AndroidEntryPoint
-class AuthorizationFragment: Fragment(R.layout.authorization_fragm) {
+class AuthorizationFragment: SviazenFragment<AuthorizationFragmBinding>() {
 
     @Inject
     lateinit var vm: AuthorizationViewModel
 
+
+    override fun inflateViewBinding(
+        inflater: LayoutInflater
+    ) = AuthorizationFragmBinding.inflate(inflater)
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         initFields()
@@ -30,22 +34,22 @@ class AuthorizationFragment: Fragment(R.layout.authorization_fragm) {
             renderState(state)
         })
 
-        buLogIn.setOnClickListener {
+        vb.buLogIn.setOnClickListener {
             vm.logIn(username, password)
         }
-        buSignUp.setOnClickListener {
+        vb.buSignUp.setOnClickListener {
             vm.signUp(username, password)
         }
-        onClickShowInfo(imgvUsernameInfo, R.string.username_info)
-        onClickShowInfo(imgvPasswordInfo, R.string.password_info)
+        onClickShowInfo(vb.imgvUsernameInfo, R.string.username_info)
+        onClickShowInfo(vb.imgvPasswordInfo, R.string.password_info)
     }
 
 
     private val username: String
-        get() = tietUsername.text?.toString() ?: ""
+        get() = vb.tietUsername.text?.toString() ?: ""
 
     private val password: String
-        get() = tietPassword.text?.toString() ?: ""
+        get() = vb.tietPassword.text?.toString() ?: ""
 
 
     private fun initFields() {
@@ -58,19 +62,19 @@ class AuthorizationFragment: Fragment(R.layout.authorization_fragm) {
             "ic_app", "mipmap", requireContext().packageName )
 
         if(iconRes == 0) {
-            imgvLogo.visibility = View.GONE
+            vb.imgvLogo.visibility = View.GONE
         } else {
-            imgvLogo.setImageResource(iconRes)
+            vb.imgvLogo.setImageResource(iconRes)
         }
     }
 
 
     private fun renderState(state: AuthorizationState) {
         if(state is AuthorizationState.Loading) {
-            prBar.visibility = View.VISIBLE
+            vb.prBar.visibility = View.VISIBLE
             return
         }
-        prBar.visibility = View.GONE
+        vb.prBar.visibility = View.GONE
 
         when(state) {
             is AuthorizationState.NetworkError -> {

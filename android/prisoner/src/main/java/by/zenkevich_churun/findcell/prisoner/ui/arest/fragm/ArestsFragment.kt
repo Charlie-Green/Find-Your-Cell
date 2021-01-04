@@ -2,32 +2,37 @@ package by.zenkevich_churun.findcell.prisoner.ui.arest.fragm
 
 import android.content.DialogInterface
 import android.os.Bundle
+import android.view.LayoutInflater
 import android.view.View
 import android.view.animation.AnimationUtils
 import androidx.appcompat.app.AlertDialog
 import androidx.core.text.HtmlCompat
 import androidx.core.view.isVisible
-import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
+import by.zenkevich_churun.findcell.core.ui.common.SviazenFragment
 import by.zenkevich_churun.findcell.core.util.android.NavigationUtil
 import by.zenkevich_churun.findcell.prisoner.R
+import by.zenkevich_churun.findcell.prisoner.databinding.ArestsFragmBinding
 import by.zenkevich_churun.findcell.prisoner.ui.common.arest.ArestsListState
 import by.zenkevich_churun.findcell.prisoner.ui.common.arest.CreateOrUpdateArestState
 import by.zenkevich_churun.findcell.prisoner.ui.arest.state.DeleteArestsState
 import by.zenkevich_churun.findcell.prisoner.ui.arest.vm.ArestsViewModel
 import by.zenkevich_churun.findcell.prisoner.ui.sched.fragm.ScheduleFragment
-import kotlinx.android.synthetic.main.arests_fragm.*
 import javax.inject.Inject
 
 
-class ArestsFragment: Fragment(R.layout.arests_fragm) {
+class ArestsFragment: SviazenFragment<ArestsFragmBinding>() {
 
     @Inject
     lateinit var vm: ArestsViewModel
 
     private lateinit var checksAnimer: ArestsCheckableStateAnimator
 
+
+    override fun inflateViewBinding(
+        inflater: LayoutInflater
+    ) = ArestsFragmBinding.inflate(inflater)
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         initFields()
@@ -50,7 +55,7 @@ class ArestsFragment: Fragment(R.layout.arests_fragm) {
             renderState(state)
         })
         vm.loadingLD.observe(viewLifecycleOwner, Observer { loading ->
-            prBar.isVisible = loading
+            vb.prBar.isVisible = loading
         })
 
         val layoutListener = object: View.OnLayoutChangeListener {
@@ -59,20 +64,20 @@ class ArestsFragment: Fragment(R.layout.arests_fragm) {
                 left: Int, top: Int, right: Int, bottom: Int,
                 oldLeft: Int, oldTop: Int, oldRight: Int, oldBottom: Int ) {
 
-                recvArests.removeOnLayoutChangeListener(this)
+                vb.recvArests.removeOnLayoutChangeListener(this)
                 observeCheckableState(bottom - top)
             }
         }
-        recvArests.addOnLayoutChangeListener(layoutListener)
+        vb.recvArests.addOnLayoutChangeListener(layoutListener)
 
-        fabAdd.setOnClickListener   { addArest() }
-        buDelete.setOnClickListener { suggestDelete() }
-        buCancel.setOnClickListener { vm.cancelDelete() }
+        vb.fabAdd.setOnClickListener   { addArest() }
+        vb.buDelete.setOnClickListener { suggestDelete() }
+        vb.buCancel.setOnClickListener { vm.cancelDelete() }
     }
 
 
     private val adapter
-        get() = recvArests.adapter as ArestsAdapter
+        get() = vb.recvArests.adapter as ArestsAdapter
 
 
     private fun initFields() {
@@ -81,11 +86,11 @@ class ArestsFragment: Fragment(R.layout.arests_fragm) {
     }
 
     private fun initRecycler() {
-        recvArests.adapter = ArestsAdapter(vm)
+        vb.recvArests.adapter = ArestsAdapter(vm)
     }
 
     private fun animateRecycler() {
-        recvArests.layoutAnimation = AnimationUtils
+        vb.recvArests.layoutAnimation = AnimationUtils
             .loadLayoutAnimation(requireContext(), R.anim.layoutanim_arests)
     }
 
@@ -93,14 +98,14 @@ class ArestsFragment: Fragment(R.layout.arests_fragm) {
     private fun observeCheckableState(screenHeight: Int) {
         val listMargin = resources.getDimensionPixelSize(R.dimen.arests_screen_padding)
         checksAnimer = ArestsCheckableStateAnimator
-            .Builder(screenHeight, buDelete, buCancel)
-            .setContentView(recvArests, listMargin)
-            .setFadingView(fabAdd)
+            .Builder(screenHeight, vb.buDelete, vb.buCancel)
+            .setContentView(vb.recvArests, listMargin)
+            .setFadingView(vb.fabAdd)
             .build()
 
         vm.checkableLD.observe(viewLifecycleOwner, Observer { checkable ->
             checksAnimer.setCheckable(checkable)  // Animate buttons in the bottom.
-            recvArests.post {
+            vb.recvArests.post {
                 adapter.isCheckable = checkable       // Animate item checkboxes.
             }
         })
@@ -108,30 +113,30 @@ class ArestsFragment: Fragment(R.layout.arests_fragm) {
 
 
     private fun renderState(state: ArestsListState) {
-        fabAdd.isVisible = state is ArestsListState.Loaded
+        vb.fabAdd.isVisible = state is ArestsListState.Loaded
 
         when(state) {
             is ArestsListState.Loading -> {
-                vlltError.visibility = View.GONE
+                vb.vlltError.visibility = View.GONE
                 // ProgressBar visibility is set in a standalone Observer.
             }
 
             is ArestsListState.Loaded -> {
-                vlltError.visibility = View.GONE
+                vb.vlltError.visibility = View.GONE
 
                 if(!state.animated) {
                     state.animated = true
                     animateRecycler()
                 }
 
-                val adapter = recvArests.adapter as ArestsAdapter
+                val adapter = vb.recvArests.adapter as ArestsAdapter
                 adapter.submitList(state.arests, state.checkedIds)
             }
 
             is ArestsListState.NoInternet -> {
-                vlltError.visibility = View.VISIBLE
-                buRetry.visibility = View.GONE
-                txtvError.setText(R.string.arests_need_internet_msg)
+                vb.vlltError.visibility = View.VISIBLE
+                vb.buRetry.visibility = View.GONE
+                vb.txtvError.setText(R.string.arests_need_internet_msg)
 
                 if(!state.notified) {
                     notifyError(R.string.no_internet_title, R.string.arests_need_internet_msg) {
@@ -141,15 +146,15 @@ class ArestsFragment: Fragment(R.layout.arests_fragm) {
             }
 
             is ArestsListState.NetworkError -> {
-                vlltError.visibility = View.VISIBLE
-                buRetry.visibility = View.VISIBLE
-                txtvError.setText(R.string.get_arests_failed_msg)
+                vb.vlltError.visibility = View.VISIBLE
+                vb.buRetry.visibility = View.VISIBLE
+                vb.txtvError.setText(R.string.get_arests_failed_msg)
 
                 if(!state.notified) {
                     notifyListStateNetworkError(state)
                 }
 
-                buRetry.setOnClickListener {
+                vb.buRetry.setOnClickListener {
                     vm.loadData(true)
                 }
             }

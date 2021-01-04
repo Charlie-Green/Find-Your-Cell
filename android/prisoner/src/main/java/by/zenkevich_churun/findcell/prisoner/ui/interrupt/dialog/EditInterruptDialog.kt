@@ -3,39 +3,34 @@ package by.zenkevich_churun.findcell.prisoner.ui.interrupt.dialog
 import android.content.DialogInterface
 import android.os.Bundle
 import android.view.*
-import androidx.fragment.app.DialogFragment
+import by.zenkevich_churun.findcell.core.ui.common.SviazenDialog
 import by.zenkevich_churun.findcell.core.util.android.AndroidUtil
-import by.zenkevich_churun.findcell.prisoner.R
+import by.zenkevich_churun.findcell.prisoner.databinding.EditInterruptDialogBinding
 import by.zenkevich_churun.findcell.prisoner.ui.interrupt.vm.EditInterruptViewModel
-import kotlinx.android.synthetic.main.result_request_dialog.*
 
 
-class EditInterruptDialog: DialogFragment() {
+class EditInterruptDialog: SviazenDialog<EditInterruptDialogBinding>() {
 
     private lateinit var vm: EditInterruptViewModel
     private var confirmed = false
 
 
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
+    override fun inflateViewBinding(
+        inflater: LayoutInflater
+    ) = EditInterruptDialogBinding.inflate(inflater)
 
-        return inflater.inflate(R.layout.result_request_dialog, container, false).also { view ->
-            setDialogWidth(view)
-        }
+    override fun customizeDialog(view: View) {
+        setDialogWidth(view)
     }
-
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         initFields()
 
-        buNo.setOnClickListener {
+        vb.buNo.setOnClickListener {
             confirmed = false
             dismiss()
         }
-        buYes.setOnClickListener {
+        vb.buYes.setOnClickListener {
             confirmed = true
             dismiss()
         }

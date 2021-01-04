@@ -13,9 +13,9 @@ import by.zenkevich_churun.findcell.core.util.view.contact.ContactView
 import by.zenkevich_churun.findcell.entity.entity.Contact
 import by.zenkevich_churun.findcell.entity.entity.Prisoner
 import by.zenkevich_churun.findcell.prisoner.R
+import by.zenkevich_churun.findcell.prisoner.databinding.ProfileScrollviewConstpartBinding
 import by.zenkevich_churun.findcell.prisoner.ui.profile.vm.ProfileViewModel
 import by.zenkevich_churun.findcell.prisoner.util.view.add_contact.ContactTypesScrollView
-import kotlinx.android.synthetic.main.profile_scrollview_constpart.view.*
 
 
 /** Adapter for the [RecyclerView] which is the scrollable part of Profile
@@ -62,26 +62,23 @@ internal class ProfileRecyclerAdapter(
 
     /** Constant part. **/
     inner class ConstantViewHolder(
-        itemView: View
-    ): RecyclerView.ViewHolder(itemView) {
-
-        private val addContactView = itemView.addContactView
-        private val etInfo = itemView.etInfo
+        private val vb: ProfileScrollviewConstpartBinding
+    ): RecyclerView.ViewHolder(vb.root) {
 
         init {
-            etInfo.addTextChangedListener {
-                onPrisonerInfoChanged(etInfo.text)
+            vb.etInfo.addTextChangedListener {
+                onPrisonerInfoChanged(vb.etInfo.text)
             }
 
-            addContactView.setContactTypeSelectedListener { type ->
+            vb.addContactView.setContactTypeSelectedListener { type ->
                 addContact(type)
             }
         }
 
         fun bind(prisonerInfo: CharSequence, addedContactTypes: List<Contact.Type>) {
-            etInfo.setText(prisonerInfo)
+            vb.etInfo.setText(prisonerInfo)
 
-            addContactView.setContent(addedContactTypes)
+            vb.addContactView.setContent(addedContactTypes)
             if(addedContactTypes.isEmpty()) {
                 animateWidthTo(0)
             } else if(itemView.width != 0) {
@@ -102,29 +99,29 @@ internal class ProfileRecyclerAdapter(
             if(lastAddContactWidth < 0) {
                 // Can't animate, since lastAnimatedWidth is invalid.
                 lastAddContactWidth = target
-                addContactView.updateLayoutParams {
+                vb.addContactView.updateLayoutParams {
                     width = target
                 }
 
                 if(target == 0) {
-                    addContactView.visibility = View.GONE
+                    vb.addContactView.visibility = View.GONE
                 }
 
                 return
             }
 
-            addContactView.visibility = View.VISIBLE
+            vb.addContactView.visibility = View.VISIBLE
             ValueAnimator.ofInt(lastAddContactWidth, target).apply {
                 addUpdateListener { animer ->
                     lastAddContactWidth = animer.animatedValue as Int
-                    addContactView.updateLayoutParams {
+                    vb.addContactView.updateLayoutParams {
                         width = lastAddContactWidth
                     }
                 }
 
                 if(target == 0) {
                     doOnEnd {
-                        addContactView.visibility = View.GONE
+                        vb.addContactView.visibility = View.GONE
                     }
                 }
 
@@ -180,17 +177,19 @@ internal class ProfileRecyclerAdapter(
         get() = info
 
 
-    private fun instantiateViewHolder(parent: ViewGroup, type: Int): RecyclerView.ViewHolder {
+    private fun instantiateViewHolder(
+        parent: ViewGroup,
+        type: Int
+    ): RecyclerView.ViewHolder {
+
         if(type == VIEWTYPE_CONTACT) {
             val contactView = ContactView(parent.context)
             return ContactViewHolder(contactView)
         }
 
-        val constView = LayoutInflater
-            .from(parent.context)
-            .inflate(R.layout.profile_scrollview_constpart, parent, false)
-
-        return ConstantViewHolder(constView)
+        val inflater = LayoutInflater.from(parent.context)
+        val vb = ProfileScrollviewConstpartBinding.inflate(inflater, parent, false)
+        return ConstantViewHolder(vb)
     }
 
     private fun addContact(type: Contact.Type) {

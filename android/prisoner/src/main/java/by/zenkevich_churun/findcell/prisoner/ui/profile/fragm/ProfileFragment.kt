@@ -1,30 +1,35 @@
 package by.zenkevich_churun.findcell.prisoner.ui.profile.fragm
 
 import android.os.Bundle
+import android.view.LayoutInflater
 import android.view.View
 import androidx.appcompat.app.AlertDialog
 import androidx.core.view.isVisible
 import androidx.core.widget.addTextChangedListener
-import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
+import by.zenkevich_churun.findcell.core.ui.common.SviazenFragment
 import by.zenkevich_churun.findcell.core.util.std.CollectionUtil
 import by.zenkevich_churun.findcell.entity.entity.Contact
 import by.zenkevich_churun.findcell.entity.entity.Prisoner
 import by.zenkevich_churun.findcell.prisoner.R
+import by.zenkevich_churun.findcell.prisoner.databinding.ProfileFragmBinding
 import by.zenkevich_churun.findcell.prisoner.repo.profile.SavePrisonerResult
 import by.zenkevich_churun.findcell.prisoner.ui.profile.model.PrisonerDraft
 import by.zenkevich_churun.findcell.prisoner.ui.profile.vm.ProfileViewModel
-import kotlinx.android.synthetic.main.profile_fragm.*
 
 
 /** Allows viewing and editing user's profile. **/
-class ProfileFragment: Fragment(R.layout.profile_fragm) {
+class ProfileFragment: SviazenFragment<ProfileFragmBinding>() {
 
     private var vm: ProfileViewModel? = null
     private var prisoner: Prisoner? = null
     private var addedContactTypes: MutableList<Contact.Type>? = null
 
+
+    override fun inflateViewBinding(
+        inflater: LayoutInflater
+    ) = ProfileFragmBinding.inflate(inflater)
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         prepareRecycler()
@@ -40,10 +45,10 @@ class ProfileFragment: Fragment(R.layout.profile_fragm) {
             displayPrisoner()
         })
         vm.unsavedChangesLD.observe(viewLifecycleOwner, Observer { thereAreChanges ->
-            fabSave.isVisible = thereAreChanges
+            vb.fabSave.isVisible = thereAreChanges
         })
         vm.loadingLD.observe(viewLifecycleOwner, Observer { isLoading ->
-            prBar.isVisible = isLoading
+            vb.prBar.isVisible = isLoading
         })
         vm.saveResultLD.observe(viewLifecycleOwner, Observer { result ->
             when(result) {
@@ -53,7 +58,7 @@ class ProfileFragment: Fragment(R.layout.profile_fragm) {
             }
         })
 
-        buResults.setOnClickListener {
+        vb.buResults.setOnClickListener {
             // TODO: Request result.
         }
     }
@@ -65,20 +70,20 @@ class ProfileFragment: Fragment(R.layout.profile_fragm) {
 
 
     private fun prepareRecycler() {
-        recyclerView.layoutManager = LinearLayoutManager(requireContext())
+        vb.recyclerView.layoutManager = LinearLayoutManager(requireContext())
     }
 
     private fun setListeners() {
-        tietName.addTextChangedListener {
-            if(fabSave.visibility != View.VISIBLE &&
+        vb.tietName.addTextChangedListener {
+            if(vb.fabSave.visibility != View.VISIBLE &&
                 prisoner != null &&
-                prisoner?.name?.length != tietName.text?.length ) {
+                prisoner?.name?.length != vb.tietName.text?.length ) {
 
                 vm?.notifyDataChanged()
             }
         }
 
-        fabSave.setOnClickListener {
+        vb.fabSave.setOnClickListener {
             collectData()?.also { vm?.save(it) }
         }
     }
@@ -94,18 +99,18 @@ class ProfileFragment: Fragment(R.layout.profile_fragm) {
         val prisoner = this.prisoner ?: return
         val addedContactTypes = this.addedContactTypes ?: return
 
-        tietName.setText(prisoner.name)
-        recyclerView.adapter = ProfileRecyclerAdapter(vm, prisoner, addedContactTypes)
+        vb.tietName.setText(prisoner.name)
+        vb.recyclerView.adapter = ProfileRecyclerAdapter(vm, prisoner, addedContactTypes)
     }
 
     private fun collectData(): Prisoner? {
-        val adapter = recyclerView.adapter as ProfileRecyclerAdapter? ?: return null
+        val adapter = vb.recyclerView.adapter as ProfileRecyclerAdapter? ?: return null
         val prisoner = this.prisoner ?: return null
 
         return PrisonerDraft(
             prisoner.id,
             prisoner.passwordHash ?: throw NullPointerException("Missing password hash"),
-            tietName.text.toString(),
+            vb.tietName.text.toString(),
             adapter.contacts,
             adapter.prisonerInfo
         )
@@ -123,7 +128,7 @@ class ProfileFragment: Fragment(R.layout.profile_fragm) {
             return
         }
 
-        val adapter = recyclerView.adapter as ProfileRecyclerAdapter? ?: return
+        val adapter = vb.recyclerView.adapter as ProfileRecyclerAdapter? ?: return
 
         for(position in positions) {
             if(position !in adapter.contacts.indices) {
