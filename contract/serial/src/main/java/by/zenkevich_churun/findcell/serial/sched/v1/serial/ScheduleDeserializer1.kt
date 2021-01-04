@@ -10,6 +10,9 @@ import java.io.InputStream
 class ScheduleDeserializer1: ScheduleDeserializer {
 
     override fun deserialize(input: InputStream): SchedulePojo {
-        return ProtocolUtil.fromJson(input, SchedulePojo1::class.java)
+        // TODO: CharlieDebug:
+        val json = String(input.readBytes())
+        println(json)
+        return ProtocolUtil.fromJson(json.byteInputStream(), SchedulePojo1::class.java)
     }
 }

@@ -17,7 +17,7 @@ internal class ScheduleMapper1: ScheduleMapper {
             cellPojo(cellEntry)
         }
 
-        val periodPojos = mutableListOf<PeriodPojo>()
+        val periodPojos = mutableListOf<PeriodPojo1>()
         for(periodEntity in view.periodEntities) {
 
             periodPojo(periodEntity, cellPojos)?.also {
@@ -27,16 +27,16 @@ internal class ScheduleMapper1: ScheduleMapper {
             // the Period is skipped.
         }
 
-        pojo.start   = view.arest.start
-        pojo.end     = view.arest.end
-        pojo.cells   = cellPojos
-        pojo.periods = periodPojos
+        pojo.start       = view.arest.start
+        pojo.end         = view.arest.end
+        pojo.cellPojos   = cellPojos
+        pojo.periodPojos = periodPojos
 
         return pojo
     }
 
 
-    private fun cellPojo(entry: ScheduleCellEntryEntity): CellPojo {
+    private fun cellPojo(entry: ScheduleCellEntryEntity): CellPojo1 {
         val key = entry.key
             ?: throw Error("${ScheduleCellEntryEntity::class.java.simpleName} not initialized")
 
@@ -49,7 +49,7 @@ internal class ScheduleMapper1: ScheduleMapper {
     private fun periodPojo(
         entity: PeriodEntity,
         cells: Collection<CellPojo>
-    ): PeriodPojo? {
+    ): PeriodPojo1? {
 
         val key = entity.key
             ?: throw Error("${PeriodEntity::class.java.simpleName} not initialized")
