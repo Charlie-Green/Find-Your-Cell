@@ -1,4 +1,4 @@
-package by.zenkevich_churun.findcell.remote.retrofit.sched.map
+package by.zenkevich_churun.findcell.core.api.sched
 
 
 /** Retrieves data required to map a Schedule POJO

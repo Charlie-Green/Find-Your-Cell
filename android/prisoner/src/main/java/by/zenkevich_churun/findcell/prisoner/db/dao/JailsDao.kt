@@ -9,6 +9,9 @@ interface JailsDao {
     @Query("select * from Jails")
     fun jails(): List<JailEntity>
 
+    @Query("select name from Jails where id=:id")
+    fun jailName(id: Int): String?
+
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun addOrUpdate(jails: List<JailEntity>)
 

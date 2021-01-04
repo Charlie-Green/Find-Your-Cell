@@ -1,7 +1,7 @@
 package by.zenkevich_churun.findcell.remote.retrofit.sched.entity
 
 import by.zenkevich_churun.findcell.entity.entity.Cell
-import by.zenkevich_churun.findcell.remote.retrofit.sched.map.SchedulePropertiesAccessor
+import by.zenkevich_churun.findcell.core.api.sched.SchedulePropertiesAccessor
 import by.zenkevich_churun.findcell.serial.sched.pojo.CellPojo
 
 
