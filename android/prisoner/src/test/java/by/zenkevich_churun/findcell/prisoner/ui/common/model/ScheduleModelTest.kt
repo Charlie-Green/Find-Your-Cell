@@ -77,7 +77,6 @@ class ScheduleModelTest {
         vararg cells: Cell ) {
 
         val day = where.dayAt(dayIndex)
-        println("days[$dayIndex] = ${day.dayData}")
         val actualCellCount = day.dayData.count { it == '.' } + 1
         Assertions.assertEquals(cells.size, actualCellCount)
 

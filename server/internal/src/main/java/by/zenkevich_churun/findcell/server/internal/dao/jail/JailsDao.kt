@@ -10,4 +10,7 @@ interface JailsDao: Repository<JailEntity, Int> {
 
     @Query("select j from JailEntity j")
     fun get(): List<JailEntity>
+
+    @Query("select seatCount from CellEntity c where jail=:jailId")
+    fun getSeatCounts(jailId: Int): List<Short>
 }

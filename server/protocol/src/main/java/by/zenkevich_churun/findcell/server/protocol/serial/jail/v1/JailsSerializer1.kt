@@ -1,6 +1,5 @@
 package by.zenkevich_churun.findcell.server.protocol.serial.jail.v1
 
-import by.zenkevich_churun.findcell.entity.entity.Cell
 import by.zenkevich_churun.findcell.entity.entity.Jail
 import by.zenkevich_churun.findcell.serial.jail.v1.pojo.*
 import by.zenkevich_churun.findcell.server.protocol.serial.jail.abstr.JailsSerializer
@@ -16,8 +15,9 @@ internal class JailsSerializer1: JailsSerializer {
     }
 
 
-    override fun serializeCells(cells: List<Cell>): String {
-        val pojo = SeatCountsListPojo.wrap(cells)
-        return ProtocolUtil.toJson(pojo, 4 + 5*cells.size)
+    override fun serializeCells(seatCounts: ShortArray): String {
+        val pojo = SeatCountsListPojo()
+        pojo.seatCounts = seatCounts
+        return ProtocolUtil.toJson(pojo, 4 + 5*seatCounts.size)
     }
 }

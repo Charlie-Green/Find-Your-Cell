@@ -24,14 +24,16 @@ class JailsController {
     }
 
 
-    @PostMapping("jail/get")
+    @PostMapping("jail/cell")
     fun getCells(
         @RequestParam("v") version: Int,
         @RequestParam("id") jailId: Int
     ): String {
 
-        val cells = repo.getCells(jailId)
-        return serializer(version).serializeCells(cells)
+        val counts = repo
+            .getSeatCounts(jailId)
+            .toShortArray()
+        return serializer(version).serializeCells(counts)
     }
 
 

@@ -15,4 +15,8 @@ class JailsRepository: SviazenRepositiory() {
     fun getJails(): List<Jail> {
         return jailsDao.get()
     }
+
+    fun getSeatCounts(jailId: Int): List<Short> {
+        return jailsDao.getSeatCounts(jailId)
+    }
 }
