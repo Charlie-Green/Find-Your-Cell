@@ -29,8 +29,7 @@ internal class ArestsAdapter(
 
         init {
             itemView.setOnClickListener {
-             // TODO: CharlieDebug: Uncomment
-            // openSchedule()
+                openSchedule()
             }
 
             itemView.setOnLongClickListener {
@@ -149,7 +148,7 @@ internal class ArestsAdapter(
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ArestViewHolder {
         val inflater = LayoutInflater.from(parent.context)
-        val vb = ArestItemBinding.inflate(inflater)
+        val vb = ArestItemBinding.inflate(inflater, parent, false)
         return ArestViewHolder(vm, vb)
     }
 

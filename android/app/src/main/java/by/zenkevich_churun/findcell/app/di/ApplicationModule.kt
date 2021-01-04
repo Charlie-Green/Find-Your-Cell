@@ -4,6 +4,8 @@ import by.zenkevich_churun.findcell.core.api.arest.ArestsApi
 import by.zenkevich_churun.findcell.core.api.jail.JailsApi
 import by.zenkevich_churun.findcell.core.api.auth.ProfileApi
 import by.zenkevich_churun.findcell.core.api.sched.ScheduleApi
+import by.zenkevich_churun.findcell.core.api.sched.SchedulePropertiesAccessor
+import by.zenkevich_churun.findcell.prisoner.repo.sched.map.SchedulePropertiesAccessorImpl
 import by.zenkevich_churun.findcell.remote.retrofit.arest.RetrofitArestsApi
 import by.zenkevich_churun.findcell.remote.retrofit.jail.RetrofitJailsApi
 import by.zenkevich_churun.findcell.remote.retrofit.profile.RetrofitProfileApi
@@ -42,4 +44,10 @@ interface ApplicationModule {
     fun arestsApi(
         impl: RetrofitArestsApi
     ): ArestsApi
+
+    @Singleton
+    @Binds
+    fun schedulePropertiesAccessor(
+        impl: SchedulePropertiesAccessorImpl
+    ): SchedulePropertiesAccessor
 }

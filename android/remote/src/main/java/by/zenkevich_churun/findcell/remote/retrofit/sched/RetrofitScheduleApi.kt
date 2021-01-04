@@ -1,9 +1,11 @@
 package by.zenkevich_churun.findcell.remote.retrofit.sched
 
 import by.zenkevich_churun.findcell.core.api.sched.ScheduleApi
+import by.zenkevich_churun.findcell.core.api.sched.SchedulePropertiesAccessor
 import by.zenkevich_churun.findcell.entity.entity.Schedule
 import by.zenkevich_churun.findcell.remote.retrofit.common.RetrofitApisUtil
 import by.zenkevich_churun.findcell.remote.retrofit.common.RetrofitHolder
+import by.zenkevich_churun.findcell.remote.retrofit.sched.entity.DeserializedSchedule
 import by.zenkevich_churun.findcell.serial.sched.serial.ScheduleDeserializer
 import by.zenkevich_churun.findcell.serial.util.protocol.Base64Util
 import javax.inject.Inject
@@ -12,7 +14,8 @@ import javax.inject.Singleton
 
 @Singleton
 class RetrofitScheduleApi @Inject constructor(
-    private val retrofitHolder: RetrofitHolder
+    private val retrofitHolder: RetrofitHolder,
+    private val props: SchedulePropertiesAccessor
 ): ScheduleApi {
 
     override fun get(
@@ -39,7 +42,7 @@ class RetrofitScheduleApi @Inject constructor(
         pojo.passwordBase64 = passwordBase64
         pojo.arestId = arestId
 
-        return TODO("Map to Schedule")
+        return DeserializedSchedule.from(pojo, props)
     }
 
     override fun update(

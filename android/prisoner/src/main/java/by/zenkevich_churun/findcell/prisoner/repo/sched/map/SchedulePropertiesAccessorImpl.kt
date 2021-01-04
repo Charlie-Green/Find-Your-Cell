@@ -37,7 +37,7 @@ class SchedulePropertiesAccessorImpl @Inject constructor(
 
 
     override fun seatCount(jailId: Int, cellNumber: Short): Short {
-        
+
         val cell = JailsRepositoryInternal.cell(
             appContext,
             jailsApi,

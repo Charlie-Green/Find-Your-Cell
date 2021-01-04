@@ -8,7 +8,7 @@ import retrofit2.http.*
 internal interface ScheduleService {
 
     @FormUrlEncoded
-    @POST
+    @POST("sched/get")
     fun get(
         @Field("v") version: Int,
         @Field("id") arestId: Int,

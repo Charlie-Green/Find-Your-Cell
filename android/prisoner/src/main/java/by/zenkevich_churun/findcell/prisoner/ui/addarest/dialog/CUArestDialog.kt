@@ -5,7 +5,6 @@ import android.view.*
 import by.zenkevich_churun.findcell.core.ui.common.SviazenDialog
 import by.zenkevich_churun.findcell.core.util.party3.CalendarPickerUtil
 import by.zenkevich_churun.findcell.prisoner.databinding.AddArestDialogBinding
-import by.zenkevich_churun.findcell.prisoner.databinding.AddarestCalpickerViewBinding
 import by.zenkevich_churun.findcell.prisoner.ui.addarest.vm.CUArestViewModel
 import com.savvi.rangedatepicker.CalendarPickerView
 import java.text.SimpleDateFormat
@@ -14,17 +13,12 @@ import java.util.*
 
 class CUArestDialog: SviazenDialog<AddArestDialogBinding>() {
 
-    private lateinit var pickerBinding: AddarestCalpickerViewBinding
     private lateinit var vm: CUArestViewModel
 
 
     override fun inflateViewBinding(
         inflater: LayoutInflater
-    ): AddArestDialogBinding {
-
-        pickerBinding = AddarestCalpickerViewBinding.inflate(inflater)
-        return AddArestDialogBinding.inflate(inflater)
-    }
+    ) = AddArestDialogBinding.inflate(inflater)
 
     override fun customizeDialog(view: View) {
         initCalendar()
@@ -46,7 +40,7 @@ class CUArestDialog: SviazenDialog<AddArestDialogBinding>() {
 
 
     private fun initCalendar() {
-        val picker = pickerBinding.calpicker
+        val picker = vb.calpicker.root
 
         picker.init(
             date(1994, Calendar.JULY, 10),
@@ -65,7 +59,7 @@ class CUArestDialog: SviazenDialog<AddArestDialogBinding>() {
 
     private fun addArest(): Boolean {
         val range = CalendarPickerUtil.selectedRange(
-            pickerBinding.calpicker
+            vb.calpicker.root
         ) ?: return false
 
         vm.addArest(range.first, range.second)
