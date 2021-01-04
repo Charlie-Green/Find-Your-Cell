@@ -2,19 +2,39 @@ package by.zenkevich_churun.findcell.remote.retrofit.sched
 
 import by.zenkevich_churun.findcell.core.api.sched.ScheduleApi
 import by.zenkevich_churun.findcell.entity.entity.Schedule
+import by.zenkevich_churun.findcell.remote.retrofit.common.RetrofitApisUtil
+import by.zenkevich_churun.findcell.remote.retrofit.common.RetrofitHolder
+import by.zenkevich_churun.findcell.serial.sched.serial.ScheduleDeserializer
+import by.zenkevich_churun.findcell.serial.util.protocol.Base64Util
 import javax.inject.Inject
 import javax.inject.Singleton
 
 
 @Singleton
-class RetrofitScheduleApi @Inject constructor(): ScheduleApi {
+class RetrofitScheduleApi @Inject constructor(
+    private val retrofitHolder: RetrofitHolder
+): ScheduleApi {
 
     override fun get(
         prisonerId: Int,
         passwordHash: ByteArray,
         arestId: Int
     ): Schedule {
-        TODO("Not yet implemented")
+
+        val service = retrofit.create(ScheduleService::class.java)
+        val passwordBase64 = Base64Util.encode(passwordHash)
+
+        val response = service
+            .get(1, arestId, passwordBase64)
+            .execute()
+        RetrofitApisUtil.assertResponseCode(response.code())
+
+        val responseStream = response.body()!!.byteStream()
+        val pojo = ScheduleDeserializer
+            .forVersion(1)
+            .deserialize(responseStream)
+
+        return TODO("Map to Schedule")
     }
 
     override fun update(
@@ -29,7 +49,7 @@ class RetrofitScheduleApi @Inject constructor(): ScheduleApi {
         passwordHash: ByteArray,
         jailId: Int,
         cellNumber: Short ) {
-
+        TODO("")
     }
 
     override fun updateCell(
@@ -39,7 +59,7 @@ class RetrofitScheduleApi @Inject constructor(): ScheduleApi {
         oldCellNumber: Short,
         newJailId: Int,
         newCellNumber: Short ) {
-        TODO("Not yet implemented")
+        TODO("")
     }
 
     override fun deleteCell(
@@ -47,6 +67,10 @@ class RetrofitScheduleApi @Inject constructor(): ScheduleApi {
         passwordHash: ByteArray,
         jailId: Int,
         cellNumber: Short ) {
-
+        TODO("")
     }
+
+
+    private val retrofit
+        get() = retrofitHolder.retrofit
 }

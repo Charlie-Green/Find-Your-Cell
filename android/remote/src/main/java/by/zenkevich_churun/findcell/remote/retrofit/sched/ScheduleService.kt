@@ -1,0 +1,17 @@
+package by.zenkevich_churun.findcell.remote.retrofit.sched
+
+import okhttp3.ResponseBody
+import retrofit2.Call
+import retrofit2.http.*
+
+
+internal interface ScheduleService {
+
+    @FormUrlEncoded
+    @POST
+    fun get(
+        @Field("v") version: Int,
+        @Field("id") arestId: Int,
+        @Field("pass") passwordBase64: String
+    ): Call<ResponseBody>
+}
