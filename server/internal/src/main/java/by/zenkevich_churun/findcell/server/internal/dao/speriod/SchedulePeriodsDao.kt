@@ -21,7 +21,7 @@ interface SchedulePeriodsDao: Repository<PeriodEntity, PeriodKey> {
     @Modifying
     @Query(
         "update PeriodEntity p " +
-        "set jail=:newJailId and cell=:newCellNumber " +
+        "set jail=:newJailId, cell=:newCellNumber " +
         "where jail=:oldJailId and cell=:oldCellNumber and arest=:arestId"
     )
     fun replaceCellReferences(

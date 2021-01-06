@@ -1,7 +1,6 @@
 package by.zenkevich_churun.findcell.prisoner.ui.cellopt.vm
 
 import android.content.Context
-import android.util.Log
 import androidx.lifecycle.*
 import by.zenkevich_churun.findcell.core.injected.web.NetworkStateTracker
 import by.zenkevich_churun.findcell.entity.entity.Cell
@@ -68,7 +67,6 @@ class CellOptionsViewModel @Inject constructor(
 
     private fun deleteCell(cell: Cell) {
         val deleted = scheduleRepo.deleteCell(cell.jailId, cell.number)
-        Log.v("CharlieDebug", "deleted = $deleted")
         if(!deleted) {
             scheduleStore.submitCellsCrud(ScheduleCellsCrudState.DeleteFailed())
             return

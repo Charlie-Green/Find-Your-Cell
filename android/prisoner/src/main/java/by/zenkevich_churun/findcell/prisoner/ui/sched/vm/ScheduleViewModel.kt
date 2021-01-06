@@ -1,7 +1,6 @@
 package by.zenkevich_churun.findcell.prisoner.ui.sched.vm
 
 import android.content.Context
-import android.util.Log
 import androidx.lifecycle.*
 import by.zenkevich_churun.findcell.core.injected.web.NetworkStateTracker
 import by.zenkevich_churun.findcell.entity.entity.Arest
@@ -109,7 +108,11 @@ class ScheduleViewModel @Inject constructor(
         }
 
         // Ensure that old data is not displayed while loading the new data:
-        scheduleStore.clearSchedule()
+        synchronized(scheduleStore) {
+            scheduleStore.clearSchedule()
+            scheduleStore.submitScheduleCrud(ScheduleCrudState.IDLE)
+            scheduleStore.submitCellsCrud(ScheduleCellsCrudState.Idle)
+        }
 
         requestedArestId = arestId
         return true

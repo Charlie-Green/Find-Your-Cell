@@ -32,6 +32,25 @@ sealed class ScheduleCellsCrudState {
             cellNumber: Short
         ): ScheduleCellsCrudState.Editing(jails, jailIndex, cellNumber)
 
+        class AddFailed(
+            jails: List<JailHeader>,
+            jailIndex: Int,
+            cellNumber: Short
+        ): ScheduleCellsCrudState.Editing(jails, jailIndex, cellNumber) {
+
+            var notified = false
+        }
+
+        class UpdateFailed(
+            val original: Cell,
+            jails: List<JailHeader>,
+            jailIndex: Int,
+            cellNumber: Short
+        ): ScheduleCellsCrudState.Editing(jails, jailIndex, cellNumber) {
+
+            var notified = false
+        }
+
 
         val selectedJail: JailHeader?
             get() {
@@ -54,14 +73,6 @@ sealed class ScheduleCellsCrudState {
     class ConfirmingDelete(
         val target: Cell
     ): ScheduleCellsCrudState()
-
-    class AddFailed: ScheduleCellsCrudState() {
-        var notified = false
-    }
-
-    class UpdateFailed: ScheduleCellsCrudState()  {
-        var notified = false
-    }
 
     class DeleteFailed: ScheduleCellsCrudState()  {
         var notified = false

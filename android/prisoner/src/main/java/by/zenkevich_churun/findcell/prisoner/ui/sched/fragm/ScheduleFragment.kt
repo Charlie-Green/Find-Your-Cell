@@ -177,8 +177,8 @@ class ScheduleFragment: SviazenFragment<ScheduleFragmBinding>() {
                 }
             }
 
-            is ScheduleCellsCrudState.AddFailed,
-            is ScheduleCellsCrudState.UpdateFailed -> {
+            is ScheduleCellsCrudState.Editing.AddFailed,
+            is ScheduleCellsCrudState.Editing.UpdateFailed -> {
                 // Show the Edit dialog which renders the state.
                 NavigationUtil.navigateIfNotYet(
                     findNavController(),

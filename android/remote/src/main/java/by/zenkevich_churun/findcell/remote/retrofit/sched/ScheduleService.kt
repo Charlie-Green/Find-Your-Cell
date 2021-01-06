@@ -17,7 +17,7 @@ internal interface ScheduleService {
     ): Call<ResponseBody>
 
 
-    @POST("cell/delete")
+    @POST("cell/update")
     fun updateCell(
         @Body body: RequestBody
     ): Call<ResponseBody>

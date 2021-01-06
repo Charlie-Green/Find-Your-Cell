@@ -39,22 +39,22 @@ class ArestsFragment: SviazenFragment<ArestsFragmBinding>() {
         initRecycler()
 
         vm.loadData(false)
-        vm.listStateLD.observe(viewLifecycleOwner, Observer { state ->
+        vm.listStateLD.observe(viewLifecycleOwner, { state ->
             renderState(state)
         })
-        vm.openedArestLD.observe(viewLifecycleOwner, Observer { arest ->
+        vm.openedArestLD.observe(viewLifecycleOwner, { arest ->
             arest?.id?.also { id ->
                 openSchedule(id)
                 vm.notifyScheduleOpened()
             }
         })
-        vm.addOrUpdateStateLD.observe(viewLifecycleOwner, Observer { state ->
+        vm.addOrUpdateStateLD.observe(viewLifecycleOwner, { state ->
             renderState(state)
         })
-        vm.deleteStateLD.observe(viewLifecycleOwner, Observer { state ->
+        vm.deleteStateLD.observe(viewLifecycleOwner, { state ->
             renderState(state)
         })
-        vm.loadingLD.observe(viewLifecycleOwner, Observer { loading ->
+        vm.loadingLD.observe(viewLifecycleOwner, { loading ->
             vb.prBar.isVisible = loading
         })
 

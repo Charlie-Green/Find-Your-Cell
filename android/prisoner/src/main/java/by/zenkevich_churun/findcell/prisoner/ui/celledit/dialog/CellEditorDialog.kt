@@ -2,6 +2,7 @@ package by.zenkevich_churun.findcell.prisoner.ui.celledit.dialog
 
 import android.content.DialogInterface
 import android.os.Bundle
+import android.util.Log
 import android.view.*
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
@@ -35,19 +36,7 @@ class CellEditorDialog: SviazenDialog<CellEditDialogBinding>() {
         vm.notifyUiShowing()
 
         vm.cellCrudStateLD.observe(viewLifecycleOwner, { state ->
-            when(state) {
-                is ScheduleCellsCrudState.Editing -> {
-                    renderEditor(state)
-                }
-
-                is ScheduleCellsCrudState.AddFailed -> {
-                    notifyError(R.string.add_cell_failed_msg)
-                }
-
-                is ScheduleCellsCrudState.UpdateFailed -> {
-                    notifyError(R.string.update_cell_failed_msg)
-                }
-            }
+            renderState(state)
         })
 
         vb.buSave.setOnClickListener {
@@ -73,6 +62,28 @@ class CellEditorDialog: SviazenDialog<CellEditDialogBinding>() {
         }
     }
 
+
+    private fun renderState(state: ScheduleCellsCrudState) {
+        if(state is ScheduleCellsCrudState.Processing) {
+            dismiss()
+            return
+        }
+
+        if(state !is ScheduleCellsCrudState.Editing) {
+            return
+        }
+
+        renderEditor(state)
+        when(state) {
+            is ScheduleCellsCrudState.Editing.AddFailed -> {
+                notifyError(R.string.add_cell_failed_msg)
+            }
+
+            is ScheduleCellsCrudState.Editing.UpdateFailed -> {
+                notifyError(R.string.update_cell_failed_msg)
+            }
+        }
+    }
 
     private fun renderEditor(state: ScheduleCellsCrudState.Editing) {
         vb.txtvError.visibility = View.GONE

@@ -2,6 +2,7 @@ package by.zenkevich_churun.findcell.prisoner.repo.sched
 
 import android.util.Log
 import by.zenkevich_churun.findcell.core.api.sched.ScheduleApi
+import by.zenkevich_churun.findcell.entity.entity.Arest
 import by.zenkevich_churun.findcell.entity.entity.Schedule
 import by.zenkevich_churun.findcell.prisoner.repo.common.PrisonerStorage
 import java.io.IOException
@@ -14,11 +15,15 @@ class ScheduleRepository @Inject constructor(
     private val api: ScheduleApi,
     private val store: PrisonerStorage ) {
 
+    private var arestId = Arest.INVALID_ID
+
+
     fun getSchedule(arestId: Int): GetScheduleResult {
         val prisoner = store.prisonerLD.value ?: return GetScheduleResult.NotAuthorized
 
         return try {
             val schedule = api.get(prisoner.id, prisoner.passwordHash, arestId)
+            this.arestId = arestId
             GetScheduleResult.Success(schedule)
         } catch(exc: IOException) {
             Log.w(LOGTAG, "Failed to get schedule: ${exc.javaClass.name}: ${exc.message}")
@@ -76,11 +81,14 @@ class ScheduleRepository @Inject constructor(
         newJailId: Int, newCellNumber: Short
     ): Boolean {
 
-        val prisoner = store.prisonerLD.value ?: return false
+        val prisoner = store.prisonerLD.value
+        if(arestId == Arest.INVALID_ID || prisoner == null) {
+            return false
+        }
 
         try {
             api.updateCell(
-                prisoner.id, prisoner.passwordHash,
+                arestId, prisoner.passwordHash,
                 oldJailId, oldCellNumber,
                 newJailId, newCellNumber
             )

@@ -120,7 +120,10 @@ class PrisonerActivity: SviazenActivity<PrisonerActivityBinding>() {
     private fun applyCellCrudState(state: ScheduleCellsCrudState) {
         when(state) {
             is ScheduleCellsCrudState.DeleteFailed -> {
-                notifyError(R.string.delete_cell_failed_msg)
+                if(!state.notified) {
+                    state.notified = true
+                    notifyError(R.string.delete_cell_failed_msg)
+                }
             }
         }
     }

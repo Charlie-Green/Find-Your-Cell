@@ -7,6 +7,7 @@ import by.zenkevich_churun.findcell.server.internal.entity.key.ScheduleCellEntry
 import by.zenkevich_churun.findcell.server.internal.entity.table.ScheduleCellEntryEntity
 import by.zenkevich_churun.findcell.server.internal.repo.common.SviazenRepositiory
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.dao.EmptyResultDataAccessException
 
 
 class CellEntriesRepository: SviazenRepositiory() {
@@ -41,6 +42,8 @@ class CellEntriesRepository: SviazenRepositiory() {
         oldJailId: Int, oldCellNumber: Short,
         newJailId: Int, newCellNumber: Short ) {
 
+        println("Updating: ($oldJailId; $oldCellNumber) -> ($newJailId; $newCellNumber)")
+
         // Validate user credentials:
         validateByArestId(arestId, passwordHash)
 
@@ -57,8 +60,9 @@ class CellEntriesRepository: SviazenRepositiory() {
         )
 
         // Now delete the oldCell without concern about the foreign key constraint:
-        val oldKey = createCellKey(arestId, oldJailId, oldCellNumber)
-        cellsDao.deleteById(oldKey)
+        deleteCell(arestId, oldJailId, oldCellNumber)
+
+        println("Update succeeded")
     }
 
 
@@ -75,8 +79,7 @@ class CellEntriesRepository: SviazenRepositiory() {
         periodsDao.deleteForCell(arestId, jailId, cellNumber)
 
         // Delete the ScheduleCellEntry itself:
-        val cellKey = createCellKey(arestId, jailId, cellNumber)
-        cellsDao.deleteById(cellKey)
+        deleteCell(arestId, jailId, cellNumber)
     }
 
 
@@ -86,6 +89,22 @@ class CellEntriesRepository: SviazenRepositiory() {
 
         val prisonerId = arestsDao.prisonerId(arestId)
         validateCredentials(prisonerId, passwordHash)
+    }
+
+    private fun deleteCell(
+        arestId: Int,
+        jailId: Int,
+        cellNumber: Short ) {
+
+        val cellKey = createCellKey(arestId, jailId, cellNumber)
+        try {
+            cellsDao.deleteById(cellKey)
+        } catch(exc: EmptyResultDataAccessException) {
+            throw IllegalArgumentException(
+                "CellEntry($arestId, $jailId, $cellNumber) doesn't exist",
+                exc
+            )
+        }
     }
 
     private fun createCellKey(

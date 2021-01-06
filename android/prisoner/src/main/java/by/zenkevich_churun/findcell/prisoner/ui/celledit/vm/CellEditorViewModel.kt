@@ -11,14 +11,12 @@ import by.zenkevich_churun.findcell.prisoner.repo.jail.JailsRepository
 import by.zenkevich_churun.findcell.prisoner.repo.sched.ScheduleRepository
 import by.zenkevich_churun.findcell.prisoner.ui.common.sched.JailHeader
 import by.zenkevich_churun.findcell.prisoner.ui.common.sched.ScheduleCellsCrudState
-import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 
 class CellEditorViewModel @Inject constructor(
-    @ApplicationContext appContext: Context,
     private val repo: JailsRepository,
     private val scheduleRepo: ScheduleRepository,
     private val scheduleStore: ScheduleLiveDatasStorage,
@@ -71,7 +69,7 @@ class CellEditorViewModel @Inject constructor(
 
 
     fun save() {
-        val state = cellCrudStateLD.value
+        val state = cellCrudStateLD.value ?: ScheduleCellsCrudState.Idle
         scheduleStore.submitCellsCrud( ScheduleCellsCrudState.Processing )
 
         viewModelScope.launch(Dispatchers.IO) {
@@ -80,15 +78,27 @@ class CellEditorViewModel @Inject constructor(
                     saveAdd(state)
                 }
 
+                is ScheduleCellsCrudState.Editing.AddFailed -> {
+                    saveAdd(state)
+                }
+
                 is ScheduleCellsCrudState.Editing.Updating -> {
-                    saveUpdate(state)
+                    saveUpdate(state, state.original)
+                }
+
+                is ScheduleCellsCrudState.Editing.UpdateFailed -> {
+                    saveUpdate(state, state.original)
+                }
+
+                else -> {
+                    scheduleStore.submitCellsCrud(state)
                 }
             }
         }
     }
 
 
-    private fun saveAdd(state: ScheduleCellsCrudState.Editing.Adding) {
+    private fun saveAdd(state: ScheduleCellsCrudState.Editing) {
         val jail = state.selectedJail
         val added = if(jail == null) {
             false
@@ -99,33 +109,49 @@ class CellEditorViewModel @Inject constructor(
             )
         }
 
-        if(added) {
+        val newState = if(added) {
             addToCache(state)
-            scheduleStore.submitCellsCrud(ScheduleCellsCrudState.Added())
+            ScheduleCellsCrudState.Added()
         } else {
-            scheduleStore.submitCellsCrud(ScheduleCellsCrudState.AddFailed())
+            ScheduleCellsCrudState.Editing.AddFailed(
+                state.jails,
+                state.jailIndex,
+                state.cellNumber
+            )
         }
+
+        scheduleStore.submitCellsCrud(newState)
     }
 
-    private fun saveUpdate(state: ScheduleCellsCrudState.Editing.Updating) {
+    private fun saveUpdate(
+        state: ScheduleCellsCrudState.Editing,
+        originalCell: Cell ) {
+
         val jail = state.selectedJail
         val updated = if(jail == null) {
             false
         } else {
             scheduleRepo.updateCell(
-                state.original.jailId,
-                state.original.number,
+                originalCell.jailId,
+                originalCell.number,
                 jail.id,
                 state.cellNumber
             )
         }
 
-        if(updated) {
-            updateInCache(state)
-            scheduleStore.submitCellsCrud(ScheduleCellsCrudState.Added())
+        val newState = if(updated) {
+            updateInCache(state, originalCell)
+            ScheduleCellsCrudState.Updated()
         } else {
-            scheduleStore.submitCellsCrud(ScheduleCellsCrudState.AddFailed())
+            ScheduleCellsCrudState.Editing.UpdateFailed(
+                originalCell,
+                state.jails,
+                state.jailIndex,
+                state.cellNumber
+            )
         }
+
+        scheduleStore.submitCellsCrud(newState)
     }
 
 
@@ -206,12 +232,29 @@ class CellEditorViewModel @Inject constructor(
             )
         }
 
+        is ScheduleCellsCrudState.Editing.AddFailed -> {
+            ScheduleCellsCrudState.Editing.AddFailed(
+                oldState.jails,
+                jailIndex,
+                cellNumber
+            )
+        }
+
+        is ScheduleCellsCrudState.Editing.UpdateFailed -> {
+            ScheduleCellsCrudState.Editing.UpdateFailed(
+                oldState.original,
+                oldState.jails,
+                jailIndex,
+                cellNumber
+            )
+        }
+
         else -> {
             oldState
         }
     }
 
-    private fun addToCache(state: ScheduleCellsCrudState.Editing.Adding) {
+    private fun addToCache(state: ScheduleCellsCrudState.Editing) {
         val addedCell = cell(state) ?: return
 
         synchronized(scheduleStore) {
@@ -224,17 +267,20 @@ class CellEditorViewModel @Inject constructor(
         }
     }
 
-    private fun updateInCache(state: ScheduleCellsCrudState.Editing.Updating) {
-        val cell = cell(state) ?: return
+    private fun updateInCache(
+        state: ScheduleCellsCrudState.Editing,
+        originalCell: Cell ) {
+
+        val newCell = cell(state) ?: return
 
         synchronized(this) {
             val schedule = scheduleStore.scheduleLD.value ?: return
             schedule.updateCell(
-                state.original.jailId,
-                state.original.number,
+                originalCell.jailId,
+                originalCell.number,
                 state.selectedJail ?: return,
                 state.cellNumber,
-                cell.seats
+                newCell.seats
             )
         }
     }

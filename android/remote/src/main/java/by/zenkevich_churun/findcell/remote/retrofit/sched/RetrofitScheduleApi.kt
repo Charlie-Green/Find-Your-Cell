@@ -58,7 +58,7 @@ class RetrofitScheduleApi @Inject constructor(
     override fun update(
         prisonerId: Int,
         passwordHash: ByteArray,
-        schedule: Schedule) {
+        schedule: Schedule ) {
 
         TODO("")
     }

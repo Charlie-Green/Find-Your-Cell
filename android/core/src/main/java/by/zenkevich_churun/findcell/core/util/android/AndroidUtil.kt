@@ -3,6 +3,7 @@ package by.zenkevich_churun.findcell.core.util.android
 import android.app.Activity
 import android.content.Context
 import android.os.Build
+import android.os.Looper
 import android.util.DisplayMetrics
 import android.util.Size
 import android.util.TypedValue
@@ -77,4 +78,10 @@ object AndroidUtil {
     fun defaultHideKeyboard(target: Window) {
         target.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN)
     }
+
+
+    val isThreadMain: Boolean
+        get() {
+            return Looper.myLooper() == Looper.getMainLooper()
+        }
 }

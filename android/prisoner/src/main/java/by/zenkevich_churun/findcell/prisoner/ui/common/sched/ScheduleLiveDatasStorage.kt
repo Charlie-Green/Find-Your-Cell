@@ -2,6 +2,7 @@ package by.zenkevich_churun.findcell.prisoner.ui.common.sched
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import by.zenkevich_churun.findcell.core.util.android.AndroidUtil
 import by.zenkevich_churun.findcell.prisoner.ui.sched.model.ScheduleCrudState
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -41,10 +42,18 @@ class ScheduleLiveDatasStorage @Inject constructor() {
 
 
     fun submitScheduleCrud(state: ScheduleCrudState) {
-        mldScheduleCrudState.postValue(state)
+        if(AndroidUtil.isThreadMain) {
+            mldScheduleCrudState.value = state
+        } else {
+            mldScheduleCrudState.postValue(state)
+        }
     }
 
     fun submitCellsCrud(state: ScheduleCellsCrudState) {
-        mldCellsCrudState.postValue(state)
+        if(AndroidUtil.isThreadMain) {
+            mldCellsCrudState.value = state
+        } else {
+            mldCellsCrudState.postValue(state)
+        }
     }
 }
