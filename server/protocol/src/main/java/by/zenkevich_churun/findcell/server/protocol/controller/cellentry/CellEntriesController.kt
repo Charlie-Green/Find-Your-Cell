@@ -22,7 +22,7 @@ class CellEntriesController {
     fun add(input: InputStream): String {
 
         val cell = deserializeCell(input)
-        val passwordHash = requirePassword(cell)
+        val passwordHash = requirePassword(cell.passwordBase64)
 
         repo.add(
             passwordHash,
@@ -35,11 +35,29 @@ class CellEntriesController {
     }
 
 
+    @PostMapping("cell/update")
+    fun update(input: InputStream): String {
+
+        val cell = CellEntriesDeserializer
+            .forVersion(1)
+            .deserializeTwo(input)
+
+        repo.update(
+            requirePassword(cell.passwordBase64),
+            cell.arestId,
+            cell.oldJailId, cell.oldCellNumber,
+            cell.newJailId, cell.newCellNumber
+        )
+
+        return ""
+    }
+
+
     @PostMapping("cell/delete")
     fun delete(input: InputStream): String {
 
         val cell = deserializeCell(input)
-        val passwordHash = requirePassword(cell)
+        val passwordHash = requirePassword(cell.passwordBase64)
 
         repo.delete(
             passwordHash,
@@ -58,9 +76,8 @@ class CellEntriesController {
             .deserialize(input)
     }
 
-    private fun requirePassword(cell: CellEntryPojo): ByteArray {
-        val base64 = cell.passwordBase64
-            ?: throw IllegalServerParameterException("Missing password")
+    private fun requirePassword(base64: String?): ByteArray {
+        base64 ?: throw IllegalServerParameterException("Missing password")
         return Base64Util.decode(base64)
     }
 }

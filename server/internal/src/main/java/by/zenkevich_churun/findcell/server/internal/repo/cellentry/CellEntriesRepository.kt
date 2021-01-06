@@ -29,13 +29,36 @@ class CellEntriesRepository: SviazenRepositiory() {
 
         validateByArestId(arestId, passwordHash)
 
-        val key = ScheduleCellEntryKey()
-        key.arestId = arestId
-        key.jailId = jailId
-        key.cellNumber = cellNumber
         val entity = ScheduleCellEntryEntity()
-        
+        entity.key = createCellKey(arestId, jailId, cellNumber)
         cellsDao.save(entity)
+    }
+
+
+    fun update(
+        passwordHash: ByteArray,
+        arestId: Int,
+        oldJailId: Int, oldCellNumber: Short,
+        newJailId: Int, newCellNumber: Short ) {
+
+        // Validate user credentials:
+        validateByArestId(arestId, passwordHash)
+
+        // Insert the new Cell:
+        val newCell = ScheduleCellEntryEntity()
+        newCell.key = createCellKey(arestId, newJailId, newCellNumber)
+        cellsDao.save(newCell)
+
+        // Replace references:
+        periodsDao.replaceCellReferences(
+            arestId,
+            oldJailId, oldCellNumber,
+            newJailId, newCellNumber
+        )
+
+        // Now delete the oldCell without concern about the foreign key constraint:
+        val oldKey = createCellKey(arestId, oldJailId, oldCellNumber)
+        cellsDao.deleteById(oldKey)
     }
 
 
@@ -52,10 +75,7 @@ class CellEntriesRepository: SviazenRepositiory() {
         periodsDao.deleteForCell(arestId, jailId, cellNumber)
 
         // Delete the ScheduleCellEntry itself:
-        val cellKey = ScheduleCellEntryKey()
-        cellKey.arestId    = arestId
-        cellKey.jailId     = jailId
-        cellKey.cellNumber = cellNumber
+        val cellKey = createCellKey(arestId, jailId, cellNumber)
         cellsDao.deleteById(cellKey)
     }
 
@@ -66,5 +86,19 @@ class CellEntriesRepository: SviazenRepositiory() {
 
         val prisonerId = arestsDao.prisonerId(arestId)
         validateCredentials(prisonerId, passwordHash)
+    }
+
+    private fun createCellKey(
+        arestId: Int,
+        jailId: Int,
+        cellNumber: Short
+    ): ScheduleCellEntryKey {
+
+        val key = ScheduleCellEntryKey()
+        key.arestId    = arestId
+        key.jailId     = jailId
+        key.cellNumber = cellNumber
+
+        return key
     }
 }
