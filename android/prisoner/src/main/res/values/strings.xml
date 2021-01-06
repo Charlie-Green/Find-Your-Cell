@@ -15,6 +15,8 @@
     <string name="sign_up">Зарегистрироваться</string>
     <string name="sign_out">Выход</string>
     <string name="find_prisoners">Найти сокамерников!</string>
+
+
     <string name="delete_arests_failed_title">Удаление не удалось</string>
     <string name="delete_arests_failed_msg">Возникла ошибка сети.</string>
     <string name="delete_arests_needs_internet">
@@ -95,6 +97,9 @@
     <!-- Notifications (Other): -->
     <string name="save_prisoner_success_msg">Информация профиля сохранена.</string>
     <string name="save_prisoner_error_msg">Не удалось сохранить информацию профиля.</string>
+    <string name="get_schedule_needs_internet">
+        Чтобы получить расписание Вашего ареста, нужно подключение к интернету.
+    </string>
     <string name="get_schedule_failed_msg">Не удалось получить Ваше расписание.</string>
     <string name="update_schedule_failed_msg">Не удалось сохранить расписание.</string>
     <string name="update_schedule_success_msg">Расписание сохранено.</string>

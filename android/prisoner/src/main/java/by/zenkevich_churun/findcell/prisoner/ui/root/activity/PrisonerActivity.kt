@@ -4,7 +4,6 @@ import android.app.Activity
 import android.graphics.Color
 import android.os.Bundle
 import android.view.View
-import androidx.lifecycle.Observer
 import androidx.navigation.NavController
 import androidx.navigation.findNavController
 import by.zenkevich_churun.findcell.core.ui.common.SviazenActivity
@@ -44,35 +43,32 @@ class PrisonerActivity: SviazenActivity<PrisonerActivityBinding>() {
         initFields()
         navMan.setup()
 
-        vm.savePrisonerResultLD.observe(this, Observer { result ->
+        vm.savePrisonerResultLD.observe(this, { result ->
             if(result is SavePrisonerResult.Success) {
                 notifySavePrisonerSuccess()
                 vm.notifySaveResultConsumed()
             }
         })
 
-        vm.updateScheduleResultLD.observe(this, Observer { result ->
+        vm.updateScheduleResultLD.observe(this, { result ->
             if(result != null) {
                 notifyUpdateScheduleSuccess()
                 vm.notifyUpdateScheduleResultConsumed()
             }
         })
         
-        vm.cellUpdateLD.observe(this, Observer { update ->
-            if(update is ScheduleCellsCrudState.DeleteFailed) {
-                notifyDeleteCellFailed()
-                vm.notifyCellUpdateConsumed()
-            }
+        vm.cellCrudStateLD.observe(this, { state ->
+            applyCellCrudState(state)
         })
 
-        vm.editInterruptStateLD.observe(this, Observer { state ->
+        vm.editInterruptStateLD.observe(this, { state ->
             when(state) {
                 is EditInterruptState.Confirmed -> interruptAndNavigate(state)
                 is EditInterruptState.Asking    -> warnEditInterrupt()
             }
         })
 
-        vm.unsavedChangesLD.observe(this, Observer { changes ->
+        vm.unsavedChangesLD.observe(this, { changes ->
             thereAreUnsavedChanges = changes
         })
     }
@@ -117,16 +113,15 @@ class PrisonerActivity: SviazenActivity<PrisonerActivityBinding>() {
     private fun notifyUpdateScheduleSuccess()
         = notifySuccess(R.string.update_schedule_success_msg)
 
-    private fun notifyDeleteCellFailed()
-        = notifyError(R.string.delete_cell_failed_msg)
-
-
-    private fun notifySuccess(messageRes: Int) {
-        Snackbar.make(vb.cdltRoot, messageRes, 2000).apply {
-            setTextColor(Color.WHITE)
-            show()
+    private fun applyCellCrudState(state: ScheduleCellsCrudState) {
+        when(state) {
+            is ScheduleCellsCrudState.DeleteFailed -> {
+                notifyError(R.string.delete_cell_failed_msg)
+            }
         }
     }
+
+
 
     private fun warnEditInterrupt() {
         NavigationUtil.navigateIfNotYet(
@@ -152,6 +147,13 @@ class PrisonerActivity: SviazenActivity<PrisonerActivityBinding>() {
         navController.navigate(destRes)
     }
 
+
+    private fun notifySuccess(messageRes: Int) {
+        Snackbar.make(vb.cdltRoot, messageRes, 2000).apply {
+            setTextColor(Color.WHITE)
+            show()
+        }
+    }
 
     private fun notifyError(messageRes: Int) {
         Snackbar.make(vb.cdltRoot, messageRes, 3000).apply {

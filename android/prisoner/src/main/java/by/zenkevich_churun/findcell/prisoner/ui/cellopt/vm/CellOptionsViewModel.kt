@@ -43,6 +43,10 @@ class CellOptionsViewModel @Inject constructor(
             return
         }
 
+        if(!netTracker.isInternetAvailable) {
+            return
+        }
+
         viewModelScope.launch(Dispatchers.IO) {
             deleteCell(oldState.target)
         }
@@ -50,13 +54,15 @@ class CellOptionsViewModel @Inject constructor(
     }
 
     fun declineDelete() {
-        val oldState = crudStateLD.value
-        if(oldState !is ScheduleCellsCrudState.ConfirmingDelete) {
-            return
-        }
+        synchronized(scheduleStore) {
+            val oldState = crudStateLD.value
+            if(oldState !is ScheduleCellsCrudState.ConfirmingDelete) {
+                return
+            }
 
-        val newState = ScheduleCellsCrudState.ViewingOptions(oldState.target)
-        scheduleStore.submitCellsCrud(newState)
+            val newState = ScheduleCellsCrudState.ViewingOptions(oldState.target)
+            scheduleStore.submitCellsCrud(newState)
+        }
     }
 
     private fun deleteCell(cell: Cell) {
@@ -69,19 +75,20 @@ class CellOptionsViewModel @Inject constructor(
         synchronized(scheduleStore) {
             val schedule = scheduleStore.scheduleLD.value
             schedule?.deleteCell(cell.jailId, cell.number)
+            scheduleStore.submitCellsCrud(ScheduleCellsCrudState.Deleted())
         }
-
-        scheduleStore.submitCellsCrud(ScheduleCellsCrudState.Deleted())
     }
 
 
     private inline fun changeState(
         mapState: (oldState: ScheduleCellsCrudState.ViewingOptions) -> ScheduleCellsCrudState ) {
 
-        val oldState = crudStateLD.value
-        if(oldState is ScheduleCellsCrudState.ViewingOptions) {
-            val newState = mapState(oldState)
-            scheduleStore.submitCellsCrud(newState)
+        synchronized(scheduleStore) {
+            val oldState = crudStateLD.value
+            if(oldState is ScheduleCellsCrudState.ViewingOptions) {
+                val newState = mapState(oldState)
+                scheduleStore.submitCellsCrud(newState)
+            }
         }
     }
 

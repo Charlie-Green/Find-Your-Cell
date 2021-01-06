@@ -30,8 +30,8 @@ class PrisonerRootViewModel @Inject constructor(
     val updateScheduleResultLD: LiveData<UpdateScheduleResult.Success?>
         get() = scheduleStore.updateScheduleResultLD
 
-    val cellUpdateLD: LiveData<ScheduleCellsCrudState?>
-        get() = scheduleStore.cellUpdateLD
+    val cellCrudStateLD: LiveData<ScheduleCellsCrudState>
+        get() = scheduleStore.cellsCrudStateLD
 
     val editInterruptStateLD: LiveData<EditInterruptState>
         get() = interruptStore.stateLD
@@ -50,9 +50,6 @@ class PrisonerRootViewModel @Inject constructor(
 
     fun notifyUpdateScheduleResultConsumed()
         = scheduleStore.notifyUpdateScheduleResultConsumed()
-
-    fun notifyCellUpdateConsumed()
-        = scheduleStore.notifyCellUpdateConsumed()
 
     fun notifyEditInterrupted(currentDest: Int, desiredDest: Int)
         = interruptStore.interrupt(currentDest, desiredDest)

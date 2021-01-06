@@ -4,13 +4,13 @@ import android.content.Context
 import androidx.lifecycle.*
 import by.zenkevich_churun.findcell.core.injected.web.NetworkStateTracker
 import by.zenkevich_churun.findcell.entity.entity.Arest
-import by.zenkevich_churun.findcell.entity.entity.Cell
 import by.zenkevich_churun.findcell.entity.entity.Schedule
 import by.zenkevich_churun.findcell.prisoner.ui.common.sched.ScheduleLiveDatasStorage
 import by.zenkevich_churun.findcell.prisoner.repo.sched.*
 import by.zenkevich_churun.findcell.prisoner.ui.common.change.UnsavedChangesLiveDatasStorage
 import by.zenkevich_churun.findcell.prisoner.ui.common.sched.ScheduleCellsCrudState
 import by.zenkevich_churun.findcell.prisoner.ui.common.sched.ScheduleModel
+import by.zenkevich_churun.findcell.prisoner.ui.sched.model.ScheduleCrudState
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -25,36 +25,25 @@ class ScheduleViewModel @Inject constructor(
     private val netTracker: NetworkStateTracker
 ): ViewModel() {
 
-    private val mapping = ScheduleVMMapping(appContext)
+    private val mldCrudState = MutableLiveData<ScheduleCrudState>()
     private val mldSelectedCellIndex = MutableLiveData<Int>()
-    private val mldError = MutableLiveData<String?>()
-    private val mldLoading = MutableLiveData<Boolean>()
     private var requestedArestId = Arest.INVALID_ID
 
 
     val selectedCellIndexLD: LiveData<Int>
         get() = mldSelectedCellIndex
 
+    val scheduleStateLD: LiveData<ScheduleCrudState>
+        get() = mldCrudState
+
     val scheduleLD: LiveData<ScheduleModel?>
         get() = scheduleStore.scheduleLD
-
-    val errorLD: LiveData<String?>
-        get() = mldError
 
     val unsavedChangesLD: LiveData<Boolean>
         get() = changesStore.scheduleLD
 
-    val loadingLD: LiveData<Boolean>
-        get() = mldLoading
-
-    val cellUpdateLD: LiveData<ScheduleCellsCrudState?>
-        get() = scheduleStore.cellUpdateLD
-
-    val cellOptionsLD: LiveData<Cell?>
-        get() = scheduleStore.cellOptionsLD
-
-    val cellUpdateRequestLD: LiveData<Cell?>
-        get() = scheduleStore.cellUpdateRequestLD
+    val cellCrudStateLD: LiveData<ScheduleCellsCrudState>
+        get() = scheduleStore.cellsCrudStateLD
 
 
     fun loadSchedule(arestId: Int) {
@@ -76,34 +65,25 @@ class ScheduleViewModel @Inject constructor(
         mldSelectedCellIndex.value = -1
     }
 
-    fun notifyErrorConsumed() {
-        mldError.value = null
-    }
-
     fun notifyScheduleChanged() {
         changesStore.setSchedule(true)
+    }
+
+    fun addCell() {
+        scheduleStore.submitCellsCrud(ScheduleCellsCrudState.AddRequested)
     }
 
 
     fun saveSchedule() {
         val scheduleModel = scheduleLD.value ?: return
-        if(!startLoad()) {
-            return
-        }
-
         mldSelectedCellIndex.value = -1
+        scheduleStore.submitCellsCrud( ScheduleCellsCrudState.Processing )
 
         viewModelScope.launch(Dispatchers.IO) {
             val schedule = scheduleModel.toSchedule()
             updateSchedule(schedule)
-            mldLoading.postValue(false)
         }
     }
-
-    fun notifyCellUpdateConsumed() {
-        scheduleStore.notifyCellUpdateConsumed()
-    }
-
 
     fun requestOptions(cellIndex: Int) {
         synchronized(scheduleStore) {
@@ -112,16 +92,10 @@ class ScheduleViewModel @Inject constructor(
                 return
             }
 
-            scheduleStore.requestOptions( schedule.cells[cellIndex] )
+            val cell = schedule.cells[cellIndex]
+            val newState = ScheduleCellsCrudState.ViewingOptions(cell)
+            scheduleStore.submitCellsCrud(newState)
         }
-    }
-
-    fun notifyCellOptionsSuggested() {
-        scheduleStore.notifyCellOptionsSuggested()
-    }
-
-    fun notifyCellUpdateSuggested() {
-        scheduleStore.notifyCellUpdateRequestConsumed()
     }
 
 
@@ -138,22 +112,18 @@ class ScheduleViewModel @Inject constructor(
     }
 
     private fun getSchedule(arestId: Int) {
-
-        mldLoading.postValue(true)
-
         viewModelScope.launch(Dispatchers.IO) {
             when(val result = repo.getSchedule(arestId)) {
                 is GetScheduleResult.Success -> {
                     val scheduleModel = ScheduleModel.from(result.schedule)
                     scheduleStore.submitSchedule(scheduleModel)
+                    mldCrudState.postValue(ScheduleCrudState.SUCCESS)
                 }
 
                 is GetScheduleResult.Failed -> {
-                    mldError.postValue(mapping.getFailedMessage)
+                    mldCrudState.postValue(ScheduleCrudState.GET_FAILED)
                 }
             }
-
-            mldLoading.postValue(false)
         }
     }
 
@@ -164,18 +134,8 @@ class ScheduleViewModel @Inject constructor(
             scheduleStore.submitUpdateScheduleSuccess()
             changesStore.setSchedule(false)
         } else {
-            mldError.postValue(mapping.updateFailedMessage)
+            mldCrudState.postValue(ScheduleCrudState.UPDATE_FAILED)
         }
-    }
-
-
-    private fun startLoad(): Boolean {
-        if(mldLoading.value == true) {
-            return false
-        }
-
-        mldLoading.postValue(true)
-        return true
     }
 
 

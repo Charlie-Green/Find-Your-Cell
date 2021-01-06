@@ -1,5 +1,6 @@
 package by.zenkevich_churun.findcell.prisoner.ui.common.sched
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import by.zenkevich_churun.findcell.prisoner.repo.sched.UpdateScheduleResult
@@ -39,6 +40,7 @@ class ScheduleLiveDatasStorage @Inject constructor() {
 
 
     fun submitCellsCrud(state: ScheduleCellsCrudState) {
+        Log.v("CharlieDebug", "cellCrud = ${state.javaClass.canonicalName}")
         mldCellsCrudState.postValue(state)
     }
 
