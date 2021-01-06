@@ -12,7 +12,7 @@ object RetrofitApisUtil {
         }
 
         if(code != HttpURLConnection.HTTP_OK) {
-            throw Error("Unexpected response code $code")
+            throw RuntimeException("Unexpected response code $code")
         }
     }
 }

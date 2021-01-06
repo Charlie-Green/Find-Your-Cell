@@ -25,7 +25,7 @@ internal class CellsAdapter(
 
         init {
             cellView.setOnClickListener {
-                vm.selectCell(adapterPosition)
+                vm.swapCellSelection(adapterPosition)
             }
             cellView.setOnLongClickListener {
                 vm.requestOptions(adapterPosition)

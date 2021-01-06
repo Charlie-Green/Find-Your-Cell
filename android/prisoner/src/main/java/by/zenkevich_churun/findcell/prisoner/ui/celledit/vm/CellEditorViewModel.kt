@@ -169,7 +169,7 @@ class CellEditorViewModel @Inject constructor(
                     oldState.original,
                     jailHeaders,
                     if(jailIndex in jails.indices) jailIndex else 0,
-                    1
+                    oldState.original.number
                 )
             }
 

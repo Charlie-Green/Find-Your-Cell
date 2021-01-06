@@ -87,9 +87,10 @@ class RetrofitScheduleApi @Inject constructor(
         cellNumber: Short ) {
 
         val pojo = CellEntryPojo1()
-        pojo.arestId    = arestId
-        pojo.jailId     = jailId
-        pojo.cellNumber = cellNumber
+        pojo.passwordBase64 = Base64Util.encode(passwordHash)
+        pojo.arestId        = arestId
+        pojo.jailId         = jailId
+        pojo.cellNumber     = cellNumber
 
         val json = Gson().toJson(pojo)
         val mediaType = MediaType.get("application/json")

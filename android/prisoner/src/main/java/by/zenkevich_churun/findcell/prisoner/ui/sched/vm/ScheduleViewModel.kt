@@ -57,8 +57,10 @@ class ScheduleViewModel @Inject constructor(
     }
 
 
-    fun selectCell(cellIndex: Int) {
-        mldSelectedCellIndex.value = cellIndex
+    fun swapCellSelection(cellIndex: Int) {
+        mldSelectedCellIndex.value =
+            if(mldSelectedCellIndex.value == cellIndex) -1
+            else cellIndex
     }
 
     fun unselectCell() {
@@ -91,6 +93,8 @@ class ScheduleViewModel @Inject constructor(
             if(cellIndex !in schedule.cells.indices) {
                 return
             }
+
+            mldSelectedCellIndex.value = -1
 
             val cell = schedule.cells[cellIndex]
             val newState = ScheduleCellsCrudState.ViewingOptions(cell)

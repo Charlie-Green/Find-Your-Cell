@@ -86,6 +86,10 @@ class CellOptionsDialog: SviazenDialog<CellOptionsDialogBinding>() {
                     vm.declineDelete()
                 }
             }
+
+            else -> {
+                dismiss()
+            }
         }
     }
 
