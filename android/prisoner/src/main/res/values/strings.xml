@@ -16,13 +16,6 @@
     <string name="sign_out">Выход</string>
     <string name="find_prisoners">Найти сокамерников!</string>
 
-
-    <string name="delete_arests_failed_title">Удаление не удалось</string>
-    <string name="delete_arests_failed_msg">Возникла ошибка сети.</string>
-    <string name="delete_arests_needs_internet">
-        Для удаления арестов нужно подключение к интернету.
-    </string>
-
     <plurals name="delete_arests_title">
         <item quantity="one">Убрать арест?</item>
         <item quantity="other">Убрать аресты?</item>
@@ -93,6 +86,11 @@
     <string name="arests_intersect_msg">
         Введённый Вами промежуток дат пересекается с Вашим арестом %s - %s.
     </string>
+    <string name="delete_arests_failed_title">Удаление не удалось</string>
+    <string name="delete_arests_failed_msg">Возникла ошибка сети.</string>
+    <string name="delete_arests_needs_internet">
+        Для удаления арестов нужно подключение к интернету.
+    </string>
 
     <!-- Notifications (Other): -->
     <string name="save_prisoner_success_msg">Информация профиля сохранена.</string>
@@ -115,6 +113,13 @@
     </string>
     <string name="add_cell_failed_msg">Не удалось добавить камеру: ошибка сети.</string>
     <string name="update_cell_failed_msg">Не удалось обновить камеру: ошибка сети.</string>
+    <string name="add_cell_succeeded_msg">
+        Теперь Вы можете указать, в какие дни вы были в камере №%d в %s
+    </string>
+    <string name="delete_cell_succeeded_msg">
+        Информация о Вашем содержании в камере удалена.
+    </string>
+    <string name="update_cell_succeeded_msg">Адрес камеры заменён.</string>
     <string name="delete_cell_failed_msg">Не удалось удалить сведения.</string>
     <string name="save_prisoner_needs_internet_msg">
         Чтобы сохранить информацию Вашего профиля, нужно соединение с интернетом.

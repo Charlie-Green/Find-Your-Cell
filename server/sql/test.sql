@@ -27,7 +27,7 @@ insert into Cells(`jail`, `number`, `seats`)
 values(1, 2, 4);
 
 insert into Cells(`jail`, `number`, `seats`)
-values(1, 5, 6);
+values(1, 3, 6);
 
 
 -- Cells within Окрестина ЦИП:

@@ -100,7 +100,8 @@ class CellEditorViewModel @Inject constructor(
 
     private fun saveAdd(state: ScheduleCellsCrudState.Editing) {
         val jail = state.selectedJail
-        val added = if(jail == null) {
+        val cell = cell(state)
+        val added = if(jail == null || cell == null) {
             false
         } else {
             scheduleRepo.addCell(
@@ -111,7 +112,8 @@ class CellEditorViewModel @Inject constructor(
 
         val newState = if(added) {
             addToCache(state)
-            ScheduleCellsCrudState.Added()
+            ScheduleCellsCrudState.Added(cell!!)
+
         } else {
             ScheduleCellsCrudState.Editing.AddFailed(
                 state.jails,

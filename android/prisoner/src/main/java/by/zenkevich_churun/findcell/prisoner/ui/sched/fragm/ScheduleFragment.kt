@@ -1,6 +1,7 @@
 package by.zenkevich_churun.findcell.prisoner.ui.sched.fragm
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import androidx.appcompat.app.AlertDialog
@@ -144,6 +145,8 @@ class ScheduleFragment: SviazenFragment<ScheduleFragmBinding>() {
     }
 
     private fun renderCellState(state: ScheduleCellsCrudState) {
+        Log.v("CharlieDebug", "state = ${state.javaClass.simpleName}")
+
         when(state) {
             is ScheduleCellsCrudState.ViewingOptions -> {
                 NavigationUtil.navigateIfNotYet(
@@ -161,8 +164,8 @@ class ScheduleFragment: SviazenFragment<ScheduleFragmBinding>() {
             }
 
             is ScheduleCellsCrudState.Added -> {
-                if(!state.notified) {
-                    state.notified = true
+                if(!state.applied) {
+                    state.applied = true
 
                     cellsAdapter?.notifyCellProbablyAdded()
                     val cellsCount = cellsAdapter?.itemCount ?: 1
@@ -171,8 +174,8 @@ class ScheduleFragment: SviazenFragment<ScheduleFragmBinding>() {
             }
 
             is ScheduleCellsCrudState.Updated -> {
-                if(!state.notified) {
-                    state.notified = true
+                if(!state.applied) {
+                    state.applied = true
                     notifyDataSetChanged()
                 }
             }
@@ -187,8 +190,8 @@ class ScheduleFragment: SviazenFragment<ScheduleFragmBinding>() {
             }
 
             is ScheduleCellsCrudState.Deleted -> {
-                if(!state.notified) {
-                    state.notified = true
+                if(!state.applied) {
+                    state.applied = true
                     notifyDataSetChanged()
                 }
             }

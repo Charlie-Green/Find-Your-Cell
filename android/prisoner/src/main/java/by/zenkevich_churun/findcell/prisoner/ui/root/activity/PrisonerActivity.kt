@@ -125,6 +125,33 @@ class PrisonerActivity: SviazenActivity<PrisonerActivityBinding>() {
                     notifyError(R.string.delete_cell_failed_msg)
                 }
             }
+
+            is ScheduleCellsCrudState.Added -> {
+                if(!state.notified) {
+                    state.notified = true
+
+                    val msg = getString(
+                        R.string.add_cell_succeeded_msg,
+                        state.newCell.number,
+                        state.newCell.jailName
+                    )
+                    notifySuccess(msg)
+                }
+            }
+
+            is ScheduleCellsCrudState.Updated -> {
+                if(!state.notified) {
+                    state.notified = true
+                    notifySuccess(R.string.update_cell_succeeded_msg)
+                }
+            }
+
+            is ScheduleCellsCrudState.Deleted -> {
+                if(!state.notified) {
+                    state.notified = true
+                    notifySuccess(R.string.delete_cell_succeeded_msg)
+                }
+            }
         }
     }
 
@@ -160,12 +187,15 @@ class PrisonerActivity: SviazenActivity<PrisonerActivityBinding>() {
     }
 
 
-    private fun notifySuccess(messageRes: Int) {
-        Snackbar.make(vb.cdltRoot, messageRes, 2000).apply {
+    private fun notifySuccess(message: String) {
+        Snackbar.make(vb.cdltRoot, message, 2000).apply {
             setTextColor(Color.WHITE)
             show()
         }
     }
+
+    private fun notifySuccess(messageRes: Int)
+        = notifySuccess( getString(messageRes) )
 
     private fun notifyError(messageRes: Int) {
         Snackbar.make(vb.cdltRoot, messageRes, 3000).apply {

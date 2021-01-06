@@ -47,54 +47,47 @@ class ScheduleRepository @Inject constructor(
     fun addCell(
         jailId: Int,
         cellNumber: Short
-    ): Boolean {
 
-        val prisoner = store.prisonerLD.value ?: return false
-
-        try {
-            api.addCell(prisoner.id, prisoner.passwordHash, jailId, cellNumber)
-            return true
-        } catch(exc: IOException) {
-            Log.w(LOGTAG, "Failed to add cell: ${exc.javaClass.name}: ${exc.message}")
-            return false
-        }
+    ) = crudCell { arestId, passwordHash ->
+        api.addCell(arestId, passwordHash, jailId, cellNumber)
     }
 
     fun deleteCell(
         jailId: Int,
         cellNumber: Short
-    ): Boolean {
 
-        val prisoner = store.prisonerLD.value ?: return false
-
-        try {
-            api.deleteCell(prisoner.id, prisoner.passwordHash, jailId, cellNumber)
-            return true
-        } catch(exc: IOException) {
-            Log.w(LOGTAG, "Failed to delete cell: ${exc.javaClass.name}: ${exc.message}")
-            return false
-        }
+    ) = crudCell { arestId, passwordHash ->
+        api.deleteCell(arestId, passwordHash, jailId, cellNumber)
     }
 
     fun updateCell(
         oldJailId: Int, oldCellNumber: Short,
         newJailId: Int, newCellNumber: Short
+
+    ) = crudCell { arestId, passwordHash ->
+        api.updateCell(
+            arestId, passwordHash,
+            oldJailId, oldCellNumber,
+            newJailId, newCellNumber
+        )
+    }
+
+
+    private inline fun crudCell(
+        performNetworkCall: (arestId: Int, passwordHash: ByteArray) -> Unit
     ): Boolean {
 
+        val arestId = this.arestId
         val prisoner = store.prisonerLD.value
         if(arestId == Arest.INVALID_ID || prisoner == null) {
             return false
         }
 
         try {
-            api.updateCell(
-                arestId, prisoner.passwordHash,
-                oldJailId, oldCellNumber,
-                newJailId, newCellNumber
-            )
+            performNetworkCall(arestId, prisoner.passwordHash)
             return true
         } catch(exc: IOException) {
-            Log.w(LOGTAG, "Failed to update cell: ${exc.javaClass.name}: ${exc.message}")
+            Log.w(LOGTAG, "Failed to add cell: ${exc.javaClass.name}: ${exc.message}")
             return false
         }
     }

@@ -78,15 +78,18 @@ sealed class ScheduleCellsCrudState {
         var notified = false
     }
 
-    class Added: ScheduleCellsCrudState() {
+    class Added(val newCell: Cell): ScheduleCellsCrudState() {
+        var applied = false
         var notified = false
     }
 
     class Updated: ScheduleCellsCrudState() {
+        var applied = false
         var notified = false
     }
 
     class Deleted: ScheduleCellsCrudState() {
+        var applied = false
         var notified = false
     }
 }

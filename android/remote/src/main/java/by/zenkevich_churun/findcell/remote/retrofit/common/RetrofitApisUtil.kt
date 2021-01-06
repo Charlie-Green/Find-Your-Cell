@@ -1,5 +1,8 @@
 package by.zenkevich_churun.findcell.remote.retrofit.common
 
+import by.zenkevich_churun.findcell.serial.util.protocol.ProtocolUtil
+import okhttp3.MediaType
+import okhttp3.RequestBody
 import java.io.IOException
 import java.net.HttpURLConnection
 
@@ -14,5 +17,16 @@ object RetrofitApisUtil {
         if(code != HttpURLConnection.HTTP_OK) {
             throw RuntimeException("Unexpected response code $code")
         }
+    }
+
+
+    fun jsonBody(
+        pojo: Any,
+        initialBufferSize: Int
+    ): RequestBody {
+
+        val mediaType = MediaType.get("application/json")
+        val json = ProtocolUtil.toJson(pojo, initialBufferSize)
+        return RequestBody.create(mediaType, json)
     }
 }

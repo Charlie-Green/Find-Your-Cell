@@ -10,10 +10,6 @@ import by.zenkevich_churun.findcell.serial.sched.serial.ScheduleDeserializer
 import by.zenkevich_churun.findcell.serial.sched.v1.pojo.CellEntryPojo1
 import by.zenkevich_churun.findcell.serial.sched.v1.pojo.TwoCellEntriesPojo1
 import by.zenkevich_churun.findcell.serial.util.protocol.Base64Util
-import by.zenkevich_churun.findcell.serial.util.protocol.ProtocolUtil
-import com.google.gson.Gson
-import okhttp3.MediaType
-import okhttp3.RequestBody
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -68,7 +64,19 @@ class RetrofitScheduleApi @Inject constructor(
         passwordHash: ByteArray,
         jailId: Int,
         cellNumber: Short ) {
-        TODO("")
+
+        val pojo = CellEntryPojo1()
+        pojo.passwordBase64 = Base64Util.encode(passwordHash)
+        pojo.arestId = arestId
+        pojo.jailId = jailId
+        pojo.cellNumber = cellNumber
+
+        val body = RetrofitApisUtil.jsonBody(pojo, passwordHash.size + 96)
+
+        val response = createService()
+            .addCell(body)
+            .execute()
+        RetrofitApisUtil.assertResponseCode(response.code())
     }
 
     override fun updateCell(
@@ -84,9 +92,7 @@ class RetrofitScheduleApi @Inject constructor(
         pojo.newJailId     = newJailId
         pojo.newCellNumber = newCellNumber
 
-        val mediaType = MediaType.get("application/json")
-        val json = ProtocolUtil.toJson(pojo, 256)
-        val body = RequestBody.create(mediaType, json)
+        val body = RetrofitApisUtil.jsonBody(pojo, passwordHash.size + 128)
 
         val response = createService()
             .updateCell(body)
@@ -106,9 +112,7 @@ class RetrofitScheduleApi @Inject constructor(
         pojo.jailId         = jailId
         pojo.cellNumber     = cellNumber
 
-        val json = Gson().toJson(pojo)
-        val mediaType = MediaType.get("application/json")
-        val body = RequestBody.create(mediaType, json)
+        val body = RetrofitApisUtil.jsonBody(pojo, passwordHash.size + 96)
 
         val response = createService()
             .deleteCell(body)
