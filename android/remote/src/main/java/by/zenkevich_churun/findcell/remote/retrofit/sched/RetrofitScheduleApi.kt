@@ -12,6 +12,7 @@ import by.zenkevich_churun.findcell.serial.util.protocol.Base64Util
 import com.google.gson.Gson
 import okhttp3.MediaType
 import okhttp3.RequestBody
+import java.io.IOException
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -58,6 +59,7 @@ class RetrofitScheduleApi @Inject constructor(
         passwordHash: ByteArray,
         schedule: Schedule) {
 
+        throw IOException("CharlieDebug")
     }
 
     override fun addCell(

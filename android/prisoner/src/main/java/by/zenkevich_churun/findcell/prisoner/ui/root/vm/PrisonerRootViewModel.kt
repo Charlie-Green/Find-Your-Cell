@@ -11,6 +11,7 @@ import by.zenkevich_churun.findcell.prisoner.ui.common.interrupt.InterruptLiveDa
 import by.zenkevich_churun.findcell.prisoner.ui.common.interrupt.EditInterruptState
 import by.zenkevich_churun.findcell.prisoner.ui.common.sched.ScheduleCellsCrudState
 import by.zenkevich_churun.findcell.prisoner.ui.common.sched.ScheduleLiveDatasStorage
+import by.zenkevich_churun.findcell.prisoner.ui.sched.model.ScheduleCrudState
 import javax.inject.Inject
 
 
@@ -27,8 +28,8 @@ class PrisonerRootViewModel @Inject constructor(
     val savePrisonerResultLD: LiveData<SavePrisonerResult>
         get() = repo.savePrisonerResultLD
 
-    val updateScheduleResultLD: LiveData<UpdateScheduleResult.Success?>
-        get() = scheduleStore.updateScheduleResultLD
+    val scheduleCrudStateLD: LiveData<ScheduleCrudState>
+        get() = scheduleStore.scheduleCrudStateLD
 
     val cellCrudStateLD: LiveData<ScheduleCellsCrudState>
         get() = scheduleStore.cellsCrudStateLD
@@ -47,9 +48,6 @@ class PrisonerRootViewModel @Inject constructor(
 
     fun notifySaveResultConsumed()
         = repo.notifySaveResultConsumed()
-
-    fun notifyUpdateScheduleResultConsumed()
-        = scheduleStore.notifyUpdateScheduleResultConsumed()
 
     fun notifyEditInterrupted(currentDest: Int, desiredDest: Int)
         = interruptStore.interrupt(currentDest, desiredDest)

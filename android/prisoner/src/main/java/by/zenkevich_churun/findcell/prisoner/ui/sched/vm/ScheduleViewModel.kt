@@ -1,6 +1,7 @@
 package by.zenkevich_churun.findcell.prisoner.ui.sched.vm
 
 import android.content.Context
+import android.util.Log
 import androidx.lifecycle.*
 import by.zenkevich_churun.findcell.core.injected.web.NetworkStateTracker
 import by.zenkevich_churun.findcell.entity.entity.Arest
@@ -25,7 +26,6 @@ class ScheduleViewModel @Inject constructor(
     private val netTracker: NetworkStateTracker
 ): ViewModel() {
 
-    private val mldCrudState = MutableLiveData<ScheduleCrudState>()
     private val mldSelectedCellIndex = MutableLiveData<Int>()
     private var requestedArestId = Arest.INVALID_ID
 
@@ -34,7 +34,7 @@ class ScheduleViewModel @Inject constructor(
         get() = mldSelectedCellIndex
 
     val scheduleStateLD: LiveData<ScheduleCrudState>
-        get() = mldCrudState
+        get() = scheduleStore.scheduleCrudStateLD
 
     val scheduleLD: LiveData<ScheduleModel?>
         get() = scheduleStore.scheduleLD
@@ -77,7 +77,7 @@ class ScheduleViewModel @Inject constructor(
     fun saveSchedule() {
         val scheduleModel = scheduleLD.value ?: return
         mldSelectedCellIndex.value = -1
-        scheduleStore.submitCellsCrud( ScheduleCellsCrudState.Processing )
+        scheduleStore.submitScheduleCrud(ScheduleCrudState.LOADING)
 
         viewModelScope.launch(Dispatchers.IO) {
             val schedule = scheduleModel.toSchedule()
@@ -112,16 +112,18 @@ class ScheduleViewModel @Inject constructor(
     }
 
     private fun getSchedule(arestId: Int) {
+        scheduleStore.submitScheduleCrud(ScheduleCrudState.LOADING)
+
         viewModelScope.launch(Dispatchers.IO) {
             when(val result = repo.getSchedule(arestId)) {
                 is GetScheduleResult.Success -> {
                     val scheduleModel = ScheduleModel.from(result.schedule)
                     scheduleStore.submitSchedule(scheduleModel)
-                    mldCrudState.postValue(ScheduleCrudState.SUCCESS)
+                    scheduleStore.submitScheduleCrud(ScheduleCrudState.GOT)
                 }
 
                 is GetScheduleResult.Failed -> {
-                    mldCrudState.postValue(ScheduleCrudState.GET_FAILED)
+                    scheduleStore.submitScheduleCrud(ScheduleCrudState.GET_FAILED)
                 }
             }
         }
@@ -131,10 +133,10 @@ class ScheduleViewModel @Inject constructor(
         val result = repo.updateSchedule(schedule)
 
         if(result is UpdateScheduleResult.Success) {
-            scheduleStore.submitUpdateScheduleSuccess()
+            scheduleStore.submitScheduleCrud(ScheduleCrudState.UPDATED)
             changesStore.setSchedule(false)
         } else {
-            mldCrudState.postValue(ScheduleCrudState.UPDATE_FAILED)
+            scheduleStore.submitScheduleCrud(ScheduleCrudState.UPDATE_FAILED)
         }
     }
 

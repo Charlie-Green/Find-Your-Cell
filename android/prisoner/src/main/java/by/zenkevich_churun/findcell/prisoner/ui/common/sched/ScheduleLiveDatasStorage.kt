@@ -1,9 +1,8 @@
 package by.zenkevich_churun.findcell.prisoner.ui.common.sched
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import by.zenkevich_churun.findcell.prisoner.repo.sched.UpdateScheduleResult
+import by.zenkevich_churun.findcell.prisoner.ui.sched.model.ScheduleCrudState
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -13,7 +12,9 @@ class ScheduleLiveDatasStorage @Inject constructor() {
 
     private val mldSchedule = MutableLiveData<ScheduleModel?>()
 
-    private val mldUpdateScheduleResult = MutableLiveData<UpdateScheduleResult.Success?>()
+    private val mldScheduleCrudState = MutableLiveData<ScheduleCrudState>().apply {
+        value = ScheduleCrudState.IDLE
+    }
 
     private val mldCellsCrudState = MutableLiveData<ScheduleCellsCrudState>().apply {
         value = ScheduleCellsCrudState.Idle
@@ -26,8 +27,8 @@ class ScheduleLiveDatasStorage @Inject constructor() {
     val cellsCrudStateLD: LiveData<ScheduleCellsCrudState>
         get() = mldCellsCrudState
 
-    val updateScheduleResultLD: LiveData<UpdateScheduleResult.Success?>
-        get() = mldUpdateScheduleResult
+    val scheduleCrudStateLD: LiveData<ScheduleCrudState>
+        get() = mldScheduleCrudState
 
 
     fun submitSchedule(schedule: ScheduleModel) {
@@ -39,17 +40,11 @@ class ScheduleLiveDatasStorage @Inject constructor() {
     }
 
 
+    fun submitScheduleCrud(state: ScheduleCrudState) {
+        mldScheduleCrudState.postValue(state)
+    }
+
     fun submitCellsCrud(state: ScheduleCellsCrudState) {
-        Log.v("CharlieDebug", "cellCrud = ${state.javaClass.canonicalName}")
         mldCellsCrudState.postValue(state)
-    }
-
-
-    fun submitUpdateScheduleSuccess() {
-        mldUpdateScheduleResult.postValue(UpdateScheduleResult.Success)
-    }
-
-    fun notifyUpdateScheduleResultConsumed() {
-        mldUpdateScheduleResult.postValue(null)
     }
 }

@@ -15,5 +15,7 @@ enum class ScheduleCrudState(
 
     /** In this case, the loaded [Schedule]
       * is obtained via [ScheduleLiveDatasStorage.scheduleLD]. **/
-    SUCCESS
+    GOT,
+
+    UPDATED
 }

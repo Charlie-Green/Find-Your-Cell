@@ -30,7 +30,7 @@ class CellEditorViewModel @Inject constructor(
 
 
     fun notifyUiShowing() {
-        val oldState = cellCrudStateLD.value ?: ScheduleCellsCrudState.Idle
+        val oldState = cellCrudStateLD.value
         if(oldState !is ScheduleCellsCrudState.AddRequested &&
             oldState !is ScheduleCellsCrudState.UpdateRequested ) {
 
@@ -71,9 +71,6 @@ class CellEditorViewModel @Inject constructor(
 
 
     fun save() {
-        val newState = ScheduleCellsCrudState.Updated()
-        scheduleStore.submitCellsCrud(newState)
-
         val state = cellCrudStateLD.value
         scheduleStore.submitCellsCrud( ScheduleCellsCrudState.Processing )
 
@@ -89,6 +86,7 @@ class CellEditorViewModel @Inject constructor(
             }
         }
     }
+
 
     private fun saveAdd(state: ScheduleCellsCrudState.Editing.Adding) {
         val jail = state.selectedJail
@@ -132,7 +130,14 @@ class CellEditorViewModel @Inject constructor(
 
 
     fun notifyUiDismissed() {
-        scheduleStore.submitCellsCrud(ScheduleCellsCrudState.Idle)
+        synchronized(scheduleStore) {
+            val oldState = cellCrudStateLD.value
+            if(oldState is ScheduleCellsCrudState.ViewingOptions ||
+                oldState is ScheduleCellsCrudState.ConfirmingDelete ) {
+
+                scheduleStore.submitCellsCrud(ScheduleCellsCrudState.Idle)
+            }
+        }
     }
 
 

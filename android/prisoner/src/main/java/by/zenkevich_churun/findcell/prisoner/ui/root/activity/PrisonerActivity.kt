@@ -16,6 +16,7 @@ import by.zenkevich_churun.findcell.prisoner.repo.profile.SavePrisonerResult
 import by.zenkevich_churun.findcell.prisoner.ui.common.interrupt.EditInterruptState
 import by.zenkevich_churun.findcell.prisoner.ui.common.sched.ScheduleCellsCrudState
 import by.zenkevich_churun.findcell.prisoner.ui.root.vm.PrisonerRootViewModel
+import by.zenkevich_churun.findcell.prisoner.ui.sched.model.ScheduleCrudState
 import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -50,13 +51,10 @@ class PrisonerActivity: SviazenActivity<PrisonerActivityBinding>() {
             }
         })
 
-        vm.updateScheduleResultLD.observe(this, { result ->
-            if(result != null) {
-                notifyUpdateScheduleSuccess()
-                vm.notifyUpdateScheduleResultConsumed()
-            }
+        vm.scheduleCrudStateLD.observe(this, { state ->
+            applyScheduleCrudState(state)
         })
-        
+
         vm.cellCrudStateLD.observe(this, { state ->
             applyCellCrudState(state)
         })
@@ -107,11 +105,17 @@ class PrisonerActivity: SviazenActivity<PrisonerActivityBinding>() {
         )
     }
 
-    private fun notifySavePrisonerSuccess()
-        = notifySuccess(R.string.save_prisoner_success_msg)
 
-    private fun notifyUpdateScheduleSuccess()
-        = notifySuccess(R.string.update_schedule_success_msg)
+    private fun applyScheduleCrudState(state: ScheduleCrudState) {
+        when(state) {
+            ScheduleCrudState.UPDATED -> {
+                if(!state.notified) {
+                    state.notified = true
+                    notifyUpdateScheduleSuccess()
+                }
+            }
+        }
+    }
 
     private fun applyCellCrudState(state: ScheduleCellsCrudState) {
         when(state) {
@@ -121,6 +125,11 @@ class PrisonerActivity: SviazenActivity<PrisonerActivityBinding>() {
         }
     }
 
+    private fun notifySavePrisonerSuccess()
+        = notifySuccess(R.string.save_prisoner_success_msg)
+
+    private fun notifyUpdateScheduleSuccess()
+        = notifySuccess(R.string.update_schedule_success_msg)
 
 
     private fun warnEditInterrupt() {

@@ -6,7 +6,6 @@ import android.view.*
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import androidx.core.view.updateLayoutParams
-import androidx.lifecycle.Observer
 import by.zenkevich_churun.findcell.core.ui.common.SviazenDialog
 import by.zenkevich_churun.findcell.core.util.android.AndroidUtil
 import by.zenkevich_churun.findcell.prisoner.R
@@ -35,7 +34,7 @@ class CellEditorDialog: SviazenDialog<CellEditDialogBinding>() {
 
         vm.notifyUiShowing()
 
-        vm.cellCrudStateLD.observe(viewLifecycleOwner, Observer { state ->
+        vm.cellCrudStateLD.observe(viewLifecycleOwner, { state ->
             when(state) {
                 is ScheduleCellsCrudState.Editing -> {
                     renderEditor(state)
@@ -58,8 +57,12 @@ class CellEditorDialog: SviazenDialog<CellEditDialogBinding>() {
     }
 
     override fun onDismiss(dialog: DialogInterface) {
+        submitDraft()
+        if(activity?.isChangingConfigurations == false) {
+            vm?.notifyUiDismissed()
+        }
+
         super.onDismiss(dialog)
-        vm?.notifyUiDismissed()
     }
 
 
@@ -112,6 +115,9 @@ class CellEditorDialog: SviazenDialog<CellEditDialogBinding>() {
 
 
     private fun submitDraft() {
-
+        vm?.submitEditorState(
+            vb.spJail.selectedItemPosition,
+            vb.numpCellNumber.value.toShort()
+        )
     }
 }

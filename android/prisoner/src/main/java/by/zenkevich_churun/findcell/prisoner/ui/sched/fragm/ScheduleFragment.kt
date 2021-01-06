@@ -112,24 +112,33 @@ class ScheduleFragment: SviazenFragment<ScheduleFragmBinding>() {
     // Observers:
 
     private fun renderScheduleState(state: ScheduleCrudState) {
+        if(state == ScheduleCrudState.LOADING) {
+            vb.prBar.visibility = View.VISIBLE
+            return
+        }
+        vb.prBar.visibility = View.GONE
+
         if(state.notified) {
             return
         }
 
         when(state) {
             ScheduleCrudState.GET_REQUIRES_INTERNET -> {
-                notifyError( getString(R.string.get_schedule_needs_internet) )
-                state.notified = true
+                notifyError( getString(R.string.get_schedule_needs_internet) ) {
+                    state.notified = true
+                }
             }
 
             ScheduleCrudState.GET_FAILED -> {
-                notifyError( getString(R.string.get_schedule_failed_msg) )
-                state.notified = true
+                notifyError( getString(R.string.get_schedule_failed_msg) ) {
+                    state.notified = true
+                }
             }
 
             ScheduleCrudState.UPDATE_FAILED -> {
-                notifyError( getString(R.string.update_schedule_failed_msg) )
-                state.notified = true
+                notifyError( getString(R.string.update_schedule_failed_msg) ) {
+                    state.notified = true
+                }
             }
         }
     }
@@ -168,6 +177,15 @@ class ScheduleFragment: SviazenFragment<ScheduleFragmBinding>() {
                 }
             }
 
+            is ScheduleCellsCrudState.AddFailed,
+            is ScheduleCellsCrudState.UpdateFailed -> {
+                // Show the Edit dialog which renders the state.
+                NavigationUtil.navigateIfNotYet(
+                    findNavController(),
+                    R.id.dialogCellEdit
+                ) { null }
+            }
+
             is ScheduleCellsCrudState.Deleted -> {
                 if(!state.notified) {
                     state.notified = true
@@ -198,12 +216,14 @@ class ScheduleFragment: SviazenFragment<ScheduleFragmBinding>() {
         vb.recvDays.scaleY = scale
     }
 
-    private fun notifyError(message: String) {
+    private fun notifyError(message: String, onDismiss: () -> Unit) {
         AlertDialog.Builder(requireContext())
             .setTitle(R.string.error_title)
             .setMessage(message)
             .setPositiveButton(R.string.ok) { dialog, _ ->
                 dialog.dismiss()
+            }.setOnDismissListener {
+                onDismiss()
             }.show()
     }
 
