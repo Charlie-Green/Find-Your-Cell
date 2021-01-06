@@ -1,5 +1,6 @@
 package by.zenkevich_churun.findcell.server.protocol.controller.cellentry
 
+import by.zenkevich_churun.findcell.serial.sched.pojo.CellEntryPojo
 import by.zenkevich_churun.findcell.serial.util.protocol.Base64Util
 import by.zenkevich_churun.findcell.server.internal.repo.cellentry.CellEntriesRepository
 import by.zenkevich_churun.findcell.server.protocol.exc.IllegalServerParameterException
@@ -17,22 +18,49 @@ class CellEntriesController {
     private lateinit var repo: CellEntriesRepository
 
 
-    @PostMapping("cell/delete")
-    fun delete(input: InputStream): String {
+    @PostMapping("cell/add")
+    fun add(input: InputStream): String {
 
-        val cell = CellEntriesDeserializer
-            .forVersion(1)
-            .deserialize(input)
-        val passwordBase64 = cell.passwordBase64
-            ?: throw IllegalServerParameterException("Missing password")
+        val cell = deserializeCell(input)
+        val passwordHash = requirePassword(cell)
 
-        repo.delete(
-            Base64Util.decode(passwordBase64, "delete a cell entry"),
+        repo.add(
+            passwordHash,
             cell.arestId,
             cell.jailId,
             cell.cellNumber
         )
 
         return ""
+    }
+
+
+    @PostMapping("cell/delete")
+    fun delete(input: InputStream): String {
+
+        val cell = deserializeCell(input)
+        val passwordHash = requirePassword(cell)
+
+        repo.delete(
+            passwordHash,
+            cell.arestId,
+            cell.jailId,
+            cell.cellNumber
+        )
+
+        return ""
+    }
+
+
+    private fun deserializeCell(input: InputStream): CellEntryPojo {
+        return CellEntriesDeserializer
+            .forVersion(1)
+            .deserialize(input)
+    }
+
+    private fun requirePassword(cell: CellEntryPojo): ByteArray {
+        val base64 = cell.passwordBase64
+            ?: throw IllegalServerParameterException("Missing password")
+        return Base64Util.decode(base64)
     }
 }

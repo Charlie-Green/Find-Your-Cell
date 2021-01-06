@@ -11,5 +11,7 @@ interface ScheduleCellsDao: Repository<ScheduleCellEntryEntity, ScheduleCellEntr
     @Query("select x from ScheduleCellEntryEntity x where arest=:arestId")
     fun get(arestId: Int): List<ScheduleCellEntryEntity>
 
+    fun save(entity: ScheduleCellEntryEntity)
+
     fun deleteById(id: ScheduleCellEntryKey)
 }
