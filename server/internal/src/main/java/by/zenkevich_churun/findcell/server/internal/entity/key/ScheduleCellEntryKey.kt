@@ -6,7 +6,7 @@ import javax.persistence.Embeddable
 
 
 @Embeddable
-class CellScheduleEntryKey: Serializable {
+class ScheduleCellEntryKey: Serializable {
 
     @Column(name = "arest")
     var arestId: Int = 0

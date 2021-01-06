@@ -3,10 +3,8 @@ package by.zenkevich_churun.findcell.server.internal.repo.arest
 import by.zenkevich_churun.findcell.entity.entity.LightArest
 import by.zenkevich_churun.findcell.entity.response.CreateOrUpdateArestResponse
 import by.zenkevich_churun.findcell.server.internal.dao.arest.ArestsDao
-import by.zenkevich_churun.findcell.server.internal.dao.prisoner.PrisonerDao
-import by.zenkevich_churun.findcell.server.internal.dao.sched.ScheduleDao
+import by.zenkevich_churun.findcell.server.internal.dao.speriod.SchedulePeriodsDao
 import by.zenkevich_churun.findcell.server.internal.entity.table.ArestEntity
-import by.zenkevich_churun.findcell.server.internal.entity.table.PrisonerEntity
 import by.zenkevich_churun.findcell.server.internal.entity.view.ArestView
 import by.zenkevich_churun.findcell.server.internal.repo.common.SviazenRepositiory
 import org.springframework.beans.factory.annotation.Autowired
@@ -18,7 +16,7 @@ class ArestsRepository: SviazenRepositiory() {
     private lateinit var arestsDao: ArestsDao
 
     @Autowired
-    private lateinit var scheduleDao: ScheduleDao
+    private lateinit var scheduleDao: SchedulePeriodsDao
 
 
     fun getArests(

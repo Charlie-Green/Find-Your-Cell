@@ -32,7 +32,8 @@ class ScheduleController {
         val view = repo.get(arestId, passwordHash)
 
         val pojo = try {
-            ScheduleMapper.forVersion(version)
+            ScheduleMapper
+                .forVersion(version)
                 .schedulePojo(view)
         } catch(exc: IllegalArgumentException) {
             println(exc.message)

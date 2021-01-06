@@ -12,4 +12,10 @@ abstract class Jail {
 
     /** Number of [Cell]s within this [Jail]. **/
     abstract val cellCount: Short
+
+
+    companion object {
+        /** Value of [Jail.id] identifying that this [Jail]'s ID is not known. **/
+        const val UNKNOWN_ID = 0
+    }
 }

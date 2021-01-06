@@ -2,7 +2,7 @@ package by.zenkevich_churun.findcell.server.internal.entity.table
 
 import by.zenkevich_churun.findcell.entity.entity.Arest
 import by.zenkevich_churun.findcell.entity.entity.Cell
-import by.zenkevich_churun.findcell.server.internal.entity.key.CellScheduleEntryKey
+import by.zenkevich_churun.findcell.server.internal.entity.key.ScheduleCellEntryKey
 import javax.persistence.*
 
 
@@ -15,5 +15,5 @@ import javax.persistence.*
 class ScheduleCellEntryEntity {
 
     @EmbeddedId
-    var key: CellScheduleEntryKey? = null
+    var key: ScheduleCellEntryKey? = null
 }

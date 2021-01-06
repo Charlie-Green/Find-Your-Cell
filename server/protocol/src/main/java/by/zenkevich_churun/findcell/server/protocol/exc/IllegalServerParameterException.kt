@@ -5,4 +5,12 @@ import org.springframework.web.bind.annotation.ResponseStatus
 
 
 @ResponseStatus(HttpStatus.BAD_REQUEST)
-class IllegalServerParameterException: IllegalArgumentException()
+class IllegalServerParameterException: IllegalArgumentException {
+
+    constructor():
+        super()
+
+    constructor(msg: String):
+        super(msg)
+    { println(msg) }
+}
