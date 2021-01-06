@@ -8,28 +8,26 @@ import by.zenkevich_churun.findcell.entity.entity.Schedule
 sealed class ScheduleCellsCrudState {
 
     object Idle: ScheduleCellsCrudState()
-    object ViewingOptions: ScheduleCellsCrudState()
     object AddRequested: ScheduleCellsCrudState()
-    object ConfirmingDelete: ScheduleCellsCrudState()
     object Processing: ScheduleCellsCrudState()
     object GetJailsNeedsInternet: ScheduleCellsCrudState()
     object GetJailsFailed: ScheduleCellsCrudState()
 
     sealed class Editing(
-        val jails: List<JailHeader>?,
+        val jails: List<JailHeader>,
         val jailIndex: Int,
         val cellNumber: Short
     ): ScheduleCellsCrudState() {
 
         class Adding(
-            jails: List<JailHeader>?,
+            jails: List<JailHeader>,
             jailIndex: Int,
             cellNumber: Short
         ): ScheduleCellsCrudState.Editing(jails, jailIndex, cellNumber)
 
         class Updating(
             val original: Cell,
-            jails: List<JailHeader>?,
+            jails: List<JailHeader>,
             jailIndex: Int,
             cellNumber: Short
         ): ScheduleCellsCrudState.Editing(jails, jailIndex, cellNumber)
@@ -37,7 +35,6 @@ sealed class ScheduleCellsCrudState {
 
         val selectedJail: JailHeader?
             get() {
-                jails ?: return null
                 if(jailIndex !in jails.indices) {
                     return null
                 }
@@ -46,8 +43,16 @@ sealed class ScheduleCellsCrudState {
             }
     }
 
+    class ViewingOptions(
+        val target: Cell
+    ): ScheduleCellsCrudState()
+
     class UpdateRequested(
         val original: Cell
+    ): ScheduleCellsCrudState()
+
+    class ConfirmingDelete(
+        val target: Cell
     ): ScheduleCellsCrudState()
 
     class AddFailed: ScheduleCellsCrudState() {
