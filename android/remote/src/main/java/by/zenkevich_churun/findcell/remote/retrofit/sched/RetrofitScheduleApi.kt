@@ -8,11 +8,12 @@ import by.zenkevich_churun.findcell.remote.retrofit.common.RetrofitHolder
 import by.zenkevich_churun.findcell.remote.retrofit.sched.entity.DeserializedSchedule
 import by.zenkevich_churun.findcell.serial.sched.serial.ScheduleDeserializer
 import by.zenkevich_churun.findcell.serial.sched.v1.pojo.CellEntryPojo1
+import by.zenkevich_churun.findcell.serial.sched.v1.pojo.TwoCellEntriesPojo1
 import by.zenkevich_churun.findcell.serial.util.protocol.Base64Util
+import by.zenkevich_churun.findcell.serial.util.protocol.ProtocolUtil
 import com.google.gson.Gson
 import okhttp3.MediaType
 import okhttp3.RequestBody
-import java.io.IOException
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -59,7 +60,7 @@ class RetrofitScheduleApi @Inject constructor(
         passwordHash: ByteArray,
         schedule: Schedule) {
 
-        throw IOException("CharlieDebug")
+        TODO("")
     }
 
     override fun addCell(
@@ -71,13 +72,26 @@ class RetrofitScheduleApi @Inject constructor(
     }
 
     override fun updateCell(
-        arestId: Int,
-        passwordHash: ByteArray,
-        oldJailId: Int,
-        oldCellNumber: Short,
-        newJailId: Int,
-        newCellNumber: Short ) {
-        TODO("")
+        arestId: Int, passwordHash: ByteArray,
+        oldJailId: Int, oldCellNumber: Short,
+        newJailId: Int, newCellNumber: Short ) {
+
+        val pojo = TwoCellEntriesPojo1()
+        pojo.arestId = arestId
+        pojo.passwordBase64 = Base64Util.encode(passwordHash)
+        pojo.oldJailId     = oldJailId
+        pojo.oldCellNumber = oldCellNumber
+        pojo.newJailId     = newJailId
+        pojo.newCellNumber = newCellNumber
+
+        val mediaType = MediaType.get("application/json")
+        val json = ProtocolUtil.toJson(pojo, 256)
+        val body = RequestBody.create(mediaType, json)
+
+        val response = createService()
+            .updateCell(body)
+            .execute()
+        RetrofitApisUtil.assertResponseCode(response.code())
     }
 
     override fun deleteCell(

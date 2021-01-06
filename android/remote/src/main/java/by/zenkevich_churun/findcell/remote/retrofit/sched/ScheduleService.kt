@@ -18,6 +18,11 @@ internal interface ScheduleService {
 
 
     @POST("cell/delete")
+    fun updateCell(
+        @Body body: RequestBody
+    ): Call<ResponseBody>
+
+        @POST("cell/delete")
     fun deleteCell(
         @Body body: RequestBody
     ): Call<ResponseBody>
