@@ -2,7 +2,6 @@ package by.zenkevich_churun.findcell.prisoner.ui.root.activity
 
 import android.app.Activity
 import android.graphics.Color
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
 import androidx.lifecycle.Observer
@@ -16,7 +15,7 @@ import by.zenkevich_churun.findcell.entity.entity.Prisoner
 import by.zenkevich_churun.findcell.prisoner.databinding.PrisonerActivityBinding
 import by.zenkevich_churun.findcell.prisoner.repo.profile.SavePrisonerResult
 import by.zenkevich_churun.findcell.prisoner.ui.common.interrupt.EditInterruptState
-import by.zenkevich_churun.findcell.prisoner.ui.common.sched.CellUpdate
+import by.zenkevich_churun.findcell.prisoner.ui.common.sched.ScheduleCellsCrudState
 import by.zenkevich_churun.findcell.prisoner.ui.root.vm.PrisonerRootViewModel
 import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
@@ -60,7 +59,7 @@ class PrisonerActivity: SviazenActivity<PrisonerActivityBinding>() {
         })
         
         vm.cellUpdateLD.observe(this, Observer { update ->
-            if(update is CellUpdate.DeleteFailed) {
+            if(update is ScheduleCellsCrudState.DeleteFailed) {
                 notifyDeleteCellFailed()
                 vm.notifyCellUpdateConsumed()
             }

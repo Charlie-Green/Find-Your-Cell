@@ -9,7 +9,7 @@ import by.zenkevich_churun.findcell.prisoner.repo.sched.UpdateScheduleResult
 import by.zenkevich_churun.findcell.prisoner.ui.common.change.UnsavedChangesLiveDatasStorage
 import by.zenkevich_churun.findcell.prisoner.ui.common.interrupt.InterruptLiveDataStorage
 import by.zenkevich_churun.findcell.prisoner.ui.common.interrupt.EditInterruptState
-import by.zenkevich_churun.findcell.prisoner.ui.common.sched.CellUpdate
+import by.zenkevich_churun.findcell.prisoner.ui.common.sched.ScheduleCellsCrudState
 import by.zenkevich_churun.findcell.prisoner.ui.common.sched.ScheduleLiveDatasStorage
 import javax.inject.Inject
 
@@ -30,7 +30,7 @@ class PrisonerRootViewModel @Inject constructor(
     val updateScheduleResultLD: LiveData<UpdateScheduleResult.Success?>
         get() = scheduleStore.updateScheduleResultLD
 
-    val cellUpdateLD: LiveData<CellUpdate?>
+    val cellUpdateLD: LiveData<ScheduleCellsCrudState?>
         get() = scheduleStore.cellUpdateLD
 
     val editInterruptStateLD: LiveData<EditInterruptState>

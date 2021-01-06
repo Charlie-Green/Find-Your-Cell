@@ -12,7 +12,7 @@ import by.zenkevich_churun.findcell.prisoner.R
 import by.zenkevich_churun.findcell.prisoner.databinding.CellOptionsDialogBinding
 import by.zenkevich_churun.findcell.prisoner.ui.cellopt.model.CellOptionsMode
 import by.zenkevich_churun.findcell.prisoner.ui.cellopt.vm.CellOptionsViewModel
-import by.zenkevich_churun.findcell.prisoner.ui.common.sched.CellUpdate
+import by.zenkevich_churun.findcell.prisoner.ui.common.sched.ScheduleCellsCrudState
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
@@ -122,9 +122,9 @@ class CellOptionsDialog: SviazenDialog<CellOptionsDialogBinding>() {
         }
     }
 
-    private fun handleUpdate(update: CellUpdate?) {
-        if(update is CellUpdate.Deleted ||
-            update is CellUpdate.DeleteFailed ) {
+    private fun handleUpdate(update: ScheduleCellsCrudState?) {
+        if(update is ScheduleCellsCrudState.Deleted ||
+            update is ScheduleCellsCrudState.DeleteFailed ) {
 
             dismiss()
         }

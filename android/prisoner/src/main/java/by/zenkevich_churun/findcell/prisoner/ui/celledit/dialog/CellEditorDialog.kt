@@ -44,7 +44,7 @@ class CellEditorDialog: SviazenDialog<CellEditDialogBinding>() {
         vm.errorLD.observe(viewLifecycleOwner, Observer { message ->
             notifyError(message)
         })
-        vm.cellUpdateLD.observe(viewLifecycleOwner, Observer { update ->
+        vm.cellCrudStateLD.observe(viewLifecycleOwner, Observer { update ->
             if(update != null) {
                 dismiss()
             }

@@ -10,8 +10,8 @@ import by.zenkevich_churun.findcell.prisoner.ui.common.sched.ScheduleLiveDatasSt
 import by.zenkevich_churun.findcell.prisoner.repo.jail.GetJailsResult
 import by.zenkevich_churun.findcell.prisoner.repo.jail.JailsRepository
 import by.zenkevich_churun.findcell.prisoner.repo.sched.ScheduleRepository
-import by.zenkevich_churun.findcell.prisoner.ui.celledit.model.*
-import by.zenkevich_churun.findcell.prisoner.ui.common.sched.CellUpdate
+import by.zenkevich_churun.findcell.prisoner.ui.common.sched.JailHeader
+import by.zenkevich_churun.findcell.prisoner.ui.common.sched.ScheduleCellsCrudState
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -26,169 +26,220 @@ class CellEditorViewModel @Inject constructor(
     private val netTracker: NetworkStateTracker
 ): ViewModel() {
 
-    private val mapping = CellEditorVMMapping(appContext)
-    private val mldEditorState = MutableLiveData<CellEditorState?>()
-    private val mldLoading = MutableLiveData<Boolean>()
-    private val mldError = MutableLiveData<String?>()
+    val cellCrudStateLD: LiveData<ScheduleCellsCrudState>
+        get() = scheduleStore.cellsCrudStateLD
 
 
-    val editorStateLD: LiveData<CellEditorState?>
-        get() = mldEditorState
+    fun notifyUiShowing() {
+        val oldState = cellCrudStateLD.value ?: ScheduleCellsCrudState.Idle
+        if(oldState !is ScheduleCellsCrudState.AddRequested &&
+            oldState !is ScheduleCellsCrudState.UpdateRequested ) {
 
-    val loadingLD: LiveData<Boolean>
-        get() = mldLoading
-
-    val errorLD: LiveData<String?>
-        get() = mldError
-
-    val cellUpdateLD: LiveData<CellUpdate?>
-        get() = scheduleStore.cellUpdateLD
-
-
-    fun requestState(jailId: Int, cellNumber: Short) {
-        if(mldEditorState.value != null) {
             return
         }
-        if(getAndSetLoading()) {
-            return
-        }
-
-        mldError.value = null
 
         viewModelScope.launch(Dispatchers.IO) {
             val result = repo.jailsList(netTracker.isInternetAvailable)
 
             when(result) {
                 is GetJailsResult.Success -> {
-                    val state = createState(result.jails, jailId, cellNumber)
-                    mldEditorState.postValue(state)
+                    val newState = createState(result.jails, oldState)
+                    scheduleStore.submitCellsCrud(newState)
                 }
 
                 is GetJailsResult.FirstTimeNeedInternet -> {
-                    mldError.postValue(mapping.needInternetMessage)
+                    val state = ScheduleCellsCrudState.GetJailsNeedsInternet
+                    scheduleStore.submitCellsCrud(state)
                 }
 
                 is GetJailsResult.FirstTimeError -> {
-                    mldError.postValue(mapping.getJailsErrorMessage)
+                    val state = ScheduleCellsCrudState.GetJailsFailed
+                    scheduleStore.submitCellsCrud(state)
                 }
             }
-
-            mldLoading.postValue(false)
         }
     }
 
 
-    fun submitState(state: CellEditorState) {
-        synchronized(this) {
-            mldEditorState.value = state
-        }
+    fun submitEditorState(
+        jailIndex: Int,
+        cellNumber: Short ) {
+
+        val oldState = cellCrudStateLD.value ?: ScheduleCellsCrudState.Idle
+        val newState = modifyEditorState(oldState, jailIndex, cellNumber)
+        scheduleStore.submitCellsCrud(newState)
     }
 
 
     fun save() {
-        if(getAndSetLoading()) {
-            return
-        }
+        val newState = ScheduleCellsCrudState.Updated()
+        scheduleStore.submitCellsCrud(newState)
 
-        val state = mldEditorState.value ?: return
+        val state = cellCrudStateLD.value
+        scheduleStore.submitCellsCrud( ScheduleCellsCrudState.Processing )
 
         viewModelScope.launch(Dispatchers.IO) {
-            if(state.isNew) {
-                if(scheduleRepo.addCell(state.selectedJail.id, state.cellNumber)) {
-                    addToSchedule(state)
-                    scheduleStore.submitCellUpdate(CellUpdate.Added)
-                } else {
-                    mldError.postValue(mapping.addCellFailedMessage)
+            when(state) {
+                is ScheduleCellsCrudState.Editing.Adding -> {
+                    saveAdd(state)
                 }
 
-            } else {
-
-                val isUpdated = scheduleRepo.updateCell(
-                    state.oldSelectedJail.id, state.oldCellNumber,
-                    state.selectedJail.id, state.cellNumber
-                )
-
-                if(isUpdated) {
-                    updateInSchedule(state)
-                    scheduleStore.submitCellUpdate(CellUpdate.Updated)
-                } else {
-                    mldError.postValue(mapping.updateCellFailedMessage)
+                is ScheduleCellsCrudState.Editing.Updating -> {
+                    saveUpdate(state)
                 }
             }
+        }
+    }
 
-            mldLoading.postValue(false)
+    private fun saveAdd(state: ScheduleCellsCrudState.Editing.Adding) {
+        val jail = state.selectedJail
+        val added = if(jail == null) {
+            false
+        } else {
+            scheduleRepo.addCell(
+                jail.id,
+                state.cellNumber
+            )
+        }
+
+        if(added) {
+            addToCache(state)
+            scheduleStore.submitCellsCrud(ScheduleCellsCrudState.Added())
+        } else {
+            scheduleStore.submitCellsCrud(ScheduleCellsCrudState.AddFailed())
+        }
+    }
+
+    private fun saveUpdate(state: ScheduleCellsCrudState.Editing.Updating) {
+        val jail = state.selectedJail
+        val updated = if(jail == null) {
+            false
+        } else {
+            scheduleRepo.updateCell(
+                state.original.jailId,
+                state.original.number,
+                jail.id,
+                state.cellNumber
+            )
+        }
+
+        if(updated) {
+            updateInCache(state)
+            scheduleStore.submitCellsCrud(ScheduleCellsCrudState.Added())
+        } else {
+            scheduleStore.submitCellsCrud(ScheduleCellsCrudState.AddFailed())
         }
     }
 
 
     fun notifyUiDismissed() {
-        scheduleStore.notifyCellUpdateRequestConsumed()
+        scheduleStore.submitCellsCrud(ScheduleCellsCrudState.Idle)
     }
 
-
-    private fun getAndSetLoading(): Boolean {
-        val isLoading = mldLoading.value ?: false
-        mldLoading.value = true
-        mldError.value = null
-        return isLoading
-    }
 
     private fun createState(
         jails: List<Jail>,
-        jailId: Int,
-        cellNumber: Short
-    ): CellEditorState {
+        oldState: ScheduleCellsCrudState
+    ): ScheduleCellsCrudState.Editing {
 
         val jailHeaders = jails.map { jail ->
             JailHeader.from(jail)
         }
 
-        val jailIndex = jails.indexOfFirst { jail ->
-            jail.id == jailId
+        return when(oldState) {
+
+            is ScheduleCellsCrudState.AddRequested -> {
+                ScheduleCellsCrudState.Editing.Adding(
+                    jailHeaders,
+                    0,
+                    1
+                )
+            }
+
+            is ScheduleCellsCrudState.UpdateRequested -> {
+                val jailIndex = jails.indexOfFirst { j ->
+                    j.id == oldState.original.jailId
+                }
+
+                ScheduleCellsCrudState.Editing.Updating(
+                    oldState.original,
+                    jailHeaders,
+                    if(jailIndex in jails.indices) jailIndex else 0,
+                    1
+                )
+            }
+
+            else -> {
+                throw IllegalStateException(
+                    "Can't initialize Cell Editor from state ${oldState.javaClass.canonicalName}" )
+            }
         }
 
-        return CellEditorState(
-            jailHeaders,
-            if(jailIndex in jails.indices) jailIndex else 0,
-            max(cellNumber, 1.toShort())
-        )
+
     }
 
-    private fun addToSchedule(editorState: CellEditorState) {
-        val addedCell = cell(editorState) ?: return
+    private fun modifyEditorState(
+        oldState: ScheduleCellsCrudState,
+        jailIndex: Int,
+        cellNumber: Short
+
+    ): ScheduleCellsCrudState = when(oldState) {
+
+        is ScheduleCellsCrudState.Editing.Adding -> {
+            ScheduleCellsCrudState.Editing.Adding(
+                oldState.jails,
+                jailIndex,
+                cellNumber
+            )
+        }
+
+        is ScheduleCellsCrudState.Editing.Updating -> {
+            ScheduleCellsCrudState.Editing.Updating(
+                oldState.original,
+                oldState.jails,
+                jailIndex,
+                cellNumber
+            )
+        }
+
+        else -> {
+            oldState
+        }
+    }
+
+    private fun addToCache(state: ScheduleCellsCrudState.Editing.Adding) {
+        val addedCell = cell(state) ?: return
 
         synchronized(scheduleStore) {
             val schedule = scheduleStore.scheduleLD.value ?: return
             schedule.addCell(
-                editorState.selectedJail,
-                editorState.cellNumber,
+                state.selectedJail ?: return,
+                state.cellNumber,
                 addedCell.seats
             )
         }
-
-        scheduleStore.submitCellUpdate(CellUpdate.Added)
     }
 
-    private fun updateInSchedule(editorState: CellEditorState) {
-        val updatedCell = cell(editorState) ?: return
+    private fun updateInCache(state: ScheduleCellsCrudState.Editing.Updating) {
+        val cell = cell(state) ?: return
 
         synchronized(this) {
             val schedule = scheduleStore.scheduleLD.value ?: return
             schedule.updateCell(
-                editorState.oldSelectedJail.id, editorState.oldCellNumber,
-                editorState.selectedJail, editorState.cellNumber,
-                updatedCell.seats
+                state.original.jailId,
+                state.original.number,
+                state.selectedJail ?: return,
+                state.cellNumber,
+                cell.seats
             )
         }
-
-        scheduleStore.submitCellUpdate(CellUpdate.Updated)
     }
 
 
-    private fun cell(editorState: CellEditorState): Cell? {
+    private fun cell(state: ScheduleCellsCrudState.Editing): Cell? {
         return repo.cell(
-            editorState.selectedJail.id,
-            editorState.cellNumber,
+            state.selectedJail?.id ?: return null,
+            state.cellNumber,
             netTracker.isInternetAvailable
         )
     }

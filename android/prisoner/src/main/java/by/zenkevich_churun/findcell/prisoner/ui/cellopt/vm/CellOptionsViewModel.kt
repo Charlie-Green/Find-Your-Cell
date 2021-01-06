@@ -7,7 +7,7 @@ import by.zenkevich_churun.findcell.entity.entity.Cell
 import by.zenkevich_churun.findcell.prisoner.repo.jail.JailsRepository
 import by.zenkevich_churun.findcell.prisoner.repo.sched.ScheduleRepository
 import by.zenkevich_churun.findcell.prisoner.ui.cellopt.model.CellOptionsMode
-import by.zenkevich_churun.findcell.prisoner.ui.common.sched.CellUpdate
+import by.zenkevich_churun.findcell.prisoner.ui.common.sched.ScheduleCellsCrudState
 import by.zenkevich_churun.findcell.prisoner.ui.common.sched.ScheduleLiveDatasStorage
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -37,7 +37,7 @@ class CellOptionsViewModel @Inject constructor(
     val loadingLD: LiveData<Boolean>
         get() = mldLoading
 
-    val cellUpdateLD: LiveData<CellUpdate?>
+    val cellUpdateLD: LiveData<ScheduleCellsCrudState?>
         get() = scheduleStore.cellUpdateLD
 
 
@@ -98,7 +98,7 @@ class CellOptionsViewModel @Inject constructor(
     private fun deleteCell(cell: Cell) {
         val deleted = scheduleRepo.deleteCell(cell.jailId, cell.number)
         if(!deleted) {
-            scheduleStore.submitCellUpdate(CellUpdate.DeleteFailed)
+            scheduleStore.submitCellUpdate(ScheduleCellsCrudState.DeleteFailed)
             return
         }
 
@@ -107,7 +107,7 @@ class CellOptionsViewModel @Inject constructor(
             schedule?.deleteCell(cell.jailId, cell.number)
         }
 
-        scheduleStore.submitCellUpdate(CellUpdate.Deleted)
+        scheduleStore.submitCellUpdate(ScheduleCellsCrudState.Deleted)
     }
 
 

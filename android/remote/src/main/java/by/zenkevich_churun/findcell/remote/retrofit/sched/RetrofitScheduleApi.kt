@@ -7,7 +7,11 @@ import by.zenkevich_churun.findcell.remote.retrofit.common.RetrofitApisUtil
 import by.zenkevich_churun.findcell.remote.retrofit.common.RetrofitHolder
 import by.zenkevich_churun.findcell.remote.retrofit.sched.entity.DeserializedSchedule
 import by.zenkevich_churun.findcell.serial.sched.serial.ScheduleDeserializer
+import by.zenkevich_churun.findcell.serial.sched.v1.pojo.CellEntryPojo1
 import by.zenkevich_churun.findcell.serial.util.protocol.Base64Util
+import com.google.gson.Gson
+import okhttp3.MediaType
+import okhttp3.RequestBody
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -18,13 +22,17 @@ class RetrofitScheduleApi @Inject constructor(
     private val props: SchedulePropertiesAccessor
 ): ScheduleApi {
 
+    private val service by lazy {
+        createService()
+    }
+
+
     override fun get(
         prisonerId: Int,
         passwordHash: ByteArray,
         arestId: Int
     ): Schedule {
 
-        val service = retrofit.create(ScheduleService::class.java)
         val passwordBase64 = Base64Util.encode(passwordHash)
 
         val response = service
@@ -53,7 +61,7 @@ class RetrofitScheduleApi @Inject constructor(
     }
 
     override fun addCell(
-        prisonerId: Int,
+        arestId: Int,
         passwordHash: ByteArray,
         jailId: Int,
         cellNumber: Short ) {
@@ -61,7 +69,7 @@ class RetrofitScheduleApi @Inject constructor(
     }
 
     override fun updateCell(
-        prisonerId: Int,
+        arestId: Int,
         passwordHash: ByteArray,
         oldJailId: Int,
         oldCellNumber: Short,
@@ -71,14 +79,28 @@ class RetrofitScheduleApi @Inject constructor(
     }
 
     override fun deleteCell(
-        prisonerId: Int,
+        arestId: Int,
         passwordHash: ByteArray,
         jailId: Int,
         cellNumber: Short ) {
-        TODO("")
+
+        val pojo = CellEntryPojo1()
+        pojo.arestId    = arestId
+        pojo.jailId     = jailId
+        pojo.cellNumber = cellNumber
+
+        val json = Gson().toJson(pojo)
+        val mediaType = MediaType.get("application/json")
+        val body = RequestBody.create(mediaType, json)
+
+        val response = createService()
+            .deleteCell(body)
+            .execute()
+        RetrofitApisUtil.assertResponseCode(response.code())
     }
 
 
-    private val retrofit
-        get() = retrofitHolder.retrofit
+    private fun createService(): ScheduleService {
+        return retrofitHolder.retrofit.create(ScheduleService::class.java)
+    }
 }

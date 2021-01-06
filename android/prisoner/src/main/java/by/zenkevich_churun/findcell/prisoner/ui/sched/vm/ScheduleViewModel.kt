@@ -9,7 +9,7 @@ import by.zenkevich_churun.findcell.entity.entity.Schedule
 import by.zenkevich_churun.findcell.prisoner.ui.common.sched.ScheduleLiveDatasStorage
 import by.zenkevich_churun.findcell.prisoner.repo.sched.*
 import by.zenkevich_churun.findcell.prisoner.ui.common.change.UnsavedChangesLiveDatasStorage
-import by.zenkevich_churun.findcell.prisoner.ui.common.sched.CellUpdate
+import by.zenkevich_churun.findcell.prisoner.ui.common.sched.ScheduleCellsCrudState
 import by.zenkevich_churun.findcell.prisoner.ui.common.sched.ScheduleModel
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.Dispatchers
@@ -47,7 +47,7 @@ class ScheduleViewModel @Inject constructor(
     val loadingLD: LiveData<Boolean>
         get() = mldLoading
 
-    val cellUpdateLD: LiveData<CellUpdate?>
+    val cellUpdateLD: LiveData<ScheduleCellsCrudState?>
         get() = scheduleStore.cellUpdateLD
 
     val cellOptionsLD: LiveData<Cell?>

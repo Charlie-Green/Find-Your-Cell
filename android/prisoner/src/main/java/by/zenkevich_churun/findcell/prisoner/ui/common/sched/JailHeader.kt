@@ -1,4 +1,4 @@
-package by.zenkevich_churun.findcell.prisoner.ui.celledit.model
+package by.zenkevich_churun.findcell.prisoner.ui.common.sched
 
 import by.zenkevich_churun.findcell.entity.entity.Jail
 

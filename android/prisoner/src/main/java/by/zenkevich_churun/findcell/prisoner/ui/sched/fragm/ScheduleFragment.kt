@@ -18,7 +18,7 @@ import by.zenkevich_churun.findcell.prisoner.R
 import by.zenkevich_churun.findcell.prisoner.databinding.ScheduleFragmBinding
 import by.zenkevich_churun.findcell.prisoner.ui.celledit.dialog.CellEditorDialog
 import by.zenkevich_churun.findcell.prisoner.ui.cellopt.dialog.CellOptionsDialog
-import by.zenkevich_churun.findcell.prisoner.ui.common.sched.CellUpdate
+import by.zenkevich_churun.findcell.prisoner.ui.common.sched.ScheduleCellsCrudState
 import by.zenkevich_churun.findcell.prisoner.ui.common.sched.ScheduleModel
 import by.zenkevich_churun.findcell.prisoner.ui.sched.vm.ScheduleViewModel
 
@@ -171,21 +171,21 @@ class ScheduleFragment: SviazenFragment<ScheduleFragmBinding>() {
         }
     }
 
-    private fun updateCells(update: CellUpdate?) {
+    private fun updateCells(update: ScheduleCellsCrudState?) {
         val cellsAdapter = vb.recvCells.adapter as CellsAdapter? ?: return
 
         when(update) {
-            is CellUpdate.Added -> {
+            is ScheduleCellsCrudState.Added -> {
                 cellsAdapter.notifyCellProbablyAdded()
                 vm.notifyCellUpdateConsumed()
                 vb.recvCells.scrollToPosition(cellsAdapter.itemCount - 1)
             }
 
-            is CellUpdate.Updated -> {
+            is ScheduleCellsCrudState.Updated -> {
                 changeDataset(cellsAdapter)
             }
 
-            is CellUpdate.Deleted -> {
+            is ScheduleCellsCrudState.Deleted -> {
                 changeDataset(cellsAdapter)
             }
         }
