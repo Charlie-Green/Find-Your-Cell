@@ -1,13 +1,50 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout
+<GridLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent" >
+    android:layout_height="match_parent"
+    android:columnCount="2"
+    android:padding="8dp">
+
+    <!-- TODO: CharlieDebug: remove backgroundTint -->
+    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+        android:id="@+id/srl"
+        android:layout_columnSpan="2"
+        android:layout_gravity="fill"
+        android:layout_height="0dp"
+        android:background="#808080" >
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recvCoPrisoners"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+
+    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+
+
+    <ImageView
+        android:id="@+id/imgvProfile"
+        android:layout_width="@dimen/profile_button_height"
+        android:layout_height="@dimen/profile_button_height"
+        android:layout_marginTop="8dp"
+        android:src="@drawable/ic_back"
+        app:tint="?colorPrimary" />
 
     <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:text="Meow!" />
+        android:id="@+id/txtvProfile"
+        android:layout_gravity="fill"
+        android:layout_width="0dp"
+        android:layout_height="@dimen/profile_button_height"
+        android:layout_marginEnd="@dimen/profile_button_margin_end"
+        android:paddingTop="@dimen/profile_button_padding_top"
+        android:gravity="center"
+        android:singleLine="true"
+        android:ellipsize="start"
+        android:textAllCaps="true"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        android:textColor="?colorPrimary"
+        android:text="@string/back_to_profile" />
 
-</FrameLayout>
+</GridLayout>

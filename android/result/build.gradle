@@ -46,6 +46,8 @@ dependencies {
     implementation Deps.libKotlin
     implementation Deps.libAndroidX
     implementation Deps.libAppCompat
+    implementation Deps.libRecycler
+    implementation Deps.libSwipeRefresh
 
     implementation project(":core")
 }

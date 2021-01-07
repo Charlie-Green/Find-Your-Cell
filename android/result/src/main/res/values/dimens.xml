@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <dimen name="profile_button_height">42dp</dimen>
+    <dimen name="profile_button_padding_top">6dp</dimen>
+    <dimen name="profile_button_margin_end">21dp</dimen>
+
+</resources>
