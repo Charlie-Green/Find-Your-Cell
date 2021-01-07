@@ -131,7 +131,7 @@ class PrisonerActivity: SviazenActivity<PrisonerActivityBinding>() {
                     state.notified = true
 
                     val msg = getString(
-                        R.string.add_cell_succeeded_msg,
+                        R.string.add_cell_success_msg,
                         state.newCell.number,
                         state.newCell.jailName
                     )
@@ -149,7 +149,7 @@ class PrisonerActivity: SviazenActivity<PrisonerActivityBinding>() {
             is ScheduleCellsCrudState.Deleted -> {
                 if(!state.notified) {
                     state.notified = true
-                    notifySuccess(R.string.delete_cell_succeeded_msg)
+                    notifySuccess(R.string.delete_cell_success_msg)
                 }
             }
         }

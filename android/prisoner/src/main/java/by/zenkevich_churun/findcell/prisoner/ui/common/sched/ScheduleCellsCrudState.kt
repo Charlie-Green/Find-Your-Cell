@@ -32,10 +32,12 @@ sealed class ScheduleCellsCrudState {
             cellNumber: Short
         ): ScheduleCellsCrudState.Editing(jails, jailIndex, cellNumber)
 
+
         class AddFailed(
             jails: List<JailHeader>,
             jailIndex: Int,
-            cellNumber: Short
+            cellNumber: Short,
+            val reason: CellEditFailureReason
         ): ScheduleCellsCrudState.Editing(jails, jailIndex, cellNumber) {
 
             var notified = false
@@ -45,11 +47,9 @@ sealed class ScheduleCellsCrudState {
             val original: Cell,
             jails: List<JailHeader>,
             jailIndex: Int,
-            cellNumber: Short
-        ): ScheduleCellsCrudState.Editing(jails, jailIndex, cellNumber) {
-
-            var notified = false
-        }
+            cellNumber: Short,
+            val reason: CellEditFailureReason
+        ): ScheduleCellsCrudState.Editing(jails, jailIndex, cellNumber)
 
 
         val selectedJail: JailHeader?
@@ -57,7 +57,6 @@ sealed class ScheduleCellsCrudState {
                 if(jailIndex !in jails.indices) {
                     return null
                 }
-
                 return jails[jailIndex]
             }
     }

@@ -5,7 +5,6 @@ import androidx.lifecycle.*
 import by.zenkevich_churun.findcell.entity.entity.Prisoner
 import by.zenkevich_churun.findcell.prisoner.repo.profile.ProfileRepository
 import by.zenkevich_churun.findcell.prisoner.repo.profile.SavePrisonerResult
-import by.zenkevich_churun.findcell.prisoner.repo.sched.UpdateScheduleResult
 import by.zenkevich_churun.findcell.prisoner.ui.common.change.UnsavedChangesLiveDatasStorage
 import by.zenkevich_churun.findcell.prisoner.ui.common.interrupt.InterruptLiveDataStorage
 import by.zenkevich_churun.findcell.prisoner.ui.common.interrupt.EditInterruptState

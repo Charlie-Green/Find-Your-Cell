@@ -7,6 +7,8 @@ import by.zenkevich_churun.findcell.entity.entity.Arest
 import by.zenkevich_churun.findcell.entity.entity.Schedule
 import by.zenkevich_churun.findcell.prisoner.ui.common.sched.ScheduleLiveDatasStorage
 import by.zenkevich_churun.findcell.prisoner.repo.sched.*
+import by.zenkevich_churun.findcell.prisoner.repo.sched.result.GetScheduleResult
+import by.zenkevich_churun.findcell.prisoner.repo.sched.result.UpdateScheduleResult
 import by.zenkevich_churun.findcell.prisoner.ui.common.change.UnsavedChangesLiveDatasStorage
 import by.zenkevich_churun.findcell.prisoner.ui.common.sched.ScheduleCellsCrudState
 import by.zenkevich_churun.findcell.prisoner.ui.common.sched.ScheduleModel

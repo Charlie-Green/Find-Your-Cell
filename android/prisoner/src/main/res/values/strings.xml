@@ -113,12 +113,13 @@
     </string>
     <string name="add_cell_failed_msg">Не удалось добавить камеру: ошибка сети.</string>
     <string name="update_cell_failed_msg">Не удалось обновить камеру: ошибка сети.</string>
-    <string name="add_cell_succeeded_msg">
+    <string name="add_cell_success_msg">
         Теперь Вы можете указать, в какие дни вы были в камере №%d в %s
     </string>
-    <string name="delete_cell_succeeded_msg">
+    <string name="delete_cell_success_msg">
         Информация о Вашем содержании в камере удалена.
     </string>
+    <string name="cell_duplicate_msg">%s в этом расписании уже есть.</string>
     <string name="update_cell_succeeded_msg">Адрес камеры заменён.</string>
     <string name="delete_cell_failed_msg">Не удалось удалить сведения.</string>
     <string name="save_prisoner_needs_internet_msg">

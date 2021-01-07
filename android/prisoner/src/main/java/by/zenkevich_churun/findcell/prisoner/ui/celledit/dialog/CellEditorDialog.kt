@@ -2,7 +2,6 @@ package by.zenkevich_churun.findcell.prisoner.ui.celledit.dialog
 
 import android.content.DialogInterface
 import android.os.Bundle
-import android.util.Log
 import android.view.*
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
@@ -12,6 +11,8 @@ import by.zenkevich_churun.findcell.core.util.android.AndroidUtil
 import by.zenkevich_churun.findcell.prisoner.R
 import by.zenkevich_churun.findcell.prisoner.databinding.CellEditDialogBinding
 import by.zenkevich_churun.findcell.prisoner.ui.celledit.vm.CellEditorViewModel
+import by.zenkevich_churun.findcell.prisoner.ui.common.sched.CellEditFailureReason
+import by.zenkevich_churun.findcell.prisoner.ui.common.sched.CellModel
 import by.zenkevich_churun.findcell.prisoner.ui.common.sched.ScheduleCellsCrudState
 
 
@@ -76,11 +77,21 @@ class CellEditorDialog: SviazenDialog<CellEditDialogBinding>() {
         renderEditor(state)
         when(state) {
             is ScheduleCellsCrudState.Editing.AddFailed -> {
-                notifyError(R.string.add_cell_failed_msg)
+                notifyError(
+                    state.reason,
+                    state.selectedJail?.name ?: "",
+                    state.cellNumber,
+                    R.string.add_cell_failed_msg
+                )
             }
 
             is ScheduleCellsCrudState.Editing.UpdateFailed -> {
-                notifyError(R.string.update_cell_failed_msg)
+                notifyError(
+                    state.reason,
+                    state.selectedJail?.name ?: "",
+                    state.cellNumber,
+                    R.string.update_cell_failed_msg
+                )
             }
         }
     }
@@ -119,9 +130,32 @@ class CellEditorDialog: SviazenDialog<CellEditDialogBinding>() {
             else R.string.save )
     }
 
-    private fun notifyError(messageRes: Int) {
+    private fun notifyError(message: String) {
         vb.txtvError.visibility = View.VISIBLE
-        vb.txtvError.setText(messageRes)
+        vb.txtvError.text = message
+    }
+
+    private fun notifyError(messageRes: Int)
+        = notifyError( getString(messageRes) )
+
+    private fun notifyError(
+        reason: CellEditFailureReason,
+        jailName: String,
+        cellNumber: Short,
+        networkErrorMessageRes: Int ) {
+
+        val msg = when(reason) {
+            CellEditFailureReason.NETWORK_ERROR -> {
+                getString(networkErrorMessageRes)
+            }
+
+            CellEditFailureReason.DUPLICATE -> {
+                val cellString = CellModel.toString(jailName, cellNumber)
+                getString(R.string.cell_duplicate_msg, cellString)
+            }
+        }
+
+        notifyError(msg)
     }
 
 

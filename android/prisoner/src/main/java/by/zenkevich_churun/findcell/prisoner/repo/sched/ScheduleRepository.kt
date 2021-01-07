@@ -2,9 +2,10 @@ package by.zenkevich_churun.findcell.prisoner.repo.sched
 
 import android.util.Log
 import by.zenkevich_churun.findcell.core.api.sched.ScheduleApi
-import by.zenkevich_churun.findcell.entity.entity.Arest
 import by.zenkevich_churun.findcell.entity.entity.Schedule
 import by.zenkevich_churun.findcell.prisoner.repo.common.PrisonerStorage
+import by.zenkevich_churun.findcell.prisoner.repo.sched.result.GetScheduleResult
+import by.zenkevich_churun.findcell.prisoner.repo.sched.result.UpdateScheduleResult
 import java.io.IOException
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -15,15 +16,16 @@ class ScheduleRepository @Inject constructor(
     private val api: ScheduleApi,
     private val store: PrisonerStorage ) {
 
-    private var arestId = Arest.INVALID_ID
+    private var schedule: Schedule? = null
 
 
     fun getSchedule(arestId: Int): GetScheduleResult {
         val prisoner = store.prisonerLD.value ?: return GetScheduleResult.NotAuthorized
 
         return try {
-            val schedule = api.get(prisoner.id, prisoner.passwordHash, arestId)
-            this.arestId = arestId
+            val schedule = api.get(prisoner.id, prisoner.passwordHash, arestId).also {
+                this.schedule = it
+            }
             GetScheduleResult.Success(schedule)
         } catch(exc: IOException) {
             Log.w(LOGTAG, "Failed to get schedule: ${exc.javaClass.name}: ${exc.message}")
@@ -77,14 +79,11 @@ class ScheduleRepository @Inject constructor(
         performNetworkCall: (arestId: Int, passwordHash: ByteArray) -> Unit
     ): Boolean {
 
-        val arestId = this.arestId
-        val prisoner = store.prisonerLD.value
-        if(arestId == Arest.INVALID_ID || prisoner == null) {
-            return false
-        }
+        val sched = schedule ?: return false
+        val prisoner = store.prisonerLD.value ?: return false
 
         try {
-            performNetworkCall(arestId, prisoner.passwordHash)
+            performNetworkCall(sched.arestId, prisoner.passwordHash)
             return true
         } catch(exc: IOException) {
             Log.w(LOGTAG, "Failed to add cell: ${exc.javaClass.name}: ${exc.message}")

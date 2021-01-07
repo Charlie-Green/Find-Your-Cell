@@ -14,5 +14,11 @@ class CellModel(
 ): Cell() {
 
     override fun toString(): String
-        = "$jailName, $number"
+        = CellModel.toString(jailName, number)
+
+
+    companion object {
+        fun toString(jailName: String, cellNumber: Short)
+            = "$jailName, $cellNumber"
+    }
 }

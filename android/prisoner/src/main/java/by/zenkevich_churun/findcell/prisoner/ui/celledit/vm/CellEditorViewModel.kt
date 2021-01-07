@@ -9,6 +9,7 @@ import by.zenkevich_churun.findcell.prisoner.ui.common.sched.ScheduleLiveDatasSt
 import by.zenkevich_churun.findcell.prisoner.repo.jail.GetJailsResult
 import by.zenkevich_churun.findcell.prisoner.repo.jail.JailsRepository
 import by.zenkevich_churun.findcell.prisoner.repo.sched.ScheduleRepository
+import by.zenkevich_churun.findcell.prisoner.ui.common.sched.CellEditFailureReason
 import by.zenkevich_churun.findcell.prisoner.ui.common.sched.JailHeader
 import by.zenkevich_churun.findcell.prisoner.ui.common.sched.ScheduleCellsCrudState
 import kotlinx.coroutines.Dispatchers
@@ -101,6 +102,19 @@ class CellEditorViewModel @Inject constructor(
     private fun saveAdd(state: ScheduleCellsCrudState.Editing) {
         val jail = state.selectedJail
         val cell = cell(state)
+
+        if(cellPresent(state.selectedJail, state.cellNumber)) {
+            val newState = ScheduleCellsCrudState.Editing.AddFailed(
+                state.jails,
+                state.jailIndex,
+                state.cellNumber,
+                CellEditFailureReason.DUPLICATE
+            )
+
+            scheduleStore.submitCellsCrud(newState)
+            return
+        }
+
         val added = if(jail == null || cell == null) {
             false
         } else {
@@ -118,7 +132,8 @@ class CellEditorViewModel @Inject constructor(
             ScheduleCellsCrudState.Editing.AddFailed(
                 state.jails,
                 state.jailIndex,
-                state.cellNumber
+                state.cellNumber,
+                CellEditFailureReason.NETWORK_ERROR
             )
         }
 
@@ -128,6 +143,19 @@ class CellEditorViewModel @Inject constructor(
     private fun saveUpdate(
         state: ScheduleCellsCrudState.Editing,
         originalCell: Cell ) {
+
+        if(cellPresent(state.selectedJail, state.cellNumber)) {
+            val newState = ScheduleCellsCrudState.Editing.UpdateFailed(
+                originalCell,
+                state.jails,
+                state.jailIndex,
+                state.cellNumber,
+                CellEditFailureReason.DUPLICATE
+            )
+
+            scheduleStore.submitCellsCrud(newState)
+            return
+        }
 
         val jail = state.selectedJail
         val updated = if(jail == null) {
@@ -149,11 +177,27 @@ class CellEditorViewModel @Inject constructor(
                 originalCell,
                 state.jails,
                 state.jailIndex,
-                state.cellNumber
+                state.cellNumber,
+                CellEditFailureReason.NETWORK_ERROR
             )
         }
 
         scheduleStore.submitCellsCrud(newState)
+    }
+
+    private fun cellPresent(
+        jail: JailHeader?,
+        cellNumber: Short
+    ): Boolean {
+
+        jail ?: return false
+
+        val sched = scheduleStore.scheduleLD.value ?: return false
+        val duplicate = sched.cells.find { c ->
+            c.jailId == jail.id && c.number == cellNumber
+        }
+
+        return (duplicate != null)
     }
 
 
@@ -238,7 +282,8 @@ class CellEditorViewModel @Inject constructor(
             ScheduleCellsCrudState.Editing.AddFailed(
                 oldState.jails,
                 jailIndex,
-                cellNumber
+                cellNumber,
+                oldState.reason
             )
         }
 
@@ -247,8 +292,15 @@ class CellEditorViewModel @Inject constructor(
                 oldState.original,
                 oldState.jails,
                 jailIndex,
-                cellNumber
+                cellNumber,
+                oldState.reason
             )
+        }
+
+        is ScheduleCellsCrudState.Editing -> {
+            // Cases for all Editing states must be handled!
+            throw NotImplementedError(
+                "Don't know how to inject editor date into this state: ${oldState.javaClass.name}" )
         }
 
         else -> {

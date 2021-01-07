@@ -1,4 +1,4 @@
-package by.zenkevich_churun.findcell.prisoner.repo.sched
+package by.zenkevich_churun.findcell.prisoner.repo.sched.result
 
 
 sealed class UpdateScheduleResult {
