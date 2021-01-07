@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="horizontal"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_marginBottom="8dp" >
+
+    <TextView
+        android:id="@+id/txtvStart"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        style="@style/schedule_dates" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        style="@style/schedule_dates"
+        android:text=" - " />
+
+    <TextView
+        android:id="@+id/txtvEnd"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        style="@style/schedule_dates" />
+
+</LinearLayout>

@@ -29,6 +29,12 @@
         <item name="android:textColor">?backgroundColor</item>
     </style>
 
+    <style name="schedule_dates">
+        <item name="android:textSize">14sp</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:textColor">?colorPrimary</item>
+    </style>
+
     <style name="cell_fragm_label">
         <item name="android:textSize">12sp</item>
     </style>

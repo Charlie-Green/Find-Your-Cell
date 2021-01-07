@@ -1,9 +1,10 @@
 package by.zenkevich_churun.findcell.prisoner.ui.sched.fragm
 
+import android.annotation.SuppressLint
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
+import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.DividerItemDecoration
@@ -18,6 +19,8 @@ import by.zenkevich_churun.findcell.prisoner.ui.common.sched.ScheduleCellsCrudSt
 import by.zenkevich_churun.findcell.prisoner.ui.common.sched.ScheduleModel
 import by.zenkevich_churun.findcell.prisoner.ui.sched.model.ScheduleCrudState
 import by.zenkevich_churun.findcell.prisoner.ui.sched.vm.ScheduleViewModel
+import java.text.SimpleDateFormat
+import java.util.*
 
 
 /** Allows viewing interactive editing of the user's arest [Schedule]. **/
@@ -51,7 +54,7 @@ class ScheduleFragment: SviazenFragment<ScheduleFragmBinding>() {
         })
         vm.scheduleLD.observe(viewLifecycleOwner, { schedule ->
             schedule?.also {
-                displaySchedule(schedule)
+                displaySchedule(it)
                 selectCell()
                 vb.buAddCell.isEnabled = true
             } ?: clearSchedule()
@@ -145,8 +148,6 @@ class ScheduleFragment: SviazenFragment<ScheduleFragmBinding>() {
     }
 
     private fun renderCellState(state: ScheduleCellsCrudState) {
-        Log.v("CharlieDebug", "state = ${state.javaClass.simpleName}")
-
         when(state) {
             is ScheduleCellsCrudState.ViewingOptions -> {
                 NavigationUtil.navigateIfNotYet(
@@ -199,6 +200,8 @@ class ScheduleFragment: SviazenFragment<ScheduleFragmBinding>() {
     }
 
     private fun displaySchedule(scheduleModel: ScheduleModel) {
+        displayDate(vb.lltDates.txtvStart, scheduleModel.start)
+        displayDate(vb.lltDates.txtvEnd, scheduleModel.end)
         vb.recvCells.adapter = CellsAdapter(scheduleModel.cells, vm)
         vb.recvDays.adapter = ScheduleDaysAdapter(scheduleModel, vm)
     }
@@ -248,11 +251,18 @@ class ScheduleFragment: SviazenFragment<ScheduleFragmBinding>() {
     private fun dimen(dimenRes: Int): Int
         = resources.getDimensionPixelSize(dimenRes)
 
+    private fun displayDate(txtv: TextView, date: Calendar) {
+        txtv.text = dateFormat.format(date.time)
+    }
+
 
     // ==================================================================================
     // Companion:
 
     companion object {
+        @SuppressLint("SimpleDateFormat")  // No need for locale: only digits are used.
+        private val dateFormat = SimpleDateFormat("dd.MM.yyyy")
+
         fun arguments(arestId: Int)
             = ScheduleArguments.createBundle(arestId)
     }

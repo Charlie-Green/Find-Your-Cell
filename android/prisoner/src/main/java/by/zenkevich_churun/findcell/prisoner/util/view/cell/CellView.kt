@@ -31,13 +31,9 @@ class CellView: LinearLayout {
     }
 
 
-    override fun setBackgroundColor(color: Int) {
-        setViewBackgroundColor(this, color)
-    }
-
 
     fun setNumberBackgroundColor(color: Int) {
-        setViewBackgroundColor(vb.txtvNumber, color)
+        vb.txtvNumber.setBackgroundColor(color)
     }
 
     fun setTextColor(color: Int) {
@@ -48,12 +44,5 @@ class CellView: LinearLayout {
     fun show(cell: Cell) {
         vb.txtvNumber.text = cell.number.toString()
         vb.txtvJail.text = cell.jailName
-    }
-
-
-    private fun setViewBackgroundColor(view: View, color: Int) {
-        view.background = view.background.mutate().apply {
-            setTint(color)
-        }
     }
 }

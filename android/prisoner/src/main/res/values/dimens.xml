@@ -6,12 +6,12 @@
     <dimen name="contact_item_margin">12dp</dimen>
 
     <dimen name="cellview_padding_vertical">6dp</dimen>
-    <dimen name="cellview_padding_horizontal">9dp</dimen>
+    <dimen name="cellview_padding_horizontal">6dp</dimen>
     <dimen name="cellview_number_width">58dp</dimen>
     <dimen name="cellview_height">48dp</dimen>
     <dimen name="cellview_margin">4dp</dimen>
     <dimen name="cells_recycler_height">104dp</dimen>
-    <dimen name="cellview_width">210dp</dimen>
+    <dimen name="cellview_width">142dp</dimen>
 
     <dimen name="cellfragm_rows_distance">6dp</dimen>
 
@@ -19,6 +19,8 @@
     <dimen name="celloptions_title_margin_horizontal">8dp</dimen>
 
     <dimen name="schedule_fragm_stroke_width">4dp</dimen>
+    <dimen name="schedule_dates_margin_start">8dp</dimen>
+    <dimen name="schedule_dates_margin_bottom">8dp</dimen>
 
     <dimen name="auth_info_width">210dp</dimen>
 
