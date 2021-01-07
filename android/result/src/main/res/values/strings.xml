@@ -1,4 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string name="potential_coprisoners_tabtext">Кандидаты</string>
+    <string name="added_coprisoners_tabtext">Добавленные</string>
     <string name="back_to_profile">Редактировать профиль</string>
 </resources>

@@ -7,18 +7,41 @@
     android:columnCount="2"
     android:padding="8dp">
 
-    <!-- TODO: CharlieDebug: remove backgroundTint -->
+
     <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
-        android:id="@+id/srl"
+        android:id="@+id/refreshLayout"
         android:layout_columnSpan="2"
         android:layout_gravity="fill"
-        android:layout_height="0dp"
-        android:background="#808080" >
+        android:layout_height="0dp" >
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/recvCoPrisoners"
+
+        <androidx.viewpager.widget.ViewPager
+            android:id="@+id/vPager"
             android:layout_width="match_parent"
-            android:layout_height="match_parent" />
+            android:layout_height="match_parent" >
+
+
+            <com.google.android.material.tabs.TabLayout
+                android:id="@+id/tabs"
+                android:layout_width="match_parent"
+                android:layout_height="42dp"
+                android:background="@drawable/coprisoners_tabs_back"
+                app:tabBackground="@drawable/primaryselected_tab_back"
+                app:tabTextColor="?colorPrimary"
+                app:tabSelectedTextColor="?backgroundColor"
+                app:tabRippleColor="@android:color/transparent"
+                app:tabMaxWidth="0dp"
+                app:tabGravity="fill"
+                app:tabMode="fixed"
+                app:tabIndicatorColor="@android:color/transparent" >
+
+                <!-- The tabs are added programmatically. -->
+
+            </com.google.android.material.tabs.TabLayout>
+
+
+        </androidx.viewpager.widget.ViewPager>
+
 
     </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
@@ -46,5 +69,6 @@
         android:textStyle="bold"
         android:textColor="?colorPrimary"
         android:text="@string/back_to_profile" />
+
 
 </GridLayout>
