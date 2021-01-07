@@ -8,10 +8,11 @@
     <application>
 
         <activity android:name="by.zenkevich_churun.findcell.prisoner.ui.root.activity.PrisonerActivity">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
+            <!-- TODO: CharlieDebug: Uncomment -->
+<!--            <intent-filter>-->
+<!--                <action android:name="android.intent.action.MAIN" />-->
+<!--                <category android:name="android.intent.category.LAUNCHER" />-->
+<!--            </intent-filter>-->
         </activity>
 
     </application>

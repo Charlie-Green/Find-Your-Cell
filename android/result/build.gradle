@@ -24,6 +24,10 @@ android {
         }
     }
 
+    buildFeatures {
+        viewBinding true
+    }
+
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
@@ -38,7 +42,10 @@ dependencies {
     def Deps = rootProject.ext
 
     implementation fileTree(dir: "libs", include: ["*.jar"])
+
     implementation Deps.libKotlin
+    implementation Deps.libAndroidX
+    implementation Deps.libAppCompat
 
     implementation project(":core")
 }
