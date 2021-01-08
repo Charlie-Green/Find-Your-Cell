@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/fragmCoPrisoners"
-        android:name="by.zenkevich_churun.findcell.result.ui.result.CoPrisonersFragment"
+        android:name="by.zenkevich_churun.findcell.result.ui.cps.CoPrisonersFragment"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 

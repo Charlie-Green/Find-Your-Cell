@@ -19,7 +19,7 @@ import javax.inject.Singleton
 
 @Module
 @InstallIn(ApplicationComponent::class)
-interface ApplicationModule {
+interface PrisonerModule {
 
     @Singleton
     @Binds

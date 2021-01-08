@@ -68,6 +68,9 @@ ext {
     libRetrofit = "com.squareup.retrofit2:retrofit:$retrofitVersion:"
     libRetrofitGson = "com.squareup.retrofit2:converter-gson:$retrofitVersion"
 
+    def workManVersion = "2.4.0"
+    libWorkMan = "androidx.work:work-runtime-ktx:$workManVersion"
+
     def jupiterVersion = "5.3.1"
     testJUnit = "org.junit.jupiter:junit-jupiter-api:$jupiterVersion"
 }

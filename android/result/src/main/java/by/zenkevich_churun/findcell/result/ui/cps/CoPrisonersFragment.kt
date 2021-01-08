@@ -1,14 +1,12 @@
-package by.zenkevich_churun.findcell.result.ui.result
+package by.zenkevich_churun.findcell.result.ui.cps
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import by.zenkevich_churun.findcell.core.ui.common.SviazenFragment
 import by.zenkevich_churun.findcell.core.util.android.AndroidUtil
 import by.zenkevich_churun.findcell.result.R
 import by.zenkevich_churun.findcell.result.databinding.CoprisonersFragmBinding
-import com.google.android.material.tabs.TabLayout
 
 
 class CoPrisonersFragment: SviazenFragment<CoprisonersFragmBinding>() {
@@ -20,6 +18,14 @@ class CoPrisonersFragment: SviazenFragment<CoprisonersFragmBinding>() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         setupTabs()
         setupSwipeRefresh()
+
+        vb.txtvProfile.setOnClickListener {
+            // ...
+        }
+
+        vb.imgvProfile.setOnClickListener {
+            // ...
+        }
     }
 
 
@@ -36,7 +42,7 @@ class CoPrisonersFragment: SviazenFragment<CoprisonersFragmBinding>() {
         vb.refreshLayout.setColorSchemeColors(primaryColor, accentColor)
 
         vb.refreshLayout.setOnRefreshListener {
-            Log.v("CharlieDebug", "Refreshing! Thread is main: ${AndroidUtil.isThreadMain}")
+            // ...
         }
     }
 }
