@@ -26,4 +26,21 @@ class FullJailPojo1: FullJailPojo() {
 
     override val cellCount: Short
         get() = cells.size.toShort()
+
+
+    companion object {
+
+        fun from(pojo: FullJailPojo): FullJailPojo1 {
+            if(pojo is FullJailPojo1) {
+                return pojo
+            }
+
+            val pojo1 = FullJailPojo1()
+            pojo1.id    = pojo.id
+            pojo1.name  = pojo.name
+            pojo1.cells = pojo.cells
+
+            return pojo1
+        }
+    }
 }

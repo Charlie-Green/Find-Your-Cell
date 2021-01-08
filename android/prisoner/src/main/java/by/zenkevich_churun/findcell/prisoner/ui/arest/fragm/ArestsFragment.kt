@@ -38,7 +38,6 @@ class ArestsFragment: SviazenFragment<ArestsFragmBinding>() {
         initFields()
         initRecycler()
 
-        vm.loadData(false)
         vm.listStateLD.observe(viewLifecycleOwner, { state ->
             renderState(state)
         })
@@ -73,6 +72,11 @@ class ArestsFragment: SviazenFragment<ArestsFragmBinding>() {
         vb.fabAdd.setOnClickListener   { addArest() }
         vb.buDelete.setOnClickListener { suggestDelete() }
         vb.buCancel.setOnClickListener { vm.cancelDelete() }
+    }
+
+    override fun onStart() {
+        vm.loadData(false)
+        super.onStart()
     }
 
 

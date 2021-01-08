@@ -32,6 +32,7 @@ class ArestsViewModel @Inject constructor(
     private val mldCheckable = MutableLiveData<Boolean>().apply {
         value = false
     }
+    private var lastPrisonerId = Prisoner.INVALID_ID
 
 
     val listStateLD: LiveData<ArestsListState>
@@ -54,6 +55,12 @@ class ArestsViewModel @Inject constructor(
 
 
     fun loadData(isRetrying: Boolean) {
+        val prisonerId = profileRepo.prisonerLD.value?.id ?: return
+        if(prisonerId != lastPrisonerId) {
+            lastPrisonerId = prisonerId
+            holder.submitState(ArestsListState.Idle)
+        }
+
         if( !isStateAppropriateToLoadData(isRetrying) ) {
             return
         }

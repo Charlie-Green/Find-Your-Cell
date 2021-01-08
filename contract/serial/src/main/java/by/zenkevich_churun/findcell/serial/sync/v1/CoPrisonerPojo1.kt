@@ -16,15 +16,35 @@ class CoPrisonerPojo1: CoPrisonerPojo() {
     override var name: String = ""
 
     @SerializedName("contacts")
-    internal var contactPojos1: List<ContactPojo1> = listOf()
+    internal var contactPojos: List<ContactPojo1> = listOf()
 
     @SerializedName("rel")
     override var relationOrdinal: Int = - 1
 
 
     override val contacts: List<Contact>
-        get() = contactPojos1
+        get() = contactPojos
 
     override val relation: Relation
         get() = Relation.values()[relationOrdinal]
+
+
+    companion object {
+
+        fun from(pojo: CoPrisonerPojo): CoPrisonerPojo1 {
+            if(pojo is CoPrisonerPojo1) {
+                return pojo
+            }
+
+            val pojo1 = CoPrisonerPojo1()
+            pojo1.id = pojo.id
+            pojo1.name = pojo.name
+            pojo1.contactPojos = pojo.contacts.map { c ->
+                ContactPojo1(c.type, c.data)
+            }
+            pojo1.relationOrdinal = pojo.relationOrdinal
+
+            return pojo1
+        }
+    }
 }
