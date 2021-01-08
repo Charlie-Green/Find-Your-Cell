@@ -28,10 +28,11 @@ class PrisonerView: Prisoner() {
     @Column(name = "info")
     override var info: String = ""
 
-    @OneToMany
-    var contactEntities: List<ContactEntity> = listOf()
+    @OneToMany(targetEntity = ContactEntity::class, fetch = FetchType.EAGER)
+    @JoinColumn(name = "prisoner", referencedColumnName = "id")
+    var contactEntities: Set<ContactEntity> = hashSetOf()
 
 
     override val contacts: List<Contact>
-        get() = contactEntities
+        get() = contactEntities.toList()
 }

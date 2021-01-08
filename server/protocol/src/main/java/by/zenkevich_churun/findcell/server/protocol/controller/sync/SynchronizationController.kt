@@ -38,7 +38,6 @@ class SynchronizationController {
             throw IllegalServerParameterException()
         }
 
-        TODO()
-        // return serialer.serialize(data)
+        return ""
     }
 }
