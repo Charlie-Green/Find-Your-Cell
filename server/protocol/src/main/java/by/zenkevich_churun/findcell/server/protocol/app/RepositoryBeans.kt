@@ -6,6 +6,7 @@ import by.zenkevich_churun.findcell.server.internal.repo.cellentry.CellEntriesRe
 import by.zenkevich_churun.findcell.server.internal.repo.jail.JailsRepository
 import by.zenkevich_churun.findcell.server.internal.repo.profile.ProfileRepository
 import by.zenkevich_churun.findcell.server.internal.repo.sched.ScheduleRepository
+import by.zenkevich_churun.findcell.server.internal.repo.sync.SynchronizationRepository
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 
@@ -36,4 +37,8 @@ open class RepositoryBeans {
     @Bean
     open fun cellEntriesRepository()
         = CellEntriesRepository()
+
+    @Bean
+    open fun synchronizationRepository()
+        = SynchronizationRepository()
 }
