@@ -2,6 +2,7 @@ package by.zenkevich_churun.findcell.prisoner.ui.common.arest
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import by.zenkevich_churun.findcell.core.util.android.AndroidUtil
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -26,10 +27,10 @@ class ArestLiveDatasHolder @Inject constructor() {
 
 
     fun submitState(state: ArestsListState) {
-        mldListState.postValue(state)
+        AndroidUtil.setOrPost(mldListState, state)
     }
 
     fun submitState(state: CreateOrUpdateArestState) {
-        mldCuState.postValue(state)
+        AndroidUtil.setOrPost(mldCuState, state)
     }
 }

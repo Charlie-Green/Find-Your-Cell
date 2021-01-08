@@ -59,15 +59,6 @@ internal class ArestsCheckableStateAnimator private constructor(
             return contentInfo.view.marginBottom - contentInfo.persistentMargin
         }
 
-    private fun measureButton(b: View): Int {
-        if(b.height != 0) {
-            return topButton.height
-        }
-
-        b.measure(View.MeasureSpec.UNSPECIFIED, View.MeasureSpec.UNSPECIFIED)
-        return b.measuredHeight
-    }
-
 
     private fun animateToState(desiredMargin: Int, desiredAlpha: Float) {
         val res = topButton.context.resources

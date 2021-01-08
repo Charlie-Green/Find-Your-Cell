@@ -1,5 +1,6 @@
 package by.zenkevich_churun.findcell.core.util.std
 
+import android.util.Log
 import java.util.Calendar
 
 
@@ -21,12 +22,18 @@ object CalendarUtil {
             val formattedStart = dateFormat.format(start.time)
             val formattedEnd   = dateFormat.format(end.time)
 
-            throw IllegalArgumentException(
+            Log.w(
+                CalendarUtil::class.java.simpleName,
                 "Difference between $formattedStart and $formattedEnd " +
                 "is not an integer number of days"
             )
         }
 
-        return (diffMillis / MILLIS_PER_DAY).toInt()
+        var diff2 = 2L*diffMillis / MILLIS_PER_DAY
+        if(diff2 % 2L == 1L) {
+            ++diff2
+        }
+
+        return (diff2 / 2).toInt()
     }
 }

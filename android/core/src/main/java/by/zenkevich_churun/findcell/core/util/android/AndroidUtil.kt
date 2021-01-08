@@ -9,6 +9,7 @@ import android.util.Size
 import android.util.TypedValue
 import android.view.*
 import android.widget.EditText
+import androidx.lifecycle.MutableLiveData
 
 
 object AndroidUtil {
@@ -84,4 +85,13 @@ object AndroidUtil {
         get() {
             return Looper.myLooper() == Looper.getMainLooper()
         }
+
+
+    fun <T> setOrPost(ld: MutableLiveData<T>, newValue: T) {
+        if(isThreadMain) {
+            ld.value = newValue
+        } else {
+            ld.postValue(newValue)
+        }
+    }
 }

@@ -42,18 +42,10 @@ class ScheduleLiveDatasStorage @Inject constructor() {
 
 
     fun submitScheduleCrud(state: ScheduleCrudState) {
-        if(AndroidUtil.isThreadMain) {
-            mldScheduleCrudState.value = state
-        } else {
-            mldScheduleCrudState.postValue(state)
-        }
+        AndroidUtil.setOrPost(mldScheduleCrudState, state)
     }
 
     fun submitCellsCrud(state: ScheduleCellsCrudState) {
-        if(AndroidUtil.isThreadMain) {
-            mldCellsCrudState.value = state
-        } else {
-            mldCellsCrudState.postValue(state)
-        }
+        AndroidUtil.setOrPost(mldCellsCrudState, state)
     }
 }

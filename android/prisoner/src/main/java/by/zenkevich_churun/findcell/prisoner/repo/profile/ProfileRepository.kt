@@ -79,7 +79,7 @@ class ProfileRepository @Inject constructor(
         return response
     }
 
-    fun signOut() {
+    fun logOut() {
         store.clear()
     }
 

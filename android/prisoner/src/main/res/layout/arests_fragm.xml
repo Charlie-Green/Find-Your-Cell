@@ -59,7 +59,7 @@
         app:fabCustomSize="48dp"
         android:src="@drawable/ic_add"
         android:tint="#f0f0f0"
-        android:visibility="gone" />
+        android:alpha="0" />
 
     <ProgressBar
         android:id="@+id/prBar"

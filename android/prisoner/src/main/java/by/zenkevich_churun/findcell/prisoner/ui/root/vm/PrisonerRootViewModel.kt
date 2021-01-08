@@ -5,6 +5,8 @@ import androidx.lifecycle.*
 import by.zenkevich_churun.findcell.entity.entity.Prisoner
 import by.zenkevich_churun.findcell.prisoner.repo.profile.ProfileRepository
 import by.zenkevich_churun.findcell.prisoner.repo.profile.SavePrisonerResult
+import by.zenkevich_churun.findcell.prisoner.ui.common.arest.ArestLiveDatasHolder
+import by.zenkevich_churun.findcell.prisoner.ui.common.arest.ArestsListState
 import by.zenkevich_churun.findcell.prisoner.ui.common.change.UnsavedChangesLiveDatasStorage
 import by.zenkevich_churun.findcell.prisoner.ui.common.interrupt.InterruptLiveDataStorage
 import by.zenkevich_churun.findcell.prisoner.ui.common.interrupt.EditInterruptState
@@ -18,7 +20,8 @@ class PrisonerRootViewModel @Inject constructor(
     private val repo: ProfileRepository,
     private val scheduleStore: ScheduleLiveDatasStorage,
     private val interruptStore: InterruptLiveDataStorage,
-    unsavedChangesStore: UnsavedChangesLiveDatasStorage
+    unsavedChangesStore: UnsavedChangesLiveDatasStorage,
+    private val arestHolder: ArestLiveDatasHolder,
 ): ViewModel() {
 
     val prisonerLD: LiveData<out Prisoner>
@@ -54,8 +57,11 @@ class PrisonerRootViewModel @Inject constructor(
     fun notifyInterruptConfirmationConsumed()
         = interruptStore.notifyConfirmationConsumed()
 
-    fun signOut()
-        = repo.signOut()
+    fun logOut() {
+        repo.logOut()
+        arestHolder.submitState(ArestsListState.Idle)
+        scheduleStore.clearSchedule()
+    }
 
 
     companion object {

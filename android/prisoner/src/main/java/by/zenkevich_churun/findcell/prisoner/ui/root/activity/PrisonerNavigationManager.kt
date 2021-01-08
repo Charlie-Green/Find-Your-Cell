@@ -99,7 +99,7 @@ internal class PrisonerNavigationManager(
                     R.id.fragmAuth,
                     R.id.actSelectAuthMenu
                 ) { null }
-                vm.signOut()
+                vm.logOut()
             }
 
             else -> {
