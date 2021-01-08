@@ -1,5 +1,6 @@
 package by.zenkevich_churun.findcell.server.internal.repo.sync
 
+import by.zenkevich_churun.findcell.entity.entity.Prisoner
 import by.zenkevich_churun.findcell.entity.pojo.SynchronizedPojo
 import by.zenkevich_churun.findcell.server.internal.dao.coprisoner.CoPrisonersDao
 import by.zenkevich_churun.findcell.server.internal.dao.jail.JailsDao
@@ -16,10 +17,10 @@ class SynchronizationRepository: SviazenRepositiory() {
     private lateinit var coPrisonersDao: CoPrisonersDao
 
 
-    fun syncedData(
+    fun suggestedPrisoners(
         prisonerId: Int,
         passwordHash: ByteArray
-    ): SynchronizedPojo {
+    ): List<Prisoner> {
 
         // 1. Validate Credentials.
         validateCredentials(prisonerId, passwordHash)
@@ -48,13 +49,7 @@ class SynchronizationRepository: SviazenRepositiory() {
             othersArestIds.addAll(ids)
         }
 
-        // 4. Map Arest IDs to Prisoner IDs:
-
-        // 1. Select all Periods for the given Prisoner.
-        // 2. For each Period:
-        //    2.1. Find intersecting Periods. This gives a list of Arest IDs.
-        //    2.2. Map Arest IDs to Prisoner IDs.
-
-        TODO()
+        // 4. Map Arest IDs to Prisoners:
+        return coPrisonersDao.prisonersByArests(othersArestIds.toList())
     }
 }

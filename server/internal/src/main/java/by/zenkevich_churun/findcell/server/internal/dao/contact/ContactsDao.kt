@@ -12,9 +12,6 @@ import javax.transaction.Transactional
 @org.springframework.stereotype.Repository
 interface ContactsDao: CrudRepository<ContactEntity, ContactKey> {
 
-    @Query("select c from ContactEntity c where prisoner=:prisonerId")
-    fun get(prisonerId: Int): List<ContactEntity>
-
     @Transactional
     @Modifying
     @Query("delete from ContactEntity c where prisoner=:prisonerId")

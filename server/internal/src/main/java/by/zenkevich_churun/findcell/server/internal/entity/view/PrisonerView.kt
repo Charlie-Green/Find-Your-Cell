@@ -2,27 +2,36 @@ package by.zenkevich_churun.findcell.server.internal.entity.view
 
 import by.zenkevich_churun.findcell.entity.entity.Contact
 import by.zenkevich_churun.findcell.entity.entity.Prisoner
-import by.zenkevich_churun.findcell.server.internal.entity.table.PrisonerEntity
+import by.zenkevich_churun.findcell.server.internal.entity.table.ContactEntity
+import javax.persistence.*
 
 
 /** Combines data from Prisoners and Contacts table to implement [Prisoner] the abstract class. **/
-class PrisonerView(
-    val prisonerEntity: PrisonerEntity,
+@Entity
+@Table(name = "Prisoners")
+class PrisonerView: Prisoner() {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
+    override var id: Int = Prisoner.INVALID_ID
+
+    @Column(name = "username")
+    override var username: String? = null
+
+    @Column(name = "pass")
+    override var passwordHash: ByteArray? = null
+
+    @Column(name = "name")
+    override var name: String = ""
+
+    @Column(name = "info")
+    override var info: String = ""
+
+    @OneToMany
+    var contactEntities: List<ContactEntity> = listOf()
+
+
     override val contacts: List<Contact>
-): Prisoner() {
-
-    override val id: Int
-        get() = prisonerEntity.id
-
-    override val username: String?
-        get() = prisonerEntity.username
-
-    override val passwordHash: ByteArray?
-        get() = prisonerEntity.passwordHash
-
-    override val name: String
-        get() = prisonerEntity.name
-
-    override val info: String
-        get() = prisonerEntity.info
+        get() = contactEntities
 }

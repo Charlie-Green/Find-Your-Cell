@@ -29,7 +29,7 @@ class SynchronizationController {
             throw IllegalServerParameterException()
         }
 
-        val data = repo.syncedData(prisonerId, passwordHash)
+        val data = repo.suggestedPrisoners(prisonerId, passwordHash)
 
         val serialer = try {
             SynchronizationSerializer.forVersion(version)
@@ -38,6 +38,7 @@ class SynchronizationController {
             throw IllegalServerParameterException()
         }
 
-        return serialer.serialize(data)
+        TODO()
+        // return serialer.serialize(data)
     }
 }

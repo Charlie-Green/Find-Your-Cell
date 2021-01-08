@@ -12,21 +12,14 @@ import javax.persistence.PersistenceException
 
 class AuthorizationRepository: SviazenRepositiory() {
 
-    @Autowired
-    private lateinit var contactsDao: ContactsDao
-
-
     fun logIn(
         username: String,
         passwordHash: ByteArray
     ): LogInResponse {
 
-        val prisonerEntity = prisonerDao.get(username, passwordHash)
-        if(prisonerEntity != null) {
-            val contacts = contactsDao.get(prisonerEntity.id)
-            prisonerEntity.passwordHash = null
-            val prisonerInstance = PrisonerView(prisonerEntity, contacts)
-            return LogInResponse.Success(prisonerInstance)
+        val prisonerView = prisonerDao.get(username, passwordHash)
+        if(prisonerView != null) {
+            return LogInResponse.Success(prisonerView)
         }
 
         val usernameCount = prisonerDao.countByUsername(username)
@@ -57,7 +50,13 @@ class AuthorizationRepository: SviazenRepositiory() {
             return SignUpResponse.UsernameTaken
         }
 
-        val createdPrisoner = PrisonerView(createdEntity, listOf())
+        val createdPrisoner = PrisonerView()
+        createdPrisoner.id         = createdEntity.id
+        createdEntity.username     = createdEntity.username
+        createdEntity.passwordHash = createdEntity.passwordHash
+        createdEntity.name         = createdEntity.name
+        createdEntity.info         = createdEntity.info
+
         return SignUpResponse.Success(createdPrisoner)
     }
 }
