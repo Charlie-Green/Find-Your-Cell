@@ -51,8 +51,8 @@ internal class WorkManagerWrapper(private val appContext: Context) {
         override fun doWork(): Result {
             Log.v("CharlieDebug", "Sync started.")
             val repo = obtainRepository()
-            val synced = repo.sync()
-            return if(synced) Result.success() else Result.failure()
+            repo.sync()
+            return Result.success()
         }
 
 

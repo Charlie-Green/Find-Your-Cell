@@ -4,9 +4,11 @@ import android.content.Context
 import androidx.lifecycle.*
 import by.zenkevich_churun.findcell.core.injected.web.NetworkStateTracker
 import by.zenkevich_churun.findcell.entity.entity.Arest
+import by.zenkevich_churun.findcell.entity.entity.Prisoner
 import by.zenkevich_churun.findcell.entity.response.CreateOrUpdateArestResponse
 import by.zenkevich_churun.findcell.prisoner.repo.arest.ArestsRepository
 import by.zenkevich_churun.findcell.prisoner.repo.arest.GetArestsResult
+import by.zenkevich_churun.findcell.prisoner.repo.profile.ProfileRepository
 import by.zenkevich_churun.findcell.prisoner.ui.arest.state.*
 import by.zenkevich_churun.findcell.prisoner.ui.common.arest.ArestLiveDatasHolder
 import by.zenkevich_churun.findcell.prisoner.ui.common.arest.ArestsListState
@@ -18,6 +20,7 @@ import javax.inject.Inject
 
 class ArestsViewModel @Inject constructor(
     private val repo: ArestsRepository,
+    private val profileRepo: ProfileRepository,
     private val netTracker: NetworkStateTracker,
     private val holder: ArestLiveDatasHolder
 ): ViewModel() {
