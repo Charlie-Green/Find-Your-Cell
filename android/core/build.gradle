@@ -49,7 +49,7 @@ dependencies {
 
     implementation Deps.libNavigationFragm
     implementation Deps.libDateRangePicker
-
+    implementation Deps.libLiveData
     implementation Deps.libHilt
 
     api project(":entity")

@@ -1,9 +1,8 @@
 package by.zenkevich_churun.findcell.result.repo.sync
 
 import android.util.Log
-import by.zenkevich_churun.findcell.core.injected.sync.SynchronizationRepository
-import by.zenkevich_churun.findcell.core.injected.sync.SynchronizationScheduler
-import by.zenkevich_churun.findcell.core.injected.sync.SynchronizedDataManager
+import androidx.lifecycle.LiveData
+import by.zenkevich_churun.findcell.core.injected.sync.*
 import java.io.IOException
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -15,7 +14,15 @@ class SynchronizationRepositoryImpl @Inject constructor(
     private val dataMan: SynchronizedDataManager
 ): SynchronizationRepository {
 
-    override fun sync(): Boolean {
+    private val stateHolder = SyncStateHolder()
+
+
+    override val syncStateLD: LiveData<SyncState>
+        get() = stateHolder.stateLD
+
+    override fun forceSync() {
+        stateHolder.notifySyncRan()
+        scheduler.notifySyncRan()
 
         val success = try {
             dataMan.sync()
@@ -25,8 +32,14 @@ class SynchronizationRepositoryImpl @Inject constructor(
             false
         }
 
-        scheduler.notifySynchronizationFinished(success)
-        return success
+        scheduler.notifySyncFinished(success)
+        stateHolder.notifySyncFinished(success, scheduler.lastSucessfulSyncTime)
+    }
+
+    override fun sync() {
+        if(scheduler.isTimeToSync) {
+            forceSync()
+        }
     }
 
 

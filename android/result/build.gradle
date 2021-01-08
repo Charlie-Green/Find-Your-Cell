@@ -54,6 +54,8 @@ dependencies {
 
     implementation Deps.libHilt
     implementation Deps.libWorkMan
+    implementation Deps.libLiveData
+    implementation Deps.libViewModel
 
     kapt Deps.kaptHilt
 
