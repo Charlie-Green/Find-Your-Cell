@@ -50,7 +50,7 @@ class FullJailView: FullJailPojo() {
             -1
         }
 
-        // Now for each existing cellNumber fill the coresponding position
+        // Now for each existing cellNumber fill the corresponding position
         // with a valid value:
         for(cell in cellEntitiesSet) {
             val index = cell.key.cellNumber.toInt() - 1

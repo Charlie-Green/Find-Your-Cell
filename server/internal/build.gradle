@@ -22,6 +22,9 @@ dependencies {
 	implementation Deps.libSpringJpa
 
 	implementation project(":entity")
+
+	testImplementation Deps.testJUnit
+	testRuntimeOnly Deps.testRuntimeJunit
 }
 
 compileKotlin {
@@ -31,4 +34,8 @@ compileKotlin {
 	kotlinOptions {
 		jvmTarget = "1.8"
 	}
+}
+
+test {
+	useJUnitPlatform()
 }

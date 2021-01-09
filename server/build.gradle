@@ -11,6 +11,10 @@ ext {
     libHibernate = "org.hibernate:hibernate-gradle-plugin:5.4.26.Final"
     libMysqlJdbc = "mysql:mysql-connector-java:5.1.6"
 
+    def junitVersion = "5.3.1"
+    testJUnit = "org.junit.jupiter:junit-jupiter-api:$junitVersion"
+    testRuntimeJunit = "org.junit.jupiter:junit-jupiter-engine:5.3.1"
+
     def gsonVersion = "2.8.6"
     libGson = "com.google.code.gson:gson:$gsonVersion"
 }

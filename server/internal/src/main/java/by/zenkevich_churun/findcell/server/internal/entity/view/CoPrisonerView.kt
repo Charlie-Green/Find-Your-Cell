@@ -15,6 +15,9 @@ class CoPrisonerView(
     override val name: String
         get() = prisonerView.name
 
+    override val info: String
+        get() = prisonerView.info
+
     override val contacts: List<Contact>
         get() = prisonerView.contacts
 }
