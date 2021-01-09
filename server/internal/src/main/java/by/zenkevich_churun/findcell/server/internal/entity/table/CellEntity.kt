@@ -9,7 +9,7 @@ import javax.persistence.*
 class CellEntity {
 
     @EmbeddedId
-    var key: CellKey? = null
+    lateinit var key: CellKey
 
     @Column(name = "seats")
     var seatCount: Short = 0

@@ -21,7 +21,7 @@ class SynchronizationRepository: SviazenRepositiory() {
     private lateinit var coPrisonersDao: CoPrisonersDao
 
 
-    fun coPrisoners(
+    fun synchronizedData(
         prisonerId: Int,
         passwordHash: ByteArray
     ): SynchronizedPojo {
@@ -41,25 +41,24 @@ class SynchronizationRepository: SviazenRepositiory() {
     /** [CoPrisoner]s with [CoPrisoner.Relation.SUGGESTED]. **/
     private fun suggestedCoPrisoners(prisonerId: Int): List<CoPrisonerView> {
 
-        // 2. Get all Periods for the specified Prisoner:
+        // 1. Get all Periods for the specified Prisoner:
         val myPeriods = coPrisonersDao.periods(prisonerId)
 
         val charlieDebugDateFormat = SimpleDateFormat("dd.MM")
         charlieDebugList("myPeriods", myPeriods) { p ->
-            val start = charlieDebugDateFormat.format( java.util.Calendar.getInstance().apply { timeInMillis = p.key!!.start }.time )
-            val end   = charlieDebugDateFormat.format( java.util.Calendar.getInstance().apply { timeInMillis = p.key!!.end   }.time )
+            val start = charlieDebugDateFormat.format( java.util.Calendar.getInstance().apply { timeInMillis = p.key.start }.time )
+            val end   = charlieDebugDateFormat.format( java.util.Calendar.getInstance().apply { timeInMillis = p.key.end   }.time )
             "$start - $end"
         }
 
-        // 3. Prepare the excluded arest IDs list:
+        // 2. Prepare the excluded arest IDs list:
         val excludedArestIdsSet = hashSetOf<Int>()
         for(period in myPeriods) {
-            excludedArestIdsSet.add(period.key!!.arestId)
+            excludedArestIdsSet.add(period.key.arestId)
         }
         val excludedArestIds = excludedArestIdsSet.toList()
 
         charlieDebugList("excludedArestIds", excludedArestIds)
-
 
         // 3. Get Arest IDs to find potential CoPrisoners:
         val othersArestIds = hashSetOf<Int>()
@@ -67,8 +66,8 @@ class SynchronizationRepository: SviazenRepositiory() {
             val ids = coPrisonersDao.getCoArestIds(
                 period.jailId,
                 period.cellNumber,
-                period.key!!.start,
-                period.key!!.end,
+                period.key.start,
+                period.key.end,
                 excludedArestIds
             )
 
@@ -93,13 +92,7 @@ class SynchronizationRepository: SviazenRepositiory() {
         // 2. Prepare Prisoner IDs and ID-to-Entry map:
         val idToEntryMap = hashMapOf<Int, CoPrisonerEntity>()
         val relatedIds = relatedEntries.map { entry ->
-            val id =
-                if(entry.key.id1 == prisonerId) entry.key.id2
-                else entry.key.id1
-
-            idToEntryMap[id] = entry
-
-            id
+            coPrisonerId(entry, prisonerId, idToEntryMap)
         }
 
         // 3. Map this to CoPrisonerView entities:
@@ -117,6 +110,21 @@ class SynchronizationRepository: SviazenRepositiory() {
         }
 
         return related
+    }
+
+    private fun coPrisonerId(
+        entry: CoPrisonerEntity,
+        prisonerId: Int,
+        idToEntryMap: HashMap<Int, CoPrisonerEntity>
+    ): Int {
+
+        val id =
+            if(entry.key.id1 == prisonerId) entry.key.id2
+            else entry.key.id1
+
+        idToEntryMap[id] = entry
+
+        return id
     }
 
 

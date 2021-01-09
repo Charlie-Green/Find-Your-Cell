@@ -9,7 +9,7 @@ import javax.persistence.*
 class PeriodEntity {
 
     @EmbeddedId
-    var key: PeriodKey? = null
+    lateinit var key: PeriodKey
 
     @Column(name = "jail")
     var jailId: Int = 0
