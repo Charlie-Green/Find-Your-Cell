@@ -5,6 +5,8 @@ import by.zenkevich_churun.findcell.entity.entity.Contact
 
 
 @Entity(
+    tableName = "CPContacts",
+
     primaryKeys = ["prisoner", "type"],
 
     foreignKeys = [
@@ -24,5 +26,21 @@ class CoPrisonerContactEntity(
     val type: Contact.Type,
 
     @ColumnInfo(name = "data")
-    val data: String
-)
+    val data: String ) {
+
+
+    companion object {
+
+        fun from(
+            contact: Contact,
+            coPrisonerId: Int
+        ): CoPrisonerContactEntity {
+
+            return CoPrisonerContactEntity(
+                coPrisonerId,
+                contact.type,
+                contact.data
+            )
+        }
+    }
+}

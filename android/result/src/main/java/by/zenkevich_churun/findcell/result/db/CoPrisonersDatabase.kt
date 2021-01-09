@@ -3,6 +3,7 @@ package by.zenkevich_churun.findcell.result.db
 import android.content.Context
 import androidx.room.*
 import by.zenkevich_churun.findcell.result.db.convert.*
+import by.zenkevich_churun.findcell.result.db.dao.CoPrisonersDao
 import by.zenkevich_churun.findcell.result.db.entity.CoPrisonerContactEntity
 import by.zenkevich_churun.findcell.result.db.entity.CoPrisonerEntity
 import by.zenkevich_churun.findcell.result.db.migr.*
@@ -21,6 +22,9 @@ import by.zenkevich_churun.findcell.result.db.migr.*
     ContactTypeRoomConverter::class
 )
 abstract class CoPrisonersDatabase: RoomDatabase() {
+
+    abstract val dao: CoPrisonersDao
+
 
     companion object {
         private var instance: CoPrisonersDatabase? = null

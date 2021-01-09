@@ -4,7 +4,7 @@ import androidx.room.*
 import by.zenkevich_churun.findcell.entity.entity.CoPrisoner
 
 
-@Entity
+@Entity(tableName = "CoPrisoners")
 class CoPrisonerEntity(
 
     @PrimaryKey(autoGenerate = true)
@@ -18,5 +18,18 @@ class CoPrisonerEntity(
     val info: String,
 
     @ColumnInfo(name = "rel")
-    val relation: CoPrisoner.Relation
-)
+    val relation: CoPrisoner.Relation ) {
+
+
+    companion object {
+
+        fun from(coPrisoner: CoPrisoner): CoPrisonerEntity {
+            return CoPrisonerEntity(
+                coPrisoner.id,
+                coPrisoner.name,
+                coPrisoner.info,
+                coPrisoner.relation
+            )
+        }
+    }
+}
