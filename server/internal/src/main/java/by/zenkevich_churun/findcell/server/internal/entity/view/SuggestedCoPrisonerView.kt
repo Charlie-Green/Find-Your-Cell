@@ -21,7 +21,8 @@ class SuggestedCoPrisonerView: CoPrisoner() {
     @Column(name = "info")
     override var info: String = ""
 
-    override val relation: CoPrisoner.Relation = CoPrisoner.Relation.SUGGESTED
+    override val relation: CoPrisoner.Relation
+        get() = CoPrisoner.Relation.SUGGESTED
 
     override val contacts: List<Contact>
         get() = listOf()  // 'Cause for Suggested Prisoner Contacts are hidden.

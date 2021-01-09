@@ -22,22 +22,15 @@ class SynchronizationController {
         @RequestParam("pass") passwordBase64: String
     ): String {
 
-        val passwordHash = try {
-            Base64Util.decode(passwordBase64)
+        try {
+            val passwordHash =Base64Util.decode(passwordBase64)
+            val data = repo.synchronizedData(prisonerId, passwordHash)
+            val serialer = SynchronizationSerializer.forVersion(version)
+            return serialer.serialize(data)
+
         } catch(exc: IllegalArgumentException) {
             println(exc.message)
             throw IllegalServerParameterException()
         }
-
-        val data = repo.synchronizedData(prisonerId, passwordHash)
-
-        val serialer = try {
-            SynchronizationSerializer.forVersion(version)
-        } catch(exc: IllegalArgumentException) {
-            println(exc.message)
-            throw IllegalServerParameterException()
-        }
-
-        return serialer.serialize(data)
     }
 }

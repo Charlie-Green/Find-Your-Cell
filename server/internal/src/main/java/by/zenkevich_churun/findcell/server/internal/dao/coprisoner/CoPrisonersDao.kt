@@ -40,7 +40,7 @@ interface CoPrisonersDao: Repository<PeriodEntity, PeriodKey> {
         excludedArestIds: List<Int>
     ): List<Int>
 
-    @Query("select c from CoPrisonerEntity where p1=:prisonerId or p2=:prisonerId")
+    @Query("select c from CoPrisonerEntity c where p1=:prisonerId or p2=:prisonerId")
     fun coPrisonerEntries(prisonerId: Int): List<CoPrisonerEntity>
 
     // @Query("select c from CoPrisonerView1 where c.id2=:id2")
@@ -53,6 +53,6 @@ interface CoPrisonersDao: Repository<PeriodEntity, PeriodKey> {
     )
     fun coPrisonersByArests(arestIds: List<Int>): List<SuggestedCoPrisonerView>
 
-    @Query("select p from PrisonerView p where p.key.prisonerId in :prisonerIds")
+    @Query("select p from PrisonerView p where p.id in :prisonerIds")
     fun prisonerViews(prisonerIds: List<Int>): List<PrisonerView>
 }

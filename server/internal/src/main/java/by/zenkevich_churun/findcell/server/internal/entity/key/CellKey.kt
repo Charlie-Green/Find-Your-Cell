@@ -11,6 +11,6 @@ class CellKey: Serializable {
     @Column(name = "jail")
     var jailId: Int = 0
 
-    @Column(name = "cell")
+    @Column(name = "number")
     var cellNumber: Short = 0
 }

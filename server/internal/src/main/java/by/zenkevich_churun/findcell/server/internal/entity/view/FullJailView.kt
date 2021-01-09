@@ -10,6 +10,7 @@ import javax.persistence.*
 @Table(name = "Jails")
 class FullJailView: FullJailPojo() {
 
+    @Transient
     private var seatCounts: List<Short>? = null
 
 
@@ -22,7 +23,6 @@ class FullJailView: FullJailPojo() {
     override var name: String = ""
 
     @OneToMany(targetEntity = CellEntity::class)
-    @JoinTable(name = "Cells")
     @JoinColumn(name = "jail", referencedColumnName = "id")
     var cellEntitiesSet: Set<CellEntity> = setOf()
         set(value) {
@@ -41,7 +41,7 @@ class FullJailView: FullJailPojo() {
 
     /** Maps [cellEntitiesSet] to [FullJailPojo.cells] **/
     private fun computeSeatCounts(): List<Short> {
-        var maxCellNumber = cellEntitiesSet
+        val maxCellNumber = cellEntitiesSet
             .maxByOrNull { it.key.cellNumber }
             ?.key?.cellNumber ?: 0
 
