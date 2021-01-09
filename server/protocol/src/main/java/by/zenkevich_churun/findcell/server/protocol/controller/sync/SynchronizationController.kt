@@ -43,6 +43,7 @@ class SynchronizationController {
             throw IllegalServerParameterException()
         }
 
-        return serialer.serialize(coPrisoners, jails)
+        // return serialer.serialize(coPrisoners, jails)
+        return ""
     }
 }

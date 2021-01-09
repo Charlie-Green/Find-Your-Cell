@@ -6,8 +6,6 @@ import by.zenkevich_churun.findcell.server.internal.entity.table.PrisonerEntity
 import javax.persistence.*
 
 
-/** Unlike [CoPrisonerView], this is selected from the table of [PrisonerEntity]s.
-  * [relation] property returns [CoPrisoner.Relation.SUGGESTED]. **/
 @Entity
 @Table(name = "Prisoners")
 class SuggestedCoPrisonerView: CoPrisoner() {
@@ -20,13 +18,22 @@ class SuggestedCoPrisonerView: CoPrisoner() {
     @Column(name = "name")
     override var name: String = ""
 
-    @OneToMany(targetEntity = ContactEntity::class)
-    @JoinTable(name = "Contacts")
-    @JoinColumn(name = "prisoner", referencedColumnName = "id")
-    var contactsSet: Set<ContactEntity> = hashSetOf()
+    @Column(name = "info")
+    override var info: String = ""
 
     override val relation: CoPrisoner.Relation = CoPrisoner.Relation.SUGGESTED
 
     override val contacts: List<Contact>
-        get() = contactsSet.toList()
+        get() = listOf()  // 'Cause for Suggested Prisoner Contacts are hidden.
+
+
+    fun toCoPrisonerView(): CoPrisonerView {
+        val prisoner = PrisonerView()
+        prisoner.id = id
+        prisoner.name = name
+        prisoner.info = info
+        prisoner.contactEntities = setOf()
+
+        return CoPrisonerView(prisoner, relation)
+    }
 }

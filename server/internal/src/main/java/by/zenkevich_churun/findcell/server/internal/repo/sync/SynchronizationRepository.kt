@@ -1,10 +1,12 @@
 package by.zenkevich_churun.findcell.server.internal.repo.sync
 
 import by.zenkevich_churun.findcell.entity.entity.CoPrisoner
-import by.zenkevich_churun.findcell.entity.entity.Prisoner
 import by.zenkevich_churun.findcell.entity.pojo.SynchronizedPojo
 import by.zenkevich_churun.findcell.server.internal.dao.coprisoner.CoPrisonersDao
 import by.zenkevich_churun.findcell.server.internal.dao.jail.JailsDao
+import by.zenkevich_churun.findcell.server.internal.entity.table.CoPrisonerEntity
+import by.zenkevich_churun.findcell.server.internal.entity.view.CoPrisonerView
+import by.zenkevich_churun.findcell.server.internal.entity.view.SynchronizedDataView
 import by.zenkevich_churun.findcell.server.internal.repo.common.SviazenRepositiory
 import org.springframework.beans.factory.annotation.Autowired
 import java.text.SimpleDateFormat
@@ -22,10 +24,22 @@ class SynchronizationRepository: SviazenRepositiory() {
     fun coPrisoners(
         prisonerId: Int,
         passwordHash: ByteArray
-    ): List<CoPrisoner> {
+    ): SynchronizedPojo {
 
-        // 1. Validate Credentials.
         validateCredentials(prisonerId, passwordHash)
+
+        val coPrisoners = suggestedCoPrisoners(prisonerId)
+            .toMutableList()
+            .apply { addAll( relatedCoPrisoners(prisonerId) ) }
+
+        val jails = jailsDao.getFull()
+
+        return SynchronizedDataView(coPrisoners, jails)
+    }
+
+
+    /** [CoPrisoner]s with [CoPrisoner.Relation.SUGGESTED]. **/
+    private fun suggestedCoPrisoners(prisonerId: Int): List<CoPrisonerView> {
 
         // 2. Get all Periods for the specified Prisoner:
         val myPeriods = coPrisonersDao.periods(prisonerId)
@@ -63,17 +77,46 @@ class SynchronizationRepository: SviazenRepositiory() {
 
         charlieDebugList("othersArestIds", othersArestIds.toList())
 
-        // 4. Map Arest IDs to Prisoners:
-        val suggested: List<CoPrisoner> =
-            coPrisonersDao.coPrisonersByArests(othersArestIds.toList())
+        return coPrisonersDao
+            .coPrisonersByArests(othersArestIds.toList())
+            .map { scp -> scp.toCoPrisonerView() }
+    }
 
-        // 5. Now add CoPrisoners with other Relations:
-        val related = coPrisonersDao.coPrisoners(prisonerId)
 
-        // 6. Merge the two:
-        return suggested
-            .toMutableList()
-            .apply { TODO() /* addAll(related) */ }
+    /** [CoPrisoner]s with [CoPrisoner.relation]
+      * different from [CoPrisoner.Relation.SUGGESTED]. **/
+    private fun relatedCoPrisoners(prisonerId: Int): List<CoPrisonerView> {
+
+        // 1. Get desired Relation entries:
+        val relatedEntries = coPrisonersDao.coPrisonerEntries(prisonerId)
+
+        // 2. Prepare Prisoner IDs and ID-to-Entry map:
+        val idToEntryMap = hashMapOf<Int, CoPrisonerEntity>()
+        val relatedIds = relatedEntries.map { entry ->
+            val id =
+                if(entry.key.id1 == prisonerId) entry.key.id2
+                else entry.key.id1
+
+            idToEntryMap[id] = entry
+
+            id
+        }
+
+        // 3. Map this to CoPrisonerView entities:
+        val relatedPrisonerViews = coPrisonersDao.prisonerViews(relatedIds)
+        val related = relatedPrisonerViews.map { p ->
+            val entry = idToEntryMap[p.id]!!
+            CoPrisonerView(p, entry.relation)
+        }
+
+        // 4. Safety: Hide contacts for non-connected CoPrisoners.
+        for(coPrisoner in related) {
+            if(coPrisoner.relation != CoPrisoner.Relation.CONNECTED) {
+                coPrisoner.prisonerView.contactEntities = setOf()
+            }
+        }
+
+        return related
     }
 
 
