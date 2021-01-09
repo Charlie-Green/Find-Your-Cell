@@ -2,7 +2,7 @@ package by.zenkevich_churun.findcell.server.internal.dao.coprisoner
 
 import by.zenkevich_churun.findcell.server.internal.entity.key.PeriodKey
 import by.zenkevich_churun.findcell.server.internal.entity.table.*
-import by.zenkevich_churun.findcell.server.internal.entity.view.PrisonerView
+import by.zenkevich_churun.findcell.server.internal.entity.view.*
 import org.springframework.data.jpa.repository.Query
 import org.springframework.data.repository.Repository
 
@@ -41,9 +41,14 @@ interface CoPrisonersDao: Repository<PeriodEntity, PeriodKey> {
     ): List<Int>
 
     @Query(
-        "select p from PrisonerView p where id in (" +
+        ""
+    )
+    fun coPrisoners(prisonerId: Int): List<CoPrisonerView>
+
+    @Query(
+        "select p from SuggestedCoPrisonerView p where id in (" +
             "select a.prisonerId from ArestEntity a where a.id in :arestIds" +
         ")"
     )
-    fun prisonersByArests(arestIds: List<Int>): List<PrisonerView>
+    fun coPrisonersByArests(arestIds: List<Int>): List<SuggestedCoPrisonerView>
 }

@@ -3,6 +3,7 @@
 
 -- -----------------------------------------------
 
+drop table if exists `PrisonersRelations`;
 drop table if exists `Contacts`;
 drop table if exists `Periods`;
 drop table if exists `ScheduleCellEntries`;
@@ -22,6 +23,14 @@ create table `Prisoners` (
   `info` text not null,
 
   unique(`username`)
+);
+
+create table `PrisonersRelations` (
+  `p1` int not null,
+  `p2` int not null,
+  `rel` smallint not null,
+
+  primary key(`p1`, `p2`)
 );
 
 create table `Contacts` (
@@ -70,6 +79,10 @@ create table `ScheduleCellEntries` (
   primary key (`arest`, `jail`, `cell`)
 );
 
+
+alter table `PrisonersRelations` add foreign key (`p1`) references `Prisoners` (`id`);
+
+alter table `PrisonersRelations` add foreign key (`p2`) references `Prisoners` (`id`);
 
 alter table `Contacts` add foreign key (`prisoner`) references `Prisoners` (`id`);
 

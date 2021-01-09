@@ -9,7 +9,6 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories
 
 @SpringBootApplication
 @PropertySources(
-    // TODO: CharlieDebug: Uncomment:
     PropertySource("classpath:public.properties"),
     PropertySource("classpath:confidential.properties")
 )

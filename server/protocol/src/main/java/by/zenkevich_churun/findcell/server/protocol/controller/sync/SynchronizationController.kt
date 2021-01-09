@@ -1,6 +1,7 @@
 package by.zenkevich_churun.findcell.server.protocol.controller.sync
 
 import by.zenkevich_churun.findcell.serial.util.protocol.Base64Util
+import by.zenkevich_churun.findcell.server.internal.repo.jail.JailsRepository
 import by.zenkevich_churun.findcell.server.internal.repo.sync.SynchronizationRepository
 import by.zenkevich_churun.findcell.server.protocol.exc.IllegalServerParameterException
 import by.zenkevich_churun.findcell.server.protocol.serial.sync.abstr.SynchronizationSerializer
@@ -13,6 +14,9 @@ class SynchronizationController {
 
     @Autowired
     private lateinit var repo: SynchronizationRepository
+
+    @Autowired
+    private lateinit var jailsRepo: JailsRepository
 
 
     @PostMapping("sync")
@@ -29,7 +33,8 @@ class SynchronizationController {
             throw IllegalServerParameterException()
         }
 
-        val data = repo.suggestedPrisoners(prisonerId, passwordHash)
+        val coPrisoners = repo.coPrisoners(prisonerId, passwordHash)
+        val jails = jailsRepo.getJails()
 
         val serialer = try {
             SynchronizationSerializer.forVersion(version)
@@ -38,6 +43,6 @@ class SynchronizationController {
             throw IllegalServerParameterException()
         }
 
-        return ""
+        return serialer.serialize(coPrisoners, jails)
     }
 }

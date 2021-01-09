@@ -1,5 +1,6 @@
 package by.zenkevich_churun.findcell.server.internal.repo.sync
 
+import by.zenkevich_churun.findcell.entity.entity.CoPrisoner
 import by.zenkevich_churun.findcell.entity.entity.Prisoner
 import by.zenkevich_churun.findcell.entity.pojo.SynchronizedPojo
 import by.zenkevich_churun.findcell.server.internal.dao.coprisoner.CoPrisonersDao
@@ -18,10 +19,10 @@ class SynchronizationRepository: SviazenRepositiory() {
     private lateinit var coPrisonersDao: CoPrisonersDao
 
 
-    fun suggestedPrisoners(
+    fun coPrisoners(
         prisonerId: Int,
         passwordHash: ByteArray
-    ): List<Prisoner> {
+    ): List<CoPrisoner> {
 
         // 1. Validate Credentials.
         validateCredentials(prisonerId, passwordHash)
@@ -63,7 +64,16 @@ class SynchronizationRepository: SviazenRepositiory() {
         charlieDebugList("othersArestIds", othersArestIds.toList())
 
         // 4. Map Arest IDs to Prisoners:
-        return coPrisonersDao.prisonersByArests(othersArestIds.toList())
+        val suggested: List<CoPrisoner> =
+            coPrisonersDao.coPrisonersByArests(othersArestIds.toList())
+
+        // 5. Now add CoPrisoners with other Relations:
+        val related = coPrisonersDao.coPrisoners(prisonerId)
+
+        // 6. Merge the two:
+        return suggested
+            .toMutableList()
+            .apply { TODO() /* addAll(related) */ }
     }
 
 
