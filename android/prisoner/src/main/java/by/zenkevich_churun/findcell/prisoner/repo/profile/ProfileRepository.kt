@@ -10,7 +10,7 @@ import by.zenkevich_churun.findcell.entity.entity.Prisoner
 import by.zenkevich_churun.findcell.entity.response.LogInResponse
 import by.zenkevich_churun.findcell.entity.response.SignUpResponse
 import by.zenkevich_churun.findcell.prisoner.R
-import by.zenkevich_churun.findcell.prisoner.repo.common.PrisonerStorage
+import by.zenkevich_churun.findcell.core.common.prisoner.PrisonerStorage
 import by.zenkevich_churun.findcell.prisoner.ui.profile.model.PrisonerDraft
 import dagger.hilt.android.qualifiers.ApplicationContext
 import java.io.IOException
@@ -22,7 +22,8 @@ import javax.inject.Singleton
 class ProfileRepository @Inject constructor(
     @ApplicationContext private val appContext: Context,
     private val api: ProfileApi,
-    private val store: PrisonerStorage ) {
+    private val store: PrisonerStorage
+) {
 
     private val mldUnsavedChanges = MutableLiveData<Boolean>().apply {
         value = false

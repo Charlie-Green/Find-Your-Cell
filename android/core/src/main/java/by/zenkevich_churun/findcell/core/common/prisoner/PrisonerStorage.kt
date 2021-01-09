@@ -1,4 +1,4 @@
-package by.zenkevich_churun.findcell.prisoner.repo.common
+package by.zenkevich_churun.findcell.core.common.prisoner
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -17,12 +17,12 @@ class PrisonerStorage @Inject constructor() {
             "Романчик",
             listOf(
                 object: Contact() {
-                    override val type: Type = Contact.Type.VK
+                    override val type: Type = Type.VK
                     override val data: String = "vk.com/myvk"
                 },
 
                 object: Contact() {
-                    override val type: Type = Contact.Type.TELEGRAM
+                    override val type: Type = Type.TELEGRAM
                     override val data: String = "t.me/mytelega"
                 },
             ),

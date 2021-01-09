@@ -5,7 +5,7 @@ import android.util.AttributeSet
 import android.view.LayoutInflater
 import android.view.View
 import android.widget.*
-import by.zenkevich_churun.findcell.core.model.contact.ContactModel
+import by.zenkevich_churun.findcell.core.common.contact.ContactModel
 import by.zenkevich_churun.findcell.entity.entity.Contact
 import by.zenkevich_churun.findcell.prisoner.R
 import by.zenkevich_churun.findcell.prisoner.databinding.ContactTypesScrollViewBinding

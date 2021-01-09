@@ -5,6 +5,8 @@ import by.zenkevich_churun.findcell.core.api.jail.JailsApi
 import by.zenkevich_churun.findcell.core.api.auth.ProfileApi
 import by.zenkevich_churun.findcell.core.api.sched.ScheduleApi
 import by.zenkevich_churun.findcell.core.api.sched.SchedulePropertiesAccessor
+import by.zenkevich_churun.findcell.core.injected.db.JailsCache
+import by.zenkevich_churun.findcell.prisoner.db.cache.JailsCacheImpl
 import by.zenkevich_churun.findcell.prisoner.repo.sched.map.SchedulePropertiesAccessorImpl
 import by.zenkevich_churun.findcell.remote.retrofit.arest.RetrofitArestsApi
 import by.zenkevich_churun.findcell.remote.retrofit.jail.RetrofitJailsApi
@@ -50,4 +52,9 @@ interface PrisonerModule {
     fun schedulePropertiesAccessor(
         impl: SchedulePropertiesAccessorImpl
     ): SchedulePropertiesAccessor
+
+    @Binds
+    fun jailsCache(
+        impl: JailsCacheImpl
+    ): JailsCache
 }

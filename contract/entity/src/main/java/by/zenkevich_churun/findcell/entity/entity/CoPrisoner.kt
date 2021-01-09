@@ -11,6 +11,9 @@ abstract class CoPrisoner {
     /** The value of [Prisoner.name] for the non-current user. **/
     abstract val name: String
 
+    /** The value of [Prisoner.info] for the non-current user. **/
+    abstract val info: String
+
     /** The value of [Prisoner.contacts] for the non-current user,
       * or an empty [List] if [relation] is not [Relation.CONNECTED]. **/
     abstract val contacts: List<Contact>

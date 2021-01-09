@@ -1,4 +1,4 @@
-package by.zenkevich_churun.findcell.core.model.contact
+package by.zenkevich_churun.findcell.core.common.contact
 
 import by.zenkevich_churun.findcell.core.R
 import by.zenkevich_churun.findcell.entity.entity.Contact

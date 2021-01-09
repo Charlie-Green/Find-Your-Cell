@@ -12,7 +12,7 @@ abstract class FullJailPojo: Jail() {
       * for the [Cell] #(j+1) within this [Jail].
       * A rare-to-impossible case: if such [Cell] is missing,
       * the corresponding position contains a negative value. **/
-    abstract var cells: List<Short>
+    abstract val cells: List<Short>
 
 
     override val cellCount: Short

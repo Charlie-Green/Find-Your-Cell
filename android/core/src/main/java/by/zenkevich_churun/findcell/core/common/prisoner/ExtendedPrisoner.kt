@@ -1,4 +1,4 @@
-package by.zenkevich_churun.findcell.prisoner.repo.common
+package by.zenkevich_churun.findcell.core.common.prisoner
 
 import by.zenkevich_churun.findcell.entity.entity.Contact
 import by.zenkevich_churun.findcell.entity.entity.Prisoner

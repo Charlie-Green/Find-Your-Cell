@@ -3,7 +3,7 @@ package by.zenkevich_churun.findcell.prisoner.repo.sched
 import android.util.Log
 import by.zenkevich_churun.findcell.core.api.sched.ScheduleApi
 import by.zenkevich_churun.findcell.entity.entity.Schedule
-import by.zenkevich_churun.findcell.prisoner.repo.common.PrisonerStorage
+import by.zenkevich_churun.findcell.core.common.prisoner.PrisonerStorage
 import by.zenkevich_churun.findcell.prisoner.repo.sched.result.GetScheduleResult
 import by.zenkevich_churun.findcell.prisoner.repo.sched.result.UpdateScheduleResult
 import java.io.IOException
@@ -14,7 +14,8 @@ import javax.inject.Singleton
 @Singleton
 class ScheduleRepository @Inject constructor(
     private val api: ScheduleApi,
-    private val store: PrisonerStorage ) {
+    private val store: PrisonerStorage
+) {
 
     private var schedule: Schedule? = null
 

@@ -1,13 +1,11 @@
 package by.zenkevich_churun.findcell.serial.sync.v1
 
-import by.zenkevich_churun.findcell.entity.entity.Contact
-import by.zenkevich_churun.findcell.entity.entity.Prisoner
+import by.zenkevich_churun.findcell.entity.entity.*
 import by.zenkevich_churun.findcell.serial.prisoner.v1.pojo.ContactPojo1
-import by.zenkevich_churun.findcell.entity.pojo.CoPrisonerPojo
 import com.google.gson.annotations.SerializedName
 
 
-class CoPrisonerPojo1: CoPrisonerPojo() {
+class CoPrisonerPojo1: CoPrisoner() {
 
     @SerializedName("id")
     override var id: Int = Prisoner.INVALID_ID
@@ -15,34 +13,37 @@ class CoPrisonerPojo1: CoPrisonerPojo() {
     @SerializedName("name")
     override var name: String = ""
 
+    @SerializedName("info")
+    override var info: String = ""
+
     @SerializedName("contacts")
     internal var contactPojos: List<ContactPojo1> = listOf()
 
     @SerializedName("rel")
-    override var relationOrdinal: Int = - 1
+    var relationOrdinal: Short = - 1
 
 
     override val contacts: List<Contact>
         get() = contactPojos
 
     override val relation: Relation
-        get() = Relation.values()[relationOrdinal]
+        get() = Relation.values()[relationOrdinal.toInt()]
 
 
     companion object {
 
-        fun from(pojo: CoPrisonerPojo): CoPrisonerPojo1 {
-            if(pojo is CoPrisonerPojo1) {
-                return pojo
+        fun from(cp: CoPrisoner): CoPrisonerPojo1 {
+            if(cp is CoPrisonerPojo1) {
+                return cp
             }
 
             val pojo1 = CoPrisonerPojo1()
-            pojo1.id = pojo.id
-            pojo1.name = pojo.name
-            pojo1.contactPojos = pojo.contacts.map { c ->
+            pojo1.id = cp.id
+            pojo1.name = cp.name
+            pojo1.contactPojos = cp.contacts.map { c ->
                 ContactPojo1(c.type, c.data)
             }
-            pojo1.relationOrdinal = pojo.relationOrdinal
+            pojo1.relationOrdinal = cp.relation.ordinal.toShort()
 
             return pojo1
         }

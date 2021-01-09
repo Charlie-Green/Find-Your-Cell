@@ -9,8 +9,7 @@ import by.zenkevich_churun.findcell.entity.entity.Jail
 import by.zenkevich_churun.findcell.entity.response.CreateOrUpdateArestResponse
 import by.zenkevich_churun.findcell.prisoner.db.JailsDatabase
 import by.zenkevich_churun.findcell.prisoner.db.entity.JailEntity
-import by.zenkevich_churun.findcell.prisoner.repo.common.ExtendedPrisoner
-import by.zenkevich_churun.findcell.prisoner.repo.common.PrisonerStorage
+import by.zenkevich_churun.findcell.core.common.prisoner.PrisonerStorage
 import dagger.hilt.android.qualifiers.ApplicationContext
 import java.io.IOException
 import java.util.*
@@ -23,7 +22,8 @@ class ArestsRepository @Inject constructor(
     @ApplicationContext private val appContext: Context,
     private val arestsApi: ArestsApi,
     private val jailsApi: JailsApi,
-    private val prisonerStore: PrisonerStorage ) {
+    private val prisonerStore: PrisonerStorage
+) {
 
     private var arests: List<Arest>? = null
 

@@ -56,8 +56,10 @@ dependencies {
     implementation Deps.libWorkMan
     implementation Deps.libLiveData
     implementation Deps.libViewModel
+    implementation Deps.libRoom
 
     kapt Deps.kaptHilt
+    kapt Deps.kaptRoom
 
     implementation project(":core")
 }

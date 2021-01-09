@@ -7,7 +7,7 @@ import android.view.View
 import android.widget.*
 import androidx.core.widget.addTextChangedListener
 import by.zenkevich_churun.findcell.core.databinding.ContactViewBinding
-import by.zenkevich_churun.findcell.core.model.contact.ContactModel
+import by.zenkevich_churun.findcell.core.common.contact.ContactModel
 import by.zenkevich_churun.findcell.entity.entity.Contact
 
 
