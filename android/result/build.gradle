@@ -51,6 +51,7 @@ dependencies {
     implementation Deps.libMaterial
     implementation Deps.libRecycler
     implementation Deps.libSwipeRefresh
+    implementation Deps.libCardView
 
     implementation Deps.libHilt
     implementation Deps.libWorkMan
