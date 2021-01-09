@@ -13,12 +13,24 @@ internal class SyncStateHolder {
         get() = mldState
 
 
-    fun notifySyncRan() {
-        mldState.postValue(SyncState.InProgress)
+    /** Checks if sync is currently running and, if it's now,
+      * cnanges [SyncState] to [SyncState.InProgress] atomically.
+      * @return whether [SyncState] was changed and sync is supposed to run. **/
+    fun checkAndRunSync(): Boolean {
+        synchronized(mldState) {
+            if(mldState.value is SyncState.InProgress) {
+                return false
+            }
+
+            mldState.postValue(SyncState.InProgress)
+            return true
+        }
     }
 
     fun notifySyncFinished(success: Boolean, lastSuccessTime: Long) {
         val newState = SyncState.NotSyncing(lastSuccessTime, !success)
-        mldState.postValue(newState)
+        synchronized(mldState) {
+            mldState.postValue(newState)
+        }
     }
 }

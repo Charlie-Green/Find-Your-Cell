@@ -1,4 +1,4 @@
-package by.zenkevich_churun.findcell.result.ui.cps
+package by.zenkevich_churun.findcell.result.ui.cps.fragm
 
 import android.view.LayoutInflater
 import android.view.ViewGroup

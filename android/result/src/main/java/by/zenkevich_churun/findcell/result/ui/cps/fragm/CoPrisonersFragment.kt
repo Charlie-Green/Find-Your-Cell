@@ -1,4 +1,4 @@
-package by.zenkevich_churun.findcell.result.ui.cps
+package by.zenkevich_churun.findcell.result.ui.cps.fragm
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -18,14 +18,7 @@ class CoPrisonersFragment: SviazenFragment<CoprisonersFragmBinding>() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         setupTabs()
         setupSwipeRefresh()
-
-        vb.txtvProfile.setOnClickListener {
-            // ...
-        }
-
-        vb.imgvProfile.setOnClickListener {
-            // ...
-        }
+        setupReturnToProfile()
     }
 
 
@@ -42,7 +35,16 @@ class CoPrisonersFragment: SviazenFragment<CoprisonersFragmBinding>() {
         vb.refreshLayout.setColorSchemeColors(primaryColor, accentColor)
 
         vb.refreshLayout.setOnRefreshListener {
-            // ...
+            // TODO
         }
+    }
+
+    private fun setupReturnToProfile() {
+        val clickListener = View.OnClickListener {
+            // TODO
+        }
+
+        vb.txtvProfile.setOnClickListener(clickListener)
+        vb.imgvProfile.setOnClickListener(clickListener)
     }
 }
