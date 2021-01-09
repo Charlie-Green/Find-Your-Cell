@@ -23,10 +23,12 @@ class CoPrisonerContactEntity(
     val coPrisonerId: Int,
 
     @ColumnInfo(name = "type")
-    val type: Contact.Type,
+    override val type: Contact.Type,
 
     @ColumnInfo(name = "data")
-    val data: String ) {
+    override val data: String
+
+): Contact() {
 
 
     companion object {

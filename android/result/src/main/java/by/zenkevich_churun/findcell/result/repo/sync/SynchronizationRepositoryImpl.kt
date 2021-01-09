@@ -3,7 +3,6 @@ package by.zenkevich_churun.findcell.result.repo.sync
 import android.util.Log
 import androidx.lifecycle.LiveData
 import by.zenkevich_churun.findcell.core.injected.sync.*
-import by.zenkevich_churun.findcell.entity.entity.CoPrisoner
 import java.io.IOException
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -20,15 +19,6 @@ class SynchronizationRepositoryImpl @Inject constructor(
 
     override val syncStateLD: LiveData<SyncState>
         get() = stateHolder.stateLD
-
-    override val suggestedLD: LiveData<List<CoPrisoner>>
-        get() = TODO()
-
-    override val connectedLD: LiveData<List<CoPrisoner>>
-        get() = TODO()
-
-    override val requestsLD: LiveData<List<CoPrisoner>>
-        get() = TODO()
 
 
     override fun forceSync(): SyncResponse {
