@@ -2,7 +2,7 @@ package by.zenkevich_churun.findcell.server.internal.repo.sync
 
 import by.zenkevich_churun.findcell.entity.entity.CoPrisoner
 import by.zenkevich_churun.findcell.entity.pojo.SynchronizedPojo
-import by.zenkevich_churun.findcell.server.internal.dao.coprisoner.CoPrisonersDao
+import by.zenkevich_churun.findcell.server.internal.dao.cp.CoPrisonersDao
 import by.zenkevich_churun.findcell.server.internal.dao.jail.JailsDao
 import by.zenkevich_churun.findcell.server.internal.entity.table.CoPrisonerEntity
 import by.zenkevich_churun.findcell.server.internal.entity.view.CoPrisonerView

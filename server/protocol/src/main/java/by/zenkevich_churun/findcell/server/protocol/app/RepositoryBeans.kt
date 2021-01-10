@@ -3,6 +3,7 @@ package by.zenkevich_churun.findcell.server.protocol.app
 import by.zenkevich_churun.findcell.server.internal.repo.arest.ArestsRepository
 import by.zenkevich_churun.findcell.server.internal.repo.auth.AuthorizationRepository
 import by.zenkevich_churun.findcell.server.internal.repo.cellentry.CellEntriesRepository
+import by.zenkevich_churun.findcell.server.internal.repo.cp.CoPrisonersRepository
 import by.zenkevich_churun.findcell.server.internal.repo.jail.JailsRepository
 import by.zenkevich_churun.findcell.server.internal.repo.profile.ProfileRepository
 import by.zenkevich_churun.findcell.server.internal.repo.sched.ScheduleRepository
@@ -41,4 +42,8 @@ open class RepositoryBeans {
     @Bean
     open fun synchronizationRepository()
         = SynchronizationRepository()
+
+    @Bean
+    open fun coPrisonersRepository()
+        = CoPrisonersRepository()
 }
