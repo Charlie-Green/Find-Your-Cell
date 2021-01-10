@@ -11,11 +11,11 @@ internal class SyncMetaStorage(
 
 
     var lastSyncTime: Long
-        get() { return getLongAt(INDEX_ANY_SYNC, 0L) }
+        get() { return getLongAt(INDEX_ANY_SYNC, DEFAULT_TIME) }
         set(value) { setLongAt(INDEX_ANY_SYNC, value) }
 
     var lastSuccessfulSyncTime: Long
-        get() { return getLongAt(INDEX_SUCCESSFUL_SYNC, 0L) }
+        get() { return getLongAt(INDEX_SUCCESSFUL_SYNC, DEFAULT_TIME) }
         set(value) { setLongAt(INDEX_SUCCESSFUL_SYNC, value) }
 
 
@@ -24,15 +24,14 @@ internal class SyncMetaStorage(
 
     private fun getLongAt(index: Int, defaultValue: Long): Long {
         val byteOffset = index.toLong() * Long.SIZE_BYTES
+        if(!file.exists() || file.length() < byteOffset + Long.SIZE_BYTES) {
+            return defaultValue
+        }
 
         synchronized(this) {
-            try {
-                RandomAccessFile(file, "r").use { file ->
-                    file.seek(byteOffset)
-                    return file.readLong()
-                }
-            } catch(exc: FileNotFoundException) {
-                return defaultValue
+            RandomAccessFile(file, "r").use { file ->
+                file.seek(byteOffset)
+                return file.readLong()
             }
         }
     }
@@ -53,5 +52,10 @@ internal class SyncMetaStorage(
         private const val FILENAME = "SyncMeta.bin"
         private const val INDEX_ANY_SYNC = 0
         private const val INDEX_SUCCESSFUL_SYNC = 1
+
+        /** Used as default value for some properties
+          * if actual data is missing on storage.
+          * [Long.MIN_VALUE] is not used to avoid arithmetic overflow. **/
+        private const val DEFAULT_TIME = Int.MIN_VALUE.toLong()
     }
 }

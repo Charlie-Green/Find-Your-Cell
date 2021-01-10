@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import androidx.appcompat.app.AlertDialog
+import androidx.core.view.isVisible
 import by.zenkevich_churun.findcell.core.ui.common.SviazenFragment
 import by.zenkevich_churun.findcell.core.util.android.AndroidUtil
 import by.zenkevich_churun.findcell.core.util.android.TabsAndPagerListener
@@ -28,6 +29,13 @@ class CoPrisonersFragment: SviazenFragment<CoprisonersFragmBinding>() {
         setupRefresh()
         setupReturnToProfile()
         vm.onViewCreated()
+
+        vm.showSyncLD.observe(viewLifecycleOwner) { show ->
+            vb.prBar.isVisible = show
+        }
+        vm.refreshStateLD.observe(viewLifecycleOwner) { state ->
+            renderRefreshState(state)
+        }
     }
 
 
@@ -60,10 +68,6 @@ class CoPrisonersFragment: SviazenFragment<CoprisonersFragmBinding>() {
         val primaryColor = AndroidUtil.themeColor(requireContext(), R.attr.colorPrimary)
         val accentColor  = AndroidUtil.themeColor(requireContext(), R.attr.colorAccent)
         vb.refreshLayout.setColorSchemeColors(primaryColor, accentColor)
-
-        vm.refreshStateLD.observe(viewLifecycleOwner) { state ->
-            renderRefreshState(state)
-        }
 
         vb.refreshLayout.setOnRefreshListener {
             vm.refresh()
@@ -99,8 +103,6 @@ class CoPrisonersFragment: SviazenFragment<CoprisonersFragmBinding>() {
                 ) { vm.onRefreshStateNotified() }
             }
         }
-
-
     }
 
 

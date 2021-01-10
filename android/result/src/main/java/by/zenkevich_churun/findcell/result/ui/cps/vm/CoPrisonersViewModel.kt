@@ -6,6 +6,7 @@ import androidx.lifecycle.*
 import by.zenkevich_churun.findcell.core.injected.sync.SyncResponse
 import by.zenkevich_churun.findcell.core.injected.sync.SynchronizationRepository
 import by.zenkevich_churun.findcell.core.injected.web.NetworkStateTracker
+import by.zenkevich_churun.findcell.result.repo.cp.CoPrisonersRepository
 import by.zenkevich_churun.findcell.result.ui.cps.model.RefreshState
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -14,6 +15,7 @@ import javax.inject.Inject
 
 class CoPrisonersViewModel @Inject constructor(
     private val syncRepo: SynchronizationRepository,
+    private val cpRepo: CoPrisonersRepository,
     private val netTracker: NetworkStateTracker
 ): ViewModel() {
 
@@ -22,6 +24,10 @@ class CoPrisonersViewModel @Inject constructor(
         value = RefreshState.NOT_REFRESHING
     }
 
+
+    val showSyncLD: LiveData<Boolean> by lazy {
+        ShowSyncMediatorLiveData(syncRepo, cpRepo, viewModelScope)
+    }
 
     val refreshStateLD: LiveData<RefreshState>
         get() = mldRefreshState
