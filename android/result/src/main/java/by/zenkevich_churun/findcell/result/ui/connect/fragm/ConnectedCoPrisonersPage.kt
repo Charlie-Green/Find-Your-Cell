@@ -1,13 +1,24 @@
 package by.zenkevich_churun.findcell.result.ui.connect.fragm
 
-import android.view.LayoutInflater
-import by.zenkevich_churun.findcell.core.ui.common.SviazenFragment
-import by.zenkevich_churun.findcell.result.databinding.PageCpsConnectedBinding
+import android.os.Bundle
+import android.view.View
+import by.zenkevich_churun.findcell.result.ui.connect.vm.ConnectedCoPrisonersViewModel
+import by.zenkevich_churun.findcell.result.ui.shared.cps.CoPrisonersPage
 
 
-class ConnectedCoPrisonersPage: SviazenFragment<PageCpsConnectedBinding>() {
+class ConnectedCoPrisonersPage: CoPrisonersPage() {
 
-    override fun inflateViewBinding(
-        inflater: LayoutInflater
-    ) = PageCpsConnectedBinding.inflate(inflater)
+    private lateinit var vm: ConnectedCoPrisonersViewModel
+
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        initFields()
+        observe(vm.dataLD)
+    }
+
+    private fun initFields() {
+        val appContext = requireContext().applicationContext
+        vm = ConnectedCoPrisonersViewModel.get(appContext, this)
+    }
 }

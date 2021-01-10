@@ -6,25 +6,36 @@ import androidx.lifecycle.MediatorLiveData
 import by.zenkevich_churun.findcell.entity.entity.CoPrisoner
 import by.zenkevich_churun.findcell.result.db.CoPrisonersDatabase
 import by.zenkevich_churun.findcell.result.db.entity.CoPrisonerEntity
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 
 internal sealed class CoPrisonersMediatorLiveData(
     private val appContext: Context,
+    private val scope: CoroutineScope,
     source: LiveData< List<CoPrisonerEntity> >
 ): MediatorLiveData< List<CoPrisoner> >() {
     // ========================================================================
     // Implementation:
 
-    constructor(appContext: Context, allowedRelations: List<CoPrisoner.Relation>):
-        this(
+    constructor(
+        appContext: Context,
+        scope: CoroutineScope,
+        allowedRelations: List<CoPrisoner.Relation>
+
+    ): this(
             appContext,
+            scope,
             CoPrisonersDatabase.get(appContext).dao.coPrisonersLD(allowedRelations)
         )
 
 
     init {
         addSource(source) { cps ->
-            updateValue(cps)
+            scope.launch(Dispatchers.IO) {
+                updateValue(cps)
+            }
         }
     }
 
@@ -35,10 +46,8 @@ internal sealed class CoPrisonersMediatorLiveData(
             .dao
 
         val compoundCoPrisoners = cps.map { cp ->
-            CompoundCoPrisoner(
-                cp,
-                dao.contacts(cp.id)
-            )
+            val contacts = dao.contacts(cp.id)
+            CompoundCoPrisoner(cp, contacts)
         }
 
         postValue(compoundCoPrisoners)
@@ -49,9 +58,12 @@ internal sealed class CoPrisonersMediatorLiveData(
     // Sub-Classes:
 
     class Suggested(
-        appContext: Context
+        appContext: Context,
+        scope: CoroutineScope
+
     ): CoPrisonersMediatorLiveData(
         appContext,
+        scope,
         listOf(
             CoPrisoner.Relation.SUGGESTED,
             CoPrisoner.Relation.OUTCOMING_REQUEST
@@ -59,16 +71,22 @@ internal sealed class CoPrisonersMediatorLiveData(
     )
 
     class Connected(
-        appContext: Context
+        appContext: Context,
+        scope: CoroutineScope
+
     ): CoPrisonersMediatorLiveData(
         appContext,
+        scope,
         listOf(CoPrisoner.Relation.CONNECTED)
     )
 
     class Requests(
-        appContext: Context
+        appContext: Context,
+        scope: CoroutineScope
+
     ): CoPrisonersMediatorLiveData(
         appContext,
+        scope,
         listOf(CoPrisoner.Relation.INCOMING_REQUEST)
     )
 }

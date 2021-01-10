@@ -1,13 +1,25 @@
 package by.zenkevich_churun.findcell.result.ui.suggest.fragm
 
-import android.view.LayoutInflater
-import by.zenkevich_churun.findcell.core.ui.common.SviazenFragment
-import by.zenkevich_churun.findcell.result.databinding.PageCpsSuggestedBinding
+import android.os.Bundle
+import android.view.View
+import by.zenkevich_churun.findcell.result.ui.shared.cps.CoPrisonersPage
+import by.zenkevich_churun.findcell.result.ui.suggest.vm.SuggestedCoPrisonersViewModel
 
 
-class SuggestedCoPrisonersPage: SviazenFragment<PageCpsSuggestedBinding>() {
+class SuggestedCoPrisonersPage: CoPrisonersPage() {
 
-    override fun inflateViewBinding(
-        inflater: LayoutInflater
-    ) = PageCpsSuggestedBinding.inflate(inflater)
+    private lateinit var vm: SuggestedCoPrisonersViewModel
+
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        initFields()
+        observe(vm.dataLD)
+    }
+
+
+    private fun initFields() {
+        val appContext = requireContext().applicationContext
+        vm = SuggestedCoPrisonersViewModel.get(appContext, this)
+    }
 }

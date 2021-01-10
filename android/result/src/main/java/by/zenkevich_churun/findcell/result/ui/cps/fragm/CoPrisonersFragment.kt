@@ -8,20 +8,31 @@ import by.zenkevich_churun.findcell.core.util.android.AndroidUtil
 import by.zenkevich_churun.findcell.core.util.android.TabsAndPagerListener
 import by.zenkevich_churun.findcell.result.R
 import by.zenkevich_churun.findcell.result.databinding.CoprisonersFragmBinding
+import by.zenkevich_churun.findcell.result.ui.cps.vm.CoPrisonersViewModel
 
 
 class CoPrisonersFragment: SviazenFragment<CoprisonersFragmBinding>() {
+
+    private lateinit var vm: CoPrisonersViewModel
+
 
     override fun inflateViewBinding(
         inflater: LayoutInflater
     ) = CoprisonersFragmBinding.inflate(inflater)
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        initFields()
         setupTabs()
         setupSwipeRefresh()
         setupReturnToProfile()
+        vm.onViewCreated()
     }
 
+
+    private fun initFields() {
+        val appContext = requireContext().applicationContext
+        vm = CoPrisonersViewModel.get(appContext, this)
+    }
 
     private fun setupTabs() {
         addTab(0)

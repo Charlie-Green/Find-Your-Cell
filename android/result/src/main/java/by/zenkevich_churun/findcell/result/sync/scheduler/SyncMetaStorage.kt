@@ -1,6 +1,7 @@
 package by.zenkevich_churun.findcell.result.sync.scheduler
 
 import android.content.Context
+import java.io.File
 import java.io.FileNotFoundException
 import java.io.RandomAccessFile
 
@@ -18,12 +19,15 @@ internal class SyncMetaStorage(
         set(value) { setLongAt(INDEX_SUCCESSFUL_SYNC, value) }
 
 
-    private fun getLongAt(index: Int, defaultValue: Long): Long {
-        synchronized(this) {
-            val byteOffset = index.toLong() * Long.SIZE_BYTES
+    private val file: File
+        get() = File(appContext.filesDir, FILENAME)
 
+    private fun getLongAt(index: Int, defaultValue: Long): Long {
+        val byteOffset = index.toLong() * Long.SIZE_BYTES
+
+        synchronized(this) {
             try {
-                RandomAccessFile(FILENAME, "r").use { file ->
+                RandomAccessFile(file, "r").use { file ->
                     file.seek(byteOffset)
                     return file.readLong()
                 }
@@ -34,10 +38,10 @@ internal class SyncMetaStorage(
     }
 
     private fun setLongAt(index: Int, value: Long) {
-        synchronized(this) {
-            val byteOffset = index.toLong() * Long.SIZE_BYTES
+        val byteOffset = index.toLong() * Long.SIZE_BYTES
 
-            RandomAccessFile(FILENAME, "rw").use { file ->
+        synchronized(this) {
+            RandomAccessFile(file, "rw").use { file ->
                 file.seek(byteOffset)
                 file.writeLong(value)
             }
