@@ -10,8 +10,8 @@
     <string name="refresh_needs_internet_msg">
         Чтобы отыскать Ваших сокамерников, подключитесь к интернету.
     </string>
-    <string name="refresh_net_error_msg">
-        Возникла ошибка сети.
+    <string name="send_connect_request_failed_title">
+        Не удалось отправить запрос
     </string>
 
     <!-- Labels and Button Texts: -->

@@ -8,6 +8,8 @@ import by.zenkevich_churun.findcell.core.injected.sync.SynchronizationRepository
 import by.zenkevich_churun.findcell.core.injected.web.NetworkStateTracker
 import by.zenkevich_churun.findcell.result.repo.cp.CoPrisonersRepository
 import by.zenkevich_churun.findcell.result.ui.cps.model.RefreshState
+import by.zenkevich_churun.findcell.result.ui.shared.connect.ConnectRequestLiveDataStorage
+import by.zenkevich_churun.findcell.result.ui.shared.connect.ConnectRequestState
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -16,7 +18,8 @@ import javax.inject.Inject
 class CoPrisonersViewModel @Inject constructor(
     private val syncRepo: SynchronizationRepository,
     private val cpRepo: CoPrisonersRepository,
-    private val netTracker: NetworkStateTracker
+    private val netTracker: NetworkStateTracker,
+    private val connectRequestStore: ConnectRequestLiveDataStorage
 ): ViewModel() {
 
     private var syncTriggered = false
@@ -31,6 +34,9 @@ class CoPrisonersViewModel @Inject constructor(
 
     val refreshStateLD: LiveData<RefreshState>
         get() = mldRefreshState
+
+    val sendConnectRequestStateLD: LiveData<ConnectRequestState>
+        get() = connectRequestStore.stateLD
 
 
     fun onViewCreated() {

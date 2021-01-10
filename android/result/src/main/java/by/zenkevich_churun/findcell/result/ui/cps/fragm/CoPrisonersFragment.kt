@@ -12,11 +12,14 @@ import by.zenkevich_churun.findcell.result.R
 import by.zenkevich_churun.findcell.result.databinding.CoprisonersFragmBinding
 import by.zenkevich_churun.findcell.result.ui.cps.model.RefreshState
 import by.zenkevich_churun.findcell.result.ui.cps.vm.CoPrisonersViewModel
+import by.zenkevich_churun.findcell.result.ui.suggest.model.ConnectRequestState
 
 
 class CoPrisonersFragment: SviazenFragment<CoprisonersFragmBinding>() {
 
     private lateinit var vm: CoPrisonersViewModel
+    private var isSyncing = false
+    private var isSendingConnectRequest = false
 
 
     override fun inflateViewBinding(
@@ -31,10 +34,14 @@ class CoPrisonersFragment: SviazenFragment<CoprisonersFragmBinding>() {
         vm.onViewCreated()
 
         vm.showSyncLD.observe(viewLifecycleOwner) { show ->
-            vb.prBar.isVisible = show
+            isSyncing = show
+            updateProgressBarVisibility()
         }
         vm.refreshStateLD.observe(viewLifecycleOwner) { state ->
             renderRefreshState(state)
+        }
+        vm.sendConnectRequestStateLD.observe(viewLifecycleOwner) { state ->
+            renderConnectRequestState(state)
         }
     }
 
@@ -99,9 +106,22 @@ class CoPrisonersFragment: SviazenFragment<CoprisonersFragmBinding>() {
             RefreshState.ERROR -> {
                 notifyError(
                     R.string.refresh_failed_title,
-                    R.string.refresh_net_error_msg
+                    R.string.network_error_msg
                 ) { vm.onRefreshStateNotified() }
             }
+        }
+    }
+
+
+    private fun renderConnectRequestState(state: ConnectRequestState) {
+        isSendingConnectRequest = (state is ConnectRequestState.Sending)
+        updateProgressBarVisibility()
+
+        if(state is ConnectRequestState.NetworkError && !state.notified) {
+            notifyError(
+                R.string.send_connect_request_failed_title,
+                R.string.network_error_msg
+            ) { state.notified = true }
         }
     }
 
@@ -119,5 +139,9 @@ class CoPrisonersFragment: SviazenFragment<CoprisonersFragmBinding>() {
             }.setOnDismissListener {
                 onDismiss()
             }.show()
+    }
+
+    private fun updateProgressBarVisibility() {
+        vb.prBar.isVisible = isSyncing || isSendingConnectRequest
     }
 }
