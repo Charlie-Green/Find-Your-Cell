@@ -52,6 +52,7 @@ dependencies {
     implementation Deps.libRecycler
     implementation Deps.libSwipeRefresh
     implementation Deps.libCardView
+    implementation Deps.libPager
 
     implementation Deps.libHilt
     implementation Deps.libWorkMan

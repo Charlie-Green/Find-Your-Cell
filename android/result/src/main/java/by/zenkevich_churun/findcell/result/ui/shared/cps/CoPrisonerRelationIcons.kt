@@ -1,4 +1,4 @@
-package by.zenkevich_churun.findcell.result.ui.cps.fragm
+package by.zenkevich_churun.findcell.result.ui.shared.cps
 
 import by.zenkevich_churun.findcell.entity.entity.CoPrisoner
 import by.zenkevich_churun.findcell.result.R

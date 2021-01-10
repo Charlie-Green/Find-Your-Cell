@@ -1,4 +1,4 @@
-package by.zenkevich_churun.findcell.result.ui.cps.fragm
+package by.zenkevich_churun.findcell.result.ui.shared.cps
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -7,8 +7,8 @@ import by.zenkevich_churun.findcell.entity.entity.CoPrisoner
 import by.zenkevich_churun.findcell.result.databinding.CoprisonerItemBinding
 
 
-internal class CoPrisonersAdapter:
-RecyclerView.Adapter<CoPrisonersAdapter.CoPrisonerViewHolder>() {
+class CoPrisonersRecyclerAdapter:
+RecyclerView.Adapter<CoPrisonersRecyclerAdapter.CoPrisonerViewHolder>() {
 
     private var cps: List<CoPrisoner>? = null
 

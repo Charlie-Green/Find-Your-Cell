@@ -46,6 +46,7 @@ dependencies {
     implementation Deps.libAndroidX
     implementation Deps.libAppCompat
     implementation Deps.libMaterial
+    implementation Deps.libPager
 
     implementation Deps.libNavigationFragm
     implementation Deps.libDateRangePicker

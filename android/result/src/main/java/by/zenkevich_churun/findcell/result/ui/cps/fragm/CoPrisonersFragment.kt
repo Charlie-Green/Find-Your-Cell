@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import by.zenkevich_churun.findcell.core.ui.common.SviazenFragment
 import by.zenkevich_churun.findcell.core.util.android.AndroidUtil
+import by.zenkevich_churun.findcell.core.util.android.TabsAndPagerListener
 import by.zenkevich_churun.findcell.result.R
 import by.zenkevich_churun.findcell.result.databinding.CoprisonersFragmBinding
 
@@ -23,10 +24,23 @@ class CoPrisonersFragment: SviazenFragment<CoprisonersFragmBinding>() {
 
 
     private fun setupTabs() {
-        val tab1 = vb.tabs.newTab().apply { setText(R.string.potential_coprisoners_tabtext) }
-        val tab2 = vb.tabs.newTab().apply { setText(R.string.added_coprisoners_tabtext) }
-        vb.tabs.addTab(tab1)
-        vb.tabs.addTab(tab2)
+        addTab(0)
+        addTab(1)
+        TabsAndPagerListener(vb.tabs, vb.vPager).attach()
+        vb.vPager.adapter = CoPrisonersPagerAdapter(requireActivity())
+
+    }
+
+    private fun addTab(position: Int) {
+        val labelRes = when(position) {
+            CoPrisonersPagerAdapter.POSITION_SUGGESTED -> R.string.suggested_coprisoners_tabtext
+            CoPrisonersPagerAdapter.POSITION_CONNECTED -> R.string.connected_coprisoners_tabtext
+            else -> throw IllegalArgumentException("Unexpected tab position $position")
+        }
+
+        val tab = vb.tabs.newTab()
+        tab.setText(labelRes)
+        vb.tabs.addTab(tab)
     }
 
     private fun setupSwipeRefresh() {

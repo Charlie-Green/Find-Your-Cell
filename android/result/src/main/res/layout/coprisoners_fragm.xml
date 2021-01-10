@@ -15,11 +15,10 @@
         android:layout_height="0dp" >
 
 
-        <androidx.viewpager.widget.ViewPager
-            android:id="@+id/vPager"
+        <LinearLayout
+            android:orientation="vertical"
             android:layout_width="match_parent"
             android:layout_height="match_parent" >
-
 
             <com.google.android.material.tabs.TabLayout
                 android:id="@+id/tabs"
@@ -40,7 +39,12 @@
             </com.google.android.material.tabs.TabLayout>
 
 
-        </androidx.viewpager.widget.ViewPager>
+            <androidx.viewpager2.widget.ViewPager2
+                android:id="@+id/vPager"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
+
+        </LinearLayout>
 
 
     </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>

@@ -45,6 +45,7 @@ ext {
     libRecycler     = "androidx.recyclerview:recyclerview:1.1.0"
     libSwipeRefresh = "androidx.swiperefreshlayout:swiperefreshlayout:1.1.0"
     libCardView     = "androidx.cardview:cardview:1.0.0"
+    libPager        = "androidx.viewpager2:viewpager2:1.0.0"
 
     def lifecycleVersion = "2.2.0"
     libViewModel  = "androidx.lifecycle:lifecycle-viewmodel-ktx:$lifecycleVersion"
