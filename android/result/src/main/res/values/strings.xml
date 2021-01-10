@@ -3,4 +3,14 @@
     <string name="suggested_coprisoners_tabtext">Кандидаты</string>
     <string name="connected_coprisoners_tabtext">Добавленные</string>
     <string name="back_to_profile">Редактировать профиль</string>
+
+
+    <!-- Notifications (Refresh): -->
+    <string name="refresh_failed_title">Обновление не удалось</string>
+    <string name="refresh_needs_internet_msg">
+        Чтобы отыскать Ваших сокамерников, подключитесь к интернету.
+    </string>
+    <string name="refresh_net_error_msg">
+        Возникла ошибка сети.
+    </string>
 </resources>

@@ -25,7 +25,7 @@ class SynchronizationSchedulerImpl @Inject constructor(
         get() {
             val lastSync = metaStorage.lastSyncTime
             val now = SystemClock.elapsedRealtime()
-            Log.v("CharlieDebug", "now = ${now/1000L}, lastSync=${lastSync}")
+            Log.v("CharlieDebug", "now = ${now/1000L}, lastSync=${lastSync/1000L}")
 
             if(now < lastSync) {
                 // Device has been rebooted, or for another reason, the time is invalid.
@@ -59,7 +59,7 @@ class SynchronizationSchedulerImpl @Inject constructor(
 
 
     companion object {
-        // TODO: Set to 28_800_000L
-        private const val SYNC_INTERVAL = 60_000L
+        // Automatic sync each 8 hours:
+        private const val SYNC_INTERVAL = 28_800_000L
     }
 }

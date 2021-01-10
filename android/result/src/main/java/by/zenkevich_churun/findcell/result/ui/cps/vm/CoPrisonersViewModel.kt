@@ -45,6 +45,11 @@ class CoPrisonersViewModel @Inject constructor(
             return
         }
 
+        if(!netTracker.isInternetAvailable) {
+            mldRefreshState.postValue(RefreshState.NO_INTERNET)
+            return
+        }
+
         mldRefreshState.value = RefreshState.REFRESHING
         viewModelScope.launch(Dispatchers.IO) {
             val response = syncRepo.forceSync()
@@ -53,7 +58,9 @@ class CoPrisonersViewModel @Inject constructor(
     }
 
     fun onRefreshStateNotified() {
-        if(mldRefreshState.value == RefreshState.ERROR) {
+        if(mldRefreshState.value == RefreshState.ERROR ||
+            mldRefreshState.value == RefreshState.NO_INTERNET ) {
+
             mldRefreshState.value = RefreshState.NOT_REFRESHING
         }
     }

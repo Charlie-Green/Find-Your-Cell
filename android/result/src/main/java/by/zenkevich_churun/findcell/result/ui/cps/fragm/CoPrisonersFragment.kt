@@ -3,11 +3,13 @@ package by.zenkevich_churun.findcell.result.ui.cps.fragm
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
+import androidx.appcompat.app.AlertDialog
 import by.zenkevich_churun.findcell.core.ui.common.SviazenFragment
 import by.zenkevich_churun.findcell.core.util.android.AndroidUtil
 import by.zenkevich_churun.findcell.core.util.android.TabsAndPagerListener
 import by.zenkevich_churun.findcell.result.R
 import by.zenkevich_churun.findcell.result.databinding.CoprisonersFragmBinding
+import by.zenkevich_churun.findcell.result.ui.cps.model.RefreshState
 import by.zenkevich_churun.findcell.result.ui.cps.vm.CoPrisonersViewModel
 
 
@@ -23,7 +25,7 @@ class CoPrisonersFragment: SviazenFragment<CoprisonersFragmBinding>() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         initFields()
         setupTabs()
-        setupSwipeRefresh()
+        setupRefresh()
         setupReturnToProfile()
         vm.onViewCreated()
     }
@@ -54,13 +56,17 @@ class CoPrisonersFragment: SviazenFragment<CoprisonersFragmBinding>() {
         vb.tabs.addTab(tab)
     }
 
-    private fun setupSwipeRefresh() {
+    private fun setupRefresh() {
         val primaryColor = AndroidUtil.themeColor(requireContext(), R.attr.colorPrimary)
         val accentColor  = AndroidUtil.themeColor(requireContext(), R.attr.colorAccent)
         vb.refreshLayout.setColorSchemeColors(primaryColor, accentColor)
 
+        vm.refreshStateLD.observe(viewLifecycleOwner) { state ->
+            renderRefreshState(state)
+        }
+
         vb.refreshLayout.setOnRefreshListener {
-            // TODO
+            vm.refresh()
         }
     }
 
@@ -71,5 +77,45 @@ class CoPrisonersFragment: SviazenFragment<CoprisonersFragmBinding>() {
 
         vb.txtvProfile.setOnClickListener(clickListener)
         vb.imgvProfile.setOnClickListener(clickListener)
+    }
+
+
+
+    private fun renderRefreshState(state: RefreshState) {
+        vb.refreshLayout.isRefreshing = (state == RefreshState.REFRESHING)
+
+        when(state) {
+            RefreshState.NO_INTERNET -> {
+                notifyError(
+                    R.string.refresh_failed_title,
+                    R.string.refresh_needs_internet_msg
+                ) { vm.onRefreshStateNotified() }
+            }
+
+            RefreshState.ERROR -> {
+                notifyError(
+                    R.string.refresh_failed_title,
+                    R.string.refresh_net_error_msg
+                ) { vm.onRefreshStateNotified() }
+            }
+        }
+
+
+    }
+
+
+    private fun notifyError(
+        titleRes: Int,
+        messageRes: Int,
+        onDismiss: () -> Unit ) {
+
+        AlertDialog.Builder(requireContext())
+            .setTitle(titleRes)
+            .setMessage(messageRes)
+            .setPositiveButton(R.string.ok) { dialog, _ ->
+                dialog.dismiss()
+            }.setOnDismissListener {
+                onDismiss()
+            }.show()
     }
 }
