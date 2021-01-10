@@ -1,7 +1,7 @@
 package by.zenkevich_churun.findcell.result.ui.shared.cps
 
+import android.content.Context
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import androidx.annotation.CallSuper
@@ -13,7 +13,12 @@ import by.zenkevich_churun.findcell.result.databinding.CoprisonersPageBinding
 
 /** The two pages are similar to each other
   * so this is the common parent class for them. **/
-abstract class CoPrisonersPage: SviazenFragment<CoprisonersPageBinding>() {
+abstract class CoPrisonersPage<
+    ViewModelType: CoPrisonersPageViewModel
+>: SviazenFragment<CoprisonersPageBinding>() {
+
+    protected lateinit var vm: ViewModelType
+
 
     override fun inflateViewBinding(
         inflater: LayoutInflater
@@ -21,17 +26,38 @@ abstract class CoPrisonersPage: SviazenFragment<CoprisonersPageBinding>() {
 
     @CallSuper
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        vb.recv.adapter = CoPrisonersRecyclerAdapter()
+        vm = obtainViewModel(requireContext().applicationContext)
+
+        val optionsAdapter = provideOptionsAdapter(vm)
+        vb.recv.adapter = CoPrisonersRecyclerAdapter(vm, optionsAdapter)
+        observeData(vm.dataLD)
+        observeExpandedPosition(vm.expandedPositionLD)
     }
 
 
-    protected fun observe(cpld: LiveData< List<CoPrisoner> >) {
-        cpld.observe(viewLifecycleOwner) { cps ->
-            Log.v("CharlieDebug", "${cps.size} coprisoners arrived")
-
-            val adapter = vb.recv.adapter as? CoPrisonersRecyclerAdapter
-                ?: throw IllegalStateException("Adapter not set")
+    private fun observeData(ld: LiveData< List<CoPrisoner> >) {
+        ld.observe(viewLifecycleOwner) { cps ->
             adapter.submitData(cps)
         }
     }
+
+    private fun observeExpandedPosition(ld: LiveData<Int>) {
+        ld.observe(viewLifecycleOwner) { position ->
+            adapter.expandedPosition = position
+        }
+    }
+
+
+    private val adapter: CoPrisonersRecyclerAdapter
+        get() = vb.recv.adapter as? CoPrisonersRecyclerAdapter
+            ?: throw IllegalStateException("Adapter not set")
+
+
+    protected abstract fun obtainViewModel(
+        appContext: Context
+    ): ViewModelType
+
+    protected abstract fun provideOptionsAdapter(
+        vm: ViewModelType
+    ): CoPrisonerOptionsAdapter
 }

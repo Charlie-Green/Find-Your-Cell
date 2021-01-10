@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="coprisoner_option">
+        <item name="android:inputType"     >text</item>
+        <item name="android:paddingTop"    >4dp</item>
+        <item name="android:paddingBottom" >4dp</item>
+        <item name="android:paddingLeft"   >8dp</item>
+        <item name="android:paddingRight"  >8dp</item>
+        <item name="android:background"    >@drawable/shape_roundrect_8</item>
+        <item name="android:backgroundTint">?colorAccent</item>
+        <item name="android:singleLine"    >true</item>
+        <item name="android:ellipsize"     >end</item>
+        <item name="android:textSize"      >16sp</item>
+        <item name="android:textColor"     >#fbfbfb</item>
+        <item name="android:textStyle"     >bold</item>
+    </style>
+    
+</resources>

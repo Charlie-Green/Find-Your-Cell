@@ -1,25 +1,18 @@
 package by.zenkevich_churun.findcell.result.ui.suggest.fragm
 
-import android.os.Bundle
-import android.view.View
+import android.content.Context
+import by.zenkevich_churun.findcell.result.ui.shared.cps.CoPrisonerOptionsAdapter
 import by.zenkevich_churun.findcell.result.ui.shared.cps.CoPrisonersPage
 import by.zenkevich_churun.findcell.result.ui.suggest.vm.SuggestedCoPrisonersViewModel
 
 
-class SuggestedCoPrisonersPage: CoPrisonersPage() {
+class SuggestedCoPrisonersPage: CoPrisonersPage<SuggestedCoPrisonersViewModel>() {
 
-    private lateinit var vm: SuggestedCoPrisonersViewModel
+    override fun obtainViewModel(
+        appContext: Context
+    ) = SuggestedCoPrisonersViewModel.get(appContext, this)
 
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-        initFields()
-        observe(vm.dataLD)
-    }
-
-
-    private fun initFields() {
-        val appContext = requireContext().applicationContext
-        vm = SuggestedCoPrisonersViewModel.get(appContext, this)
-    }
+    override fun provideOptionsAdapter(
+        vm: SuggestedCoPrisonersViewModel
+    ): CoPrisonerOptionsAdapter = SuggestedCoPrisonerOptionsAdapter()
 }

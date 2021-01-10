@@ -5,4 +5,10 @@
     <dimen name="profile_button_padding_top">6dp</dimen>
     <dimen name="profile_button_margin_end">21dp</dimen>
 
+    <dimen name="coprisoner_item_padding">8dp</dimen>
+    <dimen name="coprisoner_item_height_content">56dp</dimen>
+    <dimen name="coprisoner_item_height_collapsed">72dp</dimen>
+    <dimen name="coprisoner_item_height_button">42dp</dimen>
+    <dimen name="coprisoner_item_height_expanded">114dp</dimen>
+
 </resources>

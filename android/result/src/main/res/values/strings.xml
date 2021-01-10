@@ -13,4 +13,11 @@
     <string name="refresh_net_error_msg">
         Возникла ошибка сети.
     </string>
+
+    <!-- Labels and Button Texts: -->
+    <string name="cpoption_cancel_request">Отменить запрос</string>
+    <string name="cpoption_connect"       >Соединиться!</string>
+    <string name="cpoption_disconnect"    >Разорвать соединение</string>
+    <string name="cpoption_view_contacts" >Узнать контакты</string>
+
 </resources>

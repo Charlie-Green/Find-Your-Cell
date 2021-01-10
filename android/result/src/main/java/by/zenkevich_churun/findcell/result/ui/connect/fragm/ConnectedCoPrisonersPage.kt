@@ -1,24 +1,18 @@
 package by.zenkevich_churun.findcell.result.ui.connect.fragm
 
-import android.os.Bundle
-import android.view.View
+import android.content.Context
 import by.zenkevich_churun.findcell.result.ui.connect.vm.ConnectedCoPrisonersViewModel
+import by.zenkevich_churun.findcell.result.ui.shared.cps.CoPrisonerOptionsAdapter
 import by.zenkevich_churun.findcell.result.ui.shared.cps.CoPrisonersPage
 
 
-class ConnectedCoPrisonersPage: CoPrisonersPage() {
+class ConnectedCoPrisonersPage: CoPrisonersPage<ConnectedCoPrisonersViewModel>() {
 
-    private lateinit var vm: ConnectedCoPrisonersViewModel
+    override fun obtainViewModel(
+        appContext: Context
+    ) = ConnectedCoPrisonersViewModel.get(appContext, this)
 
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-        initFields()
-        observe(vm.dataLD)
-    }
-
-    private fun initFields() {
-        val appContext = requireContext().applicationContext
-        vm = ConnectedCoPrisonersViewModel.get(appContext, this)
-    }
+    override fun provideOptionsAdapter(
+        vm: ConnectedCoPrisonersViewModel
+    ): CoPrisonerOptionsAdapter = ConnectedCoPrisonerOptionsAdapter()
 }

@@ -8,41 +8,73 @@
     app:cardElevation="6dp"
     app:cardCornerRadius="8dp" >
 
-    <GridLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+    <LinearLayout
+        android:id="@+id/vlltExpandable"
         android:orientation="vertical"
-        android:rowCount="2"
-        android:padding="8dp" >
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/coprisoner_item_height_collapsed"
+        android:padding="@dimen/coprisoner_item_padding" >
 
-        <TextView
-            android:id="@+id/txtvName"
-            android:layout_width="0dp"
-            android:layout_gravity="fill_horizontal"
-            android:singleLine="true"
-            android:ellipsize="end"
-            android:textSize="16sp"
-            android:textStyle="bold"
-            android:textColor="?colorPrimary" />
+        <GridLayout
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/coprisoner_item_height_content"
+            android:orientation="vertical"
+            android:rowCount="2" >
 
-        <TextView
-            android:id="@+id/txtvArestsCount"
-            android:layout_width="0dp"
-            android:layout_gravity="fill_horizontal"
-            android:singleLine="true"
-            android:ellipsize="end"
-            android:textSize="14sp"
-            android:textColor="?android:textColorSecondary"
-            android:text="TODO" />
+            <TextView
+                android:id="@+id/txtvName"
+                android:layout_width="0dp"
+                android:layout_gravity="fill_horizontal"
+                android:singleLine="true"
+                android:ellipsize="end"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                android:textColor="?colorPrimary" />
+
+            <TextView
+                android:id="@+id/txtvArestsCount"
+                android:layout_width="0dp"
+                android:layout_gravity="fill_horizontal"
+                android:singleLine="true"
+                android:ellipsize="end"
+                android:textSize="14sp"
+                android:textColor="?android:textColorSecondary"
+                android:text="TODO" />
 
 
-        <ImageView
-            android:id="@+id/imgvRelation"
-            android:layout_width="24dp"
-            android:layout_height="24dp"
-            android:layout_gravity="center_vertical"
-            android:layout_rowSpan="2" />
+            <ImageView
+                android:id="@+id/imgvRelation"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:layout_gravity="center_vertical"
+                android:layout_rowSpan="2" />
 
-    </GridLayout>
+        </GridLayout>
+
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/profile_button_height" >
+
+            <Button
+                android:id="@+id/bu1"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/profile_button_height"
+                android:layout_weight="1"
+                android:layout_marginEnd="6dp"
+                style="@style/coprisoner_option" />
+
+            <Button
+                android:id="@+id/bu2"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/profile_button_height"
+                android:layout_weight="1"
+                style="@style/coprisoner_option" />
+
+        </LinearLayout>
+
+    </LinearLayout>
+
 
 </androidx.cardview.widget.CardView>

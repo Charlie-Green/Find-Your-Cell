@@ -4,14 +4,15 @@ import android.content.Context
 import androidx.lifecycle.*
 import by.zenkevich_churun.findcell.entity.entity.CoPrisoner
 import by.zenkevich_churun.findcell.result.repo.cp.CoPrisonersRepository
+import by.zenkevich_churun.findcell.result.ui.shared.cps.CoPrisonersPageViewModel
 import javax.inject.Inject
 
 
 class ConnectedCoPrisonersViewModel @Inject constructor(
     private val repo: CoPrisonersRepository
-): ViewModel() {
+): CoPrisonersPageViewModel() {
 
-    val dataLD: LiveData< List<CoPrisoner> >
+    override val dataLD: LiveData< List<CoPrisoner> >
         get() = repo.connectedLD(viewModelScope)
 
 

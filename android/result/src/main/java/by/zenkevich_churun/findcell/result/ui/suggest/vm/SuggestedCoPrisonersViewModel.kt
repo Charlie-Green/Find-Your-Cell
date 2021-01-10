@@ -12,7 +12,7 @@ class SuggestedCoPrisonersViewModel @Inject constructor(
     private val repo: CoPrisonersRepository
 ): CoPrisonersPageViewModel() {
 
-    val dataLD: LiveData< List<CoPrisoner> >
+    override val dataLD: LiveData< List<CoPrisoner> >
         get() = repo.suggestedLD(viewModelScope)
 
 

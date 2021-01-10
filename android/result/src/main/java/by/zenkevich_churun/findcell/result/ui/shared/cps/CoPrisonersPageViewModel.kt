@@ -22,4 +22,7 @@ abstract class CoPrisonersPageViewModel: ViewModel() {
             if(mldExpandedPosition.value == position) -1
             else position
     }
+
+
+    abstract val dataLD: LiveData< List<CoPrisoner> >
 }
