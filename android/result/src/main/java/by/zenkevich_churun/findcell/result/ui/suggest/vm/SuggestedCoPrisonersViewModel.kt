@@ -1,6 +1,7 @@
 package by.zenkevich_churun.findcell.result.ui.suggest.vm
 
 import android.content.Context
+import android.util.Log
 import androidx.lifecycle.*
 import by.zenkevich_churun.findcell.core.injected.web.NetworkStateTracker
 import by.zenkevich_churun.findcell.core.util.ld.EmissionIgnoringMediatorLiveData
@@ -52,8 +53,20 @@ class SuggestedCoPrisonersViewModel @Inject constructor(
         connectRequestStore.submitState(ConnectRequestState.Sending)
 
         viewModelScope.launch(Dispatchers.IO) {
-            // TODO...
+            val result = repo.sendConnectRequest(cp.id)
+            applyConnectRequestResult(result)
         }
+    }
+
+
+    private fun applyConnectRequestResult(result: Boolean) {
+        Log.v("CharlieDebug", "result = $result")
+
+        val state =
+            if(result) ConnectRequestState.Success()
+            else ConnectRequestState.NetworkError()
+
+        connectRequestStore.submitState(state)
     }
 
 

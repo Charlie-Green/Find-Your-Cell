@@ -30,16 +30,15 @@ interface CoPrisonersDao: Repository<CoPrisonerEntity, CoPrisonerKey> {
         ")"
     )
     fun getCoArestIds(
-        jailId: Int,
-        cellNumber: Short,
-        periodStart: Long,
-        periodEnd: Long,
+        jailId: Int, cellNumber: Short,
+        periodStart: Long, periodEnd: Long,
         excludedArestIds: List<Int>
     ): List<Int>
 
     @Query(
         "select cp from CoPrisonerEntity cp " +
-        "where (cp.p1=:id1 and cp.p2=:id2) or (cp.p1=:id2 and cp.p2=:id1)"
+        "where (cp.key.id1=:id1 and cp.key.id2=:id2) or " +
+              "(cp.key.id1=:id2 and cp.key.id2=:id1)"
     )
     fun coPrisoner(
         id1: Int,
@@ -60,7 +59,7 @@ interface CoPrisonersDao: Repository<CoPrisonerEntity, CoPrisonerKey> {
     )
     fun countIntersections(
         prisonerId: Int,
-        start: Long, end: Long,
+        periodStart: Long, periodEnd: Long,
         jailId: Int, cellNumber: Short
     ): Int
 

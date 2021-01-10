@@ -14,5 +14,5 @@ class SuggestedCoPrisonersPage: CoPrisonersPage<SuggestedCoPrisonersViewModel>()
 
     override fun provideOptionsAdapter(
         vm: SuggestedCoPrisonersViewModel
-    ): CoPrisonerOptionsAdapter = SuggestedCoPrisonerOptionsAdapter()
+    ): CoPrisonerOptionsAdapter = SuggestedCoPrisonerOptionsAdapter(vm)
 }

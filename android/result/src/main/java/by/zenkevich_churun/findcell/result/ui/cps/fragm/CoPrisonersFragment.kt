@@ -12,7 +12,7 @@ import by.zenkevich_churun.findcell.result.R
 import by.zenkevich_churun.findcell.result.databinding.CoprisonersFragmBinding
 import by.zenkevich_churun.findcell.result.ui.cps.model.RefreshState
 import by.zenkevich_churun.findcell.result.ui.cps.vm.CoPrisonersViewModel
-import by.zenkevich_churun.findcell.result.ui.suggest.model.ConnectRequestState
+import by.zenkevich_churun.findcell.result.ui.shared.connect.ConnectRequestState
 
 
 class CoPrisonersFragment: SviazenFragment<CoprisonersFragmBinding>() {

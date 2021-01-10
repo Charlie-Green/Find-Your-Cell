@@ -7,8 +7,6 @@ import by.zenkevich_churun.findcell.server.internal.entity.key.CoPrisonerKey
 import by.zenkevich_churun.findcell.server.internal.entity.table.CoPrisonerEntity
 import by.zenkevich_churun.findcell.server.internal.repo.common.SviazenRepositiory
 import org.springframework.beans.factory.annotation.Autowired
-import java.text.SimpleDateFormat
-import java.util.Calendar
 
 
 class CoPrisonersRepository: SviazenRepositiory() {
@@ -48,17 +46,12 @@ class CoPrisonersRepository: SviazenRepositiory() {
 
         for(p in periods) {
             // Check if this Period intersects with any of Prisoner #2's:
+            // TODO: Pre-fetch arest IDs.
             val intersectCount = dao.countIntersections(
                 id2,
                 p.key.start, p.key.end,
                 p.jailId, p.cellNumber
             )
-
-            // TODO: Pre-fetch arest IDs.
-            val charlieDebugDateFormat = SimpleDateFormat("dd.MM.yyyy")
-            val start = charlieDebugDateFormat.format( Calendar.getInstance().apply { timeInMillis = p.key.start }.time )
-            val end   = charlieDebugDateFormat.format( Calendar.getInstance().apply { timeInMillis = p.key.end   }.time )
-            println("$start - $end has $intersectCount intersections")
 
             if(intersectCount != 0) {
                 return true

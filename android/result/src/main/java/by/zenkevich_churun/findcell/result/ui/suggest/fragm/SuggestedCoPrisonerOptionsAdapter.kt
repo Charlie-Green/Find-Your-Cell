@@ -4,9 +4,12 @@ import android.util.Log
 import by.zenkevich_churun.findcell.entity.entity.CoPrisoner
 import by.zenkevich_churun.findcell.result.R
 import by.zenkevich_churun.findcell.result.ui.shared.cps.CoPrisonerOptionsAdapter
+import by.zenkevich_churun.findcell.result.ui.suggest.vm.SuggestedCoPrisonersViewModel
 
 
-internal class SuggestedCoPrisonerOptionsAdapter: CoPrisonerOptionsAdapter {
+internal class SuggestedCoPrisonerOptionsAdapter(
+    private val vm: SuggestedCoPrisonersViewModel
+): CoPrisonerOptionsAdapter {
     override fun label1(relation: CoPrisoner.Relation): Int {
         if(relation == CoPrisoner.Relation.OUTCOMING_REQUEST) {
             return R.string.cpoption_cancel_request
@@ -22,7 +25,7 @@ internal class SuggestedCoPrisonerOptionsAdapter: CoPrisonerOptionsAdapter {
         if(relation == CoPrisoner.Relation.OUTCOMING_REQUEST) {
             Log.v("CharlieDebug", "Cancel request. Position = $position")
         } else {
-            Log.v("CharlieDebug", "Connect. Position = $position")
+            vm.sendConnectRequest(position)
         }
     }
 }
