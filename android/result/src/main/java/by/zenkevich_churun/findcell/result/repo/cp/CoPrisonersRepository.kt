@@ -1,17 +1,25 @@
 package by.zenkevich_churun.findcell.result.repo.cp
 
 import android.content.Context
+import android.util.Log
 import androidx.lifecycle.LiveData
+import by.zenkevich_churun.findcell.core.api.cp.CoPrisonersApi
+import by.zenkevich_churun.findcell.core.common.prisoner.PrisonerStorage
 import by.zenkevich_churun.findcell.entity.entity.CoPrisoner
+import by.zenkevich_churun.findcell.result.db.CoPrisonersDatabase
+import by.zenkevich_churun.findcell.result.db.dao.CoPrisonersDao
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.CoroutineScope
+import java.io.IOException
 import javax.inject.Inject
 import javax.inject.Singleton
 
 
 @Singleton
 class CoPrisonersRepository @Inject constructor(
-    @ApplicationContext private val appContext: Context ) {
+    @ApplicationContext private val appContext: Context,
+    private val prisonerStore: PrisonerStorage,
+    private val cpApi: CoPrisonersApi ) {
 
     private var ldSuggested: LiveData< List<CoPrisoner> >? = null
     private var ldConnected: LiveData< List<CoPrisoner> >? = null
@@ -49,5 +57,33 @@ class CoPrisonersRepository @Inject constructor(
                 scope
             ).also { ldRequests = it }
         }
+    }
+
+
+    fun sendConnectRequest(coPrisonerId: Int): Boolean {
+        val prisoner = prisonerStore.prisonerLD.value ?: return false
+
+        val newRelation = try {
+            cpApi.connect(
+                prisoner.id,
+                prisoner.passwordHash,
+                coPrisonerId
+            )
+        } catch(exc: IOException) {
+            Log.w(LOGTAG, "Failed to send connect request: ${exc.javaClass.name}: ${exc.message}")
+            return false
+        }
+
+        dao.updateRelation(coPrisonerId, newRelation)
+        return true
+    }
+
+
+    private val dao: CoPrisonersDao
+        get() = CoPrisonersDatabase.get(appContext).dao
+
+
+    companion object {
+        private const val LOGTAG = "FindCell-CoPrisoner"
     }
 }

@@ -19,6 +19,10 @@ interface CoPrisonersDao {
     fun contacts(coPrisonerId: Int): List<CoPrisonerContactEntity>
 
 
+    @Query("update CoPrisoners set rel=:newRelation where id=:coPrisonerId")
+    fun updateRelation(coPrisonerId: Int, newRelation: CoPrisoner.Relation)
+
+
     @Query("delete from CPContacts")
     fun deleteContacts()
 
