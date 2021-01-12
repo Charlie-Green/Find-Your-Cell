@@ -27,9 +27,15 @@ class SynchronizationRepository: SviazenRepositiory() {
 
         validateCredentials(prisonerId, passwordHash)
 
-        val coPrisoners = suggestedCoPrisoners(prisonerId)
+        val relatedPair = relatedCoPrisoners(prisonerId)
+        val related = relatedPair.first
+        val relatedIds = relatedPair.second
+
+        val suggested = suggestedCoPrisoners(prisonerId, relatedIds)
+
+        val coPrisoners = related
             .toMutableList()
-            .apply { addAll( relatedCoPrisoners(prisonerId) ) }
+            .apply { addAll(suggested) }
 
         val jails = jailsDao.getFull()
 
@@ -38,16 +44,25 @@ class SynchronizationRepository: SviazenRepositiory() {
 
 
     /** [CoPrisoner]s with [CoPrisoner.Relation.SUGGESTED]. **/
-    private fun suggestedCoPrisoners(prisonerId: Int): List<CoPrisonerView> {
+    private fun suggestedCoPrisoners(
+        prisonerId: Int,
+        excludedPrisonerIds: Collection<Int>
+    ): List<CoPrisonerView> {
 
         // 1. Get all Periods for the specified Prisoner:
         val myPeriods = coPrisonersDao.periods(prisonerId)
 
-        // 2. Prepare the excluded arest IDs list:
+        // 2. Prepare the excluded arest IDs list.
+        //    Initially these are the current Prisoner's arest.
         val excludedArestIdsSet = hashSetOf<Int>()
         for(period in myPeriods) {
             excludedArestIdsSet.add(period.key.arestId)
         }
+
+        // 3. We also add excluded Prisoners' Arests:
+        excludedArestIdsSet.addAll(
+            coPrisonersDao.arestIdsByPrisoners(excludedPrisonerIds.toList())
+        )
         val excludedArestIds = excludedArestIdsSet.toList()
 
         // 3. Get Arest IDs to find potential CoPrisoners:
@@ -70,9 +85,14 @@ class SynchronizationRepository: SviazenRepositiory() {
     }
 
 
-    /** [CoPrisoner]s with [CoPrisoner.relation]
-      * different from [CoPrisoner.Relation.SUGGESTED]. **/
-    private fun relatedCoPrisoners(prisonerId: Int): List<CoPrisonerView> {
+    /** @return pair:
+      *         1. [CoPrisoner]s with [CoPrisoner.relation]
+      *            different from [CoPrisoner.Relation.SUGGESTED].
+      *         2. [Collection] of those [CoPrisoner]'s IDs.
+      *            Check for existence within the [Collection] is (in avegare) O(1). **/
+    private fun relatedCoPrisoners(
+        prisonerId: Int
+    ): Pair< List<CoPrisonerView>, Collection<Int> > {
 
         // 1. Get desired Relation entries:
         val relatedEntries = coPrisonersDao.coPrisonerEntries(prisonerId)
@@ -97,7 +117,7 @@ class SynchronizationRepository: SviazenRepositiory() {
             }
         }
 
-        return related
+        return Pair(related, idToEntryMap.keys)
     }
 
     private fun coPrisonerId(

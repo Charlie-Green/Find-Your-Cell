@@ -19,13 +19,17 @@ interface CoPrisonersDao: Repository<CoPrisonerEntity, CoPrisonerKey> {
     fun periods(prisonerId: Int): List<PeriodEntity>
 
 
+    @Query("select id from ArestEntity a where prisoner in :prisonerIds")
+    fun arestIdsByPrisoners(prisonerIds: List<Int>): List<Int>
+
+
     /** @return [List] of IDs of [ArestEntity]s to have at least 1 [PeriodEntity]
       *         intersecting the specified Period (by both dates and [Cell]),
       *         excluding specified IDs. **/
     @Query(
         "select distinct p.key.arestId from PeriodEntity p " +
         "where (p.jailId = :jailId) and (p.cellNumber = :cellNumber) and " +
-        "(p.key.arestId not in :excludedArestIds) and (" +           // A intersects B  <=>  either:
+        "(p.key.arestId not in :excludedArestIds) and (" +
             PERIODS_INTERSECT_CRITERIA +
         ")"
     )
@@ -86,7 +90,7 @@ interface CoPrisonersDao: Repository<CoPrisonerEntity, CoPrisonerKey> {
         /** A piece of JPQL code to check if 2 [PeriodEntity]s,
           * one named p and the other specified by 4 query parameters,
           * intersect. **/
-        private const val PERIODS_INTERSECT_CRITERIA =
+        private const val PERIODS_INTERSECT_CRITERIA =                // A intersects B  <=>  either:
             "(p.key.start between :periodStart and :periodEnd) "   +  // - A.start between B.start and B.end
             "or (p.key.end between :periodStart and :periodEnd) "  +  // - A.end   between B.start and B.end
             "or (:periodStart between p.key.start and p.key.end) " +  // - B.start between A.start and A.end
