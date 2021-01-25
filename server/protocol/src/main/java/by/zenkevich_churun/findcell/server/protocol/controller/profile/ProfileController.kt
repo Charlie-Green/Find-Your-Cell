@@ -2,7 +2,7 @@ package by.zenkevich_churun.findcell.server.protocol.controller.profile
 
 import by.zenkevich_churun.findcell.serial.prisoner.common.PrisonerDeserializer
 import by.zenkevich_churun.findcell.server.internal.repo.profile.ProfileRepository
-import by.zenkevich_churun.findcell.server.protocol.exc.IllegalServerParameterException
+import by.zenkevich_churun.findcell.server.protocol.controller.shared.ControllerUtil
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.web.bind.annotation.*
 import java.io.InputStream
@@ -24,11 +24,8 @@ class ProfileController {
             .forVersion(1)
             .deserializePrisoner(istream)
 
-        try {
+        ControllerUtil.catchingIllegalArgument {
             repo.update(prisoner)
-        } catch(exc: IllegalArgumentException) {
-            println(exc.message)
-            throw IllegalServerParameterException()
         }
 
         return ""

@@ -1,7 +1,7 @@
 package by.zenkevich_churun.findcell.server.protocol.controller.jail
 
 import by.zenkevich_churun.findcell.server.internal.repo.jail.JailsRepository
-import by.zenkevich_churun.findcell.server.protocol.exc.IllegalServerParameterException
+import by.zenkevich_churun.findcell.server.protocol.controller.shared.ControllerUtil
 import by.zenkevich_churun.findcell.server.protocol.serial.jail.abstr.JailsSerializer
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.web.bind.annotation.*
@@ -38,11 +38,8 @@ class JailsController {
 
 
     private fun serializer(version: Int): JailsSerializer {
-        try {
-            return JailsSerializer.forVersion(version)
-        } catch(exc: IllegalArgumentException) {
-            println(exc.message)
-            throw IllegalServerParameterException()
+        return ControllerUtil.catchingIllegalArgument {
+            JailsSerializer.forVersion(version)
         }
     }
 }

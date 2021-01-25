@@ -4,6 +4,7 @@ import by.zenkevich_churun.findcell.serial.util.protocol.Base64Util
 import by.zenkevich_churun.findcell.server.internal.repo.arest.ArestsRepository
 import by.zenkevich_churun.findcell.server.protocol.exc.IllegalServerParameterException
 import by.zenkevich_churun.findcell.serial.arest.serial.*
+import by.zenkevich_churun.findcell.server.protocol.controller.shared.ControllerUtil
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.web.bind.annotation.*
 import java.io.InputStream
@@ -30,12 +31,9 @@ class ArestsController {
             throw IllegalServerParameterException()
         }
 
-        val response = try{
+        val response = ControllerUtil.catchingIllegalArgument {
             val passwordHash = Base64Util.decode(passwordBase64, "add arests")
             repo.addArest(arest, prisonerId, passwordHash)
-        } catch(exc: IllegalArgumentException) {
-            println(exc.message)
-            throw IllegalServerParameterException()
         }
 
         return ArestsSerializer
@@ -51,13 +49,9 @@ class ArestsController {
         @RequestParam("pass") passwordBase64: String
     ): String {
 
-        val passwordHash = Base64Util.decode(passwordBase64)
-
-        val arests = try {
+        val arests = ControllerUtil.catchingIllegalArgument {
+            val passwordHash = Base64Util.decode(passwordBase64)
             repo.getArests(prisonerId, passwordHash)
-        } catch(exc: IllegalArgumentException) {
-            println(exc.message)
-            throw IllegalServerParameterException()
         }
 
         return ArestsSerializer
@@ -72,15 +66,12 @@ class ArestsController {
             .forVersion(1)
             .deserializeIds(input)
 
-        try {
+        ControllerUtil.catchingIllegalArgument {
             repo.deleteArests(
                 pojo.prisonerId,
                 pojo.passwordHash,
                 pojo.arestIds
             )
-        } catch(exc: IllegalArgumentException) {
-            println(exc.message)
-            throw IllegalServerParameterException()
         }
 
         return ""

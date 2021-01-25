@@ -22,8 +22,8 @@ abstract class CoPrisoner {
     abstract val relation: CoPrisoner.Relation
 
 
-    /** Possible reasons why the server would let the current user
-      * see information about this user. **/
+    /** Possible reasons why the server would let or not let
+      * the current user see information about this user. **/
     enum class Relation {
 
         /** According to the data from both users,
