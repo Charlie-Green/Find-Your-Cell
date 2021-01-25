@@ -10,6 +10,7 @@ import by.zenkevich_churun.findcell.result.ui.suggest.vm.SuggestedCoPrisonersVie
 internal class SuggestedCoPrisonerOptionsAdapter(
     private val vm: SuggestedCoPrisonersViewModel
 ): CoPrisonerOptionsAdapter {
+
     override fun label1(relation: CoPrisoner.Relation): Int {
         if(relation == CoPrisoner.Relation.OUTCOMING_REQUEST) {
             return R.string.cpoption_cancel_request

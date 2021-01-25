@@ -122,9 +122,11 @@ class CoPrisonersRecyclerAdapter(
             }
         }
 
-    fun submitData(data: List<CoPrisoner>) {
+    fun submitData(data: List<CoPrisoner>, updateEntirely: Boolean) {
         cps = data
-        notifyDataSetChanged()
+        if(updateEntirely) {
+            notifyDataSetChanged()
+        }
     }
 
 

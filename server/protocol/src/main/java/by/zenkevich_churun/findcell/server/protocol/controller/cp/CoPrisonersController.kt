@@ -1,5 +1,6 @@
 package by.zenkevich_churun.findcell.server.protocol.controller.cp
 
+import by.zenkevich_churun.findcell.entity.entity.CoPrisoner
 import by.zenkevich_churun.findcell.serial.util.protocol.Base64Util
 import by.zenkevich_churun.findcell.server.internal.repo.cp.CoPrisonersRepository
 import by.zenkevich_churun.findcell.server.protocol.controller.shared.ControllerUtil
@@ -21,20 +22,13 @@ class CoPrisonersController {
         @RequestParam("id1") prisonerId: Int,
         @RequestParam("pass") passwordBase64: String,
         @RequestParam("id2") coPrisonerId: Int
-    ): String {
 
-        val relation = ControllerUtil.catchingIllegalArgument {
-            val passwordHash = Base64Util.decode(passwordBase64)
-
-            repo.connect(
-                prisonerId,
-                passwordHash,
-                coPrisonerId
-            )
-        }
-
-        return relation.ordinal.toString()
-    }
+    ): String = changeRelation(
+        prisonerId,
+        passwordBase64,
+        coPrisonerId,
+        repo::connect
+    )
 
 
     @PostMapping("cp/remove")
@@ -43,8 +37,31 @@ class CoPrisonersController {
         @RequestParam("id1") prisonerId: Int,
         @RequestParam("pass") passwordBase64: String,
         @RequestParam("id2") coPrisonerId: Int
+
+    ): String = changeRelation(
+        prisonerId,
+        passwordBase64,
+        coPrisonerId,
+        repo::disconnect
+    )
+
+
+    private inline fun changeRelation(
+        prisonerId: Int,
+        passwordBase64: String,
+        coPrisonerId: Int,
+        repositoryMethod: (
+            prisonerId: Int,
+            passwordHash: ByteArray,
+            coPrisonerId: Int
+        ) -> CoPrisoner.Relation
     ): String {
 
-        TODO()
+        val newRelation = ControllerUtil.catchingIllegalArgument {
+            val passwordHash = Base64Util.decode(passwordBase64)
+            repositoryMethod(prisonerId, passwordHash, coPrisonerId)
+        }
+
+        return newRelation.ordinal.toString()
     }
 }

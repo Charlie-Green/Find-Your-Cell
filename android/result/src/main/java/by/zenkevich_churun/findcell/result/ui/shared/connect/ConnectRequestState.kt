@@ -8,7 +8,9 @@ sealed class ConnectRequestState {
         var notified = false
     }
 
-    class Success: ConnectRequestState() {
+    class Success(
+        val updatedPosition: Int
+    ): ConnectRequestState() {
         var notified = false
     }
 }

@@ -60,8 +60,9 @@ class CoPrisonersRepository @Inject constructor(
     }
 
 
-    fun sendConnectRequest(coPrisonerId: Int): Boolean {
-        val prisoner = prisonerStore.prisonerLD.value ?: return false
+    /** @return the new [CoPrisoner.Relation], or null if network request failed. **/
+    fun sendConnectRequest(coPrisonerId: Int): CoPrisoner.Relation? {
+        val prisoner = prisonerStore.prisonerLD.value ?: return null
 
         val newRelation = try {
             cpApi.connect(
@@ -71,11 +72,11 @@ class CoPrisonersRepository @Inject constructor(
             )
         } catch(exc: IOException) {
             Log.w(LOGTAG, "Failed to send connect request: ${exc.javaClass.name}: ${exc.message}")
-            return false
+            return null
         }
 
         dao.updateRelation(coPrisonerId, newRelation)
-        return true
+        return newRelation
     }
 
 

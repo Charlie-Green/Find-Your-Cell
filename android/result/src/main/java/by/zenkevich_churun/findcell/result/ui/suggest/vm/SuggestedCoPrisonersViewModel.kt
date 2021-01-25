@@ -1,10 +1,8 @@
 package by.zenkevich_churun.findcell.result.ui.suggest.vm
 
 import android.content.Context
-import android.util.Log
 import androidx.lifecycle.*
 import by.zenkevich_churun.findcell.core.injected.web.NetworkStateTracker
-import by.zenkevich_churun.findcell.core.util.ld.EmissionIgnoringMediatorLiveData
 import by.zenkevich_churun.findcell.entity.entity.CoPrisoner
 import by.zenkevich_churun.findcell.result.repo.cp.CoPrisonersRepository
 import by.zenkevich_churun.findcell.result.ui.shared.connect.ConnectRequestLiveDataStorage
@@ -21,19 +19,12 @@ class SuggestedCoPrisonersViewModel @Inject constructor(
     private val connectRequestStore: ConnectRequestLiveDataStorage
 ): CoPrisonersPageViewModel() {
 
-    private val mldData by lazy {
-        dataLiveData()
-    }
-
-
-    override val dataLD: LiveData< List<CoPrisoner> >
-        get() = mldData.apply {
-            // Ensure the latest value after a configuration change:
-            setIgnoredValue()
-        }
-
     val connectRequestStateLD: LiveData<ConnectRequestState>
         get() = connectRequestStore.stateLD
+
+
+    override val dataSource: LiveData<List<CoPrisoner>>
+        get() = repo.suggestedLD(viewModelScope)
 
 
     fun sendConnectRequest(position: Int) {
@@ -44,39 +35,41 @@ class SuggestedCoPrisonersViewModel @Inject constructor(
             return
         }
 
-        // If the request is successful, the database will change
-        // and a new value will be emitted. But we want to ignore this emission
-        // in order not to update the entire list,
-        // 'cause we know exactly which item will change.
-        mldData.ignoreNext = true
+        // Do not update the entire list on next emission.
+        // UI will be given position of the specific item to update.
+        updateDataEntirely = false
 
         connectRequestStore.submitState(ConnectRequestState.Sending)
 
         viewModelScope.launch(Dispatchers.IO) {
             val result = repo.sendConnectRequest(cp.id)
-            applyConnectRequestResult(result)
+            applyConnectRequestResult(cp.id, result)
         }
     }
 
 
-    private fun applyConnectRequestResult(result: Boolean) {
-        Log.v("CharlieDebug", "result = $result")
+    private fun applyConnectRequestResult(
+        coPrisonerId: Int,
+        newRelation: CoPrisoner.Relation? ) {
+
+        if(newRelation == null) {
+            connectRequestStore.submitState(ConnectRequestState.NetworkError())
+            return
+        }
+
+        val position = mldData.value?.first?.indexOfFirst { cp ->
+            cp.id == coPrisonerId
+        } ?: -1
 
         val state =
-            if(result) ConnectRequestState.Success()
+            if(position >= 0) ConnectRequestState.Success(position)
             else ConnectRequestState.NetworkError()
-
         connectRequestStore.submitState(state)
     }
 
 
-    private fun dataLiveData(): EmissionIgnoringMediatorLiveData< List<CoPrisoner> > {
-        val source = repo.suggestedLD(viewModelScope)
-        return EmissionIgnoringMediatorLiveData(source)
-    }
-
     private fun coPrisonerAt(position: Int): CoPrisoner? {
-        val list = mldData.value ?: return null
+        val list = mldData.value?.first ?: return null
         if(position !in list.indices) {
             return null
         }

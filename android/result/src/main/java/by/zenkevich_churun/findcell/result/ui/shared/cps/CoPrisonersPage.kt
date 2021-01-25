@@ -17,6 +17,9 @@ abstract class CoPrisonersPage<
     ViewModelType: CoPrisonersPageViewModel
 >: SviazenFragment<CoprisonersPageBinding>() {
 
+    private var positionNextUpdated = -1
+    private var wasDataUpdated = false
+
     protected lateinit var vm: ViewModelType
 
 
@@ -35,20 +38,47 @@ abstract class CoPrisonersPage<
     }
 
 
-    private fun observeData(ld: LiveData< List<CoPrisoner> >) {
-        ld.observe(viewLifecycleOwner) { cps ->
-            adapter.submitData(cps)
+    /** Call this method when a partial update of [CoPrisoner]s list
+      * is going on and the specific position of item to update gets known. **/
+    protected fun notifyCoPrisonerChanged(position: Int) {
+        positionNextUpdated = position
+        optionallyUpdateCoPrisoner()
+    }
+
+
+    private fun observeData(ld: LiveData< Pair<List<CoPrisoner>, Boolean> >) {
+        ld.observe(viewLifecycleOwner) { pair ->
+            recyclerAdapter.submitData(pair.first, pair.second)
+            if(!pair.second) {
+                wasDataUpdated = true
+                optionallyUpdateCoPrisoner()
+            }
         }
     }
 
     private fun observeExpandedPosition(ld: LiveData<Int>) {
         ld.observe(viewLifecycleOwner) { position ->
-            adapter.expandedPosition = position
+            recyclerAdapter.expandedPosition = position
         }
     }
 
 
-    private val adapter: CoPrisonersRecyclerAdapter
+    private fun optionallyUpdateCoPrisoner() {
+        if(!wasDataUpdated || positionNextUpdated < 0) {
+            return
+        }
+
+        // Update only when both the data is fresh
+        // and the position to update is known:
+        recyclerAdapter.notifyItemChanged(positionNextUpdated)
+
+        // Reset to correctly handle next partial updates:
+        positionNextUpdated = -1
+        wasDataUpdated = false
+    }
+
+
+    protected val recyclerAdapter: CoPrisonersRecyclerAdapter
         get() = vb.recv.adapter as? CoPrisonersRecyclerAdapter
             ?: throw IllegalStateException("Adapter not set")
 

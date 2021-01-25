@@ -27,16 +27,45 @@ class CoPrisonersRepository: SviazenRepositiory() {
         // Check if these users are already related:
         val record = dao.coPrisoner(prisonerId, coPrisonerId)
         if(record != null) {
-            return connect(prisonerId, coPrisonerId, record.relation)
+            return connect(
+                prisonerId,
+                coPrisonerId,
+                record.relation,
+                prisonerId == record.key.id1
+            )
         }
 
         // Check if the users are suggested to each other:
         if(areUsersSuggested(prisonerId, coPrisonerId)) {
-            return connect(prisonerId, coPrisonerId, CoPrisoner.Relation.SUGGESTED)
+            return connect(
+                prisonerId,
+                coPrisonerId,
+                CoPrisoner.Relation.SUGGESTED,
+                true  // Because prisonerId is passed as the first parameter.
+            )
         }
 
-        throw IllegalArgumentException(
-            "Prisoners $prisonerId and $coPrisonerId are not related nor suggested" )
+        throwNotCoprisoners(prisonerId, coPrisonerId)
+    }
+
+    /** @return the new [CoPrisoner.Relation] between the 2 [Prisoner]s. **/
+    fun disconnect(
+        prisonerId: Int,
+        passwordHash: ByteArray,
+        coPrisonerId: Int
+    ): CoPrisoner.Relation {
+
+        validateCredentials(prisonerId, passwordHash)
+
+        // If the users were partly or fully connected,
+        // break one side of the connection:
+        val record = dao.coPrisoner(prisonerId, coPrisonerId)
+        if(record != null) {
+            val firstBreaks = (prisonerId == record.key.id1)
+            return disconnect(record, firstBreaks)
+        }
+
+        throwNotCoprisoners(prisonerId, coPrisonerId)
     }
 
 
@@ -61,17 +90,22 @@ class CoPrisonersRepository: SviazenRepositiory() {
         return false
     }
 
+
+    /** @param firstConnects whether the user willing to connect is the first one. **/
     private fun connect(
         id1: Int,
         id2: Int,
-        currentRelation: CoPrisoner.Relation
+        currentRelation: CoPrisoner.Relation,
+        firstConnects: Boolean
     ): CoPrisoner.Relation {
 
-        val newRelation = when(currentRelation) {
-            CoPrisoner.Relation.SUGGESTED         -> CoPrisoner.Relation.OUTCOMING_REQUEST
-            CoPrisoner.Relation.INCOMING_REQUEST  -> CoPrisoner.Relation.CONNECTED
-            else                                  -> currentRelation
+        val relationCode = RelationCode.encode(currentRelation)
+        if(firstConnects) {
+            relationCode.set1()
+        } else {
+            relationCode.set2()
         }
+        val newRelation = relationCode.decode()
 
         val entity = CoPrisonerEntity()
         entity.key = CoPrisonerKey()
@@ -83,4 +117,30 @@ class CoPrisonersRepository: SviazenRepositiory() {
 
         return newRelation
     }
+
+    /** @param firstBreaks whether [record.id1] is the ID
+      * of the user who is breaking the connection. **/
+    private fun disconnect(
+        record: CoPrisonerEntity,
+        firstBreaks: Boolean
+    ): CoPrisoner.Relation {
+
+        val relationCode = RelationCode.encode(record.relation)
+        if(firstBreaks) {
+            relationCode.unset1()
+        } else {
+            relationCode.unset2()
+        }
+        record.relation = relationCode.decode()
+
+        dao.save(record)
+
+        return record.relation
+    }
+
+
+    private fun throwNotCoprisoners(
+        id1: Int,
+        id2: Int
+    ): Nothing = throw IllegalArgumentException("Prisoners $id1 and $id2 are not co-prisoners")
 }
