@@ -2,7 +2,6 @@ package by.zenkevich_churun.findcell.result.ui.suggest.fragm
 
 import android.content.Context
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import by.zenkevich_churun.findcell.result.ui.shared.connect.ConnectRequestState
 import by.zenkevich_churun.findcell.result.ui.shared.cps.CoPrisonerOptionsAdapter

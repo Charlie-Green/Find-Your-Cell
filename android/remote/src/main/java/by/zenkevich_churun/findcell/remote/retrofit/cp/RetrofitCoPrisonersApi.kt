@@ -5,6 +5,8 @@ import by.zenkevich_churun.findcell.entity.entity.CoPrisoner
 import by.zenkevich_churun.findcell.remote.retrofit.common.RetrofitApisUtil
 import by.zenkevich_churun.findcell.remote.retrofit.common.RetrofitHolder
 import by.zenkevich_churun.findcell.serial.util.protocol.Base64Util
+import okhttp3.ResponseBody
+import retrofit2.Response
 import javax.inject.Inject
 
 
@@ -25,8 +27,23 @@ class RetrofitCoPrisonersApi @Inject constructor(
             .execute()
         RetrofitApisUtil.assertResponseCode(response.code())
 
-        val ordinal = response.body()!!.string().toInt()
-        return CoPrisoner.Relation.values()[ordinal]
+        return relationFromResponse(response)
+    }
+
+    override fun disconnect(
+        prisonerId: Int,
+        passwordHash: ByteArray,
+        coPrisonerId: Int
+    ): CoPrisoner.Relation {
+
+        val passwordBase64 = Base64Util.encode(passwordHash)
+
+        val response = createService()
+            .disconnect(1, prisonerId, passwordBase64, coPrisonerId)
+            .execute()
+        RetrofitApisUtil.assertResponseCode(response.code())
+
+        return relationFromResponse(response)
     }
 
 
@@ -34,5 +51,12 @@ class RetrofitCoPrisonersApi @Inject constructor(
         return retrofitHolder
             .retrofit
             .create(CoPrisonersService::class.java)
+    }
+
+    private fun relationFromResponse(
+        response: Response<ResponseBody>
+    ): CoPrisoner.Relation {
+        val ordinal = response.body()!!.string().toInt()
+        return CoPrisoner.Relation.values()[ordinal]
     }
 }

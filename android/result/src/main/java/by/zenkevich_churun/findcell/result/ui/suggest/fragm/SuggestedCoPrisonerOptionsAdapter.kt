@@ -1,6 +1,5 @@
 package by.zenkevich_churun.findcell.result.ui.suggest.fragm
 
-import android.util.Log
 import by.zenkevich_churun.findcell.entity.entity.CoPrisoner
 import by.zenkevich_churun.findcell.result.R
 import by.zenkevich_churun.findcell.result.ui.shared.cps.CoPrisonerOptionsAdapter
@@ -24,7 +23,7 @@ internal class SuggestedCoPrisonerOptionsAdapter(
 
     override fun onSelected1(relation: CoPrisoner.Relation, position: Int) {
         if(relation == CoPrisoner.Relation.OUTCOMING_REQUEST) {
-            Log.v("CharlieDebug", "Cancel request. Position = $position")
+            vm.cancelConnectRequest(position)
         } else {
             vm.sendConnectRequest(position)
         }

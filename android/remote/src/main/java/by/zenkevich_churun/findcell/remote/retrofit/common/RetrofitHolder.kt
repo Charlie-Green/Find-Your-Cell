@@ -66,6 +66,6 @@ class RetrofitHolder @Inject constructor(
 
         /** IP of the developer's machine within his testing environment.
           * Should be removed when the app is released to production!!! **/
-        private const val IP = "192.168.43.29"
+        private const val IP = "192.168.1.166"
     }
 }

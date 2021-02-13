@@ -14,4 +14,12 @@ interface CoPrisonersApi {
         passwordHash: ByteArray,
         coPrisonerId: Int
     ): CoPrisoner.Relation
+
+    /** Opposite to [connect].
+      * @return same as [connect]. **/
+    fun disconnect(
+        prisonerId: Int,
+        passwordHash: ByteArray,
+        coPrisonerId: Int
+    ): CoPrisoner.Relation
 }

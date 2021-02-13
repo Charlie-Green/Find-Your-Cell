@@ -1,6 +1,7 @@
 package by.zenkevich_churun.findcell.result.ui.suggest.vm
 
 import android.content.Context
+import android.util.Log
 import androidx.lifecycle.*
 import by.zenkevich_churun.findcell.core.injected.web.NetworkStateTracker
 import by.zenkevich_churun.findcell.entity.entity.CoPrisoner
@@ -28,6 +29,24 @@ class SuggestedCoPrisonersViewModel @Inject constructor(
 
 
     fun sendConnectRequest(position: Int) {
+        sendRequest(position) { cpId ->
+            val result = repo.sendConnectRequest(cpId)
+            applyConnectRequestResult(cpId, result)
+        }
+    }
+
+    fun cancelConnectRequest(position: Int) {
+        sendRequest(position) { cpId ->
+            val result = repo.cancelConnectRequest(cpId)
+            applyConnectRequestResult(cpId, result)
+        }
+    }
+
+
+    private fun sendRequest(
+        position: Int,
+        asyncPart: (cpId: Int) -> Unit ) {
+
         val cp = coPrisonerAt(position) ?: return
         if(connectRequestStateLD.value is ConnectRequestState.Sending ||
             !netTracker.isInternetAvailable ) {
@@ -42,15 +61,15 @@ class SuggestedCoPrisonersViewModel @Inject constructor(
         connectRequestStore.submitState(ConnectRequestState.Sending)
 
         viewModelScope.launch(Dispatchers.IO) {
-            val result = repo.sendConnectRequest(cp.id)
-            applyConnectRequestResult(cp.id, result)
+            asyncPart(cp.id)
         }
     }
-
 
     private fun applyConnectRequestResult(
         coPrisonerId: Int,
         newRelation: CoPrisoner.Relation? ) {
+
+        Log.v("CharlieDebug", "newRelation = ${newRelation?.javaClass?.simpleName}")
 
         if(newRelation == null) {
             connectRequestStore.submitState(ConnectRequestState.NetworkError())
