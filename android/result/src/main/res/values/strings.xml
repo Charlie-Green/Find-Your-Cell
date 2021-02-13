@@ -20,4 +20,7 @@
     <string name="cpoption_disconnect"    >Разорвать соединение</string>
     <string name="cpoption_view_contacts" >Узнать контакты</string>
 
+    <!-- Other: -->
+    <string name="cp_common_cell">Могли встретиться в %s, %d</string>
+
 </resources>

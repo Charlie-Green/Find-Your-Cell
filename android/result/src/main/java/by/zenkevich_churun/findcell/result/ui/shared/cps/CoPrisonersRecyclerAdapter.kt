@@ -39,6 +39,13 @@ class CoPrisonersRecyclerAdapter(
             vb.imgvRelation.setImageResource(iconRes)
             setupButtons(cp.relation)
 
+            val context = vb.txtvInfo.context
+            vb.txtvInfo.text = context.getString(
+                R.string.cp_common_cell,
+                cp.commonJailName,
+                cp.commonCellNumber
+            )
+
             setExpanded(expanded, false)
         }
 

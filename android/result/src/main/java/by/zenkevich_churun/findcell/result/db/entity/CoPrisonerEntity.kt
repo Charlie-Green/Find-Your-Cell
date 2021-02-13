@@ -18,7 +18,13 @@ class CoPrisonerEntity(
     val info: String,
 
     @ColumnInfo(name = "rel")
-    val relation: CoPrisoner.Relation ) {
+    val relation: CoPrisoner.Relation,
+
+    @ColumnInfo(name = "jail")
+    val commonJailName: String,
+
+    @ColumnInfo(name = "cell")
+    val commonCellNumber: Short ) {
 
 
     companion object {
@@ -28,7 +34,9 @@ class CoPrisonerEntity(
                 coPrisoner.id,
                 coPrisoner.name,
                 coPrisoner.info,
-                coPrisoner.relation
+                coPrisoner.relation,
+                coPrisoner.commonJailName,
+                coPrisoner.commonCellNumber
             )
         }
     }

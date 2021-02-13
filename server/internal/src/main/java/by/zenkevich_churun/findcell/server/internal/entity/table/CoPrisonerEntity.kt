@@ -15,6 +15,12 @@ class CoPrisonerEntity {
     @Column(name = "rel")
     var relationOrdinal: Short = -1
 
+    @Column(name = "jail")
+    var commonJailId: Int = 0
+
+    @Column(name = "cell")
+    var commonCellNumber: Short = 0
+
 
     var relation: CoPrisoner.Relation
         get() { return CoPrisoner.Relation.values()[relationOrdinal.toInt()] }

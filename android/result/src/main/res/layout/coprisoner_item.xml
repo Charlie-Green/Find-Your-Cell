@@ -32,14 +32,13 @@
                 android:textColor="?colorPrimary" />
 
             <TextView
-                android:id="@+id/txtvArestsCount"
+                android:id="@+id/txtvInfo"
                 android:layout_width="0dp"
                 android:layout_gravity="fill_horizontal"
                 android:singleLine="true"
-                android:ellipsize="end"
+                android:ellipsize="start"
                 android:textSize="14sp"
-                android:textColor="?android:textColorSecondary"
-                android:text="TODO" />
+                android:textColor="?android:textColorSecondary" />
 
 
             <ImageView

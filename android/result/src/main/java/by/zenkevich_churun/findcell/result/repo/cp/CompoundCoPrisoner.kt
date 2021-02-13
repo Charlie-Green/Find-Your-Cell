@@ -21,4 +21,10 @@ internal class CompoundCoPrisoner(
 
     override val relation: Relation
         get() = cp.relation
+
+    override val commonJailName: String
+        get() = cp.commonJailName
+
+    override val commonCellNumber: Short
+        get() = cp.commonCellNumber
 }

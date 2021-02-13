@@ -53,7 +53,7 @@ class SynchronizationRepository: SviazenRepositiory() {
         val myPeriods = coPrisonersDao.periods(prisonerId)
 
         // 2. Prepare the excluded arest IDs list.
-        //    Initially these are the current Prisoner's arest.
+        //    Initially these are the current Prisoner's arests.
         val excludedArestIdsSet = hashSetOf<Int>()
         for(period in myPeriods) {
             excludedArestIdsSet.add(period.key.arestId)
@@ -66,9 +66,12 @@ class SynchronizationRepository: SviazenRepositiory() {
         val excludedArestIds = excludedArestIdsSet.toList()
 
         // 3. Get Arest IDs to find potential CoPrisoners:
-        val othersArestIds = hashSetOf<Int>()
+        val coPrisoners = hashMapOf<Int, CoPrisonerView>()
         for(period in myPeriods) {
-            val ids = coPrisonersDao.getCoArestIds(
+
+            val jailName = jailsDao.nameOf(period.jailId)
+
+            val arestIds = coPrisonersDao.getCoArestIds(
                 period.jailId,
                 period.cellNumber,
                 period.key.start,
@@ -76,12 +79,27 @@ class SynchronizationRepository: SviazenRepositiory() {
                 excludedArestIds
             )
 
-            othersArestIds.addAll(ids)
+            val prisonerViews = coPrisonersDao.prisonerViewsByArests(arestIds)
+
+            for(view in prisonerViews) {
+                if(coPrisoners.containsKey(view.id)) {
+                    continue
+                }
+
+                val cp = CoPrisonerView(
+                    view,
+                    CoPrisoner.Relation.SUGGESTED,
+                    jailName,
+                    period.cellNumber
+                )
+
+                coPrisoners[cp.id] = cp
+            }
         }
 
-        return coPrisonersDao
-            .coPrisonersByArests(othersArestIds.toList())
-            .map { scp -> scp.toCoPrisonerView() }
+        return coPrisoners.map {
+            entry -> entry.value
+        }
     }
 
 
@@ -107,7 +125,12 @@ class SynchronizationRepository: SviazenRepositiory() {
         val relatedPrisonerViews = coPrisonersDao.prisonerViews(relatedIds)
         val related = relatedPrisonerViews.map { p ->
             val entry = idToEntryMap[p.id]!!
-            CoPrisonerView(p, entry.relation)
+            CoPrisonerView(
+                p,
+                entry.relation,
+                jailsDao.nameOf(entry.commonJailId),
+                entry.commonCellNumber
+            )
         }
 
         // 4. Safety: Hide contacts for non-connected CoPrisoners.

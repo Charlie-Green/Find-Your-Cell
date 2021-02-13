@@ -3,6 +3,7 @@ package by.zenkevich_churun.findcell.server.internal.repo.cp
 import by.zenkevich_churun.findcell.entity.entity.CoPrisoner
 import by.zenkevich_churun.findcell.entity.entity.Prisoner
 import by.zenkevich_churun.findcell.server.internal.dao.cp.CoPrisonersDao
+import by.zenkevich_churun.findcell.server.internal.entity.key.CellKey
 import by.zenkevich_churun.findcell.server.internal.entity.key.CoPrisonerKey
 import by.zenkevich_churun.findcell.server.internal.entity.table.CoPrisonerEntity
 import by.zenkevich_churun.findcell.server.internal.repo.common.SviazenRepositiory
@@ -25,23 +26,30 @@ class CoPrisonersRepository: SviazenRepositiory() {
         validateCredentials(prisonerId, passwordHash)
 
         // Check if these users are already related:
-        val record = dao.coPrisoner(prisonerId, coPrisonerId)
+        var record = dao.coPrisoner(prisonerId, coPrisonerId)
         if(record != null) {
             return connect(
                 prisonerId,
                 coPrisonerId,
-                record.relation,
-                prisonerId == record.key.id1
+                record
             )
         }
 
         // Check if the users are suggested to each other:
-        if(areUsersSuggested(prisonerId, coPrisonerId)) {
+        val interceptCell = areUsersSuggested(prisonerId, coPrisonerId)
+        if(interceptCell != null) {
+            record = CoPrisonerEntity()
+            record.key = CoPrisonerKey()
+            record.key.id1 = prisonerId
+            record.key.id2 = coPrisonerId
+            record.commonJailId = interceptCell.jailId
+            record.commonCellNumber = interceptCell.cellNumber
+            record.relation = CoPrisoner.Relation.SUGGESTED
+
             return connect(
                 prisonerId,
                 coPrisonerId,
-                CoPrisoner.Relation.SUGGESTED,
-                true  // Because prisonerId is passed as the first parameter.
+                record
             )
         }
 
@@ -69,7 +77,9 @@ class CoPrisonersRepository: SviazenRepositiory() {
     }
 
 
-    private fun areUsersSuggested(id1: Int, id2: Int): Boolean {
+    /** @return [CellKey] containing [Jail] ID and [Cell] number
+      * of the [Prisoner]s' common cell, if there is one, or null. **/
+    private fun areUsersSuggested(id1: Int, id2: Int): CellKey? {
         // Select all Periods for Prisoner #1.
         val periods = dao.periods(id1)
 
@@ -83,11 +93,14 @@ class CoPrisonersRepository: SviazenRepositiory() {
             )
 
             if(intersectCount != 0) {
-                return true
+                val result = CellKey()
+                result.jailId = p.jailId
+                result.cellNumber = p.cellNumber
+                return result
             }
         }
 
-        return false
+        return null
     }
 
 
@@ -95,27 +108,20 @@ class CoPrisonersRepository: SviazenRepositiory() {
     private fun connect(
         id1: Int,
         id2: Int,
-        currentRelation: CoPrisoner.Relation,
-        firstConnects: Boolean
+        record: CoPrisonerEntity
     ): CoPrisoner.Relation {
 
-        val relationCode = RelationCode.encode(currentRelation)
-        if(firstConnects) {
+        val relationCode = RelationCode.encode(record.relation)
+        if(id1 == record.key.id1) {
             relationCode.set1()
         } else {
             relationCode.set2()
         }
-        val newRelation = relationCode.decode()
 
-        val entity = CoPrisonerEntity()
-        entity.key = CoPrisonerKey()
-        entity.key.id1 = id1
-        entity.key.id2 = id2
-        entity.relation = newRelation
+        record.relation = relationCode.decode()
+        dao.save(record)
 
-        dao.save(entity)
-
-        return newRelation
+        return record.relation
     }
 
     /** @param firstBreaks whether [record.id1] is the ID

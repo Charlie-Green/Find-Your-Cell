@@ -11,7 +11,8 @@ abstract class CoPrisoner {
     /** The value of [Prisoner.name] for the non-current user. **/
     abstract val name: String
 
-    /** The value of [Prisoner.info] for the non-current user. **/
+    /** The value of [Prisoner.info] for the non-current user,
+      * or an empty [List] if [relation] is not [Relation.CONNECTED]. **/
     abstract val info: String
 
     /** The value of [Prisoner.contacts] for the non-current user,
@@ -20,6 +21,15 @@ abstract class CoPrisoner {
 
     /** [Relation] between the two users. **/
     abstract val relation: CoPrisoner.Relation
+
+    /** Name of the [Jail] [commonCellNumber] belongs to. **/
+    abstract val commonJailName: String
+
+    /** Number of the [Cell] the [Prisoner]s were both imprisoned into at a same day.
+      * When any of the [Prisoner]s sends connect request to the other one,
+      * this [Cell] is persisted even if one of the [Prisoner]s changes
+      * their [Arest]s schedule. **/
+    abstract val commonCellNumber: Short
 
 
     /** Possible reasons why the server would let or not let

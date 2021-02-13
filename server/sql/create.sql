@@ -29,6 +29,8 @@ create table `PrisonersRelations` (
   `p1` int not null,
   `p2` int not null,
   `rel` smallint not null,
+  `jail` int not null,
+  `cell` smallint not null,
 
   primary key(`p1`, `p2`)
 );
@@ -80,18 +82,21 @@ create table `ScheduleCellEntries` (
 );
 
 
-alter table `PrisonersRelations` add foreign key (`p1`) references `Prisoners` (`id`);
+alter table `PrisonersRelations` add foreign key (`p1`)            references `Prisoners` (`id`);
+alter table `PrisonersRelations` add foreign key (`p2`)            references `Prisoners` (`id`);
+alter table `PrisonersRelations` add foreign key (`jail`, `cell`)  references `Cells` (`jail`, `number`);
 
-alter table `PrisonersRelations` add foreign key (`p2`) references `Prisoners` (`id`);
+alter table `Contacts`           add foreign key (`prisoner`)      references `Prisoners` (`id`);
 
-alter table `Contacts` add foreign key (`prisoner`) references `Prisoners` (`id`);
+alter table `Arests`             add foreign key (`prisoner`)      references `Prisoners` (`id`);
 
-alter table `Arests` add foreign key (`prisoner`) references `Prisoners` (`id`);
+alter table `Cells`              add foreign key (`jail`)          references `Jails` (`id`);
 
-alter table `Cells` add foreign key (`jail`) references `Jails` (`id`);
-
-alter table `ScheduleCellEntries` add foreign key (`arest`) references `Arests` (`id`);
-
+alter table `ScheduleCellEntries` add foreign key (`arest`)        references `Arests` (`id`);
 alter table `ScheduleCellEntries` add foreign key (`jail`, `cell`) references `Cells` (`jail`, `number`);
 
-alter table `Periods` add foreign key (`arest`, `jail`, `cell`) references `ScheduleCellEntries` (`arest`, `jail`, `cell`);
+alter table `Periods` add foreign key (
+    `arest`,
+    `jail`,
+    `cell`
+) references `ScheduleCellEntries` (`arest`, `jail`, `cell`);

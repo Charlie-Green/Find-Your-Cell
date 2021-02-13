@@ -6,7 +6,9 @@ import by.zenkevich_churun.findcell.entity.entity.Contact
 
 class CoPrisonerView(
     val prisonerView: PrisonerView,
-    override val relation: Relation
+    override val relation: Relation,
+    override val commonJailName: String,
+    override val commonCellNumber: Short
 ): CoPrisoner() {
 
     override val id: Int

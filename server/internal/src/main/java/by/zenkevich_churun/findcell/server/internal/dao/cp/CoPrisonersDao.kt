@@ -22,6 +22,13 @@ interface CoPrisonersDao: Repository<CoPrisonerEntity, CoPrisonerKey> {
     @Query("select id from ArestEntity a where prisoner in :prisonerIds")
     fun arestIdsByPrisoners(prisonerIds: List<Int>): List<Int>
 
+    @Query(
+        "select p from PrisonerView p where id in(" +
+            "select a.prisonerId from ArestEntity a where a.id in :arestIds" +
+        ")"
+    )
+    fun prisonerViewsByArests(arestIds: List<Int>): List<PrisonerView>
+
 
     /** @return [List] of IDs of [ArestEntity]s to have at least 1 [PeriodEntity]
       *         intersecting the specified Period (by both dates and [Cell]),
@@ -70,14 +77,6 @@ interface CoPrisonersDao: Repository<CoPrisonerEntity, CoPrisonerKey> {
 
     @Query("select c from CoPrisonerEntity c where p1=:prisonerId or p2=:prisonerId")
     fun coPrisonerEntries(prisonerId: Int): List<CoPrisonerEntity>
-
-
-    @Query(
-        "select p from SuggestedCoPrisonerView p where id in (" +
-            "select a.prisonerId from ArestEntity a where a.id in :arestIds" +
-        ")"
-    )
-    fun coPrisonersByArests(arestIds: List<Int>): List<SuggestedCoPrisonerView>
 
     @Query("select p from PrisonerView p where p.id in :prisonerIds")
     fun prisonerViews(prisonerIds: List<Int>): List<PrisonerView>
