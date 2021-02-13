@@ -3,6 +3,7 @@ package by.zenkevich_churun.findcell.result.ui.suggest.fragm
 import android.content.Context
 import android.os.Bundle
 import android.view.View
+import by.zenkevich_churun.findcell.result.R
 import by.zenkevich_churun.findcell.result.ui.shared.connect.ConnectRequestState
 import by.zenkevich_churun.findcell.result.ui.shared.cps.CoPrisonerOptionsAdapter
 import by.zenkevich_churun.findcell.result.ui.shared.cps.CoPrisonersPage
@@ -19,6 +20,9 @@ class SuggestedCoPrisonersPage: CoPrisonersPage<SuggestedCoPrisonersViewModel>()
         }
     }
 
+
+    override val emptyLabelRes: Int
+        get() = R.string.cp_suggested_empty
 
     override fun obtainViewModel(
         appContext: Context

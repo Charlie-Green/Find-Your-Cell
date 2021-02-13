@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import androidx.annotation.CallSuper
+import androidx.core.view.isVisible
 import androidx.lifecycle.LiveData
 import by.zenkevich_churun.findcell.core.ui.common.SviazenFragment
 import by.zenkevich_churun.findcell.entity.entity.CoPrisoner
@@ -35,6 +36,8 @@ abstract class CoPrisonersPage<
         vb.recv.adapter = CoPrisonersRecyclerAdapter(vm, optionsAdapter)
         observeData(vm.dataLD)
         observeExpandedPosition(vm.expandedPositionLD)
+
+        vb.txtvEmpty.setText(emptyLabelRes)
     }
 
 
@@ -49,6 +52,8 @@ abstract class CoPrisonersPage<
     private fun observeData(ld: LiveData< Pair<List<CoPrisoner>, Boolean> >) {
         ld.observe(viewLifecycleOwner) { pair ->
             recyclerAdapter.submitData(pair.first, pair.second)
+            vb.txtvEmpty.isVisible = pair.first.isEmpty()
+
             if(!pair.second) {
                 wasDataUpdated = true
                 optionallyUpdateCoPrisoner()
@@ -78,10 +83,12 @@ abstract class CoPrisonersPage<
     }
 
 
-    protected val recyclerAdapter: CoPrisonersRecyclerAdapter
+    private val recyclerAdapter: CoPrisonersRecyclerAdapter
         get() = vb.recv.adapter as? CoPrisonersRecyclerAdapter
             ?: throw IllegalStateException("Adapter not set")
 
+
+    protected abstract val emptyLabelRes: Int
 
     protected abstract fun obtainViewModel(
         appContext: Context

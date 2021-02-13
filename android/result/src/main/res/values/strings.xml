@@ -22,5 +22,11 @@
 
     <!-- Other: -->
     <string name="cp_common_cell">Могли встретиться в %s, %d</string>
+    <string name="cp_suggested_empty">
+        Список потенциальных сокамерников пуст. Пока что. :)
+    </string>
+    <string name="cp_connected_empty">
+        Вы пока не соединились ни с кем из сокамерников.
+    </string>
 
 </resources>
