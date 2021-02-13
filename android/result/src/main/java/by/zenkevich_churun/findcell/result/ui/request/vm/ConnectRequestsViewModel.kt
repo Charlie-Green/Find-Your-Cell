@@ -1,4 +1,4 @@
-package by.zenkevich_churun.findcell.result.ui.suggest.vm
+package by.zenkevich_churun.findcell.result.ui.request.vm
 
 import android.content.Context
 import androidx.lifecycle.*
@@ -10,22 +10,21 @@ import by.zenkevich_churun.findcell.result.ui.shared.cps.CoPrisonersPageViewMode
 import javax.inject.Inject
 
 
-class SuggestedCoPrisonersViewModel @Inject constructor(
+class ConnectRequestsViewModel @Inject constructor(
     repo: CoPrisonersRepository,
-    netTracker: NetworkStateTracker,
-    connectRequestStore: ConnectRequestLiveDataStorage
+    connectRequestStore: ConnectRequestLiveDataStorage,
+    netTracker: NetworkStateTracker
 ): CoPrisonersPageViewModel(repo, connectRequestStore, netTracker) {
 
-
     override val dataSource: LiveData<List<CoPrisoner>>
-        get() = repo.suggestedLD(viewModelScope)
+        get() = repo.requestsLD(viewModelScope)
 
 
-    fun sendConnectRequest(position: Int) {
+    fun confirmRequest(position: Int) {
         connect(position)
     }
 
-    fun cancelConnectRequest(position: Int) {
+    fun declineRequest(position: Int) {
         disconnect(position)
     }
 
@@ -35,11 +34,11 @@ class SuggestedCoPrisonersViewModel @Inject constructor(
         fun get(
             appContext: Context,
             storeOwner: ViewModelStoreOwner
-        ): SuggestedCoPrisonersViewModel {
+        ): ConnectRequestsViewModel {
 
-            val fact = SuggestedCoPrisonersVMFactory.get(appContext)
+            val fact = ConnectRequestsVMFactory.get(appContext)
             val provider = ViewModelProvider(storeOwner, fact)
-            return provider.get(SuggestedCoPrisonersViewModel::class.java)
+            return provider.get(ConnectRequestsViewModel::class.java)
         }
     }
 }

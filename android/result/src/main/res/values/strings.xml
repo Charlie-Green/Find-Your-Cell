@@ -18,6 +18,8 @@
     <string name="cpoption_cancel_request">Отменить запрос</string>
     <string name="cpoption_connect"       >Соединиться!</string>
     <string name="cpoption_disconnect"    >Разорвать соединение</string>
+    <string name="cpoption_confirm"       >Принять</string>
+    <string name="cpoption_decline"       >Отклонить</string>
     <string name="cpoption_view_contacts" >Узнать контакты</string>
 
     <!-- Other: -->
@@ -27,6 +29,9 @@
     </string>
     <string name="cp_connected_empty">
         Вы пока не соединились ни с кем из сокамерников.
+    </string>
+    <string name="cp_requests_empty">
+        Запросов нет.
     </string>
 
 </resources>

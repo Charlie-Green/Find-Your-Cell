@@ -25,10 +25,13 @@ internal sealed class CoPrisonersMediatorLiveData(
         allowedRelations: List<CoPrisoner.Relation>
 
     ): this(
-            appContext,
-            scope,
-            CoPrisonersDatabase.get(appContext).dao.coPrisonersLD(allowedRelations)
-        )
+        appContext,
+        scope,
+        CoPrisonersDatabase
+            .get(appContext)
+            .dao
+            .coPrisonersLD(allowedRelations)
+    )
 
 
     init {
