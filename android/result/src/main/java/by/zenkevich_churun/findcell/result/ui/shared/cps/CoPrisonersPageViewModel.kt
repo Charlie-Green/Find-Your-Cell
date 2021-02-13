@@ -60,7 +60,7 @@ abstract class CoPrisonersPageViewModel(
     // ================================================================================
     // Properties/Methods (Protected):
 
-    protected val connectRequestStateLD: LiveData<ConnectRequestState>
+    protected open val connectRequestStateLD: LiveData<ConnectRequestState>
         get() = connectRequestStore.stateLD
 
     protected fun connect(position: Int) {

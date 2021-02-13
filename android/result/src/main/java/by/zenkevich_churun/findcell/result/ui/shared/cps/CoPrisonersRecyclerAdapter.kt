@@ -10,7 +10,7 @@ import by.zenkevich_churun.findcell.result.R
 import by.zenkevich_churun.findcell.result.databinding.CoprisonerItemBinding
 
 
-class CoPrisonersRecyclerAdapter(
+internal class CoPrisonersRecyclerAdapter(
     private val vm: CoPrisonersPageViewModel,
     private val optionsAdapter: CoPrisonerOptionsAdapter
 ): RecyclerView.Adapter<CoPrisonersRecyclerAdapter.CoPrisonerViewHolder>() {

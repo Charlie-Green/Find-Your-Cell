@@ -1,22 +1,47 @@
 package by.zenkevich_churun.findcell.result.ui.request.fragm
 
-import android.content.Context
-import by.zenkevich_churun.findcell.result.R
-import by.zenkevich_churun.findcell.result.ui.request.vm.ConnectRequestsViewModel
-import by.zenkevich_churun.findcell.result.ui.shared.cps.CoPrisonerOptionsAdapter
-import by.zenkevich_churun.findcell.result.ui.shared.cps.CoPrisonersPage
+import android.os.Bundle
+import android.view.LayoutInflater
+import android.view.View
+import by.zenkevich_churun.findcell.core.ui.common.SviazenFragment
+import by.zenkevich_churun.findcell.result.databinding.ConnectRequestsFragmBinding
+import by.zenkevich_churun.findcell.result.ui.cps.model.RefreshState
 
 
-class ConnectRequestsFragment: CoPrisonersPage<ConnectRequestsViewModel>() {
+class ConnectRequestsFragment: SviazenFragment<ConnectRequestsFragmBinding>() {
 
-    override val emptyLabelRes: Int
-        get() = R.string.cp_requests_empty
+    private lateinit var page: ConnectRequestsPage
 
-    override fun obtainViewModel(
-        appContext: Context
-    ) = ConnectRequestsViewModel.get(appContext, this)
 
-    override fun provideOptionsAdapter(
-        vm: ConnectRequestsViewModel
-    ): CoPrisonerOptionsAdapter = ConnectRequestOptionsAdapter(vm)
+    override fun inflateViewBinding(
+        inflater: LayoutInflater
+    ) = ConnectRequestsFragmBinding.inflate(inflater)
+
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        findPage()
+        setupRefresh()
+    }
+
+
+    private fun findPage() {
+        page = childFragmentManager.fragments.find { fragm ->
+            fragm is ConnectRequestsPage
+        } as ConnectRequestsPage
+    }
+
+
+    private fun setupRefresh() {
+        vb.refreshLayout.setOnRefreshListener {
+            page.viewModel.refresh()
+        }
+
+        page.viewModel.refreshStateLD
+            .observe(viewLifecycleOwner, this::displayRefreshState)
+    }
+
+    private fun displayRefreshState(state: RefreshState) {
+        vb.refreshLayout.isRefreshing = (state == RefreshState.REFRESHING)
+        // TODO: Show error
+    }
 }
