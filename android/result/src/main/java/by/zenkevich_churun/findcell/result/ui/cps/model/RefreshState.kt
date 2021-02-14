@@ -3,9 +3,16 @@ package by.zenkevich_churun.findcell.result.ui.cps.model
 
 /** This state determines whether refreshing process
   * is to be displayed on UI. **/
-enum class RefreshState {
-    NOT_REFRESHING,
-    NO_INTERNET,
-    REFRESHING,
-    ERROR,
+sealed class RefreshState {
+
+    object NotRefreshing: RefreshState()
+    object InProgress: RefreshState()
+
+    class NoInternet: RefreshState() {
+        var notified = false
+    }
+
+    class NetworkError: RefreshState() {
+        var notified = false
+    }
 }

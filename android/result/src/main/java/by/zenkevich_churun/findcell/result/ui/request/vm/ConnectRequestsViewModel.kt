@@ -10,18 +10,19 @@ import by.zenkevich_churun.findcell.result.ui.cps.model.RefreshState
 import by.zenkevich_churun.findcell.result.ui.shared.connect.ConnectRequestLiveDataStorage
 import by.zenkevich_churun.findcell.result.ui.shared.cps.CoPrisonersPageViewModel
 import by.zenkevich_churun.findcell.result.ui.shared.cps.CoPrisonersRefreshVMHelper
+import by.zenkevich_churun.findcell.result.ui.shared.sync.SyncVMHelper
 import javax.inject.Inject
 
 
 class ConnectRequestsViewModel @Inject constructor(
-    syncRepo: SynchronizationRepository,
+    private val syncRepo: SynchronizationRepository,
     repo: CoPrisonersRepository,
     connectRequestStore: ConnectRequestLiveDataStorage,
     netTracker: NetworkStateTracker
 ): CoPrisonersPageViewModel(repo, connectRequestStore, netTracker) {
 
     private val mldRefreshState = MutableLiveData<RefreshState>().apply {
-        value = RefreshState.NOT_REFRESHING
+        value = RefreshState.NotRefreshing
     }
 
     private val refreshHelper
@@ -34,6 +35,12 @@ class ConnectRequestsViewModel @Inject constructor(
 
     val refreshStateLD: LiveData<RefreshState>
         get() = mldRefreshState
+
+
+    fun onViewCreated() {
+        SyncVMHelper.triggerSync(syncRepo, netTracker, viewModelScope)
+    }
+
 
     fun refresh()
         = refreshHelper.refresh(viewModelScope)

@@ -10,11 +10,15 @@
     <string name="refresh_needs_internet_msg">
         Чтобы отыскать Ваших сокамерников, подключитесь к интернету.
     </string>
+    <string name="refresh_requests_needs_internet_msg">
+        Чтобы увидеть, сколько сокамерников уже нашло вас, подключитесь к интернету.
+    </string>
     <string name="send_connect_request_failed_title">
         Не удалось отправить запрос
     </string>
 
     <!-- Labels and Button Texts: -->
+    <string name="screen_requests"        >Входящие запросы</string>
     <string name="cpoption_cancel_request">Отменить запрос</string>
     <string name="cpoption_connect"       >Соединиться!</string>
     <string name="cpoption_disconnect"    >Разорвать соединение</string>

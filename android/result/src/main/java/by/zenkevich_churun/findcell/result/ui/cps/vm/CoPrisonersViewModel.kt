@@ -11,6 +11,7 @@ import by.zenkevich_churun.findcell.result.ui.cps.model.RefreshState
 import by.zenkevich_churun.findcell.result.ui.shared.connect.ConnectRequestLiveDataStorage
 import by.zenkevich_churun.findcell.result.ui.shared.connect.ConnectRequestState
 import by.zenkevich_churun.findcell.result.ui.shared.cps.CoPrisonersRefreshVMHelper
+import by.zenkevich_churun.findcell.result.ui.shared.sync.SyncVMHelper
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -24,13 +25,11 @@ class CoPrisonersViewModel @Inject constructor(
 ): ViewModel() {
 
     private val mldRefreshState = MutableLiveData<RefreshState>().apply {
-        value = RefreshState.NOT_REFRESHING
+        value = RefreshState.NotRefreshing
     }
 
     private val refreshHelper
         = CoPrisonersRefreshVMHelper(syncRepo, mldRefreshState, netTracker)
-
-    private var syncTriggered = false
 
 
     val showSyncLD: LiveData<Boolean> by lazy {
@@ -49,26 +48,8 @@ class CoPrisonersViewModel @Inject constructor(
         = refreshHelper.refresh(viewModelScope)
 
     fun onViewCreated() {
-        if(syncTriggered) {
-            return
-        }
-        syncTriggered = true
-
-        netTracker.doOnAvailable {
-            viewModelScope.launch(Dispatchers.IO) {
-                syncRepo.sync()
-            }
-        }
+        SyncVMHelper.triggerSync(syncRepo, netTracker, viewModelScope)
     }
-
-    fun onRefreshStateNotified() {
-        if(mldRefreshState.value == RefreshState.ERROR ||
-            mldRefreshState.value == RefreshState.NO_INTERNET ) {
-
-            mldRefreshState.value = RefreshState.NOT_REFRESHING
-        }
-    }
-
 
 
     companion object {

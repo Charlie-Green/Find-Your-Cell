@@ -30,6 +30,7 @@ class CoPrisonersFragment: SviazenFragment<CoprisonersFragmBinding>() {
         setupTabs()
         setupRefresh()
         setupReturnToProfile()
+
         vm.onViewCreated()
 
         vm.showSyncLD.observe(viewLifecycleOwner) { show ->
@@ -71,10 +72,8 @@ class CoPrisonersFragment: SviazenFragment<CoprisonersFragmBinding>() {
     }
 
     private fun setupRefresh() {
-        val primaryColor = AndroidUtil.themeColor(requireContext(), R.attr.colorPrimary)
-        val accentColor  = AndroidUtil.themeColor(requireContext(), R.attr.colorAccent)
-        vb.refreshLayout.setColorSchemeColors(primaryColor, accentColor)
-
+        AndroidUtil.setRefreshThemeColors(
+            vb.refreshLayout, R.attr.colorPrimary, R.attr.colorAccent )
         vb.refreshLayout.setOnRefreshListener {
             vm.refresh()
         }
@@ -92,24 +91,36 @@ class CoPrisonersFragment: SviazenFragment<CoprisonersFragmBinding>() {
 
 
     private fun renderRefreshState(state: RefreshState) {
-        vb.refreshLayout.isRefreshing = (state == RefreshState.REFRESHING)
+        vb.refreshLayout.isRefreshing = (state is RefreshState.InProgress)
 
         when(state) {
-            RefreshState.NO_INTERNET -> {
-                showErrorDialog(
-                    R.string.refresh_failed_title,
-                    R.string.refresh_needs_internet_msg
-                ) { vm.onRefreshStateNotified() }
-            }
-
-            RefreshState.ERROR -> {
-                showErrorDialog(
-                    R.string.refresh_failed_title,
-                    R.string.network_error_msg
-                ) { vm.onRefreshStateNotified() }
-            }
+            is RefreshState.NoInternet   -> notifyNoInternet(state)
+            is RefreshState.NetworkError -> notifyNetworkError(state)
         }
     }
+
+    private fun notifyNoInternet(state: RefreshState.NoInternet) {
+        if(state.notified) {
+            return
+        }
+
+        showErrorDialog(
+            R.string.refresh_failed_title,
+            R.string.refresh_needs_internet_msg
+        ) { state.notified = true }
+    }
+
+    private fun notifyNetworkError(state: RefreshState.NetworkError) {
+        if(state.notified) {
+            return
+        }
+
+        showErrorDialog(
+            R.string.refresh_failed_title,
+            R.string.network_error_msg
+        ) { state.notified = true }
+    }
+
 
     private fun renderConnectRequestState(state: ConnectRequestState) {
         isSendingConnectRequest = (state is ConnectRequestState.Sending)

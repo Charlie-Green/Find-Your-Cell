@@ -47,6 +47,7 @@ dependencies {
     implementation Deps.libAppCompat
     implementation Deps.libMaterial
     implementation Deps.libPager
+    implementation Deps.libSwipeRefresh
 
     implementation Deps.libNavigationFragm
     implementation Deps.libDateRangePicker

@@ -10,6 +10,7 @@ import android.util.TypedValue
 import android.view.*
 import android.widget.EditText
 import androidx.lifecycle.MutableLiveData
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 
 
 object AndroidUtil {
@@ -93,5 +94,13 @@ object AndroidUtil {
         } else {
             ld.postValue(newValue)
         }
+    }
+
+
+    fun setRefreshThemeColors(refreshLayout: SwipeRefreshLayout, vararg attrs: Int) {
+        val colors = IntArray(attrs.size) { index ->
+            themeColor(refreshLayout.context, attrs[index])
+        }
+        refreshLayout.setColorSchemeColors(*colors)
     }
 }

@@ -19,16 +19,16 @@ internal class CoPrisonersRefreshVMHelper(
     private val netTracker: NetworkStateTracker ) {
 
     fun refresh(scope: CoroutineScope) {
-        if(mldRefreshState.value != RefreshState.NOT_REFRESHING) {
+        if(mldRefreshState.value is RefreshState.InProgress) {
             return
         }
 
         if(!netTracker.isInternetAvailable) {
-            mldRefreshState.postValue(RefreshState.NO_INTERNET)
+            mldRefreshState.postValue(RefreshState.NoInternet())
             return
         }
 
-        mldRefreshState.value = RefreshState.REFRESHING
+        mldRefreshState.value = RefreshState.InProgress
         scope.launch(Dispatchers.IO) {
             val response = syncRepo.forceSync()
             changeRefreshState(response)
@@ -39,9 +39,9 @@ internal class CoPrisonersRefreshVMHelper(
     private fun changeRefreshState(response: SyncResponse) {
         Log.v("CharlieDebug", "response = ${response.name}")
         val newState = when(response) {
-            SyncResponse.SUCCESS -> RefreshState.NOT_REFRESHING
-            SyncResponse.IGNORED -> RefreshState.NOT_REFRESHING
-            SyncResponse.ERROR   -> RefreshState.ERROR
+            SyncResponse.SUCCESS -> RefreshState.NotRefreshing
+            SyncResponse.IGNORED -> RefreshState.NotRefreshing
+            SyncResponse.ERROR   -> RefreshState.NetworkError()
         }
 
         mldRefreshState.postValue(newState)
