@@ -3,7 +3,6 @@ package by.zenkevich_churun.findcell.prisoner.ui.profile.fragm
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
-import androidx.appcompat.app.AlertDialog
 import androidx.core.view.isVisible
 import androidx.core.widget.addTextChangedListener
 import androidx.lifecycle.Observer
@@ -146,21 +145,13 @@ class ProfileFragment: SviazenFragment<ProfileFragmBinding>() {
     }
 
 
-    private fun notifySaveError()
-        = notifyError(R.string.error_title, R.string.save_prisoner_error_msg)
+    private fun notifySaveError() = showErrorDialog(
+        R.string.error_title,
+        R.string.save_prisoner_error_msg
+    ) {   }
 
-    private fun notifySaveNeedsInternet()
-        = notifyError(R.string.no_internet_title, R.string.save_prisoner_needs_internet_msg)
-
-
-    private fun notifyError(titleRes: Int, messageRes: Int) {
-        AlertDialog.Builder(requireContext())
-            .setTitle(titleRes)
-            .setMessage(messageRes)
-            .setPositiveButton(R.string.ok) { dialog, _ ->
-                dialog.dismiss()
-            }.setOnDismissListener {
-                vm?.notifySaveResultConsumed()
-            }.show()
-    }
+    private fun notifySaveNeedsInternet() = showErrorDialog(
+        R.string.no_internet_title,
+        R.string.save_prisoner_needs_internet_msg
+    ) {   }
 }

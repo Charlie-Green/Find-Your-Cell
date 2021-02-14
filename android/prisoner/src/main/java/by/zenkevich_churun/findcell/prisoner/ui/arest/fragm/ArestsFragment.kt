@@ -139,7 +139,7 @@ class ArestsFragment: SviazenFragment<ArestsFragmBinding>() {
                 vb.txtvError.setText(R.string.arests_need_internet_msg)
 
                 if(!state.notified) {
-                    notifyError(R.string.no_internet_title, R.string.arests_need_internet_msg) {
+                    showErrorDialog(R.string.no_internet_title, R.string.arests_need_internet_msg) {
                         state.notified = true
                     }
                 }
@@ -171,7 +171,7 @@ class ArestsFragment: SviazenFragment<ArestsFragmBinding>() {
 
             is CreateOrUpdateArestState.NoInternet -> {
                 if(!state.notified) {
-                    notifyError(R.string.no_internet_title, R.string.arests_need_internet_msg) {
+                    showErrorDialog(R.string.no_internet_title, R.string.arests_need_internet_msg) {
                         state.notified = true
                     }
                 }
@@ -214,7 +214,7 @@ class ArestsFragment: SviazenFragment<ArestsFragmBinding>() {
 
             is DeleteArestsState.NetworkError -> {
                 if(!state.notified) {
-                    notifyError(
+                    showErrorDialog(
                         R.string.delete_arests_failed_title,
                         R.string.delete_arests_failed_msg
                     ) { state.notified = true }
@@ -224,7 +224,7 @@ class ArestsFragment: SviazenFragment<ArestsFragmBinding>() {
 
             is DeleteArestsState.NoInternet -> {
                 if(!state.notified) {
-                    notifyError(
+                    showErrorDialog(
                         R.string.no_internet_title,
                         R.string.delete_arests_needs_internet
                     ) { state.notified = true }
@@ -236,7 +236,7 @@ class ArestsFragment: SviazenFragment<ArestsFragmBinding>() {
 
 
     private fun notifyListStateNetworkError(state: ArestsListState.NetworkError) {
-        notifyError(R.string.error_title, R.string.get_arests_failed_msg) {
+        showErrorDialog(R.string.error_title, R.string.get_arests_failed_msg) {
             state.notified = true
         }
     }
@@ -291,20 +291,6 @@ class ArestsFragment: SviazenFragment<ArestsFragmBinding>() {
     }
 
 
-    private fun notifyError(
-        titleRes: Int,
-        messageRes: Int,
-        onDismiss: (DialogInterface) -> Unit ) {
-
-        AlertDialog.Builder(requireContext())
-            .setTitle(titleRes)
-            .setMessage(messageRes)
-            .setPositiveButton(R.string.ok) { dialog, _ ->
-                dialog.dismiss()
-            }.setOnDismissListener(onDismiss)
-            .show()
-    }
-
     private fun notifyCreateOrUpdateError(
         operationCreate: Boolean,
         message: String,
@@ -313,14 +299,7 @@ class ArestsFragment: SviazenFragment<ArestsFragmBinding>() {
         val titleRes =
             if(operationCreate) R.string.add_arest_failed_title
             else R.string.update_arest_failed_title
-
-        AlertDialog.Builder(requireContext())
-            .setTitle(titleRes)
-            .setMessage(message)
-            .setPositiveButton(R.string.ok) { dialog, _ ->
-                dialog.dismiss()
-            }.setOnDismissListener(onDismiss)
-            .show()
+        showErrorDialog( getString(titleRes), message, onDismiss )
     }
 
 

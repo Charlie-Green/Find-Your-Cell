@@ -3,7 +3,6 @@ package by.zenkevich_churun.findcell.result.ui.cps.fragm
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
-import androidx.appcompat.app.AlertDialog
 import androidx.core.view.isVisible
 import by.zenkevich_churun.findcell.core.ui.common.SviazenFragment
 import by.zenkevich_churun.findcell.core.util.android.AndroidUtil
@@ -97,14 +96,14 @@ class CoPrisonersFragment: SviazenFragment<CoprisonersFragmBinding>() {
 
         when(state) {
             RefreshState.NO_INTERNET -> {
-                notifyError(
+                showErrorDialog(
                     R.string.refresh_failed_title,
                     R.string.refresh_needs_internet_msg
                 ) { vm.onRefreshStateNotified() }
             }
 
             RefreshState.ERROR -> {
-                notifyError(
+                showErrorDialog(
                     R.string.refresh_failed_title,
                     R.string.network_error_msg
                 ) { vm.onRefreshStateNotified() }
@@ -112,34 +111,18 @@ class CoPrisonersFragment: SviazenFragment<CoprisonersFragmBinding>() {
         }
     }
 
-
     private fun renderConnectRequestState(state: ConnectRequestState) {
         isSendingConnectRequest = (state is ConnectRequestState.Sending)
         updateProgressBarVisibility()
 
         if(state is ConnectRequestState.NetworkError && !state.notified) {
-            notifyError(
+            showErrorDialog(
                 R.string.send_connect_request_failed_title,
                 R.string.network_error_msg
             ) { state.notified = true }
         }
     }
 
-
-    private fun notifyError(
-        titleRes: Int,
-        messageRes: Int,
-        onDismiss: () -> Unit ) {
-
-        AlertDialog.Builder(requireContext())
-            .setTitle(titleRes)
-            .setMessage(messageRes)
-            .setPositiveButton(R.string.ok) { dialog, _ ->
-                dialog.dismiss()
-            }.setOnDismissListener {
-                onDismiss()
-            }.show()
-    }
 
     private fun updateProgressBarVisibility() {
         vb.prBar.isVisible = isSyncing || isSendingConnectRequest

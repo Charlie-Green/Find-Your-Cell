@@ -1,11 +1,11 @@
 package by.zenkevich_churun.findcell.prisoner.ui.sched.fragm
 
 import android.annotation.SuppressLint
+import android.content.DialogInterface
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.widget.TextView
-import androidx.appcompat.app.AlertDialog
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -222,16 +222,15 @@ class ScheduleFragment: SviazenFragment<ScheduleFragmBinding>() {
         vb.recvDays.scaleY = scale
     }
 
-    private fun notifyError(message: String, onDismiss: () -> Unit) {
-        AlertDialog.Builder(requireContext())
-            .setTitle(R.string.error_title)
-            .setMessage(message)
-            .setPositiveButton(R.string.ok) { dialog, _ ->
-                dialog.dismiss()
-            }.setOnDismissListener {
-                onDismiss()
-            }.show()
-    }
+    private fun notifyError(
+        message: String,
+        onDismiss: (DialogInterface) -> Unit
+
+    ) = showErrorDialog(
+        getString(R.string.error_title),
+        message,
+        onDismiss
+    )
 
     private fun notifyDataSetChanged() {
         cellsAdapter?.notifyDataSetChanged()
