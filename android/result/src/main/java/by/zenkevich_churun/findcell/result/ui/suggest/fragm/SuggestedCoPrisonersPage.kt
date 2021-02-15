@@ -4,7 +4,7 @@ import android.content.Context
 import android.os.Bundle
 import android.view.View
 import by.zenkevich_churun.findcell.result.R
-import by.zenkevich_churun.findcell.result.ui.shared.connect.ConnectRequestState
+import by.zenkevich_churun.findcell.result.ui.shared.cppage.model.ChangeRelationRequestState
 import by.zenkevich_churun.findcell.result.ui.shared.cps.CoPrisonerOptionsAdapter
 import by.zenkevich_churun.findcell.result.ui.shared.cps.CoPrisonersPage
 import by.zenkevich_churun.findcell.result.ui.suggest.vm.SuggestedCoPrisonersViewModel
@@ -33,8 +33,8 @@ class SuggestedCoPrisonersPage: CoPrisonersPage<SuggestedCoPrisonersViewModel>()
     ): CoPrisonerOptionsAdapter = SuggestedCoPrisonerOptionsAdapter(vm)
 
 
-    private fun consumeState(state: ConnectRequestState) {
-        if(state is ConnectRequestState.Success && !state.notified) {
+    private fun consumeState(state: ChangeRelationRequestState) {
+        if(state is ChangeRelationRequestState.Success && !state.notified) {
             state.notified = true
             notifyCoPrisonerChanged(state.updatedPosition)
         }
