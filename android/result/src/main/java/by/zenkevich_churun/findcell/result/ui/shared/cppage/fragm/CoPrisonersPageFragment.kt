@@ -4,7 +4,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import androidx.annotation.CallSuper
-import androidx.core.view.isVisible
 import androidx.lifecycle.LiveData
 import by.zenkevich_churun.findcell.core.ui.common.SviazenFragment
 import by.zenkevich_churun.findcell.entity.entity.CoPrisoner
@@ -18,8 +17,6 @@ abstract class CoPrisonersPageFragment<
     ViewModelType: CoPrisonersPageViewModel
 >: SviazenFragment<CoprisonersPageBinding>() {
 
-    private var positionNextUpdated = -1
-    private var wasDataUpdated = false
     private lateinit var pageDescriptor: CoPrisonersPageDescriptor<ViewModelType>
     protected lateinit var vm: ViewModelType
 
@@ -40,14 +37,6 @@ abstract class CoPrisonersPageFragment<
     }
 
 
-    /** Call this method when a partial update of [CoPrisoner]s list
-     * is going on and the specific position of item to update gets known. **/
-    protected fun notifyCoPrisonerChanged(position: Int) {
-        positionNextUpdated = position
-        optionallyUpdateCoPrisoner()
-    }
-
-
     private fun initFields() {
         pageDescriptor = providePageDescriptor()
         val appContext = requireContext().applicationContext
@@ -55,15 +44,9 @@ abstract class CoPrisonersPageFragment<
     }
 
 
-    private fun observeData(ld: LiveData<Pair<List<CoPrisoner>, Boolean>>) {
+    private fun observeData(ld: LiveData< Pair<List<CoPrisoner>, Int> >) {
         ld.observe(viewLifecycleOwner) { pair ->
             recyclerAdapter.submitData(pair.first, pair.second)
-            vb.txtvEmpty.isVisible = pair.first.isEmpty()
-
-            if(!pair.second) {
-                wasDataUpdated = true
-                optionallyUpdateCoPrisoner()
-            }
         }
     }
 
@@ -71,21 +54,6 @@ abstract class CoPrisonersPageFragment<
         ld.observe(viewLifecycleOwner) { position ->
             recyclerAdapter.expandedPosition = position
         }
-    }
-
-
-    private fun optionallyUpdateCoPrisoner() {
-        if(!wasDataUpdated || positionNextUpdated < 0) {
-            return
-        }
-
-        // Update only when both the data is fresh
-        // and the position to update is known:
-        recyclerAdapter.notifyItemChanged(positionNextUpdated)
-
-        // Reset to correctly handle next partial updates:
-        positionNextUpdated = -1
-        wasDataUpdated = false
     }
 
 

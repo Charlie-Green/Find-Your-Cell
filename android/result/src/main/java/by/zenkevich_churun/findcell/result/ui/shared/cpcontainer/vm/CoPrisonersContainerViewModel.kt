@@ -35,7 +35,7 @@ abstract class CoPrisonersContainerViewModel(
     val refreshStateLD: LiveData<RefreshState>
         get() = mldRefreshState
 
-    val sendChangeRelationRequestStateLD: LiveData<ChangeRelationRequestState>
+    val changeRelationStateLD: LiveData<ChangeRelationRequestState>
         get() = changeRelationStore.stateLD
 
 

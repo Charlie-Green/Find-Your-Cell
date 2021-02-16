@@ -25,7 +25,7 @@ abstract class CoPrisonersPageViewModel(
         value = -1
     }
 
-    protected var updateDataEntirely = true
+    protected var updatedPosition = -1
 
     protected val mldData by lazy {
         createLiveData()
@@ -40,12 +40,11 @@ abstract class CoPrisonersPageViewModel(
     val expandedPositionLD: LiveData<Int>
         get() = mldExpandedPosition
 
-    /** Emits a pair (C; b) where:
+    /** Emits a pair (C; p) such that:
       * - C is the list of [CoPrisoner]s to be shown to the user.
-      * - b: if it's false, it means UI shouldn't update the list entirely.
-      *   Instead, it will be provided with an exact
-      *   item position (range of positions) to update. **/
-    val dataLD: LiveData< Pair<List<CoPrisoner>, Boolean> >
+      * - p: position of specific item to update.
+      *      If negative, the entire list have to be updated. **/
+    val dataLD: LiveData< Pair<List<CoPrisoner>, Int> >
         get() = mldData
 
 
@@ -92,8 +91,8 @@ abstract class CoPrisonersPageViewModel(
         }
 
         // Do not update the entire list on next emission.
-        // UI will be given position of the specific item to update.
-        updateDataEntirely = false
+        // Update only this position instead.
+        updatedPosition = position
 
         changeRelationStore.submitState(ChangeRelationRequestState.Sending)
 
@@ -134,12 +133,12 @@ abstract class CoPrisonersPageViewModel(
     }
 
 
-    private fun createLiveData(): MediatorLiveData< Pair<List<CoPrisoner>, Boolean> > {
-        val mld = MediatorLiveData< Pair<List<CoPrisoner>, Boolean> >()
+    private fun createLiveData(): MediatorLiveData< Pair<List<CoPrisoner>, Int> > {
+        val mld = MediatorLiveData< Pair<List<CoPrisoner>, Int> >()
         mld.addSource(dataSource) { data ->
-            val resultPair = Pair(data, updateDataEntirely)
+            val resultPair = Pair(data, updatedPosition)
             AndroidUtil.setOrPost(mld, resultPair)
-            updateDataEntirely = true
+            updatedPosition = -1  // Reset this flag.
         }
 
         return mld

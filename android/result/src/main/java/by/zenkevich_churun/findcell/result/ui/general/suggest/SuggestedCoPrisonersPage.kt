@@ -28,7 +28,7 @@ private class SuggestedPageDescriptor(
         relation: CoPrisoner.Relation,
         position: Int ) {
 
-        if(relation == CoPrisoner.Relation.OUTCOMING_REQUEST) {
+        if(relation == CoPrisoner.Relation.SUGGESTED) {
             return vm.sendConnectRequest(position)
         }
         vm.cancelConnectRequest(position)

@@ -28,11 +28,7 @@ class CoPrisonersRepository: SviazenRepositiory() {
         // Check if these users are already related:
         var record = dao.coPrisoner(prisonerId, coPrisonerId)
         if(record != null) {
-            return connect(
-                prisonerId,
-                coPrisonerId,
-                record
-            )
+            return connect(prisonerId, record)
         }
 
         // Check if the users are suggested to each other:
@@ -46,11 +42,7 @@ class CoPrisonersRepository: SviazenRepositiory() {
             record.commonCellNumber = interceptCell.cellNumber
             record.relation = CoPrisoner.Relation.SUGGESTED
 
-            return connect(
-                prisonerId,
-                coPrisonerId,
-                record
-            )
+            return connect(prisonerId, record)
         }
 
         throwNotCoprisoners(prisonerId, coPrisonerId)
@@ -107,7 +99,6 @@ class CoPrisonersRepository: SviazenRepositiory() {
     /** @param firstConnects whether the user willing to connect is the first one. **/
     private fun connect(
         id1: Int,
-        id2: Int,
         record: CoPrisonerEntity
     ): CoPrisoner.Relation {
 

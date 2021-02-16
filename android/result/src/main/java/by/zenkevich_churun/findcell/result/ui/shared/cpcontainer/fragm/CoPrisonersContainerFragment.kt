@@ -46,8 +46,8 @@ abstract class CoPrisonersContainerFragment<
         vm.refreshStateLD.observe(viewLifecycleOwner) { state ->
             renderRefreshState(state)
         }
-        vm.sendChangeRelationRequestStateLD.observe(viewLifecycleOwner) { state ->
-            renderConnectRequestState(state)
+        vm.changeRelationStateLD.observe(viewLifecycleOwner) { state ->
+            renderChangeRelationState(state)
         }
     }
 
@@ -115,7 +115,7 @@ abstract class CoPrisonersContainerFragment<
     }
 
 
-    private fun renderConnectRequestState(state: ChangeRelationRequestState) {
+    private fun renderChangeRelationState(state: ChangeRelationRequestState) {
         isSendingConnectRequest = (state is ChangeRelationRequestState.Sending)
         updateProgressBarVisibility()
 

@@ -133,10 +133,13 @@ internal class CoPrisonersRecyclerAdapter<ViewModelType: CoPrisonersPageViewMode
             }
         }
 
-    fun submitData(data: List<CoPrisoner>, updateEntirely: Boolean) {
+    fun submitData(data: List<CoPrisoner>, updatedPosition: Int) {
         cps = data
-        if(updateEntirely) {
+
+        if(updatedPosition < 0) {
             notifyDataSetChanged()
+        } else {
+            notifyItemChanged(updatedPosition)
         }
     }
 
