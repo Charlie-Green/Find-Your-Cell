@@ -50,6 +50,9 @@ abstract class CoPrisoner {
           * has pending request from the current one. **/
         OUTCOMING_REQUEST,
 
+        /** This user has declined request from the other user. **/
+        REQUEST_DECLINED,
+
         /** The users have agreed to connect.
           * This is the only type of [Relation] which allows both users
           * to see each other's private information **/

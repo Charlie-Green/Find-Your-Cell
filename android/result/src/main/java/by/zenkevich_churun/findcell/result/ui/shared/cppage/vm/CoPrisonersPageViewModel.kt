@@ -1,6 +1,5 @@
 package by.zenkevich_churun.findcell.result.ui.shared.cppage.vm
 
-import android.util.Log
 import androidx.lifecycle.*
 import by.zenkevich_churun.findcell.core.injected.web.NetworkStateTracker
 import by.zenkevich_churun.findcell.core.util.android.AndroidUtil
@@ -104,8 +103,6 @@ abstract class CoPrisonersPageViewModel(
     private fun applyConnectRequestResult(
         coPrisonerId: Int,
         newRelation: CoPrisoner.Relation? ) {
-
-        Log.v("CharlieDebug", "newRelation = ${newRelation?.javaClass?.simpleName}")
 
         if(newRelation == null) {
             changeRelationStore.submitState(ChangeRelationRequestState.NetworkError())
