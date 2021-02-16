@@ -2,7 +2,6 @@ package by.zenkevich_churun.findcell.result.ui.shared.cppage.vm
 
 import androidx.lifecycle.*
 import by.zenkevich_churun.findcell.core.injected.web.NetworkStateTracker
-import by.zenkevich_churun.findcell.core.util.android.AndroidUtil
 import by.zenkevich_churun.findcell.entity.entity.CoPrisoner
 import by.zenkevich_churun.findcell.result.repo.cp.CoPrisonersRepository
 import by.zenkevich_churun.findcell.result.ui.shared.cppage.model.ChangeRelationRequestState
@@ -24,10 +23,8 @@ abstract class CoPrisonersPageViewModel(
         value = -1
     }
 
-    protected var updatedPosition = -1
-
-    protected val mldData by lazy {
-        createLiveData()
+    private val mldData by lazy {
+        CoPrisonersPageLiveData(dataSource, viewModelScope, dataComparator)
     }
 
 
@@ -51,6 +48,12 @@ abstract class CoPrisonersPageViewModel(
         mldExpandedPosition.value =
             if(mldExpandedPosition.value == position) -1
             else position
+    }
+
+    fun onStop() {
+        viewModelScope.launch(Dispatchers.Default) {
+            mldData.sort()
+        }
     }
 
 
@@ -91,7 +94,7 @@ abstract class CoPrisonersPageViewModel(
 
         // Do not update the entire list on next emission.
         // Update only this position instead.
-        updatedPosition = position
+        mldData.setUpdatedPosition(position)
 
         changeRelationStore.submitState(ChangeRelationRequestState.Sending)
 
@@ -130,17 +133,8 @@ abstract class CoPrisonersPageViewModel(
     }
 
 
-    private fun createLiveData(): MediatorLiveData< Pair<List<CoPrisoner>, Int> > {
-        val mld = MediatorLiveData< Pair<List<CoPrisoner>, Int> >()
-        mld.addSource(dataSource) { data ->
-            val resultPair = Pair(data, updatedPosition)
-            AndroidUtil.setOrPost(mld, resultPair)
-            updatedPosition = -1  // Reset this flag.
-        }
-
-        return mld
-    }
-
-
     protected abstract val dataSource: LiveData< List<CoPrisoner> >
+
+    protected open val dataComparator: Comparator<CoPrisoner>?
+        get() = null
 }

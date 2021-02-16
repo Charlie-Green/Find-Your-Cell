@@ -34,8 +34,10 @@ internal class CoPrisonersRecyclerAdapter<ViewModelType: CoPrisonersPageViewMode
 
 
         fun bind(cp: CoPrisoner, expanded: Boolean) {
-            val iconRes = CoPrisonerRelationIcons.iconResourceFor(cp.relation)
+            val isDeclinedRequest = (cp.relation == CoPrisoner.Relation.REQUEST_DECLINED)
+            vb.root.alpha = if(isDeclinedRequest) 0.6f else 1.0f
 
+            val iconRes = CoPrisonerRelationIcons.iconResourceFor(cp.relation)
             vb.txtvName.text = cp.name
             vb.imgvRelation.setImageResource(iconRes)
             setupButtons(cp.relation)
@@ -47,10 +49,10 @@ internal class CoPrisonersRecyclerAdapter<ViewModelType: CoPrisonersPageViewMode
                 cp.commonCellNumber
             )
 
-            setExpanded(expanded, false)
+            setExpanded(expanded)
         }
 
-        fun setExpanded(expanded: Boolean, animate: Boolean) {
+        fun setExpanded(expanded: Boolean) {
             val heightRes =
                 if(expanded) R.dimen.coprisoner_item_height_expanded
                 else R.dimen.coprisoner_item_height_collapsed
@@ -115,7 +117,7 @@ internal class CoPrisonersRecyclerAdapter<ViewModelType: CoPrisonersPageViewMode
         payloads: MutableList<Any> ) {
 
         if(payloads.size == 1 && payloads[0] === PAYLOAD_SET_EXPANDED) {
-            holder.setExpanded(position == positionExpanded, true)
+            holder.setExpanded(position == positionExpanded)
         } else {
             onBindViewHolder(holder, position)
         }

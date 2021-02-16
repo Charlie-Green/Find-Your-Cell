@@ -1,6 +1,5 @@
 package by.zenkevich_churun.findcell.result.ui.shared.cpcontainer.vm
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -71,7 +70,6 @@ abstract class CoPrisonersContainerViewModel(
 
 
     private fun changeRefreshState(response: SyncResponse) {
-        Log.v("CharlieDebug", "response = ${response.name}")
         val newState = when(response) {
             SyncResponse.SUCCESS -> RefreshState.NotRefreshing
             SyncResponse.IGNORED -> RefreshState.NotRefreshing

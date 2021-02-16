@@ -18,9 +18,13 @@ class IncomingRequestsViewModel @Inject constructor(
     netTracker: NetworkStateTracker,
     changeRelationStore: ChangeRelationLiveDataStorage
 ): CoPrisonersPageViewModel(cpRepo, changeRelationStore, netTracker) {
+    // ==============================================================================
 
     override val dataSource: LiveData<List<CoPrisoner>>
         get() = cpRepo.incomingRequestsLD(viewModelScope)
+
+    override val dataComparator: Comparator<CoPrisoner>?
+        get() = IncomingRequestsFirstComparator()
 
     fun confirmRequest(position: Int)
         = connect(position)
@@ -28,6 +32,27 @@ class IncomingRequestsViewModel @Inject constructor(
     fun declineRequest(position: Int)
         = disconnect(position)
 
+
+    // ==============================================================================
+
+    private class IncomingRequestsFirstComparator: Comparator<CoPrisoner> {
+
+        override fun compare(
+            p1: CoPrisoner,
+            p2: CoPrisoner
+        ): Int = priorityOf(p1.relation) - priorityOf(p2.relation)
+
+
+        private fun priorityOf(relation: CoPrisoner.Relation): Int {
+            if(relation == CoPrisoner.Relation.INCOMING_REQUEST) {
+                return -1
+            }
+            return 0
+        }
+    }
+
+
+    // ==============================================================================
 
     companion object {
 

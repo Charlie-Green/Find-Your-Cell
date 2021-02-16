@@ -21,6 +21,7 @@ internal object CoPrisonerRelationIcons {
             when(ordinal) {
                 CoPrisoner.Relation.SUGGESTED.ordinal         -> R.drawable.relation_suggested
                 CoPrisoner.Relation.INCOMING_REQUEST.ordinal  -> R.drawable.relation_in_request
+                CoPrisoner.Relation.REQUEST_DECLINED.ordinal  -> R.drawable.relation_in_request
                 CoPrisoner.Relation.OUTCOMING_REQUEST.ordinal -> R.drawable.relation_out_request
                 CoPrisoner.Relation.CONNECTED.ordinal         -> R.drawable.relation_connected
                 else -> 0

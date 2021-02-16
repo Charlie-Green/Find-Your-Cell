@@ -22,7 +22,7 @@ internal sealed class CoPrisonersMediatorLiveData(
     constructor(
         appContext: Context,
         scope: CoroutineScope,
-        allowedRelations: List<CoPrisoner.Relation>
+        allowedRelations: List<CoPrisoner.Relation>,
 
     ): this(
         appContext,
@@ -35,6 +35,7 @@ internal sealed class CoPrisonersMediatorLiveData(
 
 
     init {
+        @Suppress("LeakingThis")  // addSource is not overridden.
         addSource(source) { cps ->
             scope.launch(Dispatchers.IO) {
                 updateValue(cps)
@@ -63,7 +64,6 @@ internal sealed class CoPrisonersMediatorLiveData(
     class Suggested(
         appContext: Context,
         scope: CoroutineScope
-
     ): CoPrisonersMediatorLiveData(
         appContext,
         scope,
@@ -90,7 +90,10 @@ internal sealed class CoPrisonersMediatorLiveData(
     ): CoPrisonersMediatorLiveData(
         appContext,
         scope,
-        listOf(CoPrisoner.Relation.INCOMING_REQUEST)
+        listOf(
+            CoPrisoner.Relation.INCOMING_REQUEST,
+            CoPrisoner.Relation.REQUEST_DECLINED
+        )
     )
 
     class OutcomingRequests(

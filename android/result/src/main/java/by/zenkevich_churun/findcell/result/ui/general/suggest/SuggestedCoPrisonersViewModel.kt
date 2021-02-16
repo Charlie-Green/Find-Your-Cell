@@ -18,9 +18,13 @@ class SuggestedCoPrisonersViewModel @Inject constructor(
     netTracker: NetworkStateTracker,
     changeRelationStore: ChangeRelationLiveDataStorage
 ): CoPrisonersPageViewModel(cpRepo, changeRelationStore, netTracker) {
+    // ===============================================================================
 
     override val dataSource: LiveData< List<CoPrisoner> >
         get() = cpRepo.suggestedLD(viewModelScope)
+
+    override val dataComparator: Comparator<CoPrisoner>?
+        get() = SuggestedFirstComparator()
 
     fun sendConnectRequest(position: Int)
         = connect(position)
@@ -28,6 +32,27 @@ class SuggestedCoPrisonersViewModel @Inject constructor(
     fun cancelConnectRequest(position: Int)
         = disconnect(position)
 
+
+    // ===============================================================================
+
+    private class SuggestedFirstComparator: Comparator<CoPrisoner> {
+
+        override fun compare(
+            p1: CoPrisoner,
+            p2: CoPrisoner
+        ): Int = priorityOf(p1.relation) - priorityOf(p2.relation)
+
+
+        private fun priorityOf(relation: CoPrisoner.Relation): Int {
+            if(relation == CoPrisoner.Relation.SUGGESTED) {
+                return -1
+            }
+            return 0
+        }
+    }
+
+
+    // ===============================================================================
 
     companion object {
 
