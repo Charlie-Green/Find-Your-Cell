@@ -56,20 +56,18 @@ interface CoPrisonersDao: Repository<CoPrisonerEntity, CoPrisonerKey> {
         id2: Int
     ): CoPrisonerEntity?
 
-    /** Counts the number of [PeriodEntity]s belonging to the specified [PrisonerEntity]
+    /** Counts the number of [PeriodEntity]s from the given list of [ArestEntity] IDs
       * and intersecting with the specified [PeriodEntity]. **/
     @Query(
         "select count(p) " +
         "from PeriodEntity p " +
-        "where arest in (" +                                   // Condition #1: the right Prisoner
-            "select id from ArestEntity a " +
-            "where prisoner=:prisonerId" +
-        ") and (jail=:jailId) and (cell=:cellNumber) and (" +  // Condition #2: the Periods intersect
-            PERIODS_INTERSECT_CRITERIA +
-        ")"
+        "where (arest in :arestIds) and " +
+               "(jail=:jailId) and (cell=:cellNumber) and (" +
+                   PERIODS_INTERSECT_CRITERIA +
+               ")"
     )
     fun countIntersections(
-        prisonerId: Int,
+        arestIds: List<Int>,
         periodStart: Long, periodEnd: Long,
         jailId: Int, cellNumber: Short
     ): Int

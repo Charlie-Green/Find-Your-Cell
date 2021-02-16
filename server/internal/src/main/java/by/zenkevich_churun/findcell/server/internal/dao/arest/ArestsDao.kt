@@ -16,6 +16,9 @@ interface ArestsDao: Repository<ArestEntity, Int> {
     @Query("select a from ArestEntity a where prisoner=:prisonerId")
     fun arests(prisonerId: Int): List<ArestEntity>
 
+    @Query("select id from ArestEntity a where prisoner=:prisonerId")
+    fun arestIds(prisonerId: Int): List<Int>
+
     @Query(
         "select id from ArestEntity a " +
         "where (a.prisonerId = :prisonerId) and (" +      // A intersects B  <=>  either:

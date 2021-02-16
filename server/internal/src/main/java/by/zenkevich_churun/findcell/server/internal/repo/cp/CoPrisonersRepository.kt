@@ -2,6 +2,7 @@ package by.zenkevich_churun.findcell.server.internal.repo.cp
 
 import by.zenkevich_churun.findcell.entity.entity.CoPrisoner
 import by.zenkevich_churun.findcell.entity.entity.Prisoner
+import by.zenkevich_churun.findcell.server.internal.dao.arest.ArestsDao
 import by.zenkevich_churun.findcell.server.internal.dao.cp.CoPrisonersDao
 import by.zenkevich_churun.findcell.server.internal.entity.key.CellKey
 import by.zenkevich_churun.findcell.server.internal.entity.key.CoPrisonerKey
@@ -14,6 +15,9 @@ class CoPrisonersRepository: SviazenRepositiory() {
 
     @Autowired
     private lateinit var dao: CoPrisonersDao
+
+    @Autowired
+    private lateinit var arestsDao: ArestsDao
 
 
     /** @return the new [CoPrisoner.Relation] between the 2 [Prisoner]s. **/
@@ -32,7 +36,7 @@ class CoPrisonersRepository: SviazenRepositiory() {
         }
 
         // Check if the users are suggested to each other:
-        val interceptCell = areUsersSuggested(prisonerId, coPrisonerId)
+        val interceptCell = findCommonCell(prisonerId, coPrisonerId)
         if(interceptCell != null) {
             record = CoPrisonerEntity()
             record.key = CoPrisonerKey()
@@ -71,15 +75,17 @@ class CoPrisonersRepository: SviazenRepositiory() {
 
     /** @return [CellKey] containing [Jail] ID and [Cell] number
       * of the [Prisoner]s' common cell, if there is one, or null. **/
-    private fun areUsersSuggested(id1: Int, id2: Int): CellKey? {
-        // Select all Periods for Prisoner #1.
-        val periods = dao.periods(id1)
+    private fun findCommonCell(id1: Int, id2: Int): CellKey? {
+        // Select all Periods for Prisoner #1:
+        val myPeriods = dao.periods(id1)
 
-        for(p in periods) {
+        // Select all Arests for Prisoner #2:
+        val theirArests = arestsDao.arestIds(id2)
+
+        for(p in myPeriods) {
             // Check if this Period intersects with any of Prisoner #2's:
-            // TODO: Pre-fetch arest IDs.
             val intersectCount = dao.countIntersections(
-                id2,
+                theirArests,
                 p.key.start, p.key.end,
                 p.jailId, p.cellNumber
             )
