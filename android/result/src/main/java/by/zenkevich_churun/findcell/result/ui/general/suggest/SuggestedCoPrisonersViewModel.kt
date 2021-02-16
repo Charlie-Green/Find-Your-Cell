@@ -1,37 +1,32 @@
-package by.zenkevich_churun.findcell.result.ui.suggest.vm
+package by.zenkevich_churun.findcell.result.ui.general.suggest
 
 import android.content.Context
-import androidx.lifecycle.*
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.ViewModelStoreOwner
+import androidx.lifecycle.viewModelScope
 import by.zenkevich_churun.findcell.core.injected.web.NetworkStateTracker
 import by.zenkevich_churun.findcell.entity.entity.CoPrisoner
 import by.zenkevich_churun.findcell.result.repo.cp.CoPrisonersRepository
 import by.zenkevich_churun.findcell.result.ui.shared.cppage.vm.ChangeRelationLiveDataStorage
-import by.zenkevich_churun.findcell.result.ui.shared.cppage.model.ChangeRelationRequestState
 import by.zenkevich_churun.findcell.result.ui.shared.cppage.vm.CoPrisonersPageViewModel
 import javax.inject.Inject
 
 
 class SuggestedCoPrisonersViewModel @Inject constructor(
-    repo: CoPrisonersRepository,
+    cpRepo: CoPrisonersRepository,
     netTracker: NetworkStateTracker,
     changeRelationStore: ChangeRelationLiveDataStorage
-): CoPrisonersPageViewModel(repo, changeRelationStore, netTracker) {
+): CoPrisonersPageViewModel(cpRepo, changeRelationStore, netTracker) {
 
-
-    override val dataSource: LiveData<List<CoPrisoner>>
+    override val dataSource: LiveData< List<CoPrisoner> >
         get() = cpRepo.suggestedLD(viewModelScope)
 
-    public val changeRelationRequestStateLD: LiveData<ChangeRelationRequestState>
-        get() = super.changeRelationRequestStateLD
+    fun sendConnectRequest(position: Int)
+        = connect(position)
 
-
-    fun sendConnectRequest(position: Int) {
-        connect(position)
-    }
-
-    fun cancelConnectRequest(position: Int) {
-        disconnect(position)
-    }
+    fun cancelConnectRequest(position: Int)
+        = disconnect(position)
 
 
     companion object {

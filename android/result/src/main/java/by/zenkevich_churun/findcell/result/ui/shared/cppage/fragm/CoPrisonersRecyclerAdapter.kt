@@ -11,19 +11,19 @@ import by.zenkevich_churun.findcell.result.databinding.CoprisonerItemBinding
 import by.zenkevich_churun.findcell.result.ui.shared.cppage.vm.CoPrisonersPageViewModel
 
 
-internal class CoPrisonersRecyclerAdapter(
-    private val vm: CoPrisonersPageViewModel,
-    private val pageDescriptor: CoPrisonersPageDescriptor<*>
-): RecyclerView.Adapter<CoPrisonersRecyclerAdapter.CoPrisonerViewHolder>() {
+internal class CoPrisonersRecyclerAdapter<ViewModelType: CoPrisonersPageViewModel>(
+    private val vm: ViewModelType,
+    private val pageDescriptor: CoPrisonersPageDescriptor<ViewModelType>
+): RecyclerView.Adapter< CoPrisonersRecyclerAdapter.CoPrisonerViewHolder<ViewModelType> >() {
 
     private var cps: List<CoPrisoner>? = null
     private var positionExpanded = -1
 
 
-    class CoPrisonerViewHolder(
-        private val vm: CoPrisonersPageViewModel,
+    class CoPrisonerViewHolder<ViewModelType: CoPrisonersPageViewModel>(
+        private val vm: ViewModelType,
         private val vb: CoprisonerItemBinding,
-        private val pageDescriptor: CoPrisonersPageDescriptor<*>
+        private val pageDescriptor: CoPrisonersPageDescriptor<ViewModelType>
     ): RecyclerView.ViewHolder(vb.root) {
 
         init {
@@ -65,7 +65,7 @@ internal class CoPrisonersRecyclerAdapter(
 
             vb.bu1.setText(label1)
             vb.bu1.setOnClickListener {
-                pageDescriptor.onSelected1(relation, adapterPosition)
+                pageDescriptor.onSelected1(vm, relation, adapterPosition)
             }
 
             if(label2 == 0) {
@@ -74,7 +74,7 @@ internal class CoPrisonersRecyclerAdapter(
             } else {
                 vb.bu2.visibility = View.VISIBLE
                 vb.bu2.setOnClickListener {
-                    pageDescriptor.onSelected2(relation, adapterPosition)
+                    pageDescriptor.onSelected2(vm, relation, adapterPosition)
                 }
             }
         }
@@ -94,20 +94,23 @@ internal class CoPrisonersRecyclerAdapter(
     override fun onCreateViewHolder(
         parent: ViewGroup,
         viewType: Int
-    ): CoPrisonerViewHolder {
+    ): CoPrisonerViewHolder<ViewModelType> {
 
         val inflater = LayoutInflater.from(parent.context)
         val vb = CoprisonerItemBinding.inflate(inflater, parent, false)
         return CoPrisonerViewHolder(vm, vb, pageDescriptor)
     }
 
-    override fun onBindViewHolder(holder: CoPrisonerViewHolder, position: Int) {
+    override fun onBindViewHolder(
+        holder: CoPrisonerViewHolder<ViewModelType>,
+        position: Int ) {
+
         val cp = cps?.get(position) ?: return
         holder.bind(cp, position == positionExpanded)
     }
 
     override fun onBindViewHolder(
-        holder: CoPrisonerViewHolder,
+        holder: CoPrisonerViewHolder<ViewModelType>,
         position: Int,
         payloads: MutableList<Any> ) {
 

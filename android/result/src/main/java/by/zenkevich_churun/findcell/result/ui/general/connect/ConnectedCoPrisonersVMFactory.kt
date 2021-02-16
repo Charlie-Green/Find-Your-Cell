@@ -1,4 +1,4 @@
-package by.zenkevich_churun.findcell.result.ui.connect.vm
+package by.zenkevich_churun.findcell.result.ui.general.connect
 
 import android.content.Context
 import androidx.lifecycle.ViewModel
@@ -15,14 +15,14 @@ internal class ConnectedCoPrisonersVMFactory(
 
     @EntryPoint
     @InstallIn(ApplicationComponent::class)
-    interface SuggestedCoPrisonersEntryPoint {
+    interface ConnectedCoPrisonersEntryPoint {
         val connectedCoPrisonersViewModel: ConnectedCoPrisonersViewModel
     }
 
 
     @Suppress("UNCHECKED_CAST")
     override fun <T: ViewModel?> create(modelClass: Class<T>): T {
-        val entryClass = SuggestedCoPrisonersEntryPoint::class.java
+        val entryClass = ConnectedCoPrisonersEntryPoint::class.java
         val accessor = EntryPointAccessors.fromApplication(appContext, entryClass)
         return accessor.connectedCoPrisonersViewModel as T
     }

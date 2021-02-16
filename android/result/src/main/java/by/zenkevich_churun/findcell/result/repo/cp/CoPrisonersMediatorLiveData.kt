@@ -83,7 +83,7 @@ internal sealed class CoPrisonersMediatorLiveData(
         listOf(CoPrisoner.Relation.CONNECTED)
     )
 
-    class Requests(
+    class IncomingRequests(
         appContext: Context,
         scope: CoroutineScope
 
@@ -91,5 +91,15 @@ internal sealed class CoPrisonersMediatorLiveData(
         appContext,
         scope,
         listOf(CoPrisoner.Relation.INCOMING_REQUEST)
+    )
+
+    class OutcomingRequests(
+        appContext: Context,
+        scope: CoroutineScope
+
+    ): CoPrisonersMediatorLiveData(
+        appContext,
+        scope,
+        listOf(CoPrisoner.Relation.OUTCOMING_REQUEST)
     )
 }

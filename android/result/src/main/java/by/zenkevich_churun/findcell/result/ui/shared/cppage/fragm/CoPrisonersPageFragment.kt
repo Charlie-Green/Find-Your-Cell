@@ -16,12 +16,11 @@ import by.zenkevich_churun.findcell.result.ui.shared.cppage.vm.CoPrisonersPageVi
   * lists of [CoPrisoner]s filtered by [CoPrisoner.Relation] **/
 abstract class CoPrisonersPageFragment<
     ViewModelType: CoPrisonersPageViewModel
-> internal constructor(
-    private val pageDescriptor: CoPrisonersPageDescriptor<ViewModelType>
-): SviazenFragment<CoprisonersPageBinding>() {
+>: SviazenFragment<CoprisonersPageBinding>() {
 
     private var positionNextUpdated = -1
     private var wasDataUpdated = false
+    private lateinit var pageDescriptor: CoPrisonersPageDescriptor<ViewModelType>
     protected lateinit var vm: ViewModelType
 
 
@@ -50,6 +49,7 @@ abstract class CoPrisonersPageFragment<
 
 
     private fun initFields() {
+        pageDescriptor = providePageDescriptor()
         val appContext = requireContext().applicationContext
         vm = pageDescriptor.getViewModel(appContext)
     }
@@ -89,7 +89,11 @@ abstract class CoPrisonersPageFragment<
     }
 
 
-    private val recyclerAdapter: CoPrisonersRecyclerAdapter
-        get() = vb.recv.adapter as? CoPrisonersRecyclerAdapter
+    private val recyclerAdapter: CoPrisonersRecyclerAdapter<ViewModelType>
+        get() = vb.recv.adapter as? CoPrisonersRecyclerAdapter<ViewModelType>
             ?: throw IllegalStateException("Adapter not set")
+
+
+    internal abstract
+    fun providePageDescriptor(): CoPrisonersPageDescriptor<ViewModelType>
 }

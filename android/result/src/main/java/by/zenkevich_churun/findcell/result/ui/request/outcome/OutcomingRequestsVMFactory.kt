@@ -1,4 +1,4 @@
-package by.zenkevich_churun.findcell.result.ui.suggest.vm
+package by.zenkevich_churun.findcell.result.ui.request.outcome
 
 import android.content.Context
 import androidx.lifecycle.ViewModel
@@ -9,31 +9,31 @@ import dagger.hilt.android.EntryPointAccessors
 import dagger.hilt.android.components.ApplicationComponent
 
 
-internal class SuggestedCoPrisonersVMFactory(
+internal class OutcomingRequestsVMFactory(
     private val appContext: Context
 ): ViewModelProvider.Factory {
 
     @EntryPoint
     @InstallIn(ApplicationComponent::class)
-    interface SuggestedCoPrisonersEntryPoint {
-        val suggestedCoPrisonersViewModel: SuggestedCoPrisonersViewModel
+    interface OutcomingRequestsEntryPoint {
+        val outcomingRequestsViewModel: OutcomingRequestsViewModel
     }
 
 
     @Suppress("UNCHECKED_CAST")
     override fun <T: ViewModel?> create(modelClass: Class<T>): T {
-        val entryClass = SuggestedCoPrisonersEntryPoint::class.java
+        val entryClass = OutcomingRequestsEntryPoint::class.java
         val accessor = EntryPointAccessors.fromApplication(appContext, entryClass)
-        return accessor.suggestedCoPrisonersViewModel as T
+        return accessor.outcomingRequestsViewModel as T
     }
 
 
     companion object {
-        private var instance: SuggestedCoPrisonersVMFactory? = null
+        private var instance: OutcomingRequestsVMFactory? = null
 
-        fun get(appContext: Context): SuggestedCoPrisonersVMFactory {
+        fun get(appContext: Context): OutcomingRequestsVMFactory {
             return instance ?: synchronized(this) {
-                instance ?: SuggestedCoPrisonersVMFactory(appContext).also {
+                instance ?: OutcomingRequestsVMFactory(appContext).also {
                     instance = it
                 }
             }

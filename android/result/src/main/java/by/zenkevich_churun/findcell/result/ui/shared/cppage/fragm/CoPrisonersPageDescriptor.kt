@@ -36,11 +36,19 @@ internal interface CoPrisonersPageDescriptor<ViewModelType: CoPrisonersPageViewM
       * @param relation the value of [CoPrisoner.relation] property
       *        for the [CoPrisoner] the options are requested for.
       * @param position adapter position of the item whose option is selected. **/
-    fun onSelected1(relation: CoPrisoner.Relation, position: Int)
+    fun onSelected1(
+        vm: ViewModelType,
+        relation: CoPrisoner.Relation,
+        position: Int
+    )
 
     /** Same as [onSelected1], but for the second button.
       * If [label2] returns 0, this method is never invoked. **/
-    fun onSelected2(relation: CoPrisoner.Relation, position: Int) {
+    fun onSelected2(
+        vm: ViewModelType,
+        relation: CoPrisoner.Relation,
+        position: Int ) {
+
         throw NotImplementedError(
             "Either label2 must return 0 or this method must be implemented."
         )

@@ -19,12 +19,11 @@ import by.zenkevich_churun.findcell.result.ui.shared.cpcontainer.vm.CoPrisonersC
   * Swipe-to-refresh is also supported. **/
 abstract class CoPrisonersContainerFragment<
     ViewModelType: CoPrisonersContainerViewModel
-> internal constructor(
-    private val containerDescriptor: CoPrisonersContainerDescriptor<ViewModelType>
-): SviazenFragment<CoprisonersContainerFragmBinding>() {
+>: SviazenFragment<CoprisonersContainerFragmBinding>() {
 
 
     private lateinit var vm: ViewModelType
+    private lateinit var containerDescriptor: CoPrisonersContainerDescriptor<ViewModelType>
     private var isSyncing = false
     private var isSendingConnectRequest = false
 
@@ -54,6 +53,7 @@ abstract class CoPrisonersContainerFragment<
 
 
     private fun initFields() {
+        containerDescriptor = provideContainerDescriptor()
         val appContext = requireContext().applicationContext
         vm = containerDescriptor.getViewModel(appContext)
     }
@@ -69,12 +69,6 @@ abstract class CoPrisonersContainerFragment<
     }
 
     private fun addTab(position: Int) {
-//        val labelRes = when(position) {
-//            CoPrisonersPagerAdapter.POSITION_SUGGESTED -> R.string.suggested_coprisoners_tabtext
-//            CoPrisonersPagerAdapter.POSITION_CONNECTED -> R.string.connected_coprisoners_tabtext
-//            else -> throw IllegalArgumentException("Unexpected tab position $position")
-//        }
-
         val tab = vb.tabs.newTab()
         tab.setText( containerDescriptor.tabLabelRes(position) )
         vb.tabs.addTab(tab)
@@ -137,4 +131,8 @@ abstract class CoPrisonersContainerFragment<
     private fun updateProgressBarVisibility() {
         vb.prBar.isVisible = isSyncing || isSendingConnectRequest
     }
+
+
+    internal abstract
+    fun provideContainerDescriptor(): CoPrisonersContainerDescriptor<ViewModelType>
 }

@@ -1,11 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="suggested_coprisoners_tabtext">Кандидаты</string>
-    <string name="connected_coprisoners_tabtext">Добавленные</string>
-    <string name="back_to_profile">Редактировать профиль</string>
 
-
-    <!-- Notifications (Refresh): -->
+    <!-- Notifications: -->
     <string name="refresh_failed_title">Обновление не удалось</string>
     <string name="refresh_needs_internet_msg">
         Чтобы отыскать Ваших сокамерников, подключитесь к интернету.
@@ -17,19 +13,29 @@
         Не удалось отправить запрос
     </string>
 
-    <!-- Labels and Button Texts: -->
-    <string name="screen_requests"        >Входящие запросы</string>
-    <string name="cpoption_cancel_request">Отменить запрос</string>
+
+    <!-- CoPrisoners Screens and Tabs: -->
+    <string name="screen_connections"           >Сокамерники</string>
+    <string name="suggested_coprisoners_tabtext">Кандидаты</string>
+    <string name="connected_coprisoners_tabtext">Добавленные</string>
+
+    <string name="screen_requests"        >Запросы на соединение</string>
+    <string name="income_requests_tabtext">Полученные</string>
+    <string name="outcome_requests_tabtext">Отправленные</string>
+
+
+    <!-- CoPrisoners Options: -->
     <string name="cpoption_connect"       >Соединиться!</string>
+    <string name="cpoption_cancel_request">Отменить запрос</string>
+    <string name="cpoption_view_contacts" >Узнать контакты</string>
     <string name="cpoption_disconnect"    >Разорвать соединение</string>
     <string name="cpoption_confirm"       >Принять</string>
     <string name="cpoption_decline"       >Отклонить</string>
-    <string name="cpoption_view_contacts" >Узнать контакты</string>
 
-    <!-- Other: -->
-    <string name="cp_common_cell">Могли встретиться в %s, %d</string>
+    <!-- Empty Labels: -->
     <string name="cp_suggested_empty">
-        Список потенциальных сокамерников пуст. Пока что. :)
+        Список потенциальных сокамерников пуст.\n
+        Пока что. :)
     </string>
     <string name="cp_connected_empty">
         Вы пока не соединились ни с кем из сокамерников.
@@ -37,5 +43,9 @@
     <string name="cp_requests_empty">
         Запросов нет.
     </string>
+
+
+    <!-- Other: -->
+    <string name="cp_common_cell">Могли встретиться в %s, %d</string>
 
 </resources>

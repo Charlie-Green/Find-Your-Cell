@@ -24,7 +24,8 @@ class CoPrisonersRepository @Inject constructor(
 
     private var ldSuggested: LiveData< List<CoPrisoner> >? = null
     private var ldConnected: LiveData< List<CoPrisoner> >? = null
-    private var ldRequests:  LiveData< List<CoPrisoner> >? = null
+    private var ldIn:        LiveData< List<CoPrisoner> >? = null
+    private var ldOut:       LiveData< List<CoPrisoner> >? = null
 
 
     /** [CoPrisoner]s with [CoPrisoner.Relation.SUGGESTED]
@@ -51,12 +52,22 @@ class CoPrisonersRepository @Inject constructor(
 
 
     /** [CoPrisoner]s with [CoPrisoner.Relation.INCOMING_REQUEST]. **/
-    fun requestsLD(scope: CoroutineScope): LiveData< List<CoPrisoner> > {
-        return ldRequests ?: synchronized(this) {
-            ldRequests ?: CoPrisonersMediatorLiveData.Requests(
+    fun incomingRequestsLD(scope: CoroutineScope): LiveData< List<CoPrisoner> > {
+        return ldIn ?: synchronized(this) {
+            ldIn ?: CoPrisonersMediatorLiveData.IncomingRequests(
                 appContext,
                 scope
-            ).also { ldRequests = it }
+            ).also { ldIn = it }
+        }
+    }
+
+    /** [CoPrisoner]s with [CoPrisoner.Relation.OUTCOMING_REQUEST]. **/
+    fun outcomingRequestsLD(scope: CoroutineScope): LiveData< List<CoPrisoner> > {
+        return ldIn ?: synchronized(this) {
+            ldOut ?: CoPrisonersMediatorLiveData.OutcomingRequests(
+                appContext,
+                scope
+            ).also { ldOut = it }
         }
     }
 
