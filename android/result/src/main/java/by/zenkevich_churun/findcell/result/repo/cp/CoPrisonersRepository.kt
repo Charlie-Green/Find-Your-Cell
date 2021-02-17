@@ -22,53 +22,30 @@ class CoPrisonersRepository @Inject constructor(
     private val prisonerStore: PrisonerStorage,
     private val cpApi: CoPrisonersApi ) {
 
-    private var ldSuggested: LiveData< List<CoPrisoner> >? = null
-    private var ldConnected: LiveData< List<CoPrisoner> >? = null
-    private var ldIn:        LiveData< List<CoPrisoner> >? = null
-    private var ldOut:       LiveData< List<CoPrisoner> >? = null
-
-
     /** [CoPrisoner]s with [CoPrisoner.Relation.SUGGESTED]
       * and [CoPrisoner.Relation.OUTCOMING_REQUEST]. **/
-    fun suggestedLD(scope: CoroutineScope): LiveData< List<CoPrisoner> > {
-        return ldSuggested ?: synchronized(this) {
-            ldSuggested ?: CoPrisonersMediatorLiveData.Suggested(
-                appContext,
-                scope
-            ).also { ldSuggested = it }
-        }
+    fun suggestedLD(coroutineScope: CoroutineScope): LiveData< List<CoPrisoner> > {
+        return CoPrisonersMediatorLiveData
+            .Suggested(appContext, coroutineScope)
     }
 
 
     /** [CoPrisoner]s with [CoPrisoner.Relation.CONNECTED]. **/
-    fun connectedLD(scope: CoroutineScope): LiveData< List<CoPrisoner> > {
-        return ldConnected ?: synchronized(this) {
-            ldConnected ?: CoPrisonersMediatorLiveData.Connected(
-                appContext,
-                scope
-            ).also { ldConnected = it }
-        }
+    fun connectedLD(coroutineScope: CoroutineScope): LiveData< List<CoPrisoner> > {
+        return CoPrisonersMediatorLiveData
+            .Connected(appContext, coroutineScope)
     }
 
 
     /** [CoPrisoner]s with [CoPrisoner.Relation.INCOMING_REQUEST]. **/
-    fun incomingRequestsLD(scope: CoroutineScope): LiveData< List<CoPrisoner> > {
-        return ldIn ?: synchronized(this) {
-            ldIn ?: CoPrisonersMediatorLiveData.IncomingRequests(
-                appContext,
-                scope
-            ).also { ldIn = it }
-        }
+    fun incomingRequestsLD(coroutineScope: CoroutineScope): LiveData< List<CoPrisoner> > {
+        return CoPrisonersMediatorLiveData
+            .IncomingRequests(appContext, coroutineScope)
     }
 
     /** [CoPrisoner]s with [CoPrisoner.Relation.OUTCOMING_REQUEST]. **/
-    fun outcomingRequestsLD(scope: CoroutineScope): LiveData< List<CoPrisoner> > {
-        return ldIn ?: synchronized(this) {
-            ldOut ?: CoPrisonersMediatorLiveData.OutcomingRequests(
-                appContext,
-                scope
-            ).also { ldOut = it }
-        }
+    fun outcomingRequestsLD(coroutineScope: CoroutineScope): LiveData< List<CoPrisoner> > {
+        return CoPrisonersMediatorLiveData.OutcomingRequests(appContext, coroutineScope)
     }
 
 

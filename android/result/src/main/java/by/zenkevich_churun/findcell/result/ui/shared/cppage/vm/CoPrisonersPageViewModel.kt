@@ -5,7 +5,9 @@ import by.zenkevich_churun.findcell.core.injected.web.NetworkStateTracker
 import by.zenkevich_churun.findcell.entity.entity.CoPrisoner
 import by.zenkevich_churun.findcell.result.repo.cp.CoPrisonersRepository
 import by.zenkevich_churun.findcell.result.ui.shared.cppage.model.ChangeRelationRequestState
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 
 
@@ -24,7 +26,7 @@ abstract class CoPrisonersPageViewModel(
     }
 
     private val mldData by lazy {
-        CoPrisonersPageLiveData(dataSource, viewModelScope, dataComparator)
+        createDataMLD()
     }
 
 
@@ -133,8 +135,17 @@ abstract class CoPrisonersPageViewModel(
     }
 
 
-    protected abstract val dataSource: LiveData< List<CoPrisoner> >
+    private fun createDataMLD(): CoPrisonersPageLiveData {
+        val dataSource = getDataSource(viewModelScope)
+        return CoPrisonersPageLiveData(
+            dataSource, viewModelScope, dataComparator )
+    }
+
 
     protected open val dataComparator: Comparator<CoPrisoner>?
         get() = null
+
+    protected abstract fun getDataSource(
+        scope: CoroutineScope
+    ): LiveData< List<CoPrisoner> >
 }

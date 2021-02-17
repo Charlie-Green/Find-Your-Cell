@@ -10,6 +10,7 @@ import by.zenkevich_churun.findcell.entity.entity.CoPrisoner
 import by.zenkevich_churun.findcell.result.repo.cp.CoPrisonersRepository
 import by.zenkevich_churun.findcell.result.ui.shared.cppage.vm.ChangeRelationLiveDataStorage
 import by.zenkevich_churun.findcell.result.ui.shared.cppage.vm.CoPrisonersPageViewModel
+import kotlinx.coroutines.CoroutineScope
 import javax.inject.Inject
 
 
@@ -19,8 +20,10 @@ class ConnectedCoPrisonersViewModel @Inject constructor(
     changeRelationStore: ChangeRelationLiveDataStorage
 ): CoPrisonersPageViewModel(cpRepo, changeRelationStore, netTracker) {
 
-    override val dataSource: LiveData< List<CoPrisoner> >
-        get() = cpRepo.connectedLD(viewModelScope)
+    override fun getDataSource(
+        scope: CoroutineScope
+    ) = cpRepo.connectedLD(scope)
+
 
     fun breakConnection(position: Int)
         = disconnect(position)

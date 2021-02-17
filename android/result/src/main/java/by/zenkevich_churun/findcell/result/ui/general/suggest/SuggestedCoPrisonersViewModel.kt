@@ -10,6 +10,7 @@ import by.zenkevich_churun.findcell.entity.entity.CoPrisoner
 import by.zenkevich_churun.findcell.result.repo.cp.CoPrisonersRepository
 import by.zenkevich_churun.findcell.result.ui.shared.cppage.vm.ChangeRelationLiveDataStorage
 import by.zenkevich_churun.findcell.result.ui.shared.cppage.vm.CoPrisonersPageViewModel
+import kotlinx.coroutines.CoroutineScope
 import javax.inject.Inject
 
 
@@ -20,8 +21,9 @@ class SuggestedCoPrisonersViewModel @Inject constructor(
 ): CoPrisonersPageViewModel(cpRepo, changeRelationStore, netTracker) {
     // ===============================================================================
 
-    override val dataSource: LiveData< List<CoPrisoner> >
-        get() = cpRepo.suggestedLD(viewModelScope)
+    override fun getDataSource(
+        scope: CoroutineScope
+    ) = cpRepo.suggestedLD(viewModelScope)
 
     override val dataComparator: Comparator<CoPrisoner>?
         get() = SuggestedFirstComparator()
