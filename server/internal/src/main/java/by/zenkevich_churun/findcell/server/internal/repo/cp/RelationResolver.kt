@@ -33,6 +33,11 @@ internal class RelationResolver(private val ordinal: Short) {
         if(ordinal == CoPrisonerEntity.RELATION_ORDINAL_OUTCOMING_DECLINED) {
             return CoPrisoner.Relation.REQUEST_DECLINED
         }
+        if(ordinal.toInt() == CoPrisoner.Relation.REQUEST_DECLINED.ordinal) {
+            // The flip for this would be RELATION_ORDINAL_OUTCOMING_DECLINED,
+            // which is shown to the user as CoPrisoner.Relation.OUTCOMING_REQUEST
+            return CoPrisoner.Relation.OUTCOMING_REQUEST
+        }
 
         try {
             return CoPrisoner.Relation.values()[ordinal.toInt()]

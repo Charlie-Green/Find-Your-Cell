@@ -1,5 +1,6 @@
 package by.zenkevich_churun.findcell.result.ui.shared.cppage.fragm
 
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -34,9 +35,6 @@ internal class CoPrisonersRecyclerAdapter<ViewModelType: CoPrisonersPageViewMode
 
 
         fun bind(cp: CoPrisoner, expanded: Boolean) {
-            val isDeclinedRequest = (cp.relation == CoPrisoner.Relation.REQUEST_DECLINED)
-            vb.root.alpha = if(isDeclinedRequest) 0.6f else 1.0f
-
             val iconRes = CoPrisonerRelationIcons.iconResourceFor(cp.relation)
             vb.txtvName.text = cp.name
             vb.imgvRelation.setImageResource(iconRes)
@@ -49,15 +47,17 @@ internal class CoPrisonersRecyclerAdapter<ViewModelType: CoPrisonersPageViewMode
                 cp.commonCellNumber
             )
 
-            setExpanded(expanded)
+            setExpanded(cp, expanded)
         }
 
-        fun setExpanded(expanded: Boolean) {
+        fun setExpanded(cp: CoPrisoner, expanded: Boolean) {
             val heightRes =
                 if(expanded) R.dimen.coprisoner_item_height_expanded
                 else R.dimen.coprisoner_item_height_collapsed
             val resources = vb.root.context.resources
             setHeight( resources.getDimensionPixelSize(heightRes) )
+
+            setAlpha(cp.relation)
         }
 
 
@@ -75,17 +75,23 @@ internal class CoPrisonersRecyclerAdapter<ViewModelType: CoPrisonersPageViewMode
                 vb.bu2.setOnClickListener(null)
             } else {
                 vb.bu2.visibility = View.VISIBLE
+                vb.bu2.setText(label2)
                 vb.bu2.setOnClickListener {
                     pageDescriptor.onSelected2(vm, relation, adapterPosition)
                 }
             }
         }
 
-
         private fun setHeight(h: Int) {
             vb.vlltExpandable.updateLayoutParams {
                 height = h
             }
+        }
+
+
+        private fun setAlpha(relation: CoPrisoner.Relation) {
+            val isDeclinedRequest = (relation == CoPrisoner.Relation.REQUEST_DECLINED)
+            vb.vlltExpandable.alpha = if(isDeclinedRequest) 0.6f else 1.0f
         }
     }
 
@@ -117,7 +123,8 @@ internal class CoPrisonersRecyclerAdapter<ViewModelType: CoPrisonersPageViewMode
         payloads: MutableList<Any> ) {
 
         if(payloads.size == 1 && payloads[0] === PAYLOAD_SET_EXPANDED) {
-            holder.setExpanded(position == positionExpanded)
+            val cp = cps?.get(position) ?: return
+            holder.setExpanded(cp, position == positionExpanded)
         } else {
             onBindViewHolder(holder, position)
         }

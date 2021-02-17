@@ -16,11 +16,14 @@ private class IncomingRequestsPageDescriptor(
         get() = R.string.cp_requests_empty
 
 
-    override fun label1(relation: CoPrisoner.Relation)
-        = R.string.cpoption_confirm
+    override fun label1(relation: CoPrisoner.Relation): Int {
+        return R.string.cpoption_confirm
+    }
 
-    override fun label2(relation: CoPrisoner.Relation): Int
-        = R.string.cpoption_decline
+    override fun label2(relation: CoPrisoner.Relation): Int {
+        return if(relation == CoPrisoner.Relation.REQUEST_DECLINED) 0
+            else R.string.cpoption_decline
+    }
 
     override fun onSelected1(
         vm: IncomingRequestsViewModel,

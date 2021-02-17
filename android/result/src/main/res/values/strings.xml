@@ -28,7 +28,7 @@
     <string name="cpoption_connect"       >Соединиться!</string>
     <string name="cpoption_cancel_request">Отменить запрос</string>
     <string name="cpoption_view_contacts" >Узнать контакты</string>
-    <string name="cpoption_disconnect"    >Разорвать соединение</string>
+    <string name="cpoption_disconnect"    >Рассоединиться</string>
     <string name="cpoption_confirm"       >Принять</string>
     <string name="cpoption_decline"       >Отклонить</string>
 
