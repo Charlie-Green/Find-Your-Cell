@@ -22,19 +22,6 @@ class CoPrisonerEntity {
     var commonCellNumber: Short = 0
 
 
-    val relation: CoPrisoner.Relation
-        get() {
-            if(relationOrdinal == RELATION_ORDINAL_OUTCOMING_DECLINED) {
-                return CoPrisoner.Relation.OUTCOMING_REQUEST
-            }
-            try {
-                return CoPrisoner.Relation.values()[relationOrdinal.toInt()]
-            } catch(exc: IndexOutOfBoundsException) {
-                throw IllegalStateException("Invalid relation ordinal $relationOrdinal")
-            }
-        }
-
-
     companion object {
         /** This is to be used instead or [CoPrisoner.Relation.ordinal] to specify
           * such pair (p1; p2) that p2 has declined request from p1.

@@ -8,16 +8,20 @@ import by.zenkevich_churun.findcell.server.internal.entity.table.CoPrisonerEntit
 import by.zenkevich_churun.findcell.server.internal.entity.view.CoPrisonerView
 import by.zenkevich_churun.findcell.server.internal.entity.view.SynchronizedDataView
 import by.zenkevich_churun.findcell.server.internal.repo.common.SviazenRepositiory
+import by.zenkevich_churun.findcell.server.internal.repo.cp.RelationResolver
 import org.springframework.beans.factory.annotation.Autowired
 
 
 class SynchronizationRepository: SviazenRepositiory() {
+    // ==============================================================================
+    // Fields:
 
     @Autowired
     private lateinit var jailsDao: JailsDao
 
     @Autowired
     private lateinit var coPrisonersDao: CoPrisonersDao
+
 
 
     fun synchronizedData(
@@ -65,7 +69,7 @@ class SynchronizationRepository: SviazenRepositiory() {
         )
         val excludedArestIds = excludedArestIdsSet.toList()
 
-        // 3. Get Arest IDs to find potential CoPrisoners:
+        // 4. Get Arest IDs to find potential CoPrisoners:
         val coPrisoners = hashMapOf<Int, CoPrisonerView>()
         for(period in myPeriods) {
 
@@ -125,9 +129,11 @@ class SynchronizationRepository: SviazenRepositiory() {
         val relatedPrisonerViews = coPrisonersDao.prisonerViews(relatedIds)
         val related = relatedPrisonerViews.map { p ->
             val entry = idToEntryMap[p.id]!!
+            val isFirstCurrent = (prisonerId == entry.key.id1)
+
             CoPrisonerView(
                 p,
-                entry.relation,
+                RelationResolver(entry.relationOrdinal).resolve(isFirstCurrent),
                 jailsDao.nameOf(entry.commonJailId),
                 entry.commonCellNumber
             )

@@ -37,11 +37,6 @@ abstract class CoPrisonersPageFragment<
         vb.txtvEmpty.setText(pageDescriptor.emptyLabelRes)
     }
 
-    override fun onStop() {
-        vm.onStop()
-        super.onStop()
-    }
-
 
     private fun initFields() {
         pageDescriptor = providePageDescriptor()

@@ -1,11 +1,10 @@
 package by.zenkevich_churun.findcell.result.ui.shared.cppage.vm
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MediatorLiveData
 import by.zenkevich_churun.findcell.entity.entity.CoPrisoner
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.*
 
 
 /** Modification of [LiveData] for [CoPrisoner]s pages.
@@ -15,7 +14,7 @@ import kotlinx.coroutines.launch
   * It also supports sorting items in case the position is not known
   * (that is, the entire list is updated) **/
 class CoPrisonersPageLiveData(
-    dataSource: LiveData< List<CoPrisoner> >,
+    private val dataSource: LiveData< List<CoPrisoner> >,
     private val scope: CoroutineScope,
     private val comparator: Comparator<CoPrisoner>?
 ): MediatorLiveData< Pair<List<CoPrisoner>, Int> >() {
@@ -28,17 +27,6 @@ class CoPrisonersPageLiveData(
 
     fun setUpdatedPosition(position: Int) {
         updatedPosition = position
-    }
-
-    fun sort() {
-        val list = this.value?.first ?: return
-        val comparator = this.comparator ?: return
-        updatedPosition = -1  // Old position will be invalid after the list is sorted.
-
-        scope.launch(Dispatchers.IO) {
-            val sortedList = list.sortedWith(comparator)
-            postValue( Pair(sortedList, -1) )
-        }
     }
 
 
@@ -58,39 +46,50 @@ class CoPrisonersPageLiveData(
         val position = updatedPosition
         updatedPosition = -1
 
-        val sortedList: MutableList<CoPrisoner>
+        val resultList: MutableList<CoPrisoner>
+        val sort: Boolean
         if(position < 0) {
             // Take the new list and sort it.
-            sortedList = newList.toMutableList()
-            comparator?.also { sortedList.sortWith(it) }
+            resultList = newList.toMutableList()
+            sort = true
         } else {
             // Only change the specific item.
             // Don't sort; otherwise it will be impossible to update 1 item.
-            sortedList = (value?.first as MutableList<CoPrisoner>?)
+            val tempList = (value?.first as MutableList<CoPrisoner>?)
                 ?: newList.toMutableList()
-            updateSingleItem(sortedList, position, newList)
+            val itemUpdated = updateSingleItem(tempList, position, newList)
+
+            resultList = if(itemUpdated) tempList else newList.toMutableList()
+            sort = !itemUpdated
         }
 
-        postValue( Pair(sortedList, position) )
+        if(sort) {
+            Log.v("CharlieDebug", "Update entirely!")
+            comparator?.also { resultList.sortWith(it) }
+        }
+        postValue( Pair(resultList, position) )
     }
 
+    /** @return whether update succeeded. **/
     private fun updateSingleItem(
         dest: MutableList<CoPrisoner>,
         destIndex: Int,
-        src: List<CoPrisoner> ) {
+        src: List<CoPrisoner>
+    ): Boolean {
 
         if(destIndex !in dest.indices) {
-            return
+            return false
         }
 
         val id = dest[destIndex].id
         val srcIndex = src.indexOfFirst { cp ->
             cp.id == id
         }
-        if(destIndex !in dest.indices) {
-            return
+        if(srcIndex !in src.indices) {
+            return false
         }
 
         dest[destIndex] = src[srcIndex]
+        return true
     }
 }

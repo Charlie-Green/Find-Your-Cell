@@ -21,7 +21,6 @@ abstract class CoPrisonersContainerFragment<
     ViewModelType: CoPrisonersContainerViewModel
 >: SviazenFragment<CoprisonersContainerFragmBinding>() {
 
-
     private lateinit var vm: ViewModelType
     private lateinit var containerDescriptor: CoPrisonersContainerDescriptor<ViewModelType>
     private var isSyncing = false
@@ -64,7 +63,7 @@ abstract class CoPrisonersContainerFragment<
         }
         TabsAndPagerListener(vb.tabs, vb.vPager).attach()
         vb.vPager.adapter =
-            CoPrisonersPagerAdapter(requireActivity(), containerDescriptor)
+            CoPrisonersPagerAdapter(this, containerDescriptor)
 
     }
 

@@ -12,6 +12,8 @@ import org.springframework.beans.factory.annotation.Autowired
 
 
 class CoPrisonersRepository: SviazenRepositiory() {
+    // ==============================================================================
+    // Fields:
 
     @Autowired
     private lateinit var dao: CoPrisonersDao
@@ -19,6 +21,9 @@ class CoPrisonersRepository: SviazenRepositiory() {
     @Autowired
     private lateinit var arestsDao: ArestsDao
 
+
+    // ==============================================================================
+    // Public:
 
     /** @return the new [CoPrisoner.Relation] between the 2 [Prisoner]s. **/
     fun connect(
@@ -73,6 +78,9 @@ class CoPrisonersRepository: SviazenRepositiory() {
     }
 
 
+    // ==============================================================================
+    // Private (Major functionality)
+
     /** @return [CellKey] containing [Jail] ID and [Cell] number
       * of the [Prisoner]s' common cell, if there is one, or null. **/
     private fun findCommonCell(id1: Int, id2: Int): CellKey? {
@@ -118,7 +126,8 @@ class CoPrisonersRepository: SviazenRepositiory() {
         record.relationOrdinal = relationCode.decode()
         dao.save(record)
 
-        return record.relation
+        return RelationResolver(record.relationOrdinal)
+            .resolve(id1 == record.key.id1)
     }
 
     /** @param firstBreaks whether [record.id1] is the ID
@@ -138,12 +147,17 @@ class CoPrisonersRepository: SviazenRepositiory() {
 
         dao.save(record)
 
-        return record.relation
+        return RelationResolver(record.relationOrdinal).resolve(firstBreaks)
     }
 
+
+    // ==============================================================================
+    // Private (Help):
 
     private fun throwNotCoprisoners(
         id1: Int,
         id2: Int
-    ): Nothing = throw IllegalArgumentException("Prisoners $id1 and $id2 are not co-prisoners")
+    ): Nothing = throw IllegalArgumentException(
+        "Prisoners $id1 and $id2 are not co-prisoners"
+    )
 }

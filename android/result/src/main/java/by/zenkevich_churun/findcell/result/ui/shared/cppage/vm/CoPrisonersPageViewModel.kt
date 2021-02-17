@@ -7,7 +7,6 @@ import by.zenkevich_churun.findcell.result.repo.cp.CoPrisonersRepository
 import by.zenkevich_churun.findcell.result.ui.shared.cppage.model.ChangeRelationRequestState
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 
 
@@ -50,12 +49,6 @@ abstract class CoPrisonersPageViewModel(
         mldExpandedPosition.value =
             if(mldExpandedPosition.value == position) -1
             else position
-    }
-
-    fun onStop() {
-        viewModelScope.launch(Dispatchers.Default) {
-            mldData.sort()
-        }
     }
 
 
