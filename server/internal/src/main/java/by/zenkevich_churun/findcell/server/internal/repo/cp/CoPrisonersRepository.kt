@@ -44,7 +44,7 @@ class CoPrisonersRepository: SviazenRepositiory() {
             record.key.id2 = coPrisonerId
             record.commonJailId = interceptCell.jailId
             record.commonCellNumber = interceptCell.cellNumber
-            record.relation = CoPrisoner.Relation.SUGGESTED
+            record.relationOrdinal = CoPrisoner.Relation.SUGGESTED.ordinal.toShort()
 
             return connect(prisonerId, record)
         }
@@ -108,14 +108,14 @@ class CoPrisonersRepository: SviazenRepositiory() {
         record: CoPrisonerEntity
     ): CoPrisoner.Relation {
 
-        val relationCode = RelationCode.encode(record.relation)
+        val relationCode = RelationCode.encode(record.relationOrdinal)
         if(id1 == record.key.id1) {
             relationCode.set1()
         } else {
             relationCode.set2()
         }
 
-        record.relation = relationCode.decode()
+        record.relationOrdinal = relationCode.decode()
         dao.save(record)
 
         return record.relation
@@ -128,13 +128,13 @@ class CoPrisonersRepository: SviazenRepositiory() {
         firstBreaks: Boolean
     ): CoPrisoner.Relation {
 
-        val relationCode = RelationCode.encode(record.relation)
+        val relationCode = RelationCode.encode(record.relationOrdinal)
         if(firstBreaks) {
             relationCode.unset1()
         } else {
             relationCode.unset2()
         }
-        record.relation = relationCode.decode()
+        record.relationOrdinal = relationCode.decode()
 
         dao.save(record)
 
