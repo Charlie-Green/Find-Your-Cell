@@ -1,9 +1,6 @@
 package by.zenkevich_churun.findcell.result.ui.shared.cpcontainer.vm
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.*
 import by.zenkevich_churun.findcell.core.injected.sync.SyncResponse
 import by.zenkevich_churun.findcell.core.injected.sync.SynchronizationRepository
 import by.zenkevich_churun.findcell.core.injected.web.NetworkStateTracker

@@ -4,6 +4,7 @@ import android.content.Context
 import android.util.Log
 import androidx.work.*
 import by.zenkevich_churun.findcell.core.injected.sync.SynchronizationRepository
+import by.zenkevich_churun.findcell.core.injected.web.NetworkStateTracker
 import dagger.hilt.EntryPoint
 import dagger.hilt.InstallIn
 import dagger.hilt.android.EntryPointAccessors
@@ -39,7 +40,8 @@ internal class WorkManagerWrapper(private val appContext: Context) {
     @EntryPoint
     @InstallIn(ApplicationComponent::class)
     interface WorkManagerEntryPoint {
-        val syncRepo: SynchronizationRepository
+        val syncRepoForWork: SynchronizationRepository
+        val netTrackerForWork: NetworkStateTracker
     }
 
 
@@ -48,18 +50,22 @@ internal class WorkManagerWrapper(private val appContext: Context) {
         params: WorkerParameters
     ): Worker(context, params) {
 
+        private lateinit var repo: SynchronizationRepository
+        private lateinit var netTracker: NetworkStateTracker
+
+
         override fun doWork(): Result {
-            val repo = obtainRepository()
-            repo.sync()
+            initFields()
+            netTracker.doOnAvailable(repo::sync)
             return Result.success()
         }
 
 
-        private fun obtainRepository(): SynchronizationRepository {
+        private fun initFields() {
             val entryClass = WorkManagerEntryPoint::class.java
-            return EntryPointAccessors
-                .fromApplication(applicationContext, entryClass)
-                .syncRepo
+            val deps = EntryPointAccessors.fromApplication(applicationContext, entryClass)
+            repo = deps.syncRepoForWork
+            netTracker = deps.netTrackerForWork
         }
     }
 

@@ -15,12 +15,12 @@
 
 
     <!-- CoPrisoners Screens and Tabs: -->
-    <string name="screen_connections"           >Сокамерники</string>
+    <string name="cps_navlabel"                 >Сокамерники</string>
     <string name="suggested_coprisoners_tabtext">Кандидаты</string>
     <string name="connected_coprisoners_tabtext">Добавленные</string>
 
-    <string name="screen_requests"        >Запросы на соединение</string>
-    <string name="income_requests_tabtext">Полученные</string>
+    <string name="requests_navlabel"       >Запросы на соединение</string>
+    <string name="income_requests_tabtext" >Полученные</string>
     <string name="outcome_requests_tabtext">Отправленные</string>
 
 
@@ -31,6 +31,7 @@
     <string name="cpoption_disconnect"    >Разорвать соединение</string>
     <string name="cpoption_confirm"       >Принять</string>
     <string name="cpoption_decline"       >Отклонить</string>
+
 
     <!-- Empty Labels: -->
     <string name="cp_suggested_empty">

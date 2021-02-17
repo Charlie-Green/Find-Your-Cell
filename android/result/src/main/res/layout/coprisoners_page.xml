@@ -19,7 +19,6 @@
         android:gravity="center"
         android:layout_margin="8dp"
         android:textSize="14sp"
-        android:textColor="?android:textColorSecondary"
-        android:visibility="gone" />
+        android:textColor="?android:textColorSecondary" />
 
 </FrameLayout>

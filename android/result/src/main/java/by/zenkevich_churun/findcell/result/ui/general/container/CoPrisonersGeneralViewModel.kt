@@ -1,6 +1,7 @@
 package by.zenkevich_churun.findcell.result.ui.general.container
 
 import android.content.Context
+import android.util.Log
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelStoreOwner
 import by.zenkevich_churun.findcell.core.injected.sync.SynchronizationRepository

@@ -1,17 +1,3 @@
 <manifest
     xmlns:android="http://schemas.android.com/apk/res/android"
-    package="by.zenkevich_churun.findcell.result">
-
-    <application>
-
-        <activity android:name=".ui.root.ResultActivity">
-<!--            TODO: CharlieDebug: Remove. -->
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
-
-    </application>
-
-</manifest>
+    package="by.zenkevich_churun.findcell.result" />

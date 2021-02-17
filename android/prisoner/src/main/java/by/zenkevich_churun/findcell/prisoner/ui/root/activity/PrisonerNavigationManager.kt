@@ -65,56 +65,44 @@ internal class PrisonerNavigationManager(
     private fun navigate(itemId: Int): Boolean {
         val currentDest = controller.currentDestination?.id ?: 0
         val unsavedChanges = vm.unsavedChangesLD.value ?: false
+        if(unsavedChanges && itemId != R.id.miProfile) {
+            vm.notifyEditInterrupted(currentDest, R.id.actSelectArestsMenu)
+            return false
+        }
 
         when(itemId) {
-            R.id.miProfile -> {
-                NavigationUtil.navigateIfNotYet(
-                    controller,
-                    R.id.fragmProfile,
-                    R.id.actSelectProfileMenu
-                ) { null }
-            }
-
-            R.id.miArests  -> {
-                if(unsavedChanges) {
-                    vm.notifyEditInterrupted(currentDest, R.id.actSelectArestsMenu)
-                    return false
-                }
-
-                NavigationUtil.navigateIfNotYet(
-                    controller,
-                    R.id.fragmArests,
-                    R.id.actSelectArestsMenu
-                ) { null }
-            }
+            R.id.miProfile  -> navigateToDest(R.id.fragmProfile,  R.id.actSelectProfileMenu)
+            R.id.miArests   -> navigateToDest(R.id.fragmArests,   R.id.actSelectArestsMenu)
+            R.id.miCps      -> navigateToDest(R.id.fragmCps,      R.id.actSelectCpsMenu)
+            R.id.miRequests -> navigateToDest(R.id.fragmRequests, R.id.actSelectRequestsMenu)
 
             R.id.miAuth -> {
-                if(unsavedChanges) {
-                    vm.notifyEditInterrupted(currentDest, R.id.actSelectAuthMenu)
-                    return false
-                }
-
-                NavigationUtil.navigateIfNotYet(
-                    controller,
-                    R.id.fragmAuth,
-                    R.id.actSelectAuthMenu
-                ) { null }
+                navigateToDest(R.id.fragmAuth, R.id.actSelectAuthMenu)
                 vm.logOut()
             }
 
-            else -> {
-                throw NotImplementedError("Unknown menu item $itemId")
-            }
+            else -> throw NotImplementedError("Unknown menu item $itemId")
         }
 
         return true
     }
 
+    private fun navigateToDest(desiredNav: Int, action: Int) {
+        NavigationUtil.navigateIfNotYet(
+            controller,
+            desiredNav,
+            action
+        ) { null }
+    }
+
+
     private fun select(destId: Int) {
         val itemId = when(destId) {
-            R.id.fragmProfile -> R.id.miProfile
-            R.id.fragmArests  -> R.id.miArests
-            R.id.fragmAuth    -> R.id.miAuth
+            R.id.fragmProfile  -> R.id.miProfile
+            R.id.fragmArests   -> R.id.miArests
+            R.id.fragmCps      -> R.id.fragmCps
+            R.id.fragmRequests -> R.id.fragmRequests
+            R.id.fragmAuth     -> R.id.miAuth
             else -> return
         }
 

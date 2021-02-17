@@ -6,10 +6,22 @@
             android:id="@+id/miProfile"
             android:icon="@drawable/profile_menuicon"
             android:title="@string/profile_navlabel" />
+
         <item
             android:id="@+id/miArests"
             android:icon="@drawable/arests_menuicon"
             android:title="@string/arests_navlabel" />
+
+        <item
+            android:id="@+id/miCps"
+            android:icon="@drawable/cps_menuicon"
+            android:title="@string/cps_navlabel" />
+
+        <item
+            android:id="@+id/miRequests"
+            android:icon="@drawable/requests_menuicon"
+            android:title="@string/requests_navlabel" />
+
         <item
             android:id="@+id/miAuth"
             android:icon="@drawable/auth_menuicon"

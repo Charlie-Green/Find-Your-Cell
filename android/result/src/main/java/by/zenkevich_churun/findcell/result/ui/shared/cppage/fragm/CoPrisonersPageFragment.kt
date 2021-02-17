@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import androidx.annotation.CallSuper
+import androidx.core.view.isVisible
 import androidx.lifecycle.LiveData
 import by.zenkevich_churun.findcell.core.ui.common.SviazenFragment
 import by.zenkevich_churun.findcell.entity.entity.CoPrisoner
@@ -51,6 +52,7 @@ abstract class CoPrisonersPageFragment<
 
     private fun observeData(ld: LiveData< Pair<List<CoPrisoner>, Int> >) {
         ld.observe(viewLifecycleOwner) { pair ->
+            vb.txtvEmpty.isVisible = pair.first.isEmpty()
             recyclerAdapter.submitData(pair.first, pair.second)
         }
     }

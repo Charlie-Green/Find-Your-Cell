@@ -7,6 +7,9 @@
     android:id="@+id/graphPrisoner"
     app:startDestination="@id/fragmArests" >
 
+
+    <!-- 'prisoner' module: -->
+
     <fragment
         android:id="@+id/fragmAuth"
         android:name="by.zenkevich_churun.findcell.prisoner.ui.auth.fragm.AuthorizationFragment"
@@ -70,6 +73,21 @@
         android:name="by.zenkevich_churun.findcell.prisoner.ui.addarest.dialog.CUArestDialog" />
 
 
+    <!-- 'result' module: -->
+
+    <fragment
+        android:id="@+id/fragmCps"
+        android:name="by.zenkevich_churun.findcell.result.ui.general.container.CoPrisonersGeneralFragment"
+        android:label="@string/cps_navlabel" />
+
+    <fragment
+        android:id="@+id/fragmRequests"
+        android:name="by.zenkevich_churun.findcell.result.ui.request.container.ConnectRequestsFragment"
+        android:label="@string/requests_navlabel" />
+
+
+    <!-- NavDrawer actions: -->
+
     <action
         android:id="@+id/actSelectProfileMenu"
         app:destination="@id/fragmProfile"
@@ -79,6 +97,18 @@
     <action
         android:id="@+id/actSelectArestsMenu"
         app:destination="@id/fragmArests"
+        app:popUpTo="@id/graphPrisoner"
+        app:popUpToInclusive="true" />
+
+    <action
+        android:id="@+id/actSelectCpsMenu"
+        app:destination="@id/fragmCps"
+        app:popUpTo="@id/graphPrisoner"
+        app:popUpToInclusive="true" />
+
+    <action
+        android:id="@+id/actSelectRequestsMenu"
+        app:destination="@id/fragmRequests"
         app:popUpTo="@id/graphPrisoner"
         app:popUpToInclusive="true" />
 

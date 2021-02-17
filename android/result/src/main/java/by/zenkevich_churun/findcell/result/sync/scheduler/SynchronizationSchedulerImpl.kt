@@ -47,7 +47,7 @@ class SynchronizationSchedulerImpl @Inject constructor(
     }
 
     override fun notifySyncFinished(success: Boolean) {
-        Log.v("CharlieDebug", "Synchronization Finished. Success: $success")
+        Log.v("CharlieDebug", "Synchronization finished. Success: $success")
 
         metaStorage.lastSyncTime = SystemClock.elapsedRealtime()
         if(success) {
