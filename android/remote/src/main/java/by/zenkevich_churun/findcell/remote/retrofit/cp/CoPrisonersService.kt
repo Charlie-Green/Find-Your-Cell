@@ -25,4 +25,12 @@ internal interface CoPrisonersService {
         @Field("id2") coPrisonerId: Int
     ): Call<ResponseBody>
 
+    @FormUrlEncoded
+    @POST("cp/get")
+    fun coPrisoner(
+        @Field("v") version: Int,
+        @Field("id1") prisonerId: Int,
+        @Field("pass") passwordBase64: String,
+        @Field("id2") coPrisonerId: Int
+    ): Call<ResponseBody>
 }

@@ -7,6 +7,8 @@ import by.zenkevich_churun.findcell.core.api.cp.CoPrisonersApi
 import by.zenkevich_churun.findcell.core.common.prisoner.ExtendedPrisoner
 import by.zenkevich_churun.findcell.core.common.prisoner.PrisonerStorage
 import by.zenkevich_churun.findcell.entity.entity.CoPrisoner
+import by.zenkevich_churun.findcell.entity.entity.Prisoner
+import by.zenkevich_churun.findcell.entity.response.GetCoPrisonerResponse
 import by.zenkevich_churun.findcell.result.db.CoPrisonersDatabase
 import by.zenkevich_churun.findcell.result.db.dao.CoPrisonersDao
 import dagger.hilt.android.qualifiers.ApplicationContext
@@ -50,7 +52,7 @@ class CoPrisonersRepository @Inject constructor(
 
 
     /** @return the new [CoPrisoner.Relation], or null if network request failed. **/
-    fun sendConnectRequest(
+    fun connect(
         coPrisonerId: Int
     ): CoPrisoner.Relation? = sendRequest(coPrisonerId) { prisoner ->
 
@@ -62,7 +64,7 @@ class CoPrisonersRepository @Inject constructor(
     }
 
     /** @return the new [CoPrisoner.Relation], or null if network request failed. **/
-    fun cancelConnectRequest(
+    fun disconnect(
         coPrisonerId: Int
     ): CoPrisoner.Relation? = sendRequest(coPrisonerId) { prisoner ->
 
@@ -74,6 +76,20 @@ class CoPrisonersRepository @Inject constructor(
     }
 
 
+    fun getPrisoner(id: Int): GetCoPrisonerResponse {
+        val prisoner = prisonerStore.prisonerLD.value
+            ?: throw IllegalStateException("Not authorized")
+
+        try {
+            // TODO: Alter database in case of NotConnected response.
+            return cpApi
+                .getCoPrisoner(prisoner.id, prisoner.passwordHash, id)
+        } catch(exc: IOException) {
+            return GetCoPrisonerResponse.NetworkError
+        }
+    }
+
+
     private val dao: CoPrisonersDao
         get() = CoPrisonersDatabase.get(appContext).dao
 
@@ -81,6 +97,7 @@ class CoPrisonersRepository @Inject constructor(
         cpId: Int,
         doNetworkCall: (ExtendedPrisoner) -> CoPrisoner.Relation
     ): CoPrisoner.Relation? {
+
         val prisoner = prisonerStore.prisonerLD.value ?: return null
 
         val newRelation = try {

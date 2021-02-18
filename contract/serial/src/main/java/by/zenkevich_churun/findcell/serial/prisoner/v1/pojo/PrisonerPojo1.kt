@@ -75,15 +75,6 @@ internal class PrisonerPojo1: Prisoner() {
             addIfDefined(contactInstagram, Contact.Type.INSTAGRAM)
         }
 
-    private fun MutableList<Contact>.addIfDefined(
-        contactData: String?,
-        contactType: Contact.Type ) {
-
-        contactData ?: return
-        val contact = ContactPojo1(contactType, contactData)
-        add(contact)
-    }
-
 
     companion object {
 

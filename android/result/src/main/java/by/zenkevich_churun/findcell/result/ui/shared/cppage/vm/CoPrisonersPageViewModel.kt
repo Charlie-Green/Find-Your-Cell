@@ -60,14 +60,14 @@ abstract class CoPrisonersPageViewModel(
 
     protected fun connect(position: Int) {
         sendRequest(position) { cpId ->
-            val result = cpRepo.sendConnectRequest(cpId)
+            val result = cpRepo.connect(cpId)
             applyConnectRequestResult(cpId, result)
         }
     }
 
     protected fun disconnect(position: Int) {
         sendRequest(position) { cpId ->
-            val result = cpRepo.cancelConnectRequest(cpId)
+            val result = cpRepo.disconnect(cpId)
             applyConnectRequestResult(cpId, result)
         }
     }

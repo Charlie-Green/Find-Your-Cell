@@ -2,6 +2,7 @@ package by.zenkevich_churun.findcell.core.api.cp
 
 import by.zenkevich_churun.findcell.entity.entity.CoPrisoner
 import by.zenkevich_churun.findcell.entity.entity.Prisoner
+import by.zenkevich_churun.findcell.entity.response.GetCoPrisonerResponse
 
 
 interface CoPrisonersApi {
@@ -22,4 +23,10 @@ interface CoPrisonersApi {
         passwordHash: ByteArray,
         coPrisonerId: Int
     ): CoPrisoner.Relation
+
+    fun getCoPrisoner(
+        prisonerId: Int,
+        passwordHash: ByteArray,
+        coPrisonerId: Int
+    ): GetCoPrisonerResponse
 }
