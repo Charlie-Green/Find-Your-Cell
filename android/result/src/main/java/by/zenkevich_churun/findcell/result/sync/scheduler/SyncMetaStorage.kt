@@ -1,6 +1,8 @@
 package by.zenkevich_churun.findcell.result.sync.scheduler
 
 import android.content.Context
+import by.zenkevich_churun.findcell.core.util.std.toBoolean
+import by.zenkevich_churun.findcell.core.util.std.toLong
 import java.io.File
 import java.io.FileNotFoundException
 import java.io.RandomAccessFile
@@ -17,6 +19,10 @@ internal class SyncMetaStorage(
     var lastSuccessfulSyncTime: Long
         get() { return getLongAt(INDEX_SUCCESSFUL_SYNC, DEFAULT_TIME) }
         set(value) { setLongAt(INDEX_SUCCESSFUL_SYNC, value) }
+
+    var syncScheduled: Boolean
+        get() { return getLongAt(INDEX_SYNC_SCHEDULED, 0L).toBoolean() }
+        set(value) { setLongAt(INDEX_SYNC_SCHEDULED, value.toLong()) }
 
 
     private val file: File
@@ -50,8 +56,9 @@ internal class SyncMetaStorage(
 
     companion object {
         private const val FILENAME = "SyncMeta.bin"
-        private const val INDEX_ANY_SYNC = 0
+        private const val INDEX_ANY_SYNC        = 0
         private const val INDEX_SUCCESSFUL_SYNC = 1
+        private const val INDEX_SYNC_SCHEDULED  = 2
 
         /** Used as default value for some properties
           * if actual data is missing on storage.

@@ -63,12 +63,10 @@ class PrisonerRootViewModel @Inject constructor(
 
     fun logOut() {
         viewModelScope.launch(Dispatchers.IO) {
-            cpRepo.logOut()
+            repo.logOut()
             arestHolder.submitState(ArestsListState.Idle)
             scheduleStore.clearSchedule()
         }
-
-        repo.logOut()
     }
 
 

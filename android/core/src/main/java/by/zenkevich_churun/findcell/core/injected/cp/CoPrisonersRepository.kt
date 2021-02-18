@@ -13,5 +13,4 @@ interface CoPrisonersRepository {
     fun connect(coPrisonerId: Int): CoPrisoner.Relation?
     fun disconnect(coPrisonerId: Int): CoPrisoner.Relation?
     fun getPrisoner(id: Int): GetCoPrisonerResponse
-    fun logOut()
 }

@@ -11,6 +11,7 @@ import by.zenkevich_churun.findcell.entity.response.LogInResponse
 import by.zenkevich_churun.findcell.entity.response.SignUpResponse
 import by.zenkevich_churun.findcell.prisoner.R
 import by.zenkevich_churun.findcell.core.common.prisoner.PrisonerStorage
+import by.zenkevich_churun.findcell.core.injected.sync.CoPrisonersCacheManager
 import by.zenkevich_churun.findcell.prisoner.ui.profile.model.PrisonerDraft
 import dagger.hilt.android.qualifiers.ApplicationContext
 import java.io.IOException
@@ -22,8 +23,10 @@ import javax.inject.Singleton
 class ProfileRepository @Inject constructor(
     @ApplicationContext private val appContext: Context,
     private val api: ProfileApi,
-    private val store: PrisonerStorage
-) {
+    private val prisonerStore: PrisonerStorage,
+    private val cpMan: CoPrisonersCacheManager ) {
+
+    private val authStore = AuthorizationDataStorage(appContext)
 
     private val mldUnsavedChanges = MutableLiveData<Boolean>().apply {
         value = false
@@ -33,7 +36,7 @@ class ProfileRepository @Inject constructor(
 
 
     val prisonerLD: LiveData<out Prisoner?>
-        get() = store.prisonerLD
+        get() = prisonerStore.prisonerLD
 
     val unsavedChangesLD: LiveData<Boolean>
         get() = mldUnsavedChanges
@@ -52,7 +55,10 @@ class ProfileRepository @Inject constructor(
         }
 
         if(response is LogInResponse.Success) {
-            store.submit(response.prisoner, passHash)
+            prisonerStore.submit(response.prisoner, passHash)
+            if(authStore.lastPrisonerId != response.prisoner.id) {
+                cpMan.invalidate()
+            }
         }
 
         return response
@@ -74,19 +80,20 @@ class ProfileRepository @Inject constructor(
         }
 
         if(response is SignUpResponse.Success) {
-            store.submit(response.prisoner, passHash)
+            prisonerStore.submit(response.prisoner, passHash)
         }
 
         return response
     }
 
     fun logOut() {
-        store.clear()
+        prisonerStore.clear()
+        cpMan.invalidate()
     }
 
     fun saveDraft(draft: Prisoner) {
-        store.prisonerLD.value?.also { extendedPrisoner ->
-            store.submit(draft, extendedPrisoner.passwordHash)
+        prisonerStore.prisonerLD.value?.also { extendedPrisoner ->
+            prisonerStore.submit(draft, extendedPrisoner.passwordHash)
         }
     }
 

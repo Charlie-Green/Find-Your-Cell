@@ -10,6 +10,7 @@ import by.zenkevich_churun.findcell.entity.response.CreateOrUpdateArestResponse
 import by.zenkevich_churun.findcell.prisoner.db.JailsDatabase
 import by.zenkevich_churun.findcell.prisoner.db.entity.JailEntity
 import by.zenkevich_churun.findcell.core.common.prisoner.PrisonerStorage
+import by.zenkevich_churun.findcell.core.injected.sync.CoPrisonersCacheManager
 import dagger.hilt.android.qualifiers.ApplicationContext
 import java.io.IOException
 import java.util.*
@@ -22,8 +23,8 @@ class ArestsRepository @Inject constructor(
     @ApplicationContext private val appContext: Context,
     private val arestsApi: ArestsApi,
     private val jailsApi: JailsApi,
-    private val prisonerStore: PrisonerStorage
-) {
+    private val prisonerStore: PrisonerStorage,
+    private val cpInvalider: CoPrisonersCacheManager ) {
 
     private var arests: List<Arest>? = null
 
@@ -109,6 +110,9 @@ class ArestsRepository @Inject constructor(
             Log.w(LOGTAG, "Failed to delete arests: ${exc.message}")
             return null
         }
+
+        // Deletion of Arest may stop some CoPrisoners from being suggested:
+        cpInvalider.invalidate()
 
         return ArestsCache.delete(ids.toHashSet())
     }

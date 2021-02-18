@@ -29,9 +29,15 @@ class SynchronizedDataManagerImpl @Inject constructor(
         jailsCache.cache(data.jails)
     }
 
+    override fun clear() {
+        db.dao.deleteCoPrisoners()
+    }
+
+
+    private val db
+        get() = CoPrisonersDatabase.get(appContext)
 
     private fun cache(coPrisoners: List<CoPrisoner>) {
-        val db = CoPrisonersDatabase.get(appContext)
         val dao = db.dao
 
         val coPrisonerEntities = coPrisoners.map { cp ->

@@ -88,11 +88,6 @@ class CoPrisonersRepositoryImpl @Inject constructor(
     }
 
 
-    override fun logOut() {
-        dao.deleteCoPrisoners()
-    }
-
-
     private val dao: CoPrisonersDao
         get() = CoPrisonersDatabase.get(appContext).dao
 

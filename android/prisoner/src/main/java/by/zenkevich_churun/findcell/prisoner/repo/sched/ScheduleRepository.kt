@@ -4,6 +4,7 @@ import android.util.Log
 import by.zenkevich_churun.findcell.core.api.sched.ScheduleApi
 import by.zenkevich_churun.findcell.entity.entity.Schedule
 import by.zenkevich_churun.findcell.core.common.prisoner.PrisonerStorage
+import by.zenkevich_churun.findcell.core.injected.sync.CoPrisonersCacheManager
 import by.zenkevich_churun.findcell.prisoner.repo.sched.result.GetScheduleResult
 import by.zenkevich_churun.findcell.prisoner.repo.sched.result.UpdateScheduleResult
 import java.io.IOException
@@ -14,8 +15,8 @@ import javax.inject.Singleton
 @Singleton
 class ScheduleRepository @Inject constructor(
     private val api: ScheduleApi,
-    private val store: PrisonerStorage
-) {
+    private val store: PrisonerStorage,
+    private val cpMan: CoPrisonersCacheManager ) {
 
     private var schedule: Schedule? = null
 
@@ -39,11 +40,15 @@ class ScheduleRepository @Inject constructor(
 
         try {
             api.update(prisoner.id, prisoner.passwordHash, schedule)
-            return UpdateScheduleResult.Success
         } catch(exc: IOException) {
             Log.w(LOGTAG, "Failed to update schedule: ${exc.javaClass.name}: ${exc.message}")
             return UpdateScheduleResult.Failed(exc)
         }
+
+        // Modification of Schedule may affect suggested CoPrisoners:
+        cpMan.invalidate()
+
+        return UpdateScheduleResult.Success
     }
 
 

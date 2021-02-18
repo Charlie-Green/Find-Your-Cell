@@ -35,6 +35,14 @@ class SynchronizationSchedulerImpl @Inject constructor(
             return (now - lastSync) >= SYNC_INTERVAL
         }
 
+    override fun scheduleFirstSync() {
+        Log.v("CharlieDebug", "scheduleFirstSync(syncScheduled = ${metaStorage.syncScheduled})")
+        if(!metaStorage.syncScheduled) {
+            metaStorage.syncScheduled = true
+            workWrapper.scheduleWork(40L)
+        }
+    }
+
     override fun notifyArestUpdated() {
         Log.v("CharlieDebug", "Arest Updated")
         // Invalidate the previous sync:
@@ -43,6 +51,7 @@ class SynchronizationSchedulerImpl @Inject constructor(
 
     override fun notifySyncRan() {
         Log.v("CharlieDebug", "Synchronization ran")
+        metaStorage.syncScheduled = true
         workWrapper.cancelWork()
     }
 
@@ -55,6 +64,10 @@ class SynchronizationSchedulerImpl @Inject constructor(
         }
 
         workWrapper.scheduleWork(SYNC_INTERVAL)
+    }
+
+    override fun cancelSyncs() {
+        workWrapper.cancelWork()
     }
 
 

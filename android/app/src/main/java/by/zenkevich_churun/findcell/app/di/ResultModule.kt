@@ -3,12 +3,14 @@ package by.zenkevich_churun.findcell.app.di
 import by.zenkevich_churun.findcell.core.api.cp.CoPrisonersApi
 import by.zenkevich_churun.findcell.core.api.sync.SynchronizationApi
 import by.zenkevich_churun.findcell.core.injected.cp.CoPrisonersRepository
+import by.zenkevich_churun.findcell.core.injected.sync.CoPrisonersCacheManager
 import by.zenkevich_churun.findcell.core.injected.sync.SynchronizationRepository
 import by.zenkevich_churun.findcell.core.injected.sync.SynchronizationScheduler
 import by.zenkevich_churun.findcell.core.injected.sync.SynchronizedDataManager
 import by.zenkevich_churun.findcell.remote.retrofit.cp.RetrofitCoPrisonersApi
 import by.zenkevich_churun.findcell.remote.retrofit.sync.RetrofitSynchronizationApi
 import by.zenkevich_churun.findcell.result.repo.cp.CoPrisonersRepositoryImpl
+import by.zenkevich_churun.findcell.result.repo.sync.CoPrisonersCacheManagerImpl
 import by.zenkevich_churun.findcell.result.repo.sync.SynchronizationRepositoryImpl
 import by.zenkevich_churun.findcell.result.sync.data.SynchronizedDataManagerImpl
 import by.zenkevich_churun.findcell.result.sync.scheduler.SynchronizationSchedulerImpl
@@ -36,6 +38,11 @@ interface ResultModule {
     fun synchronizationScheduler(
         impl: SynchronizationSchedulerImpl
     ): SynchronizationScheduler
+
+    @Binds
+    fun coPrisonersCacheManager(
+        impl: CoPrisonersCacheManagerImpl
+    ): CoPrisonersCacheManager
 
     @Binds
     fun synchronizationRepository(
