@@ -2,7 +2,7 @@ package by.zenkevich_churun.findcell.serial.cp.v1
 
 import by.zenkevich_churun.findcell.entity.entity.Contact
 import by.zenkevich_churun.findcell.serial.prisoner.contract.PrisonerContract1
-import by.zenkevich_churun.findcell.serial.prisoner.v1.pojo.addIfDefined
+import by.zenkevich_churun.findcell.serial.util.prisoner.PrisonerSerialUtil
 import com.google.gson.annotations.SerializedName
 
 
@@ -39,14 +39,14 @@ class CoPrisonerContactsPojo1 {
 
     fun collectContacts(): List<Contact> {
         return mutableListOf<Contact>().apply {
-            addIfDefined(contactPhone,     Contact.Type.PHONE)
-            addIfDefined(contactTelegram,  Contact.Type.TELEGRAM)
-            addIfDefined(contactViber,     Contact.Type.VIBER)
-            addIfDefined(contactWhatsApp,  Contact.Type.WHATSAPP)
-            addIfDefined(contactSkype,     Contact.Type.SKYPE)
-            addIfDefined(contactVk,        Contact.Type.VK)
-            addIfDefined(contactFacebook,  Contact.Type.FACEBOOK)
-            addIfDefined(contactInstagram, Contact.Type.INSTAGRAM)
+            PrisonerSerialUtil.addIfDefined(this, contactPhone,     Contact.Type.PHONE)
+            PrisonerSerialUtil.addIfDefined(this, contactTelegram,  Contact.Type.TELEGRAM)
+            PrisonerSerialUtil.addIfDefined(this, contactViber,     Contact.Type.VIBER)
+            PrisonerSerialUtil.addIfDefined(this, contactWhatsApp,  Contact.Type.WHATSAPP)
+            PrisonerSerialUtil.addIfDefined(this, contactSkype,     Contact.Type.SKYPE)
+            PrisonerSerialUtil.addIfDefined(this, contactVk,        Contact.Type.VK)
+            PrisonerSerialUtil.addIfDefined(this, contactFacebook,  Contact.Type.FACEBOOK)
+            PrisonerSerialUtil.addIfDefined(this, contactInstagram, Contact.Type.INSTAGRAM)
         }
     }
 }

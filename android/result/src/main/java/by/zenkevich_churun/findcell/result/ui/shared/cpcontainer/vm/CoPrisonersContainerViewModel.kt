@@ -4,7 +4,8 @@ import androidx.lifecycle.*
 import by.zenkevich_churun.findcell.core.injected.sync.SyncResponse
 import by.zenkevich_churun.findcell.core.injected.sync.SynchronizationRepository
 import by.zenkevich_churun.findcell.core.injected.web.NetworkStateTracker
-import by.zenkevich_churun.findcell.result.repo.cp.CoPrisonersRepository
+import by.zenkevich_churun.findcell.entity.entity.CoPrisoner
+import by.zenkevich_churun.findcell.core.injected.cp.CoPrisonersRepository
 import by.zenkevich_churun.findcell.result.ui.shared.cpcontainer.model.RefreshState
 import by.zenkevich_churun.findcell.result.ui.shared.cppage.vm.ChangeRelationLiveDataStorage
 import by.zenkevich_churun.findcell.result.ui.shared.cppage.model.ChangeRelationRequestState
@@ -25,7 +26,7 @@ abstract class CoPrisonersContainerViewModel(
     }
 
     val showSyncLD: LiveData<Boolean> by lazy {
-        ShowSyncMediatorLiveData(syncRepo, cpRepo, viewModelScope)
+        ShowSyncMediatorLiveData(syncRepo, dataSource1, dataSource2)
     }
 
     val refreshStateLD: LiveData<RefreshState>
@@ -53,6 +54,8 @@ abstract class CoPrisonersContainerViewModel(
     }
 
     fun onViewCreated() {
+        // TODO: Doesn't work well if the user logs out and log in to another account.
+        // Find another solution.
         if(syncTriggered) {
             return
         }
@@ -75,6 +78,10 @@ abstract class CoPrisonersContainerViewModel(
 
         mldRefreshState.postValue(newState)
     }
+
+
+    protected abstract val dataSource1: LiveData< out List<CoPrisoner> >
+    protected abstract val dataSource2: LiveData< out List<CoPrisoner> >
 
 
     companion object {

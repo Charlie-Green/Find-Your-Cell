@@ -10,7 +10,7 @@ class SynchronizationSerializer1: SynchronizationSerializer {
 
     override fun serialize(data: SynchronizedPojo): String {
         val pojo = SynchronizedPojo1.from(data)
-        val approxSize = 64 + 256*pojo.coPrisoners.size + 512*pojo.jails.size
+        val approxSize = 64 + 128*pojo.coPrisoners.size + 512*pojo.jails.size
         return ProtocolUtil.toJson(pojo, approxSize)
     }
 }

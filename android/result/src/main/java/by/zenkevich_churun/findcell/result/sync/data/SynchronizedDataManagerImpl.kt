@@ -1,13 +1,13 @@
 package by.zenkevich_churun.findcell.result.sync.data
 
 import android.content.Context
+import android.util.Log
 import by.zenkevich_churun.findcell.core.api.sync.SynchronizationApi
 import by.zenkevich_churun.findcell.core.common.prisoner.PrisonerStorage
 import by.zenkevich_churun.findcell.core.injected.db.JailsCache
 import by.zenkevich_churun.findcell.core.injected.sync.SynchronizedDataManager
 import by.zenkevich_churun.findcell.entity.entity.CoPrisoner
 import by.zenkevich_churun.findcell.result.db.CoPrisonersDatabase
-import by.zenkevich_churun.findcell.result.db.entity.CoPrisonerContactEntity
 import by.zenkevich_churun.findcell.result.db.entity.CoPrisonerEntity
 import dagger.hilt.android.qualifiers.ApplicationContext
 import javax.inject.Inject
@@ -38,19 +38,9 @@ class SynchronizedDataManagerImpl @Inject constructor(
             CoPrisonerEntity.from(cp)
         }
 
-        val contactEntities = mutableListOf<CoPrisonerContactEntity>()
-        for(coPrisoner in coPrisoners) {
-            for(contact in coPrisoner.contacts) {
-                val entity = CoPrisonerContactEntity.from(contact, coPrisoner.id)
-                contactEntities.add(entity)
-            }
-        }
-
         db.runInTransaction {
-            dao.deleteContacts()
             dao.deleteCoPrisoners()
             dao.addOrUpdateCoprisoners(coPrisonerEntities)
-            dao.addOrUpdateContacts(contactEntities)
         }
     }
 }

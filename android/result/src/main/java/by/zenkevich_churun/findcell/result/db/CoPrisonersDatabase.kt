@@ -4,15 +4,13 @@ import android.content.Context
 import androidx.room.*
 import by.zenkevich_churun.findcell.result.db.convert.*
 import by.zenkevich_churun.findcell.result.db.dao.CoPrisonersDao
-import by.zenkevich_churun.findcell.result.db.entity.CoPrisonerContactEntity
 import by.zenkevich_churun.findcell.result.db.entity.CoPrisonerEntity
 import by.zenkevich_churun.findcell.result.db.migr.*
 
 
 @Database(
     entities = [
-        CoPrisonerEntity::class,
-        CoPrisonerContactEntity::class
+        CoPrisonerEntity::class
     ],
     version = CoPrisonerDatabaseVersions.APP_1_0,
     exportSchema = false

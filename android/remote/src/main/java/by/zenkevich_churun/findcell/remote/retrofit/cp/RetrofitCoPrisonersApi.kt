@@ -2,6 +2,7 @@ package by.zenkevich_churun.findcell.remote.retrofit.cp
 
 import by.zenkevich_churun.findcell.core.api.cp.CoPrisonersApi
 import by.zenkevich_churun.findcell.entity.entity.CoPrisoner
+import by.zenkevich_churun.findcell.core.injected.cp.CoPrisonersRepository
 import by.zenkevich_churun.findcell.entity.response.GetCoPrisonerResponse
 import by.zenkevich_churun.findcell.remote.retrofit.common.RetrofitApisUtil
 import by.zenkevich_churun.findcell.remote.retrofit.common.RetrofitHolder

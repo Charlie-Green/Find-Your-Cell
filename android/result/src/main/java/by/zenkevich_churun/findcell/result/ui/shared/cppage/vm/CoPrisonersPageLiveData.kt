@@ -14,7 +14,7 @@ import kotlinx.coroutines.*
   * It also supports sorting items in case the position is not known
   * (that is, the entire list is updated) **/
 class CoPrisonersPageLiveData(
-    private val dataSource: LiveData< List<CoPrisoner> >,
+    dataSource: LiveData< out List<CoPrisoner> >,
     private val scope: CoroutineScope,
     private val comparator: Comparator<CoPrisoner>?
 ): MediatorLiveData< Pair<List<CoPrisoner>, Int> >() {

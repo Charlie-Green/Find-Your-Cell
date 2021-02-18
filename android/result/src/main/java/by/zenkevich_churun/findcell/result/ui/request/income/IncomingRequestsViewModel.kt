@@ -1,16 +1,13 @@
 package by.zenkevich_churun.findcell.result.ui.request.income
 
 import android.content.Context
-import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelStoreOwner
-import androidx.lifecycle.viewModelScope
 import by.zenkevich_churun.findcell.core.injected.web.NetworkStateTracker
 import by.zenkevich_churun.findcell.entity.entity.CoPrisoner
-import by.zenkevich_churun.findcell.result.repo.cp.CoPrisonersRepository
+import by.zenkevich_churun.findcell.core.injected.cp.CoPrisonersRepository
 import by.zenkevich_churun.findcell.result.ui.shared.cppage.vm.ChangeRelationLiveDataStorage
 import by.zenkevich_churun.findcell.result.ui.shared.cppage.vm.CoPrisonersPageViewModel
-import kotlinx.coroutines.CoroutineScope
 import javax.inject.Inject
 
 
@@ -21,9 +18,8 @@ class IncomingRequestsViewModel @Inject constructor(
 ): CoPrisonersPageViewModel(cpRepo, changeRelationStore, netTracker) {
     // ==============================================================================
 
-    override fun getDataSource(
-        scope: CoroutineScope
-    ) = cpRepo.incomingRequestsLD(viewModelScope)
+    override fun dataSource()
+        = cpRepo.incomingRequestsLD
 
     override val dataComparator: Comparator<CoPrisoner>?
         get() = IncomingRequestsFirstComparator()

@@ -3,9 +3,8 @@ package by.zenkevich_churun.findcell.result.ui.shared.cppage.vm
 import androidx.lifecycle.*
 import by.zenkevich_churun.findcell.core.injected.web.NetworkStateTracker
 import by.zenkevich_churun.findcell.entity.entity.CoPrisoner
-import by.zenkevich_churun.findcell.result.repo.cp.CoPrisonersRepository
+import by.zenkevich_churun.findcell.core.injected.cp.CoPrisonersRepository
 import by.zenkevich_churun.findcell.result.ui.shared.cppage.model.ChangeRelationRequestState
-import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
@@ -129,7 +128,7 @@ abstract class CoPrisonersPageViewModel(
 
 
     private fun createDataMLD(): CoPrisonersPageLiveData {
-        val dataSource = getDataSource(viewModelScope)
+        val dataSource = dataSource()
         return CoPrisonersPageLiveData(
             dataSource, viewModelScope, dataComparator )
     }
@@ -138,7 +137,5 @@ abstract class CoPrisonersPageViewModel(
     protected open val dataComparator: Comparator<CoPrisoner>?
         get() = null
 
-    protected abstract fun getDataSource(
-        scope: CoroutineScope
-    ): LiveData< List<CoPrisoner> >
+    protected abstract fun dataSource(): LiveData< out List<CoPrisoner> >
 }

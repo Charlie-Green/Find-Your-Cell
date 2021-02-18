@@ -2,57 +2,55 @@ package by.zenkevich_churun.findcell.result.repo.cp
 
 import android.content.Context
 import android.util.Log
-import androidx.lifecycle.LiveData
 import by.zenkevich_churun.findcell.core.api.cp.CoPrisonersApi
 import by.zenkevich_churun.findcell.core.common.prisoner.ExtendedPrisoner
 import by.zenkevich_churun.findcell.core.common.prisoner.PrisonerStorage
+import by.zenkevich_churun.findcell.core.injected.cp.CoPrisonersRepository
 import by.zenkevich_churun.findcell.entity.entity.CoPrisoner
-import by.zenkevich_churun.findcell.entity.entity.Prisoner
 import by.zenkevich_churun.findcell.entity.response.GetCoPrisonerResponse
 import by.zenkevich_churun.findcell.result.db.CoPrisonersDatabase
 import by.zenkevich_churun.findcell.result.db.dao.CoPrisonersDao
 import dagger.hilt.android.qualifiers.ApplicationContext
-import kotlinx.coroutines.CoroutineScope
 import java.io.IOException
 import javax.inject.Inject
 import javax.inject.Singleton
 
 
 @Singleton
-class CoPrisonersRepository @Inject constructor(
+class CoPrisonersRepositoryImpl @Inject constructor(
     @ApplicationContext private val appContext: Context,
     private val prisonerStore: PrisonerStorage,
-    private val cpApi: CoPrisonersApi ) {
+    private val cpApi: CoPrisonersApi
+): CoPrisonersRepository {
+
+    private val ldResolver = CoPrisonersLDResolver(appContext)
+
 
     /** [CoPrisoner]s with [CoPrisoner.Relation.SUGGESTED]
       * and [CoPrisoner.Relation.OUTCOMING_REQUEST]. **/
-    fun suggestedLD(coroutineScope: CoroutineScope): LiveData< List<CoPrisoner> > {
-        return CoPrisonersMediatorLiveData
-            .Suggested(appContext, coroutineScope)
+    override val suggestedLD by lazy {
+        ldResolver.suggested()
     }
 
-
     /** [CoPrisoner]s with [CoPrisoner.Relation.CONNECTED]. **/
-    fun connectedLD(coroutineScope: CoroutineScope): LiveData< List<CoPrisoner> > {
-        return CoPrisonersMediatorLiveData
-            .Connected(appContext, coroutineScope)
+    override val connectedLD by lazy {
+        ldResolver.connected()
     }
 
 
     /** [CoPrisoner]s with [CoPrisoner.Relation.INCOMING_REQUEST]. **/
-    fun incomingRequestsLD(coroutineScope: CoroutineScope): LiveData< List<CoPrisoner> > {
-        return CoPrisonersMediatorLiveData
-            .IncomingRequests(appContext, coroutineScope)
+    override val incomingRequestsLD by lazy {
+        ldResolver.incomingRequests()
     }
 
     /** [CoPrisoner]s with [CoPrisoner.Relation.OUTCOMING_REQUEST]. **/
-    fun outcomingRequestsLD(coroutineScope: CoroutineScope): LiveData< List<CoPrisoner> > {
-        return CoPrisonersMediatorLiveData.OutcomingRequests(appContext, coroutineScope)
+    override val outcomingRequestsLD by lazy {
+        ldResolver.outcomingRequests()
     }
 
 
     /** @return the new [CoPrisoner.Relation], or null if network request failed. **/
-    fun connect(
+    override fun connect(
         coPrisonerId: Int
     ): CoPrisoner.Relation? = sendRequest(coPrisonerId) { prisoner ->
 
@@ -64,7 +62,7 @@ class CoPrisonersRepository @Inject constructor(
     }
 
     /** @return the new [CoPrisoner.Relation], or null if network request failed. **/
-    fun disconnect(
+    override fun disconnect(
         coPrisonerId: Int
     ): CoPrisoner.Relation? = sendRequest(coPrisonerId) { prisoner ->
 
@@ -76,7 +74,7 @@ class CoPrisonersRepository @Inject constructor(
     }
 
 
-    fun getPrisoner(id: Int): GetCoPrisonerResponse {
+    override fun getPrisoner(id: Int): GetCoPrisonerResponse {
         val prisoner = prisonerStore.prisonerLD.value
             ?: throw IllegalStateException("Not authorized")
 
@@ -87,6 +85,11 @@ class CoPrisonersRepository @Inject constructor(
         } catch(exc: IOException) {
             return GetCoPrisonerResponse.NetworkError
         }
+    }
+
+
+    override fun logOut() {
+        dao.deleteCoPrisoners()
     }
 
 

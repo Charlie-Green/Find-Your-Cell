@@ -33,7 +33,7 @@ insert into `Periods`(`arest`, `start`, `end`, `jail`, `cell`)
 values(3, 1604786400000, 1605045600000, 1, 3);
 
 -- 11.11.2020 - 18.11.2020: Окрестина ЦИП, 1
--- Intersects with user 1.
+-- Intersects with Prisoner 1.
 insert into `Periods`(`arest`, `start`, `end`, `jail`, `cell`)
 values(3, 1605045600000, 1605650400000, 2, 1);
 
@@ -64,6 +64,7 @@ insert into `ScheduleCellEntries`(`arest`, `jail`, `cell`)
 values(4, 3, 4);
 
 -- 15.07.2020 - 21.07.2020: Жодино, 4
+-- Intersects with Prisoner 1.
 insert into `Periods`(`arest`, `start`, `end`, `jail`, `cell`)
 values(4, 1594760400000, 1595278800000, 3, 4);
 

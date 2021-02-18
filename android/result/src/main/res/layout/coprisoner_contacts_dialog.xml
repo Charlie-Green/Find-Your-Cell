@@ -15,7 +15,14 @@
         android:textStyle="bold"
         android:textColor="?colorPrimary" />
 
-    <!-- ContactViews are added here. -->
+    <!-- Replaced with ContactViews: -->
+    <ProgressBar
+        android:id="@+id/prBar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="8dp"
+        android:layout_gravity="center_horizontal"
+        android:theme="@style/primary_tinted_progressbar_theme" />
 
     <TextView
         android:id="@+id/txtvInfo"

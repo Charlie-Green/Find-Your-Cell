@@ -5,6 +5,7 @@ import by.zenkevich_churun.findcell.entity.pojo.SynchronizedPojo
 import by.zenkevich_churun.findcell.server.internal.dao.cp.CoPrisonersDao
 import by.zenkevich_churun.findcell.server.internal.dao.jail.JailsDao
 import by.zenkevich_churun.findcell.server.internal.entity.table.CoPrisonerEntity
+import by.zenkevich_churun.findcell.server.internal.entity.table.JailEntity
 import by.zenkevich_churun.findcell.server.internal.entity.view.CoPrisonerView
 import by.zenkevich_churun.findcell.server.internal.entity.view.SynchronizedDataView
 import by.zenkevich_churun.findcell.server.internal.repo.common.SviazenRepositiory
@@ -36,6 +37,7 @@ class SynchronizationRepository: SviazenRepositiory() {
         val relatedIds = relatedPair.second
 
         val suggested = suggestedCoPrisoners(prisonerId, relatedIds)
+        println("${suggested.size} suggested + ${related.size} related")
 
         val coPrisoners = related
             .toMutableList()
@@ -69,11 +71,14 @@ class SynchronizationRepository: SviazenRepositiory() {
         )
         val excludedArestIds = excludedArestIdsSet.toList()
 
+        val jailIds = myPeriods.map { period ->
+            period.jailId
+        }
+        val jailMap = jailMap(jailIds)
+
         // 4. Get Arest IDs to find potential CoPrisoners:
         val coPrisoners = hashMapOf<Int, CoPrisonerView>()
         for(period in myPeriods) {
-
-            val jailName = jailsDao.nameOf(period.jailId)
 
             val arestIds = coPrisonersDao.getCoArestIds(
                 period.jailId,
@@ -91,10 +96,11 @@ class SynchronizationRepository: SviazenRepositiory() {
                 }
 
                 val cp = CoPrisonerView(
-                    view,
-                    CoPrisoner.Relation.SUGGESTED,
-                    jailName,
-                    period.cellNumber
+                    view.id,
+                    view.name,
+                    jailMap[period.jailId]!!.name,
+                    period.cellNumber,
+                    CoPrisoner.Relation.SUGGESTED
                 )
 
                 coPrisoners[cp.id] = cp
@@ -117,37 +123,39 @@ class SynchronizationRepository: SviazenRepositiory() {
     ): Pair< List<CoPrisonerView>, Collection<Int> > {
 
         // 1. Get desired Relation entries:
-        val relatedEntries = coPrisonersDao.coPrisonerEntries(prisonerId)
+        val cpEntries = coPrisonersDao.coPrisonerEntries(prisonerId)
 
         // 2. Prepare Prisoner IDs and ID-to-Entry map:
         val idToEntryMap = hashMapOf<Int, CoPrisonerEntity>()
-        val relatedIds = relatedEntries.map { entry ->
+        val cpIds = cpEntries.map { entry ->
             coPrisonerId(entry, prisonerId, idToEntryMap)
         }
 
+        // 3. Optimization: load Jails into a HashMap so  we don't have
+        // to execute a database query on each iteration on step 4.
+        val jailIds = cpEntries.map { entry ->
+            entry.commonJailId
+        }
+        val jailMap = jailMap(jailIds)
+
         // 3. Map this to CoPrisonerView entities:
-        val relatedPrisonerViews = coPrisonersDao.prisonerViews(relatedIds)
+        val relatedPrisonerViews = coPrisonersDao.prisonerViews(cpIds)
         val related = relatedPrisonerViews.map { p ->
             val entry = idToEntryMap[p.id]!!
             val isFirstCurrent = (prisonerId == entry.key.id1)
 
             CoPrisonerView(
-                p,
-                RelationResolver(entry.relationOrdinal).resolve(isFirstCurrent),
-                jailsDao.nameOf(entry.commonJailId),
-                entry.commonCellNumber
+                p.id,
+                p.name,
+                jailMap[entry.commonJailId]!!.name,
+                entry.commonCellNumber,
+                RelationResolver(entry.relationOrdinal).resolve(isFirstCurrent)
             )
-        }
-
-        // 4. Safety: Hide contacts for non-connected CoPrisoners.
-        for(coPrisoner in related) {
-            if(coPrisoner.relation != CoPrisoner.Relation.CONNECTED) {
-                coPrisoner.prisonerView.contactEntities = setOf()
-            }
         }
 
         return Pair(related, idToEntryMap.keys)
     }
+
 
     private fun coPrisonerId(
         entry: CoPrisonerEntity,
@@ -162,5 +170,16 @@ class SynchronizationRepository: SviazenRepositiory() {
         idToEntryMap[id] = entry
 
         return id
+    }
+
+    private fun jailMap(jailIds: List<Int>): HashMap<Int, JailEntity> {
+        val jails = jailsDao.get(jailIds)
+
+        val jailMap = hashMapOf<Int, JailEntity>()
+        for(j in jails) {
+            jailMap[j.id] = j
+        }
+
+        return jailMap
     }
 }

@@ -9,22 +9,21 @@ class CoPrisonerEntity(
 
     @PrimaryKey(autoGenerate = true)
     @ColumnInfo(name = "id")
-    val id: Int,
+    override val id: Int,
 
     @ColumnInfo(name = "name")
-    val name: String,
-
-    @ColumnInfo(name = "info")
-    val info: String,
+    override val name: String,
 
     @ColumnInfo(name = "rel")
-    val relation: CoPrisoner.Relation,
+    override val relation: CoPrisoner.Relation,
 
     @ColumnInfo(name = "jail")
-    val commonJailName: String,
+    override val commonJailName: String,
 
     @ColumnInfo(name = "cell")
-    val commonCellNumber: Short ) {
+    override val commonCellNumber: Short
+
+): CoPrisoner() {
 
 
     companion object {
@@ -33,7 +32,6 @@ class CoPrisonerEntity(
             return CoPrisonerEntity(
                 coPrisoner.id,
                 coPrisoner.name,
-                coPrisoner.info,
                 coPrisoner.relation,
                 coPrisoner.commonJailName,
                 coPrisoner.commonCellNumber

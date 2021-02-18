@@ -13,12 +13,6 @@ class CoPrisonerPojo1: CoPrisoner() {
     @SerializedName("name")
     override var name: String = ""
 
-    @SerializedName("info")
-    override var info: String = ""
-
-    @SerializedName("contacts")
-    internal var contactPojos: List<ContactPojo1> = listOf()
-
     @SerializedName("rel")
     var relationOrdinal: Short = - 1
 
@@ -28,9 +22,6 @@ class CoPrisonerPojo1: CoPrisoner() {
     @SerializedName("cell")
     override var commonCellNumber: Short = 0
 
-
-    override val contacts: List<Contact>
-        get() = contactPojos
 
     override val relation: Relation
         get() = Relation.values()[relationOrdinal.toInt()]
@@ -48,9 +39,6 @@ class CoPrisonerPojo1: CoPrisoner() {
             pojo1.name = cp.name
             pojo1.commonJailName = cp.commonJailName
             pojo1.commonCellNumber = cp.commonCellNumber
-            pojo1.contactPojos = cp.contacts.map { c ->
-                ContactPojo1(c.type, c.data)
-            }
             pojo1.relationOrdinal = cp.relation.ordinal.toShort()
 
             return pojo1
