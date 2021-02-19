@@ -2,6 +2,7 @@ package by.zenkevich_churun.findcell.prisoner.ui.arest.fragm
 
 import android.content.DialogInterface
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.animation.AnimationUtils
@@ -58,21 +59,12 @@ class ArestsFragment: SviazenFragment<ArestsFragmBinding>() {
             vb.prBar.isVisible = loading
         })
 
-        val layoutListener = object: View.OnLayoutChangeListener {
-            override fun onLayoutChange(
-                v: View?,
-                left: Int, top: Int, right: Int, bottom: Int,
-                oldLeft: Int, oldTop: Int, oldRight: Int, oldBottom: Int ) {
-
-                vb.recvArests.removeOnLayoutChangeListener(this)
-                observeCheckableState(bottom - top)
-            }
-        }
-        vb.recvArests.addOnLayoutChangeListener(layoutListener)
-
         vb.fabAdd.setOnClickListener   { addArest() }
         vb.buDelete.setOnClickListener { suggestDelete() }
         vb.buCancel.setOnClickListener { vm.cancelDelete() }
+        vm.checkableLD.observe(viewLifecycleOwner) { checkable ->
+            setCheckable(checkable)
+        }
     }
 
 
@@ -83,6 +75,8 @@ class ArestsFragment: SviazenFragment<ArestsFragmBinding>() {
     private fun initFields() {
         val appContext = requireContext().applicationContext
         vm = ArestsViewModel.get(appContext, this)
+        checksAnimer = ArestsCheckableStateAnimator(
+            vb.recvArests, vb.fabAdd, vb.buDelete, vb.buCancel )
     }
 
     private fun initRecycler() {
@@ -95,20 +89,11 @@ class ArestsFragment: SviazenFragment<ArestsFragmBinding>() {
     }
 
 
-    private fun observeCheckableState(screenHeight: Int) {
-        val listMargin = resources.getDimensionPixelSize(R.dimen.arests_screen_padding)
-        checksAnimer = ArestsCheckableStateAnimator
-            .Builder(screenHeight, vb.buDelete, vb.buCancel)
-            .setContentView(vb.recvArests, listMargin)
-            .setFadingView(vb.fabAdd)
-            .build()
-
-        vm.checkableLD.observe(viewLifecycleOwner, Observer { checkable ->
-            checksAnimer.setCheckable(checkable)  // Animate buttons in the bottom.
-            vb.recvArests.post {
-                adapter.isCheckable = checkable       // Animate item checkboxes.
-            }
-        })
+    private fun setCheckable(checkable: Boolean) {
+        checksAnimer.setCheckable(checkable)  // Animate buttons in the bottom.
+        vb.recvArests.post {
+            adapter.isCheckable = checkable       // Animate item checkboxes.
+        }
     }
 
 

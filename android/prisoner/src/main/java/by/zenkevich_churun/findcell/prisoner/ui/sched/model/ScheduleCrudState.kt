@@ -4,18 +4,24 @@ import by.zenkevich_churun.findcell.entity.entity.Schedule
 import by.zenkevich_churun.findcell.prisoner.ui.common.sched.ScheduleLiveDatasStorage
 
 
-enum class ScheduleCrudState(
-    var notified: Boolean = false) {
+sealed class ScheduleCrudState{
 
-    IDLE,
-    GET_REQUIRES_INTERNET,
-    LOADING,
-    GET_FAILED,
-    UPDATE_FAILED,
+    object Idle: ScheduleCrudState()
+    object Loading: ScheduleCrudState()
 
     /** In this case, the loaded [Schedule]
-      * is obtained via [ScheduleLiveDatasStorage.scheduleLD]. **/
-    GOT,
+     * is obtained via [ScheduleLiveDatasStorage.scheduleLD]. **/
+    object Got: ScheduleCrudState()
+    
+    class GetFailed: ScheduleCrudState() {
+        var notified = false
+    }
 
-    UPDATED
+    class UpdateFailed: ScheduleCrudState() {
+        var notified = false
+    }
+
+    class Updated: ScheduleCrudState() {
+        var notified = false
+    }
 }

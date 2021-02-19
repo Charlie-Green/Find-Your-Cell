@@ -9,11 +9,39 @@
     android:paddingTop="@dimen/arests_screen_padding"
     android:paddingRight="@dimen/arests_screen_padding" >
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recvArests"
+
+    <LinearLayout
+        android:orientation="vertical"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
+        android:layout_height="match_parent" >
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recvArests"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
+
+        <Button
+            android:id="@+id/buDelete"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/arest_deletebutton_height"
+            android:background="?colorError"
+            android:textColor="?backgroundColor"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            android:text="@string/delete" />
+
+        <Button
+            android:id="@+id/buCancel"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/arest_deletebutton_height"
+            android:background="?backgroundColor"
+            android:textColor="?colorPrimary"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            android:text="@string/cancel" />
+
+    </LinearLayout>
 
 
     <LinearLayout
@@ -68,28 +96,5 @@
         android:layout_gravity="center"
         android:theme="@style/primary_tinted_progressbar_theme"
         android:visibility="gone" />
-
-
-    <!-- Positioned programmatically -->
-    <Button
-        android:id="@+id/buDelete"
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/arest_deletebutton_height"
-        android:background="?colorError"
-        android:textColor="?backgroundColor"
-        android:textSize="16sp"
-        android:textStyle="bold"
-        android:text="@string/delete" />
-
-    <!-- Positioned programmatically -->
-    <Button
-        android:id="@+id/buCancel"
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/arest_deletebutton_height"
-        android:background="?backgroundColor"
-        android:textColor="?colorPrimary"
-        android:textSize="16sp"
-        android:textStyle="bold"
-        android:text="@string/cancel" />
 
 </FrameLayout>

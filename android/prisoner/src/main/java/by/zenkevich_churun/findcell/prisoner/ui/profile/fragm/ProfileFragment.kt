@@ -51,7 +51,7 @@ class ProfileFragment: SviazenFragment<ProfileFragmBinding>() {
         })
         vm.saveResultLD.observe(viewLifecycleOwner, Observer { result ->
             when(result) {
-                is SavePrisonerResult.Success    -> deleteContacts(result.deletePositions)
+                is SavePrisonerResult.Success    -> deleteContacts(result.deletedPositions)
                 is SavePrisonerResult.Error      -> notifySaveError()
                 is SavePrisonerResult.NoInternet -> notifySaveNeedsInternet()
             }

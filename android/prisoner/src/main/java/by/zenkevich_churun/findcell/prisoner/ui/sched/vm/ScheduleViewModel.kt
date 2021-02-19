@@ -80,7 +80,7 @@ class ScheduleViewModel @Inject constructor(
     fun saveSchedule() {
         val scheduleModel = scheduleLD.value ?: return
         mldSelectedCellIndex.value = -1
-        scheduleStore.submitScheduleCrud(ScheduleCrudState.LOADING)
+        scheduleStore.submitScheduleCrud(ScheduleCrudState.Loading)
 
         viewModelScope.launch(Dispatchers.IO) {
             val schedule = scheduleModel.toSchedule()
@@ -112,7 +112,7 @@ class ScheduleViewModel @Inject constructor(
         // Ensure that old data is not displayed while loading the new data:
         synchronized(scheduleStore) {
             scheduleStore.clearSchedule()
-            scheduleStore.submitScheduleCrud(ScheduleCrudState.IDLE)
+            scheduleStore.submitScheduleCrud(ScheduleCrudState.Idle)
             scheduleStore.submitCellsCrud(ScheduleCellsCrudState.Idle)
         }
 
@@ -121,18 +121,18 @@ class ScheduleViewModel @Inject constructor(
     }
 
     private fun getSchedule(arestId: Int) {
-        scheduleStore.submitScheduleCrud(ScheduleCrudState.LOADING)
+        scheduleStore.submitScheduleCrud(ScheduleCrudState.Loading)
 
         viewModelScope.launch(Dispatchers.IO) {
             when(val result = repo.getSchedule(arestId)) {
                 is GetScheduleResult.Success -> {
                     val scheduleModel = ScheduleModel.from(result.schedule)
                     scheduleStore.submitSchedule(scheduleModel)
-                    scheduleStore.submitScheduleCrud(ScheduleCrudState.GOT)
+                    scheduleStore.submitScheduleCrud(ScheduleCrudState.Got)
                 }
 
                 is GetScheduleResult.Failed -> {
-                    scheduleStore.submitScheduleCrud(ScheduleCrudState.GET_FAILED)
+                    scheduleStore.submitScheduleCrud(ScheduleCrudState.GetFailed())
                 }
             }
         }
@@ -142,10 +142,10 @@ class ScheduleViewModel @Inject constructor(
         val result = repo.updateSchedule(schedule)
 
         if(result is UpdateScheduleResult.Success) {
-            scheduleStore.submitScheduleCrud(ScheduleCrudState.UPDATED)
+            scheduleStore.submitScheduleCrud(ScheduleCrudState.Updated())
             changesStore.setSchedule(false)
         } else {
-            scheduleStore.submitScheduleCrud(ScheduleCrudState.UPDATE_FAILED)
+            scheduleStore.submitScheduleCrud(ScheduleCrudState.UpdateFailed())
         }
     }
 

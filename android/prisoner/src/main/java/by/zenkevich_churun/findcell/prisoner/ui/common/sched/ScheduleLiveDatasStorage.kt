@@ -14,7 +14,7 @@ class ScheduleLiveDatasStorage @Inject constructor() {
     private val mldSchedule = MutableLiveData<ScheduleModel?>()
 
     private val mldScheduleCrudState = MutableLiveData<ScheduleCrudState>().apply {
-        value = ScheduleCrudState.IDLE
+        value = ScheduleCrudState.Idle
     }
 
     private val mldCellsCrudState = MutableLiveData<ScheduleCellsCrudState>().apply {

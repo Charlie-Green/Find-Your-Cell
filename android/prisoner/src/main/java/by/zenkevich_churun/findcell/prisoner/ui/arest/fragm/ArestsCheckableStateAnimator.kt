@@ -1,19 +1,21 @@
 package by.zenkevich_churun.findcell.prisoner.ui.arest.fragm
 
 import android.animation.ValueAnimator
-import android.view.View
-import android.widget.FrameLayout
+import android.view.ViewGroup
+import android.widget.Button
+import android.widget.LinearLayout
 import androidx.core.view.marginBottom
 import androidx.core.view.updateLayoutParams
+import androidx.recyclerview.widget.RecyclerView
 import by.zenkevich_churun.findcell.prisoner.R
+import com.google.android.material.floatingactionbutton.FloatingActionButton
 
 
-internal class ArestsCheckableStateAnimator private constructor(
-    private val contentInfo: ContentViewInfo,
-    private val fadingView: View?,
-    private val screenHeight: Int,
-    private val topButton:    View,
-    private val bottomButton: View ) {
+internal class ArestsCheckableStateAnimator(
+    private val resizableView: RecyclerView,
+    private val fadingView: FloatingActionButton,
+    private val topButton: Button,
+    private val bottomButton: Button ) {
 
     private val marginAboveButtons: Int
     private val marginBetweenButtons: Int
@@ -23,7 +25,7 @@ internal class ArestsCheckableStateAnimator private constructor(
 
 
     init {
-        val res = topButton.context.resources
+        val res = resizableView.context.resources
         marginAboveButtons   = res.getDimensionPixelSize(R.dimen.arest_deletebutton_margin_top)
         marginBetweenButtons = res.getDimensionPixelSize(R.dimen.arest_deletebutton_margin_bottom)
         buttonHeight         = res.getDimensionPixelSize(R.dimen.arest_deletebutton_height)
@@ -56,13 +58,13 @@ internal class ArestsCheckableStateAnimator private constructor(
 
     private val currentMargin: Int
         get() {
-            return contentInfo.view.marginBottom - contentInfo.persistentMargin
+            return resizableView.marginBottom
         }
 
 
     private fun animateToState(desiredMargin: Int, desiredAlpha: Float) {
-        val res = topButton.context.resources
-        val initialAlpha = fadingView?.alpha ?: 0f
+        val res = resizableView.context.resources
+        val initialAlpha = fadingView.alpha
         val duration = res.getInteger(R.integer.arest_delete_animation_duration).toLong()
 
         ValueAnimator.ofInt(currentMargin, desiredMargin)
@@ -75,54 +77,21 @@ internal class ArestsCheckableStateAnimator private constructor(
     }
 
     private fun setState(contentMargin: Int, alpha: Float) {
-        contentInfo.view.updateLayoutParams<FrameLayout.LayoutParams> {
-            bottomMargin = contentMargin + contentInfo.persistentMargin
-        }
-        fadingView?.alpha = alpha
+        // Set alpha:
+        fadingView.alpha = alpha
 
-        val topTranslation = (screenHeight - contentMargin).toFloat()
-        topButton.translationY = topTranslation
-        bottomButton.translationY = topTranslation + buttonHeight + marginBetweenButtons
-    }
-
-
-    class Builder(
-        private val screenHeight: Int,
-        private val topButton: View,
-        private val bottomButton: View ) {
-
-        private var contentInfo: ArestsCheckableStateAnimator.ContentViewInfo? = null
-        private var fadingView: View? = null
-
-
-        fun setContentView(
-            view: View,
-            persistentBottomMargin: Int
-        ): ArestsCheckableStateAnimator.Builder {
-
-            contentInfo = ContentViewInfo(view, persistentBottomMargin)
-            return this
+        // Resize the resisable view:
+        resizableView.updateLayoutParams<LinearLayout.LayoutParams> {
+            bottomMargin = contentMargin
         }
 
-        fun setFadingView(view: View): ArestsCheckableStateAnimator.Builder {
-            fadingView = view
-            return this
-        }
-
-        fun build(): ArestsCheckableStateAnimator {
-            return ArestsCheckableStateAnimator(
-                contentInfo ?: throw IllegalStateException("Content view not set"),
-                fadingView,
-                screenHeight,
-                topButton,
-                bottomButton
-            )
+        // Position the buttons:
+        val parent = resizableView.parent as ViewGroup
+        for(j in 0 until parent.childCount) {
+            val child = parent.getChildAt(j)
+            if(child !== resizableView) {
+                child.translationY = -1f * contentMargin
+            }
         }
     }
-
-
-    private class ContentViewInfo(
-        val view: View,
-        val persistentMargin: Int
-    )
 }

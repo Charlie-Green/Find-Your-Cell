@@ -46,7 +46,7 @@ class PrisonerActivity: SviazenActivity<PrisonerActivityBinding>() {
 
         vm.savePrisonerResultLD.observe(this, { result ->
             if(result is SavePrisonerResult.Success) {
-                notifySavePrisonerSuccess()
+                notifySuccess(R.string.save_prisoner_success_msg)
                 vm.notifySaveResultConsumed()
             }
         })
@@ -108,10 +108,10 @@ class PrisonerActivity: SviazenActivity<PrisonerActivityBinding>() {
 
     private fun applyScheduleCrudState(state: ScheduleCrudState) {
         when(state) {
-            ScheduleCrudState.UPDATED -> {
+            is ScheduleCrudState.Updated -> {
                 if(!state.notified) {
                     state.notified = true
-                    notifyUpdateScheduleSuccess()
+                    notifySuccess(R.string.update_schedule_success_msg)
                 }
             }
         }
@@ -154,12 +154,6 @@ class PrisonerActivity: SviazenActivity<PrisonerActivityBinding>() {
             }
         }
     }
-
-    private fun notifySavePrisonerSuccess()
-        = notifySuccess(R.string.save_prisoner_success_msg)
-
-    private fun notifyUpdateScheduleSuccess()
-        = notifySuccess(R.string.update_schedule_success_msg)
 
 
     private fun warnEditInterrupt() {

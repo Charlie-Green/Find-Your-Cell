@@ -116,32 +116,29 @@ class ScheduleFragment: SviazenFragment<ScheduleFragmBinding>() {
     // Observers:
 
     private fun renderScheduleState(state: ScheduleCrudState) {
-        if(state == ScheduleCrudState.LOADING) {
+        if(state is ScheduleCrudState.Loading) {
             vb.prBar.visibility = View.VISIBLE
             return
         }
         vb.prBar.visibility = View.GONE
 
-        if(state.notified) {
-            return
-        }
-
         when(state) {
-            ScheduleCrudState.GET_REQUIRES_INTERNET -> {
-                notifyError( getString(R.string.get_schedule_needs_internet) ) {
-                    state.notified = true
+            is ScheduleCrudState.GetFailed -> {
+                if(!state.notified) {
+                    val msg = getString(R.string.get_schedule_failed_msg)
+                    notifyError(msg) {
+                        state.notified = true
+                        findNavController().navigateUp()
+                    }
                 }
             }
 
-            ScheduleCrudState.GET_FAILED -> {
-                notifyError( getString(R.string.get_schedule_failed_msg) ) {
-                    state.notified = true
-                }
-            }
-
-            ScheduleCrudState.UPDATE_FAILED -> {
-                notifyError( getString(R.string.update_schedule_failed_msg) ) {
-                    state.notified = true
+            is ScheduleCrudState.UpdateFailed -> {
+                if(!state.notified) {
+                    val msg = getString(R.string.update_schedule_failed_msg)
+                    notifyError(msg) {
+                        state.notified = true
+                    }
                 }
             }
         }

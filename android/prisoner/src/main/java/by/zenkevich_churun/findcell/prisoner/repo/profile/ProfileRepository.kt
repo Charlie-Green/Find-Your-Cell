@@ -105,7 +105,7 @@ class ProfileRepository @Inject constructor(
         mldUnsavedChanges.postValue(false)
         try {
             api.update(clearData)
-            val result = SavePrisonerResult.Success(deletedPositions, clearData)
+            val result = SavePrisonerResult.Success(deletedPositions)
             mldSaveResult.postValue(result)
         } catch(exc: IOException) {
             Log.w(LOGTAG, "Failed to save ${Prisoner::class.java.simpleName}")
