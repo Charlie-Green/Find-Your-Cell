@@ -9,6 +9,7 @@ import by.zenkevich_churun.findcell.remote.retrofit.sched.entity.DeserializedSch
 import by.zenkevich_churun.findcell.serial.sched.serial.ScheduleDeserializer
 import by.zenkevich_churun.findcell.serial.sched.serial.ScheduleSerializer
 import by.zenkevich_churun.findcell.serial.sched.v1.pojo.CellEntryPojo1
+import by.zenkevich_churun.findcell.serial.sched.v1.pojo.LightSchedulePojo1
 import by.zenkevich_churun.findcell.serial.sched.v1.pojo.SchedulePojo1
 import by.zenkevich_churun.findcell.serial.sched.v1.pojo.TwoCellEntriesPojo1
 import by.zenkevich_churun.findcell.serial.util.protocol.Base64Util
@@ -55,10 +56,10 @@ class RetrofitScheduleApi @Inject constructor(
         passwordHash: ByteArray,
         schedule: Schedule ) {
 
-        val pojo = SchedulePojo1.from(schedule, passwordHash)
+        val pojo = LightSchedulePojo1.from(schedule, passwordHash)
         val data = ScheduleSerializer
             .forVersion(1)
-            .serialize(pojo)
+            .serializeLight(pojo)
 
         val mediaType = MediaType.get("application/json")
         val body = RequestBody.create(mediaType, data)
@@ -67,6 +68,7 @@ class RetrofitScheduleApi @Inject constructor(
             .execute()
         RetrofitApisUtil.assertResponseCode(response.code())
     }
+
 
     override fun addCell(
         arestId: Int,

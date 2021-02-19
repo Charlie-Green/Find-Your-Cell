@@ -1,5 +1,6 @@
 package by.zenkevich_churun.findcell.serial.sched.serial
 
+import by.zenkevich_churun.findcell.serial.sched.pojo.LightSchedulePojo
 import by.zenkevich_churun.findcell.serial.sched.pojo.SchedulePojo
 import by.zenkevich_churun.findcell.serial.sched.v1.serial.ScheduleSerializer1
 
@@ -7,6 +8,7 @@ import by.zenkevich_churun.findcell.serial.sched.v1.serial.ScheduleSerializer1
 interface ScheduleSerializer {
 
     fun serialize(schedule: SchedulePojo): String
+    fun serializeLight(schedule: LightSchedulePojo): String
 
 
     companion object {
