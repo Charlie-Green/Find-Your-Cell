@@ -16,6 +16,12 @@ internal interface ScheduleService {
         @Field("pass") passwordBase64: String
     ): Call<ResponseBody>
 
+    @FormUrlEncoded
+    @POST("sched/save")
+    fun save(
+        @Body body: RequestBody
+    ): Call<ResponseBody>
+
 
     @POST("cell/add")
     fun addCell(

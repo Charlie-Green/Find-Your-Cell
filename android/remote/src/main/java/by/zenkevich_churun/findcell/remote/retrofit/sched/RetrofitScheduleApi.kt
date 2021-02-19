@@ -7,9 +7,13 @@ import by.zenkevich_churun.findcell.remote.retrofit.common.RetrofitApisUtil
 import by.zenkevich_churun.findcell.remote.retrofit.common.RetrofitHolder
 import by.zenkevich_churun.findcell.remote.retrofit.sched.entity.DeserializedSchedule
 import by.zenkevich_churun.findcell.serial.sched.serial.ScheduleDeserializer
+import by.zenkevich_churun.findcell.serial.sched.serial.ScheduleSerializer
 import by.zenkevich_churun.findcell.serial.sched.v1.pojo.CellEntryPojo1
+import by.zenkevich_churun.findcell.serial.sched.v1.pojo.SchedulePojo1
 import by.zenkevich_churun.findcell.serial.sched.v1.pojo.TwoCellEntriesPojo1
 import by.zenkevich_churun.findcell.serial.util.protocol.Base64Util
+import okhttp3.MediaType
+import okhttp3.RequestBody
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -20,11 +24,6 @@ class RetrofitScheduleApi @Inject constructor(
     private val props: SchedulePropertiesAccessor
 ): ScheduleApi {
 
-    private val service by lazy {
-        createService()
-    }
-
-
     override fun get(
         prisonerId: Int,
         passwordHash: ByteArray,
@@ -33,7 +32,7 @@ class RetrofitScheduleApi @Inject constructor(
 
         val passwordBase64 = Base64Util.encode(passwordHash)
 
-        val response = service
+        val response = createService()
             .get(1, arestId, passwordBase64)
             .execute()
         RetrofitApisUtil.assertResponseCode(response.code())
@@ -56,7 +55,17 @@ class RetrofitScheduleApi @Inject constructor(
         passwordHash: ByteArray,
         schedule: Schedule ) {
 
-        TODO("")
+        val pojo = SchedulePojo1.from(schedule, passwordHash)
+        val data = ScheduleSerializer
+            .forVersion(1)
+            .serialize(pojo)
+
+        val mediaType = MediaType.get("application/json")
+        val body = RequestBody.create(mediaType, data)
+        val response = createService()
+            .save(body)
+            .execute()
+        RetrofitApisUtil.assertResponseCode(response.code())
     }
 
     override fun addCell(
