@@ -33,7 +33,12 @@ interface SchedulePeriodsDao: Repository<PeriodEntity, PeriodKey> {
     @Transactional
     @Modifying
     @Query("delete from PeriodEntity p where arest in :arests")
-    fun deleteForArests(arests: List<Int>)
+    fun deletePeriodsForArests(arests: List<Int>)
+
+    @Transactional
+    @Modifying
+    @Query("delete from ScheduleCellEntryEntity c where arest in :arests")
+    fun deleteCellEntriesForArests(arests: List<Int>)
 
     @Transactional
     @Modifying

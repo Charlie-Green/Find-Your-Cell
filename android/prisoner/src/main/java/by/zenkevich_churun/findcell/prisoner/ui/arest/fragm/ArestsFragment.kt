@@ -207,7 +207,7 @@ class ArestsFragment: SviazenFragment<ArestsFragmBinding>() {
         when(state) {
             is DeleteArestsState.Success -> {
                 if(!state.notified) {
-                    notifyArestsDeleted(state.minPosition, state.maxPosition)
+                    notifyArestsDeleted(state.positions)
                     state.notified = true
                 }
             }
@@ -253,9 +253,12 @@ class ArestsFragment: SviazenFragment<ArestsFragmBinding>() {
         }
     }
 
-    private fun notifyArestsDeleted(minPosition: Int, maxPosition: Int) {
-        val count = maxPosition-minPosition + 1
-        adapter.notifyItemRangeChanged(minPosition, count)
+    private fun notifyArestsDeleted(positions: List<Int>) {
+        var countDeleted = 0
+        for(position in positions) {
+            adapter.notifyItemRemoved(position - countDeleted)
+            ++countDeleted
+        }
     }
 
 

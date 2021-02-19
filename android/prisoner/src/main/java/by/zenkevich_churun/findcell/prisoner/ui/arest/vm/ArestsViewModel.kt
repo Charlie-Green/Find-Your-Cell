@@ -184,10 +184,8 @@ class ArestsViewModel @Inject constructor(
         listState?.checkedIds?.clear()
 
         // Publish the Success state:
-        val state = DeleteArestsState.Success(
-            deletedPositions.minByOrNull { it } ?: 0,
-            deletedPositions.maxByOrNull { it } ?: 0
-        )
+        val sortedPositions = deletedPositions.sorted()  // UI relies on it.
+        val state = DeleteArestsState.Success(sortedPositions)
         mldDeleteState.postValue(state)
     }
 

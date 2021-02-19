@@ -80,49 +80,51 @@ class AuthorizationFragment: SviazenFragment<AuthorizationFragmBinding>() {
                 val messageRes =
                     if(state.wasLoggingIn) R.string.login_failed_msg
                     else R.string.signup_failed_msg
-                showErrorDialog(R.string.error_title, messageRes) {  }
+                showErrorDialog(R.string.error_title, messageRes) {
+                    vm.notifyStateConsumed()
+                }
             }
 
             is AuthorizationState.InvalidUsername -> {
                 showErrorDialog(
                     R.string.invalid_username_title,
                     R.string.username_rules
-                ) {   }
+                ) { vm.notifyStateConsumed() }
             }
 
             is AuthorizationState.InvalidPassword -> {
                 showErrorDialog(
                     R.string.invalid_password_title,
                     R.string.password_rules
-                ) {   }
+                ) { vm.notifyStateConsumed() }
             }
 
             is AuthorizationState.NoInternet -> {
                 showErrorDialog(
                     R.string.no_internet_title,
                     R.string.auth_needs_internet_msg
-                ) {   }
+                ) { vm.notifyStateConsumed() }
             }
 
             is AuthorizationState.UsernameNotExist -> {
                 showErrorDialog(
                     R.string.wrong_credentials_title,
                     R.string.username_not_exist_msg
-                ) {   }
+                ) { vm.notifyStateConsumed() }
             }
 
             is AuthorizationState.PasswordNotMatch -> {
                 showErrorDialog(
                     R.string.wrong_credentials_title,
                     R.string.password_not_match_msg
-                ) {   }
+                ) { vm.notifyStateConsumed() }
             }
 
             is AuthorizationState.UsernameTaken -> {
                 showErrorDialog(
                     getString(R.string.invalid_username_title),
                     getString(R.string.username_taken_msg, state.username)
-                ) {   }
+                ) { vm.notifyStateConsumed() }
             }
 
             is AuthorizationState.Success -> {
