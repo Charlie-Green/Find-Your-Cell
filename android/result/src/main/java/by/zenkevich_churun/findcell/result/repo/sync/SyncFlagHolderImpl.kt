@@ -1,7 +1,7 @@
 package by.zenkevich_churun.findcell.result.repo.sync
 
-import android.util.Log
 import by.zenkevich_churun.findcell.core.injected.sync.*
+import java.util.concurrent.atomic.AtomicBoolean
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -9,18 +9,22 @@ import javax.inject.Singleton
 /** This class's functionality is small yet is used from different places
   * within the app, which is why it's separated into a standalone class. **/
 @Singleton
-class CoPrisonersCacheManagerImpl @Inject constructor(
+class SyncFlagHolderImpl @Inject constructor(
     private val scheduler: SynchronizationScheduler,
     private val dataMan: SynchronizedDataManager
-): CoPrisonersCacheManager {
+): SyncFlagHolder {
 
-    override fun invalidate() {
-        Log.v("CharlieDebug", "CoPrisoners cleared")
-        dataMan.clear()
-        scheduler.cancelSyncs()
+    private val flag = AtomicBoolean(true)
+
+    override fun consume(): Boolean {
+        return flag.getAndSet(false)
     }
 
-    override fun scheduleFirstSync() {
-        scheduler.scheduleFirstSync()
+    override fun set(value: Boolean) {
+        val oldValue = flag.getAndSet(value)
+        if(!oldValue) {
+            scheduler.cancelSyncs()
+            dataMan.clear()
+        }
     }
 }

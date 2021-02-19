@@ -1,6 +1,5 @@
 package by.zenkevich_churun.findcell.result.ui.shared.cppage.vm
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MediatorLiveData
 import by.zenkevich_churun.findcell.entity.entity.CoPrisoner
@@ -64,7 +63,6 @@ class CoPrisonersPageLiveData(
         }
 
         if(sort) {
-            Log.v("CharlieDebug", "Update entirely!")
             comparator?.also { resultList.sortWith(it) }
         }
         postValue( Pair(resultList, position) )

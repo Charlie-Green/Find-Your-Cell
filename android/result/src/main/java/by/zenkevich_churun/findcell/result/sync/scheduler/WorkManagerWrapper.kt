@@ -1,7 +1,6 @@
 package by.zenkevich_churun.findcell.result.sync.scheduler
 
 import android.content.Context
-import android.util.Log
 import androidx.work.*
 import by.zenkevich_churun.findcell.core.injected.sync.SynchronizationRepository
 import by.zenkevich_churun.findcell.core.injected.web.NetworkStateTracker
@@ -15,8 +14,6 @@ import java.util.concurrent.TimeUnit
 internal class WorkManagerWrapper(private val appContext: Context) {
 
     fun scheduleWork(delay: Long) {
-        Log.v("CharlieDebug", "Schedule work in ${delay/1000L}s")
-
         val request = OneTimeWorkRequestBuilder<SyncWorker>()
             .setInitialDelay(delay, TimeUnit.MILLISECONDS)
             .build()

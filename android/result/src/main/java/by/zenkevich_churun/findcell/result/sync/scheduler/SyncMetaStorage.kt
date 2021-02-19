@@ -20,10 +20,6 @@ internal class SyncMetaStorage(
         get() { return getLongAt(INDEX_SUCCESSFUL_SYNC, DEFAULT_TIME) }
         set(value) { setLongAt(INDEX_SUCCESSFUL_SYNC, value) }
 
-    var syncScheduled: Boolean
-        get() { return getLongAt(INDEX_SYNC_SCHEDULED, 0L).toBoolean() }
-        set(value) { setLongAt(INDEX_SYNC_SCHEDULED, value.toLong()) }
-
 
     private val file: File
         get() = File(appContext.filesDir, FILENAME)
@@ -58,7 +54,6 @@ internal class SyncMetaStorage(
         private const val FILENAME = "SyncMeta.bin"
         private const val INDEX_ANY_SYNC        = 0
         private const val INDEX_SUCCESSFUL_SYNC = 1
-        private const val INDEX_SYNC_SCHEDULED  = 2
 
         /** Used as default value for some properties
           * if actual data is missing on storage.

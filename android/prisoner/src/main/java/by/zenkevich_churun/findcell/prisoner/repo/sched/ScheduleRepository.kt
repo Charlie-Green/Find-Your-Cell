@@ -4,7 +4,7 @@ import android.util.Log
 import by.zenkevich_churun.findcell.core.api.sched.ScheduleApi
 import by.zenkevich_churun.findcell.entity.entity.Schedule
 import by.zenkevich_churun.findcell.core.common.prisoner.PrisonerStorage
-import by.zenkevich_churun.findcell.core.injected.sync.CoPrisonersCacheManager
+import by.zenkevich_churun.findcell.core.injected.sync.SyncFlagHolder
 import by.zenkevich_churun.findcell.prisoner.repo.sched.result.GetScheduleResult
 import by.zenkevich_churun.findcell.prisoner.repo.sched.result.UpdateScheduleResult
 import java.io.IOException
@@ -16,7 +16,7 @@ import javax.inject.Singleton
 class ScheduleRepository @Inject constructor(
     private val api: ScheduleApi,
     private val store: PrisonerStorage,
-    private val cpMan: CoPrisonersCacheManager ) {
+    private val syncFlagHolder: SyncFlagHolder ) {
 
     private var schedule: Schedule? = null
 
@@ -46,7 +46,7 @@ class ScheduleRepository @Inject constructor(
         }
 
         // Modification of Schedule may affect suggested CoPrisoners:
-        cpMan.invalidate()
+        syncFlagHolder.set(false)
 
         return UpdateScheduleResult.Success
     }

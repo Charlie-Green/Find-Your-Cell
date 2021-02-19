@@ -5,6 +5,7 @@ import by.zenkevich_churun.findcell.entity.pojo.SynchronizedPojo
 import by.zenkevich_churun.findcell.remote.retrofit.common.RetrofitApisUtil
 import by.zenkevich_churun.findcell.remote.retrofit.common.RetrofitHolder
 import by.zenkevich_churun.findcell.serial.util.protocol.Base64Util
+import java.io.IOException
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -28,8 +29,8 @@ class RetrofitSynchronizationApi @Inject constructor(
         val response = service
             .fetchData(1, prisonerId, passBase64)
             .execute()
-        RetrofitApisUtil.assertResponseCode(response.code())
 
-        return response.body()!!
+        return response.body()
+            ?: throw IOException("No response body. Code is ${response.code()}")
     }
 }

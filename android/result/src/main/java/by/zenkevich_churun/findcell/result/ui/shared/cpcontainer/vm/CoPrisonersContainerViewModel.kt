@@ -54,12 +54,9 @@ abstract class CoPrisonersContainerViewModel(
     }
 
     fun onViewCreated() {
-        // TODO: Doesn't work well if the user logs out and log in to another account.
-        // Find another solution.
-        if(syncTriggered) {
+        if(!syncRepo.shouldAutoSync) {
             return
         }
-        syncTriggered = true
 
         netTracker.doOnAvailable {
             viewModelScope.launch(Dispatchers.IO) {
@@ -82,9 +79,4 @@ abstract class CoPrisonersContainerViewModel(
 
     protected abstract val dataSource1: LiveData< out List<CoPrisoner> >
     protected abstract val dataSource2: LiveData< out List<CoPrisoner> >
-
-
-    companion object {
-        private var syncTriggered = false
-    }
 }

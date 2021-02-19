@@ -12,23 +12,23 @@ import javax.inject.Singleton
 class PrisonerStorage @Inject constructor() {
     private val mldPrisoner = MutableLiveData<ExtendedPrisoner?>().apply {
         // TODO: CharlieDebug:
-        value = ExtendedPrisoner(
-            1,
-            "Романчик",
-            listOf(
-                object: Contact() {
-                    override val type: Type = Type.VK
-                    override val data: String = "vk.com/myvk"
-                },
-
-                object: Contact() {
-                    override val type: Type = Type.TELEGRAM
-                    override val data: String = "t.me/mytelega"
-                },
-            ),
-            "This is a fake test user. Remove it from PrisonerStorage class when not needed.",
-            "111".toByteArray(Charsets.UTF_8)
-        )
+//        value = ExtendedPrisoner(
+//            1,
+//            "Романчик",
+//            listOf(
+//                object: Contact() {
+//                    override val type: Type = Type.VK
+//                    override val data: String = "vk.com/myvk"
+//                },
+//
+//                object: Contact() {
+//                    override val type: Type = Type.TELEGRAM
+//                    override val data: String = "t.me/mytelega"
+//                },
+//            ),
+//            "This is a fake test user. Remove it from PrisonerStorage class when not needed.",
+//            "111".toByteArray(Charsets.UTF_8)
+//        )
     }
 
     val prisonerLD: LiveData<ExtendedPrisoner?>

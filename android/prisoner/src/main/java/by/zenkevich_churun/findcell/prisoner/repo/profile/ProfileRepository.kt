@@ -11,7 +11,7 @@ import by.zenkevich_churun.findcell.entity.response.LogInResponse
 import by.zenkevich_churun.findcell.entity.response.SignUpResponse
 import by.zenkevich_churun.findcell.prisoner.R
 import by.zenkevich_churun.findcell.core.common.prisoner.PrisonerStorage
-import by.zenkevich_churun.findcell.core.injected.sync.CoPrisonersCacheManager
+import by.zenkevich_churun.findcell.core.injected.sync.SyncFlagHolder
 import by.zenkevich_churun.findcell.prisoner.ui.profile.model.PrisonerDraft
 import dagger.hilt.android.qualifiers.ApplicationContext
 import java.io.IOException
@@ -24,9 +24,7 @@ class ProfileRepository @Inject constructor(
     @ApplicationContext private val appContext: Context,
     private val api: ProfileApi,
     private val prisonerStore: PrisonerStorage,
-    private val cpMan: CoPrisonersCacheManager ) {
-
-    private val authStore = AuthorizationDataStorage(appContext)
+    private val syncFlagHolder: SyncFlagHolder ) {
 
     private val mldUnsavedChanges = MutableLiveData<Boolean>().apply {
         value = false
@@ -56,9 +54,7 @@ class ProfileRepository @Inject constructor(
 
         if(response is LogInResponse.Success) {
             prisonerStore.submit(response.prisoner, passHash)
-            if(authStore.lastPrisonerId != response.prisoner.id) {
-                cpMan.invalidate()
-            }
+            syncFlagHolder.set(true)
         }
 
         return response
@@ -88,7 +84,7 @@ class ProfileRepository @Inject constructor(
 
     fun logOut() {
         prisonerStore.clear()
-        cpMan.invalidate()
+        syncFlagHolder.set(false)
     }
 
     fun saveDraft(draft: Prisoner) {

@@ -7,7 +7,6 @@ package by.zenkevich_churun.findcell.core.injected.sync
 interface SynchronizationScheduler {
     val lastSucessfulSyncTime: Long
     val isTimeToSync: Boolean
-    fun scheduleFirstSync()
     fun notifyArestUpdated()
     fun notifySyncRan()
     fun notifySyncFinished(success: Boolean)
