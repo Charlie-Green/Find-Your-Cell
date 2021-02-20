@@ -21,6 +21,11 @@ interface PrisonerDao: Repository<PrisonerEntity, Int> {
         passwordHash: ByteArray
     ): PrisonerEntity?
 
+    /** @return [PrisonerView] with only [PrisonerView.info] and
+      * [PrisonerView.contactEntities] fields initialized. **/
+    @Query("select p from PrisonerView p where p.id=:id")
+    fun get(id: Int): PrisonerView
+
     @Query("select count(*) from PrisonerEntity p where username=:username")
     fun countByUsername(username: String): Int
 

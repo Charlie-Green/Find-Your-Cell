@@ -1,11 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-
-<!-- TODO: CharlieDebug: app:startDestination="@id/fragmAuth" -->
 <navigation
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/graphPrisoner"
-    app:startDestination="@id/fragmArests" >
+    app:startDestination="@id/fragmAuth" >
 
 
     <!-- 'prisoner' module: -->
@@ -84,6 +82,11 @@
         android:id="@+id/fragmRequests"
         android:name="by.zenkevich_churun.findcell.result.ui.request.container.ConnectRequestsFragment"
         android:label="@string/requests_navlabel" />
+
+    <dialog
+        android:id="@+id/dialogCoPrisonerContacts"
+        android:name="by.zenkevich_churun.findcell.result.ui.contact.dialog.CoPrisonerContactsDialog"
+        android:label="@string/cps_navlabel" />
 
 
     <!-- NavDrawer actions: -->

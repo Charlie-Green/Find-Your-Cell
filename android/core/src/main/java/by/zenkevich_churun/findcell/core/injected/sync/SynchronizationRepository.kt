@@ -18,4 +18,7 @@ interface SynchronizationRepository {
 
     /** Check business-requirements for sync, and if they hold, perform sync. **/
     fun sync(): SyncResponse
+
+    /** Start an automatic sync, if it should run. **/
+    fun autoSync()
 }

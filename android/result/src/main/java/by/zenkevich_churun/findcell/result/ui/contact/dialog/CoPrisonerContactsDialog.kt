@@ -1,11 +1,19 @@
 package by.zenkevich_churun.findcell.result.ui.contact.dialog
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewGroup.LayoutParams.MATCH_PARENT
+import android.view.ViewGroup.LayoutParams.WRAP_CONTENT
+import android.widget.LinearLayout
+import androidx.fragment.app.DialogFragment
 import by.zenkevich_churun.findcell.core.ui.common.SviazenDialog
+import by.zenkevich_churun.findcell.core.util.android.AndroidUtil
 import by.zenkevich_churun.findcell.core.util.view.contact.ContactView
+import by.zenkevich_churun.findcell.entity.entity.Contact
 import by.zenkevich_churun.findcell.entity.entity.Prisoner
+import by.zenkevich_churun.findcell.result.R
 import by.zenkevich_churun.findcell.result.databinding.CoprisonerContactsDialogBinding
 import by.zenkevich_churun.findcell.result.ui.contact.model.GetCoPrisonerState
 import by.zenkevich_churun.findcell.result.ui.contact.vm.CoPrisonerContactsViewModel
@@ -26,7 +34,7 @@ class CoPrisonerContactsDialog: SviazenDialog<CoprisonerContactsDialogBinding>()
 
         val args = CoPrisonerContactsArguments(requireArguments())
 
-        vm.loadPrisoner(args.coprisonerId)
+        vm.loadPrisoner(args.coprisonerId, args.coprisonerName)
         vm.stateLD.observe(viewLifecycleOwner) { state ->
             displayData(state)
         }
@@ -61,18 +69,37 @@ class CoPrisonerContactsDialog: SviazenDialog<CoprisonerContactsDialogBinding>()
 
         // Add the new ones:
         for(contact in state.contacts) {
-            val view = ContactView(requireContext())
-            view.show(contact)
-            vb.root.addView(view)
+            addContactView(contact)
         }
 
-        // Update info:
+        // Update name and info:
+        vb.txtvName.text = state.name
         vb.txtvInfo.text = state.info
+    }
+
+    private fun addContactView(contact: Contact) {
+        val gap = resources.getDimensionPixelSize(R.dimen.coprisoner_contacts_gap)
+
+        val params = LinearLayout.LayoutParams(MATCH_PARENT, WRAP_CONTENT).apply {
+            topMargin = gap
+            bottomMargin = gap
+        }
+
+        val view = ContactView(requireContext())
+        vb.root.addView(view, 1, params)
+        view.show(contact)
     }
 
 
     companion object {
-        fun arguments(coPrisonerId: Int): Bundle
-            = CoPrisonerContactsArguments.createBundle(coPrisonerId)
+
+        fun arguments(
+            coPrisonerId: Int,
+            coPrisonerName: String
+
+        ): Bundle = CoPrisonerContactsArguments.createBundle(
+            coPrisonerId,
+            coPrisonerName
+        )
     }
 }

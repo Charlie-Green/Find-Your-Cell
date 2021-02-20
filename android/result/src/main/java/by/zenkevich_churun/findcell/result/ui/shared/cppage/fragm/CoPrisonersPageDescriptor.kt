@@ -22,11 +22,11 @@ internal interface CoPrisonersPageDescriptor<ViewModelType: CoPrisonersPageViewM
       * Defines label resource for the first button.
       * @param relation the value of [CoPrisoner.relation] property
       *        for the [CoPrisoner] the options are requested for. **/
-    fun label1(relation: CoPrisoner.Relation): Int
+    fun label1(cp: CoPrisoner): Int
 
     /** Same as [label1], but for the second option.
       * If only 1 option is supported, the method must return 0. **/
-    fun label2(relation: CoPrisoner.Relation): Int {
+    fun label2(cp: CoPrisoner): Int {
         return 0
     }
 
@@ -38,7 +38,7 @@ internal interface CoPrisonersPageDescriptor<ViewModelType: CoPrisonersPageViewM
       * @param position adapter position of the item whose option is selected. **/
     fun onSelected1(
         vm: ViewModelType,
-        relation: CoPrisoner.Relation,
+        cp: CoPrisoner,
         position: Int
     )
 
@@ -46,7 +46,7 @@ internal interface CoPrisonersPageDescriptor<ViewModelType: CoPrisonersPageViewM
       * If [label2] returns 0, this method is never invoked. **/
     fun onSelected2(
         vm: ViewModelType,
-        relation: CoPrisoner.Relation,
+        cp: CoPrisoner,
         position: Int ) {
 
         throw NotImplementedError(

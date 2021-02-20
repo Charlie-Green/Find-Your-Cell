@@ -38,7 +38,7 @@ internal class CoPrisonersRecyclerAdapter<ViewModelType: CoPrisonersPageViewMode
             val iconRes = CoPrisonerRelationIcons.iconResourceFor(cp.relation)
             vb.txtvName.text = cp.name
             vb.imgvRelation.setImageResource(iconRes)
-            setupButtons(cp.relation)
+            setupButtons(cp)
 
             val context = vb.txtvInfo.context
             vb.txtvInfo.text = context.getString(
@@ -61,13 +61,13 @@ internal class CoPrisonersRecyclerAdapter<ViewModelType: CoPrisonersPageViewMode
         }
 
 
-        private fun setupButtons(relation: CoPrisoner.Relation) {
-            val label1 = pageDescriptor.label1(relation)
-            val label2 = pageDescriptor.label2(relation)
+        private fun setupButtons(cp: CoPrisoner) {
+            val label1 = pageDescriptor.label1(cp)
+            val label2 = pageDescriptor.label2(cp)
 
             vb.bu1.setText(label1)
             vb.bu1.setOnClickListener {
-                pageDescriptor.onSelected1(vm, relation, adapterPosition)
+                pageDescriptor.onSelected1(vm, cp, adapterPosition)
             }
 
             if(label2 == 0) {
@@ -77,7 +77,7 @@ internal class CoPrisonersRecyclerAdapter<ViewModelType: CoPrisonersPageViewMode
                 vb.bu2.visibility = View.VISIBLE
                 vb.bu2.setText(label2)
                 vb.bu2.setOnClickListener {
-                    pageDescriptor.onSelected2(vm, relation, adapterPosition)
+                    pageDescriptor.onSelected2(vm, cp, adapterPosition)
                 }
             }
         }

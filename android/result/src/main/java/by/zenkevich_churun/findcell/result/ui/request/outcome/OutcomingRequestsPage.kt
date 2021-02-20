@@ -16,12 +16,12 @@ private class OutcomingRequestsPageDescriptor(
         get() = R.string.cp_requests_empty
 
 
-    override fun label1(relation: CoPrisoner.Relation)
+    override fun label1(cp: CoPrisoner)
         = R.string.cpoption_cancel_request
 
     override fun onSelected1(
         vm: OutcomingRequestsViewModel,
-        relation: CoPrisoner.Relation,
+        cp: CoPrisoner,
         position: Int ) {
 
         vm.cancelRequest(position)

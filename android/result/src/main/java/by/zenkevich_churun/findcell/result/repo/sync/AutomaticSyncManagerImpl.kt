@@ -9,12 +9,17 @@ import javax.inject.Singleton
 /** This class's functionality is small yet is used from different places
   * within the app, which is why it's separated into a standalone class. **/
 @Singleton
-class SyncFlagHolderImpl @Inject constructor(
+class AutomaticSyncManagerImpl @Inject constructor(
     private val scheduler: SynchronizationScheduler,
     private val dataMan: SynchronizedDataManager
-): SyncFlagHolder {
+): AutomaticSyncManager {
 
     private val flag = AtomicBoolean(true)
+
+
+    override fun get(): Boolean {
+        return flag.get()
+    }
 
     override fun consume(): Boolean {
         return flag.getAndSet(false)
@@ -24,7 +29,10 @@ class SyncFlagHolderImpl @Inject constructor(
         val oldValue = flag.getAndSet(value)
         if(!oldValue) {
             scheduler.cancelSyncs()
-            dataMan.clear()
         }
+    }
+
+    override fun clearCoPrisonersCache() {
+        dataMan.clear()
     }
 }

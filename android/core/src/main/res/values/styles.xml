@@ -13,4 +13,9 @@
         <item name="backgroundTint">@color/primary</item>
     </style>
 
+
+    <style name="contactview_edittext_theme">
+        <item name="android:textColorSecondary">@android:color/transparent</item>
+    </style>
+
 </resources>

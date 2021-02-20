@@ -5,6 +5,7 @@ import by.zenkevich_churun.findcell.serial.util.protocol.Base64Util
 import by.zenkevich_churun.findcell.server.internal.repo.cp.CoPrisonersRepository
 import by.zenkevich_churun.findcell.server.protocol.controller.shared.ControllerUtil
 import by.zenkevich_churun.findcell.server.protocol.exc.IllegalServerParameterException
+import by.zenkevich_churun.findcell.server.protocol.serial.cp.abstr.CoPrisonerSerializer
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.web.bind.annotation.*
 
@@ -44,6 +45,23 @@ class CoPrisonersController {
         coPrisonerId,
         repo::disconnect
     )
+
+
+    @PostMapping("cp/get")
+    fun coPrisoner(
+        @RequestParam("v") version: Int,
+        @RequestParam("id1") prisonerId: Int,
+        @RequestParam("pass") passwordBase64: String,
+        @RequestParam("id2") coPrisonerId: Int
+    ): String {
+
+        val passwordHash = Base64Util.decode(passwordBase64)
+        val cp = repo.coPrisoner(prisonerId, passwordHash, coPrisonerId)
+
+        return CoPrisonerSerializer
+            .forVersion(version)
+            .serialize(cp.info, cp.contacts)
+    }
 
 
     private inline fun changeRelation(

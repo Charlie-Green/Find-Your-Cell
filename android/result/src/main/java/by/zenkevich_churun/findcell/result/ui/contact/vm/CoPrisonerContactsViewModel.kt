@@ -21,7 +21,7 @@ class CoPrisonerContactsViewModel @Inject constructor(
     val stateLD: LiveData<GetCoPrisonerState>
         get() = mldState
 
-    fun loadPrisoner(id: Int) {
+    fun loadPrisoner(id: Int, name: String) {
         if(!shouldLoadPrisoner(id)) {
             return
         }
@@ -29,7 +29,7 @@ class CoPrisonerContactsViewModel @Inject constructor(
         mldState.postValue(GetCoPrisonerState.Loading)
         viewModelScope.launch(Dispatchers.IO) {
             val response = repo.getPrisoner(id)
-            val state = responseToState(id, response)
+            val state = responseToState(id, name, response)
             mldState.postValue(state)
         }
     }
@@ -50,11 +50,12 @@ class CoPrisonerContactsViewModel @Inject constructor(
 
     private fun responseToState(
         id: Int,
+        name: String,
         response: GetCoPrisonerResponse
     ): GetCoPrisonerState = when(response) {
 
         is GetCoPrisonerResponse.Success ->
-            GetCoPrisonerState.Success(id, response.contacts, response.info)
+            GetCoPrisonerState.Success(id, name, response.contacts, response.info)
 
         is GetCoPrisonerResponse.NotConnected ->
             GetCoPrisonerState.Error.NotConnected()

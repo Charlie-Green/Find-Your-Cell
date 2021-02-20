@@ -10,5 +10,6 @@
     <dimen name="coprisoner_item_height_collapsed">72dp</dimen>
     <dimen name="coprisoner_item_height_button">42dp</dimen>
     <dimen name="coprisoner_item_height_expanded">114dp</dimen>
+    <dimen name="coprisoner_contacts_gap">4dp</dimen>
 
 </resources>

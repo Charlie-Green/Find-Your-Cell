@@ -12,7 +12,7 @@ import javax.inject.Singleton
 class SynchronizationRepositoryImpl @Inject constructor(
     private val scheduler: SynchronizationScheduler,
     private val dataMan: SynchronizedDataManager,
-    private val syncFlagHolder: SyncFlagHolder
+    private val autoSyncMan: AutomaticSyncManager
 ): SynchronizationRepository {
 
     private val stateHolder = SyncStateHolder()
@@ -22,7 +22,7 @@ class SynchronizationRepositoryImpl @Inject constructor(
         get() = stateHolder.stateLD
 
     override val shouldAutoSync: Boolean
-        get() = syncFlagHolder.consume()
+        get() = autoSyncMan.get()
 
 
     override fun forceSync(): SyncResponse {
@@ -51,6 +51,13 @@ class SynchronizationRepositoryImpl @Inject constructor(
             return SyncResponse.IGNORED
         }
         return forceSync()
+    }
+
+    override fun autoSync() {
+        val shouldSync = autoSyncMan.consume()
+        if(shouldSync) {
+            forceSync()
+        }
     }
 
 

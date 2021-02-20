@@ -10,6 +10,7 @@ sealed class GetCoPrisonerState {
 
     class Success(
         val id: Int,
+        val name: String,
         val contacts: List<Contact>,
         val info: String
     ): GetCoPrisonerState()

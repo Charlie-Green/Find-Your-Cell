@@ -60,7 +60,7 @@ abstract class CoPrisonersContainerViewModel(
 
         netTracker.doOnAvailable {
             viewModelScope.launch(Dispatchers.IO) {
-                syncRepo.sync()
+                syncRepo.autoSync()
             }
         }
     }

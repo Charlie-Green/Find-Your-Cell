@@ -10,7 +10,7 @@ import by.zenkevich_churun.findcell.entity.response.CreateOrUpdateArestResponse
 import by.zenkevich_churun.findcell.prisoner.db.JailsDatabase
 import by.zenkevich_churun.findcell.prisoner.db.entity.JailEntity
 import by.zenkevich_churun.findcell.core.common.prisoner.PrisonerStorage
-import by.zenkevich_churun.findcell.core.injected.sync.SyncFlagHolder
+import by.zenkevich_churun.findcell.core.injected.sync.AutomaticSyncManager
 import dagger.hilt.android.qualifiers.ApplicationContext
 import java.io.IOException
 import java.util.*
@@ -24,7 +24,7 @@ class ArestsRepository @Inject constructor(
     private val arestsApi: ArestsApi,
     private val jailsApi: JailsApi,
     private val prisonerStore: PrisonerStorage,
-    private val syncFlagHolder: SyncFlagHolder ) {
+    private val autoSyncMan: AutomaticSyncManager ) {
 
     private var arests: List<Arest>? = null
 
@@ -112,7 +112,8 @@ class ArestsRepository @Inject constructor(
         }
 
         // Deletion of Arest may stop some CoPrisoners from being suggested:
-        syncFlagHolder.set(false)
+        autoSyncMan.clearCoPrisonersCache()
+        autoSyncMan.set(true)
 
         return ArestsCache.delete(ids.toHashSet())
     }

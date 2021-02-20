@@ -16,8 +16,8 @@ private class SuggestedPageDescriptor(
         get() = R.string.cp_suggested_empty
 
 
-    override fun label1(relation: CoPrisoner.Relation): Int {
-        if(relation == CoPrisoner.Relation.SUGGESTED) {
+    override fun label1(cp: CoPrisoner): Int {
+        if(cp.relation == CoPrisoner.Relation.SUGGESTED) {
             return R.string.cpoption_connect
         }
         return R.string.cpoption_cancel_request
@@ -25,10 +25,10 @@ private class SuggestedPageDescriptor(
 
     override fun onSelected1(
         vm: SuggestedCoPrisonersViewModel,
-        relation: CoPrisoner.Relation,
+        cp: CoPrisoner,
         position: Int ) {
 
-        if(relation == CoPrisoner.Relation.SUGGESTED) {
+        if(cp.relation == CoPrisoner.Relation.SUGGESTED) {
             return vm.sendConnectRequest(position)
         }
         vm.cancelConnectRequest(position)
