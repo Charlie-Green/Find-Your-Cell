@@ -10,10 +10,10 @@ abstract class Schedule {
     abstract val arestId: Int
 
     /** The first day of schedule. **/
-    abstract val start: Calendar
+    abstract val start: Long
 
     /** The last day of schedule (the day the [Prisoner] was released). **/
-    abstract val end: Calendar
+    abstract val end: Long
 
     /** All [Cell]s the user specified that, during their arest, they have been to.
       * [SchedulePeriod.cellIndex] field points to an element within this list. **/

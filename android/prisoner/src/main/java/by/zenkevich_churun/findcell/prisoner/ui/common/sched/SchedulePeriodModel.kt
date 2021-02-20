@@ -2,36 +2,32 @@ package by.zenkevich_churun.findcell.prisoner.ui.common.sched
 
 import by.zenkevich_churun.findcell.core.util.std.CalendarUtil
 import by.zenkevich_churun.findcell.entity.entity.SchedulePeriod
-import java.util.*
 
 
 class SchedulePeriodModel(
-    override val startDate: Calendar,
-    override val endDate: Calendar,
+    startTime: Long,
+    endTime: Long,
     override val cellIndex: Int
 ): SchedulePeriod() {
 
-    init {
-        // For easier comparasion:
-        CalendarUtil.setToMidnight(startDate)
-        CalendarUtil.setToMidnight(endDate)
-    }
+    override var start: Long = CalendarUtil.midnight(startTime)
+    override var end:   Long = CalendarUtil.midnight(endTime)
 
 
-    fun split(day: Calendar): Pair<SchedulePeriodModel, SchedulePeriodModel> {
-        if(day.before(startDate) || day.after(endDate)) {
+    fun split(day: Long): Pair<SchedulePeriodModel, SchedulePeriodModel> {
+        if(day < start || day > end) {
             throw IllegalArgumentException("Day doesn't belong to period")
         }
 
         return Pair(
             SchedulePeriodModel(
-                startDate,
-                day.clone() as Calendar,
+                start,
+                end,
                 cellIndex
             ),
             SchedulePeriodModel(
-                day.clone() as Calendar,
-                endDate,
+                start,
+                end,
                 cellIndex
             )
         )

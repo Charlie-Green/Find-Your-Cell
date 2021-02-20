@@ -2,7 +2,6 @@ package by.zenkevich_churun.findcell.core.api.arest
 
 import by.zenkevich_churun.findcell.entity.entity.LightArest
 import by.zenkevich_churun.findcell.entity.response.CreateOrUpdateArestResponse
-import java.util.Calendar
 
 
 interface ArestsApi {
@@ -17,16 +16,16 @@ interface ArestsApi {
     fun create(
         prisonerId: Int,
         passwordHash: ByteArray,
-        start: Calendar,
-        end: Calendar
+        start: Long,
+        end: Long
     ): CreateOrUpdateArestResponse
 
     fun update(
         prisonerId: Int,
         passwordHash: ByteArray,
         id: Int,
-        newStart: Calendar,
-        newEnd: Calendar
+        newStart: Long,
+        newEnd: Long
     ): CreateOrUpdateArestResponse
 
     fun delete(

@@ -4,9 +4,10 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import by.zenkevich_churun.findcell.entity.entity.Arest
 import by.zenkevich_churun.findcell.entity.entity.LightArest
-import java.util.*
+import java.util.LinkedList
 import javax.inject.Inject
 import javax.inject.Singleton
+import kotlin.Comparator
 import kotlin.collections.HashSet
 
 
@@ -139,27 +140,10 @@ class ArestsCache @Inject constructor() {
     private object ArestsComparator: Comparator<LightArest> {
 
         override fun compare(a: LightArest, b: LightArest): Int {
-            var code = compareCalendars(a.start, b.start)
-            if(code == 0) {
-                code = compareCalendars(a.end, b.end)
+            if(a.start != b.start) {
+                return a.start.compareTo(b.start)
             }
-
-            return code
-        }
-
-
-        private fun compareCalendars(a: Calendar, b: Calendar): Int {
-            val millisA = a.timeInMillis
-            val millisB = b.timeInMillis
-
-            if(millisA < millisB) {
-                return -1
-            }
-            if(millisA > millisB) {
-                return 1
-            }
-
-            return 0
+            return a.end.compareTo(b.end)
         }
     }
 }

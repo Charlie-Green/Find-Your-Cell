@@ -40,7 +40,8 @@ internal object ArestUiUtil {
     }
 
 
-    fun format(cal: Calendar): String {
-        return dateFormat.format(cal.time)
+    fun format(time: Long): String {
+        val date = Date(time)
+        return dateFormat.format(date)
     }
 }

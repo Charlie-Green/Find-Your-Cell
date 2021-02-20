@@ -20,8 +20,8 @@ sealed class CreateOrUpdateArestState {
 
     class ArestsIntersectError(
         val operationCreate: Boolean,
-        val intersectedStart: Calendar,
-        val intersectedEnd:   Calendar
+        val intersectedStart: Long,
+        val intersectedEnd: Long
     ): CreateOrUpdateArestState() {
 
         var notified = false

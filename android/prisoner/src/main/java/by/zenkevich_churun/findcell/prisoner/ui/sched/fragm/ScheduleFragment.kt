@@ -247,8 +247,8 @@ class ScheduleFragment: SviazenFragment<ScheduleFragmBinding>() {
     private fun dimen(dimenRes: Int): Int
         = resources.getDimensionPixelSize(dimenRes)
 
-    private fun displayDate(txtv: TextView, date: Calendar) {
-        txtv.text = dateFormat.format(date.time)
+    private fun displayDate(txtv: TextView, time: Long) {
+        txtv.text = dateFormat.format( Date(time) )
     }
 
 

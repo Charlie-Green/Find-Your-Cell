@@ -1,7 +1,5 @@
 package by.zenkevich_churun.findcell.entity.entity
 
-import java.util.Calendar
-
 
 /** Light version of [Arest] where full [Jail] entities are replaced with their IDs.
   * This is intended to save network traffic for fetching list of [Arest]s:
@@ -13,10 +11,10 @@ abstract class LightArest {
     abstract val id: Int
 
     /** The first day in a [Jail]. **/
-    abstract val start: Calendar
+    abstract val start: Long
 
     /** The last day in a [Jail]. **/
-    abstract val end: Calendar
+    abstract val end: Long
 
     /** The number of distinct [Jail]s
       * the [Prisoner] was imprisoned into during this [Arest]. **/

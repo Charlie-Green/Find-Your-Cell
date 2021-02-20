@@ -9,7 +9,6 @@ import by.zenkevich_churun.findcell.entity.entity.Arest
 import by.zenkevich_churun.findcell.prisoner.R
 import by.zenkevich_churun.findcell.prisoner.databinding.ArestItemBinding
 import by.zenkevich_churun.findcell.prisoner.ui.arest.vm.ArestsViewModel
-import java.util.Calendar
 
 
 internal class ArestsAdapter(
@@ -44,8 +43,8 @@ internal class ArestsAdapter(
 
 
         fun bind(arest: Arest) {
-            vb.txtvStart.text = formatDate(arest.start)
-            vb.txtvEnd.text   = formatDate(arest.end)
+            vb.txtvStart.text = ArestUiUtil.format(arest.start)
+            vb.txtvEnd.text   = ArestUiUtil.format(arest.end)
             vb.txtvJails.text = ArestUiUtil.jailsText(arest.jails)
             vb.chbDelete.isChecked = checks?.contains(arest.id) ?: false
 
@@ -125,10 +124,6 @@ internal class ArestsAdapter(
 
         private fun openSchedule() {
             vm.openSchedule(adapterPosition)
-        }
-
-        private fun formatDate(cal: Calendar): String {
-            return ArestUiUtil.format(cal)
         }
 
 

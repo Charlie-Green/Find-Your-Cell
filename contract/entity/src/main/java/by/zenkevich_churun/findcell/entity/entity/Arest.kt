@@ -1,23 +1,19 @@
 package by.zenkevich_churun.findcell.entity.entity
 
 import by.zenkevich_churun.findcell.entity.util.EntityUtil
-import java.util.Calendar
 
 
 /** Light information about 1 user arest,
   * that is the period between the first and the last day in jails. **/
 class Arest(
     override val id: Int,
-    override val start: Calendar,
-    override val end: Calendar,
+    startMillis: Long,
+    endMillis: Long,
     val jails: List<Jail>
 ): LightArest() {
 
-    init {
-        EntityUtil.setToMidnight(start)
-        EntityUtil.setToMidnight(end)
-    }
-
+    override val start = EntityUtil.midnight(startMillis)
+    override val end: Long = EntityUtil.midnight(endMillis)
 
     override val jailsCount: Int
         get() = jails.size

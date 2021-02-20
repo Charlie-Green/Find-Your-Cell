@@ -33,8 +33,8 @@ class ArestEntity {
             val entity = ArestEntity()
             entity.id = arest.id
             entity.prisonerId = prisonerId
-            entity.end = arest.end.timeInMillis
-            entity.start = arest.start.timeInMillis
+            entity.start = arest.start
+            entity.end = arest.end
 
             return entity
         }

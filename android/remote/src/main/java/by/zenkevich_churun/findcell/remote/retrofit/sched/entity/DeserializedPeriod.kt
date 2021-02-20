@@ -8,8 +8,8 @@ import java.util.*
 internal class DeserializedPeriod
 private constructor(): SchedulePeriod() {
 
-    override lateinit var startDate: Calendar
-    override lateinit var endDate: Calendar
+    override var start: Long = 0L
+    override var end: Long = 0L
     override var cellIndex: Int = -1
 
 
@@ -19,8 +19,8 @@ private constructor(): SchedulePeriod() {
 
             val period = DeserializedPeriod()
 
-            period.startDate = Calendar.getInstance().apply { timeInMillis = p.start }
-            period.endDate   = Calendar.getInstance().apply { timeInMillis = p.end }
+            period.start = p.start
+            period.end = p.end
             period.cellIndex = p.cellIndex
 
             return period

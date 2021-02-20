@@ -10,23 +10,10 @@ class ArestView(
     val jailIds: List<Int>
 ): LightArest() {
 
-    override val id: Int
-        get() = arest.id
-
-    override val start: Calendar by lazy {
-        Calendar.getInstance().apply {
-            timeInMillis = arest.start
-        }
-    }
-
-    override val end: Calendar by lazy {
-        Calendar.getInstance().apply {
-            timeInMillis = arest.end
-        }
-    }
-
-    override val jailsCount: Int
-        get() = jailIds.size
+    override val id         by arest::id
+    override val start      by arest::start
+    override val end        by arest::end
+    override val jailsCount by jailIds::size
 
     override fun jailIdAt(index: Int): Int
         = jailIds[index]

@@ -14,7 +14,6 @@ import by.zenkevich_churun.findcell.core.common.prisoner.PrisonerStorage
 import by.zenkevich_churun.findcell.core.injected.sync.AutomaticSyncManager
 import dagger.hilt.android.qualifiers.ApplicationContext
 import java.io.IOException
-import java.util.*
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -74,15 +73,12 @@ class ArestsRepository @Inject constructor(
         val prisoner = prisonerStore.prisonerLD.value
             ?: throw IllegalStateException("Not authorized")
 
-        val startCal = Calendar.getInstance().apply { timeInMillis = start }
-        val endCal   = Calendar.getInstance().apply { timeInMillis = end }
-
         val response = try {
             arestsApi.create(
                 prisoner.id,
                 prisoner.passwordHash,
-                startCal,
-                endCal
+                start,
+                end
             )
         } catch(exc: IOException) {
             return Pair(CreateOrUpdateArestResponse.NetworkError, -1)
@@ -94,8 +90,8 @@ class ArestsRepository @Inject constructor(
 
         val arest = Arest(
             response.arestId,
-            startCal,
-            endCal,
+            start,
+            end,
             listOf()  // Jails list is empty because the Arest was just created.
         )
         val position = cache.insert(arest)

@@ -12,8 +12,8 @@ internal class DeserializedSchedule
 private constructor(): Schedule() {
 
     override var arestId: Int = 0
-    override lateinit var start: Calendar
-    override lateinit var end: Calendar
+    override var start: Long = 0L
+    override var end: Long = 0L
     override lateinit var cells: List<DeserializedCell>
     override lateinit var periods: List<DeserializedPeriod>
 
@@ -29,8 +29,8 @@ private constructor(): Schedule() {
 
             sched.arestId = pojo.arestId
                 ?: throw KotlinNullPointerException("Mapping requires arestId")
-            sched.start   = Calendar.getInstance().apply { timeInMillis = pojo.start }
-            sched.end     = Calendar.getInstance().apply { timeInMillis = pojo.end }
+            sched.start   = pojo.start
+            sched.end     = pojo.end
             sched.cells   = deserializedCells(pojo.cells, props)
             sched.periods = deserializedPeriods(pojo.periods)
 

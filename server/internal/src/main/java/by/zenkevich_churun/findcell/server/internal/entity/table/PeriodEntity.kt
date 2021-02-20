@@ -30,8 +30,8 @@ class PeriodEntity {
             val entity = PeriodEntity()
             entity.key = PeriodKey(
                 arestId,
-                period.startDate.timeInMillis,
-                period.endDate.timeInMillis
+                period.start,
+                period.end
             )
 
             val cellKey = cells[period.cellIndex].key!!

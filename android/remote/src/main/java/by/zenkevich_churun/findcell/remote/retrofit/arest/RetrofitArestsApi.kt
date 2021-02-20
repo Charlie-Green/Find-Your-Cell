@@ -11,7 +11,6 @@ import by.zenkevich_churun.findcell.serial.arest.v1.pojo.ArestPojo1
 import by.zenkevich_churun.findcell.serial.util.protocol.Base64Util
 import okhttp3.MediaType
 import okhttp3.RequestBody
-import java.util.Calendar
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -24,15 +23,15 @@ class RetrofitArestsApi @Inject constructor(
     override fun create(
         prisonerId: Int,
         passwordHash: ByteArray,
-        start: Calendar,
-        end: Calendar
+        start: Long,
+        end: Long
     ): CreateOrUpdateArestResponse {
 
         val service = retrofit.create(ArestsService::class.java)
 
         val arest = ArestPojo1()
-        arest.startMillis = start.timeInMillis
-        arest.endMillis   = end.timeInMillis
+        arest.start = start
+        arest.end   = end
 
         val json = ArestsSerializer
             .forVersion(1)
@@ -72,8 +71,8 @@ class RetrofitArestsApi @Inject constructor(
         prisonerId: Int,
         passwordHash: ByteArray,
         id: Int,
-        newStart: Calendar,
-        newEnd: Calendar
+        newStart: Long,
+        newEnd: Long
     ): CreateOrUpdateArestResponse {
 
         TODO("Not yet implemented")

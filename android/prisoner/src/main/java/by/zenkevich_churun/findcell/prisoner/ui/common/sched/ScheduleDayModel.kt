@@ -7,7 +7,7 @@ import java.util.*
 
 
 class ScheduleDayModel(
-    val date: Calendar,
+    val date: Long,
     val dayData: String,
     val textColor: Int,
     val backColors: List<Int> ) {
@@ -18,7 +18,7 @@ class ScheduleDayModel(
 
 
     private fun buildFullHtml(): String {
-        val dateString = dateFormat.format(date.time)
+        val dateString = dateFormat.format( Date(date) )
         return "<b>$dateString</b>: $dayData"
     }
 

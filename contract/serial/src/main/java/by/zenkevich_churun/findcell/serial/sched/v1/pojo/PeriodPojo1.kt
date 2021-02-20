@@ -21,8 +21,8 @@ class PeriodPojo1: PeriodPojo() {
 
         fun from(p: SchedulePeriod): PeriodPojo1 {
             val pojo = PeriodPojo1()
-            pojo.start     = p.startDate.timeInMillis
-            pojo.end       = p.endDate.timeInMillis
+            pojo.start     = p.start
+            pojo.end       = p.end
             pojo.cellIndex = p.cellIndex
 
             return pojo

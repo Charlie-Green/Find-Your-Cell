@@ -24,7 +24,7 @@ internal class ArestsSerializer1: ArestsSerializer {
     }
 
     override fun sertialize(response: CreateOrUpdateArestResponse): String {
-        return when(response) {
+        when(response) {
             is CreateOrUpdateArestResponse.ArestsIntersect -> {
                 return "I${response.intersectedId}"
             }

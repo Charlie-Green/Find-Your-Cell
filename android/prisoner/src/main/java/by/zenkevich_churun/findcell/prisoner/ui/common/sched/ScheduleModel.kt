@@ -18,8 +18,8 @@ import kotlin.collections.HashSet
   * @see UiSchedule **/
 class ScheduleModel private constructor(
     val arestId: Int,
-    val start: Calendar,
-    val end: Calendar,
+    startTime: Long,
+    endTime: Long,
     val cells: MutableList<CellModel>,
 
     /** Element j corresponds to the day start+j.
@@ -27,18 +27,15 @@ class ScheduleModel private constructor(
       * the user was kept in during this day. **/
     internal val days: Array< HashSet<Int> > ) {
 
-
-    init {
-        CalendarUtil.setToMidnight(start)
-        CalendarUtil.setToMidnight(end)
-    }
+    val start = CalendarUtil.midnight(startTime)
+    val end = CalendarUtil.midnight(endTime)
 
 
     val dayCount: Int
         get() = CalendarUtil.daysDifference(start, end) + 1
 
-    fun markDayWithCell(cellIndex: Int, day: Calendar) {
-        CalendarUtil.setToMidnight(day)
+    fun markDayWithCell(cellIndex: Int, dayTime: Long) {
+        val day = CalendarUtil.midnight(dayTime)
 
         val cellIndices = days[ dayIndex(day) ]
         if(cellIndices.contains(cellIndex)) {
@@ -50,13 +47,13 @@ class ScheduleModel private constructor(
 
     fun dayAt(index: Int): ScheduleDayModel {
         val day = dayWithIndex(index)
-        val dayData = days[index]
+        val cellIndices = days[index]
 
         return ScheduleDayModel(
             day,
-            dayData(day, dayData),
-            textColor(dayData),
-            backColors(dayData)
+            dayData(cellIndices),
+            textColor(cellIndices),
+            backColors(cellIndices)
         )
     }
 
@@ -125,14 +122,12 @@ class ScheduleModel private constructor(
 
 
 
-    private fun dayIndex(day: Calendar): Int {
+    private fun dayIndex(day: Long): Int {
         return CalendarUtil.daysDifference(start, day)
     }
 
-    private fun dayWithIndex(index: Int): Calendar {
-        val cal = start.clone() as Calendar
-        cal.add(Calendar.DATE, index)
-        return cal
+    private fun dayWithIndex(index: Int): Long {
+        return CalendarUtil.addDays(start, index)
     }
 
 
@@ -167,10 +162,10 @@ class ScheduleModel private constructor(
         = UiSchedule.from(this)
 
 
-    private fun dayData(day: Calendar, dayData: HashSet<Int>): String {
-        val sb = StringBuilder(16*dayData.size)
+    private fun dayData(cellIndices: HashSet<Int>): String {
+        val sb = StringBuilder(16*cellIndices.size)
 
-        for(cellIndex in dayData) {
+        for(cellIndex in cellIndices) {
             if(!sb.isEmpty()) {
                 sb.append(". ")
             }
@@ -233,7 +228,7 @@ class ScheduleModel private constructor(
         }
 
         private fun days(
-            startDate: Calendar,
+            start: Long,
             dayCount: Int,
             periods: List<SchedulePeriod>
         ): Array< HashSet<Int> > {
@@ -243,8 +238,8 @@ class ScheduleModel private constructor(
             }
 
             for(period in periods) {
-                val startIndex = CalendarUtil.daysDifference(startDate, period.startDate)
-                val endIndex = CalendarUtil.daysDifference(startDate, period.endDate)
+                val startIndex = CalendarUtil.daysDifference(start, period.start)
+                val endIndex = CalendarUtil.daysDifference(start, period.end)
 
                 for(dayIndex in startIndex..endIndex) {
                     days[dayIndex].add(period.cellIndex)
