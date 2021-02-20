@@ -1,18 +1,27 @@
 package by.zenkevich_churun.findcell.prisoner.repo.arest
 
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import by.zenkevich_churun.findcell.entity.entity.Arest
 import by.zenkevich_churun.findcell.entity.entity.LightArest
 import java.util.*
+import javax.inject.Inject
+import javax.inject.Singleton
 import kotlin.collections.HashSet
 
 
 /** Keeps current list of [Arest]s in RAM.
   * Provides methods to update cache after changes were made remotely.
   * Thread-safe. **/
-internal object ArestsCache {
+@Singleton
+class ArestsCache @Inject constructor() {
 
-    private val arests: MutableList<Arest> = mutableListOf()
+    private val mldArests = MutableLiveData< List<Arest> >().apply {
+        value = mutableListOf()
+    }
 
+    val arestsLD: LiveData< List<Arest> >
+        get() = mldArests
 
     val cachedList: List<Arest>
         get() = synchronized(arests) {
@@ -21,7 +30,7 @@ internal object ArestsCache {
 
 
     fun submit(list: List<Arest>) {
-        synchronized(arests) {
+        updateArests {
             arests.clear()
             arests.addAll(list)
             arests.sortWith(ArestsComparator)
@@ -31,7 +40,7 @@ internal object ArestsCache {
 
     /** @return index in the list where the [Arest] was inserted. **/
     fun insert(newArest: Arest): Int {
-        synchronized(arests) {
+        updateArests {
             val position = positionFor(newArest)
             arests.add(position, newArest)
             return position
@@ -40,14 +49,17 @@ internal object ArestsCache {
 
     /** @return pair of old index and new index **/
     fun update(updatedArest: Arest): Pair<Int, Int> {
-        synchronized(arests) {
+        updateArests {
             val oldPosition = findArest(updatedArest.id)
-            val newPosition = positionFor(updatedArest)
             arests.removeAt(oldPosition)
+
+            val newPosition = positionFor(updatedArest)
             arests.add(newPosition, updatedArest)
+
             return oldPosition to newPosition
         }
     }
+
 
     /** @return [LinkedList] of list positions which the items have been deleted from. **/
     fun delete(ids: HashSet<Int>): LinkedList<Int> {
@@ -57,7 +69,7 @@ internal object ArestsCache {
 
         val deletedPositions = LinkedList<Int>()
 
-        synchronized(arests) {
+        updateArests {
             val oldArests = List(arests.size) { index ->
                 arests[index]
             }
@@ -78,6 +90,17 @@ internal object ArestsCache {
 
         return deletedPositions
     }
+
+    /** Makes the [Arest]s list empty. **/
+    fun clear() {
+        updateArests {
+            arests.clear()
+        }
+    }
+
+
+    private val arests: MutableList<Arest>
+        get() = mldArests.value as MutableList<Arest>
 
 
     private fun findArest(id: Int): Int {
@@ -100,6 +123,16 @@ internal object ArestsCache {
             return position
         }
         return arests.size
+    }
+
+    private inline fun <T> updateArests(
+        updateList: () -> T
+    ): T {
+        synchronized(mldArests) {
+            val result = updateList()
+            mldArests.postValue(mldArests.value)  // Re-emit
+            return result
+        }
     }
 
 

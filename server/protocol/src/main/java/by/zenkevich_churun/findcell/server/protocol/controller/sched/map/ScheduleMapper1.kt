@@ -83,7 +83,7 @@ internal class ScheduleMapper1: ScheduleMapper {
     }
 
     private fun warnCellNotFound(entity: PeriodEntity) {
-        val key = entity.key!!
+        val key = entity.key
 
         val periodClass = SchedulePeriod::class.java.simpleName
         val cellClass   = Cell::class.java.simpleName

@@ -38,17 +38,6 @@
             android:layout_weight="1"
             android:layout_marginTop="16dp" />
 
-
-        <Button
-            android:id="@+id/buResults"
-            android:layout_width="match_parent"
-            android:layout_height="48dp"
-            android:backgroundTint="?colorPrimary"
-            android:textColor="?backgroundColor"
-            android:textSize="16sp"
-            android:textStyle="bold"
-            android:text="@string/find_prisoners" />
-
     </LinearLayout>
 
 

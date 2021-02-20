@@ -35,30 +35,26 @@ class ProfileFragment: SviazenFragment<ProfileFragmBinding>() {
         setListeners()
 
         val vm = getViewModel().also { this.vm = it }
-        vm.prisonerLD.observe(viewLifecycleOwner, Observer { prisoner ->
+        vm.prisonerLD.observe(viewLifecycleOwner, { prisoner ->
             this.prisoner = prisoner
             displayPrisoner()
         })
-        vm.addedContactTypesLD.observe(viewLifecycleOwner, Observer { addedContactTypes ->
+        vm.addedContactTypesLD.observe(viewLifecycleOwner) { addedContactTypes ->
             this.addedContactTypes = CollectionUtil.copyList(addedContactTypes)
             displayPrisoner()
-        })
-        vm.unsavedChangesLD.observe(viewLifecycleOwner, Observer { thereAreChanges ->
+        }
+        vm.unsavedChangesLD.observe(viewLifecycleOwner) { thereAreChanges ->
             vb.fabSave.isVisible = thereAreChanges
-        })
-        vm.loadingLD.observe(viewLifecycleOwner, Observer { isLoading ->
+        }
+        vm.loadingLD.observe(viewLifecycleOwner) { isLoading ->
             vb.prBar.isVisible = isLoading
-        })
-        vm.saveResultLD.observe(viewLifecycleOwner, Observer { result ->
+        }
+        vm.saveResultLD.observe(viewLifecycleOwner) { result ->
             when(result) {
                 is SavePrisonerResult.Success    -> deleteContacts(result.deletedPositions)
                 is SavePrisonerResult.Error      -> notifySaveError()
                 is SavePrisonerResult.NoInternet -> notifySaveNeedsInternet()
             }
-        })
-
-        vb.buResults.setOnClickListener {
-            // TODO: Request result.
         }
     }
 

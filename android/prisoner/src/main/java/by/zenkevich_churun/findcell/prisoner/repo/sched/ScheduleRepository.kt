@@ -5,6 +5,9 @@ import by.zenkevich_churun.findcell.core.api.sched.ScheduleApi
 import by.zenkevich_churun.findcell.entity.entity.Schedule
 import by.zenkevich_churun.findcell.core.common.prisoner.PrisonerStorage
 import by.zenkevich_churun.findcell.core.injected.sync.AutomaticSyncManager
+import by.zenkevich_churun.findcell.entity.entity.Arest
+import by.zenkevich_churun.findcell.entity.entity.Jail
+import by.zenkevich_churun.findcell.prisoner.repo.arest.ArestsCache
 import by.zenkevich_churun.findcell.prisoner.repo.sched.result.GetScheduleResult
 import by.zenkevich_churun.findcell.prisoner.repo.sched.result.UpdateScheduleResult
 import java.io.IOException
@@ -16,6 +19,7 @@ import javax.inject.Singleton
 class ScheduleRepository @Inject constructor(
     private val api: ScheduleApi,
     private val store: PrisonerStorage,
+    private val arestsCache: ArestsCache,
     private val autoSyncMan: AutomaticSyncManager ) {
 
     private var schedule: Schedule? = null
@@ -47,6 +51,9 @@ class ScheduleRepository @Inject constructor(
 
         // Modification of Schedule may affect suggested CoPrisoners:
         autoSyncMan.set(true)
+
+        // Update the Arest this Schedule belongs to:
+        updateArest(schedule)
 
         return UpdateScheduleResult.Success
     }
@@ -80,6 +87,26 @@ class ScheduleRepository @Inject constructor(
         )
     }
 
+
+    private fun updateArest(schedule: Schedule) {
+        val oldArest = arestsCache.cachedList.find { a ->
+            a.id == schedule.arestId
+        } ?: return
+
+        val newJailIds = hashSetOf<Int>()
+        val newJails = mutableListOf<Jail>()
+        for(period in schedule.periods) {
+            val j = JailForArest.from(schedule.cells, period)
+            if(!newJailIds.contains(j.id)) {
+                newJailIds.add(j.id)
+                newJails.add(j)
+            }
+        }
+
+        val newArest = Arest(
+            oldArest.id, oldArest.start, oldArest.end, newJails)
+        arestsCache.update(newArest)
+    }
 
     private inline fun crudCell(
         performNetworkCall: (arestId: Int, passwordHash: ByteArray) -> Unit

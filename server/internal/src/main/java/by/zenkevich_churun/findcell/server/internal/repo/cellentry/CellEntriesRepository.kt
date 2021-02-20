@@ -42,8 +42,6 @@ class CellEntriesRepository: SviazenRepositiory() {
         oldJailId: Int, oldCellNumber: Short,
         newJailId: Int, newCellNumber: Short ) {
 
-        println("Updating: ($oldJailId; $oldCellNumber) -> ($newJailId; $newCellNumber)")
-
         // Validate user credentials:
         validateByArestId(arestId, passwordHash)
 
@@ -61,8 +59,6 @@ class CellEntriesRepository: SviazenRepositiory() {
 
         // Now delete the oldCell without concern about the foreign key constraint:
         deleteCell(arestId, oldJailId, oldCellNumber)
-
-        println("Update succeeded")
     }
 
 

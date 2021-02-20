@@ -2,6 +2,7 @@ package by.zenkevich_churun.findcell.prisoner.repo.arest
 
 import android.content.Context
 import android.util.Log
+import androidx.lifecycle.LiveData
 import by.zenkevich_churun.findcell.core.api.arest.ArestsApi
 import by.zenkevich_churun.findcell.core.api.jail.JailsApi
 import by.zenkevich_churun.findcell.entity.entity.Arest
@@ -23,12 +24,15 @@ class ArestsRepository @Inject constructor(
     @ApplicationContext private val appContext: Context,
     private val arestsApi: ArestsApi,
     private val jailsApi: JailsApi,
+    private val cache: ArestsCache,
     private val prisonerStore: PrisonerStorage,
     private val autoSyncMan: AutomaticSyncManager ) {
 
-    private var arests: List<Arest>? = null
+    val arestsLD: LiveData< List<Arest> >
+        get() = cache.arestsLD
 
 
+    /** In case of success, the new value is emitted by [arestsLD] **/
     fun arestsList(): GetArestsResult {
         val prisoner = prisonerStore.prisonerLD.value
             ?: return GetArestsResult.NotAuthorized
@@ -53,8 +57,8 @@ class ArestsRepository @Inject constructor(
         }
 
         val arests = ArestsMapper.map(lightArests, jails)
-        ArestsCache.submit(arests)
-        return GetArestsResult.Success( ArestsCache.cachedList )
+        cache.submit(arests)
+        return GetArestsResult.Success
     }
 
 
@@ -94,7 +98,7 @@ class ArestsRepository @Inject constructor(
             endCal,
             listOf()  // Jails list is empty because the Arest was just created.
         )
-        val position = ArestsCache.insert(arest)
+        val position = cache.insert(arest)
 
         return Pair(response, position)
     }
@@ -104,7 +108,7 @@ class ArestsRepository @Inject constructor(
     fun deleteArests(ids: Collection<Int>): List<Int>? {
         val prisoner = prisonerStore.prisonerLD.value ?: return null
 
-        val response = try {
+        try {
             arestsApi.delete(prisoner.id, prisoner.passwordHash, ids)
         } catch(exc: IOException) {
             Log.w(LOGTAG, "Failed to delete arests: ${exc.message}")
@@ -115,7 +119,12 @@ class ArestsRepository @Inject constructor(
         autoSyncMan.clearCoPrisonersCache()
         autoSyncMan.set(true)
 
-        return ArestsCache.delete(ids.toHashSet())
+        return cache.delete(ids.toHashSet())
+    }
+
+    /** Clears current value of [arestsLD] **/
+    fun clearArests() {
+        cache.clear()
     }
 
 

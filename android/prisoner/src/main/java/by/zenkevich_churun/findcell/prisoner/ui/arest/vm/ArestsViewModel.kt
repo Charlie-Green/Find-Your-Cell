@@ -27,11 +27,33 @@ class ArestsViewModel @Inject constructor(
     private val mldDeleteState = MutableLiveData<DeleteArestsState>().apply {
         value = DeleteArestsState.Idle
     }
+
     private val mldOpenedArest = MutableLiveData<Arest?>()
+
     private val mldCheckable = MutableLiveData<Boolean>().apply {
         value = false
     }
+
+    private val arestsObserver: Observer< List<Arest> >
+
     private var lastPrisonerId = Prisoner.INVALID_ID
+
+
+    init {
+        arestsObserver = Observer { arests ->
+            holder.submitState( ArestsListState.Loaded(arests) )
+        }
+        repo.arestsLD.observeForever(arestsObserver)
+    }
+
+
+    override fun onCleared() {
+        // Next time the screen is opened, the Arests are re-fetched.
+        // Thus, the current arests list will no longer be used, so remove it.
+
+        repo.clearArests()
+        repo.arestsLD.removeObserver(arestsObserver)
+    }
 
 
     val listStateLD: LiveData<ArestsListState>
@@ -153,11 +175,6 @@ class ArestsViewModel @Inject constructor(
 
     private fun applyResult(result: GetArestsResult) {
         when(result) {
-            is GetArestsResult.Success -> {
-                val newState = ArestsListState.Loaded(result.arests)
-                holder.submitState(newState)
-            }
-
             is GetArestsResult.NetworkError -> {
                 holder.submitState( ArestsListState.NetworkError() )
             }

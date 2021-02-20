@@ -40,7 +40,9 @@ internal object AuthorizationValidator {
 
 
     private fun throwIllegalParameter(message: String?): Nothing {
-        message?.also { println(it) }
-        throw IllegalServerParameterException()
+        val exc = message?.let {
+            IllegalServerParameterException(it)
+        } ?: IllegalServerParameterException()
+        throw exc
     }
 }
