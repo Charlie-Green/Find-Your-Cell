@@ -19,8 +19,11 @@ sealed class GetCoPrisonerState {
         var dialogConsumed = false
         var containerConsumed = false
 
-        class NoInternet: GetCoPrisonerState()
-        class Network: GetCoPrisonerState()
-        class NotConnected: GetCoPrisonerState()
+        class NoInternet: GetCoPrisonerState.Error()
+        class Network: GetCoPrisonerState.Error()
+
+        class NotConnected(
+            val prisonerName: String
+        ): GetCoPrisonerState.Error()
     }
 }

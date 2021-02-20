@@ -48,5 +48,6 @@
 
     <!-- Other: -->
     <string name="cp_common_cell">Могли встретиться в %s, %d</string>
+    <string name="not_coprisoner_msg">%s не соединён с Вами.</string>
 
 </resources>

@@ -14,6 +14,8 @@ import by.zenkevich_churun.findcell.prisoner.ui.common.interrupt.EditInterruptSt
 import by.zenkevich_churun.findcell.prisoner.ui.common.sched.ScheduleCellsCrudState
 import by.zenkevich_churun.findcell.prisoner.ui.common.sched.ScheduleLiveDatasStorage
 import by.zenkevich_churun.findcell.prisoner.ui.sched.model.ScheduleCrudState
+import by.zenkevich_churun.findcell.result.ui.contact.model.GetCoPrisonerState
+import by.zenkevich_churun.findcell.result.ui.contact.vm.CoPrisonerStateLDStorage
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -26,6 +28,7 @@ class PrisonerRootViewModel @Inject constructor(
     private val interruptStore: InterruptLiveDataStorage,
     unsavedChangesStore: UnsavedChangesLiveDatasStorage,
     private val arestHolder: ArestLiveDatasHolder,
+    private val coPrisonerStore: CoPrisonerStateLDStorage
 ): ViewModel() {
 
     val prisonerLD: LiveData<out Prisoner>
@@ -45,6 +48,9 @@ class PrisonerRootViewModel @Inject constructor(
 
     val unsavedChangesLD: LiveData<Boolean>
         = UnsavedPrisonerChangesLiveData(unsavedChangesStore, repo)
+
+    val coPrisonerStateLD: LiveData<GetCoPrisonerState>
+        get() = coPrisonerStore.stateLD
 
 
     var lastDestination: Int

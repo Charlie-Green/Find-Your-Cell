@@ -1,8 +1,10 @@
 package by.zenkevich_churun.findcell.result.ui.contact.vm
 
 import android.content.Context
+import android.util.Log
 import androidx.lifecycle.*
 import by.zenkevich_churun.findcell.core.injected.cp.CoPrisonersRepository
+import by.zenkevich_churun.findcell.core.injected.web.NetworkStateTracker
 import by.zenkevich_churun.findcell.entity.response.GetCoPrisonerResponse
 import by.zenkevich_churun.findcell.result.ui.contact.model.GetCoPrisonerState
 import kotlinx.coroutines.Dispatchers
@@ -11,32 +13,40 @@ import javax.inject.Inject
 
 
 class CoPrisonerContactsViewModel @Inject constructor(
-    private val repo: CoPrisonersRepository
+    private val repo: CoPrisonersRepository,
+    private val stateStore: CoPrisonerStateLDStorage,
+    private val netTracker: NetworkStateTracker
 ): ViewModel() {
 
-    private val mldState = MutableLiveData<GetCoPrisonerState>().apply {
-        value = GetCoPrisonerState.Idle
+    override fun onCleared() {
+        stateStore.submit(GetCoPrisonerState.Idle)
     }
 
+
     val stateLD: LiveData<GetCoPrisonerState>
-        get() = mldState
+        get() = stateStore.stateLD
 
     fun loadPrisoner(id: Int, name: String) {
         if(!shouldLoadPrisoner(id)) {
             return
         }
 
-        mldState.postValue(GetCoPrisonerState.Loading)
+        if(!netTracker.isInternetAvailable) {
+            stateStore.submit(GetCoPrisonerState.Error.NoInternet())
+            return
+        }
+
+        stateStore.submit(GetCoPrisonerState.Loading)
         viewModelScope.launch(Dispatchers.IO) {
             val response = repo.getPrisoner(id)
             val state = responseToState(id, name, response)
-            mldState.postValue(state)
+            stateStore.submit(state)
         }
     }
 
 
     private fun shouldLoadPrisoner(id: Int): Boolean {
-        val state = mldState.value!!
+        val state = stateLD.value ?: GetCoPrisonerState.Idle
 
         if(state is GetCoPrisonerState.Error) {
             return state.dialogConsumed && state.containerConsumed
@@ -58,7 +68,7 @@ class CoPrisonerContactsViewModel @Inject constructor(
             GetCoPrisonerState.Success(id, name, response.contacts, response.info)
 
         is GetCoPrisonerResponse.NotConnected ->
-            GetCoPrisonerState.Error.NotConnected()
+            GetCoPrisonerState.Error.NotConnected(name)
 
         is GetCoPrisonerResponse.NetworkError ->
             GetCoPrisonerState.Error.Network()

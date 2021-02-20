@@ -7,12 +7,10 @@ import android.view.View
 import android.view.ViewGroup.LayoutParams.MATCH_PARENT
 import android.view.ViewGroup.LayoutParams.WRAP_CONTENT
 import android.widget.LinearLayout
-import androidx.fragment.app.DialogFragment
+import androidx.navigation.fragment.findNavController
 import by.zenkevich_churun.findcell.core.ui.common.SviazenDialog
-import by.zenkevich_churun.findcell.core.util.android.AndroidUtil
 import by.zenkevich_churun.findcell.core.util.view.contact.ContactView
 import by.zenkevich_churun.findcell.entity.entity.Contact
-import by.zenkevich_churun.findcell.entity.entity.Prisoner
 import by.zenkevich_churun.findcell.result.R
 import by.zenkevich_churun.findcell.result.databinding.CoprisonerContactsDialogBinding
 import by.zenkevich_churun.findcell.result.ui.contact.model.GetCoPrisonerState
@@ -54,7 +52,7 @@ class CoPrisonerContactsDialog: SviazenDialog<CoprisonerContactsDialogBinding>()
         }
         if(state is GetCoPrisonerState.Error) {
             state.dialogConsumed = true
-            dismiss()
+            findNavController().navigateUp()
             return
         }
         if(state !is GetCoPrisonerState.Success) {

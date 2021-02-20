@@ -3,6 +3,7 @@ package by.zenkevich_churun.findcell.prisoner.ui.root.activity
 import android.app.Activity
 import android.graphics.Color
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import androidx.navigation.NavController
 import androidx.navigation.findNavController
@@ -17,6 +18,7 @@ import by.zenkevich_churun.findcell.prisoner.ui.common.interrupt.EditInterruptSt
 import by.zenkevich_churun.findcell.prisoner.ui.common.sched.ScheduleCellsCrudState
 import by.zenkevich_churun.findcell.prisoner.ui.root.vm.PrisonerRootViewModel
 import by.zenkevich_churun.findcell.prisoner.ui.sched.model.ScheduleCrudState
+import by.zenkevich_churun.findcell.result.ui.contact.model.GetCoPrisonerState
 import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -69,6 +71,10 @@ class PrisonerActivity: SviazenActivity<PrisonerActivityBinding>() {
         vm.unsavedChangesLD.observe(this, { changes ->
             thereAreUnsavedChanges = changes
         })
+
+        vm.coPrisonerStateLD.observe(this) { state ->
+            applyCoPrisonerState(state)
+        }
     }
 
     override fun onBackPressed() {
@@ -155,6 +161,26 @@ class PrisonerActivity: SviazenActivity<PrisonerActivityBinding>() {
         }
     }
 
+    private fun applyCoPrisonerState(state: GetCoPrisonerState) {
+        if(state !is GetCoPrisonerState.Error || state.containerConsumed) {
+            return
+        }
+        state.containerConsumed = true
+
+        when(state) {
+            is GetCoPrisonerState.Error.Network -> {
+                notifyError(R.string.network_error_title)
+            }
+            is GetCoPrisonerState.Error.NoInternet -> {
+                notifyError(R.string.no_internet_title)
+            }
+            is GetCoPrisonerState.Error.NotConnected -> {
+                val msg = getString(R.string.not_coprisoner_msg, state.prisonerName)
+                notifyError(msg)
+            }
+        }
+    }
+
 
     private fun warnEditInterrupt() {
         NavigationUtil.navigateIfNotYet(
@@ -191,10 +217,13 @@ class PrisonerActivity: SviazenActivity<PrisonerActivityBinding>() {
     private fun notifySuccess(messageRes: Int)
         = notifySuccess( getString(messageRes) )
 
-    private fun notifyError(messageRes: Int) {
-        Snackbar.make(vb.cdltRoot, messageRes, 3000).apply {
+    private fun notifyError(message: String) {
+        Snackbar.make(vb.cdltRoot, message, 3000).apply {
             setTextColor(Color.RED)
             show()
         }
     }
+
+    private fun notifyError(messageRes: Int)
+        = notifyError( getString(messageRes) )
 }

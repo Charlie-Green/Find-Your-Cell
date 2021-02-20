@@ -5,6 +5,7 @@ import by.zenkevich_churun.findcell.serial.util.protocol.Base64Util
 import by.zenkevich_churun.findcell.server.internal.repo.cp.CoPrisonersRepository
 import by.zenkevich_churun.findcell.server.protocol.controller.shared.ControllerUtil
 import by.zenkevich_churun.findcell.server.protocol.exc.IllegalServerParameterException
+import by.zenkevich_churun.findcell.server.protocol.exc.NotConnectedCoPrisonersException
 import by.zenkevich_churun.findcell.server.protocol.serial.cp.abstr.CoPrisonerSerializer
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.web.bind.annotation.*
@@ -57,6 +58,7 @@ class CoPrisonersController {
 
         val passwordHash = Base64Util.decode(passwordBase64)
         val cp = repo.coPrisoner(prisonerId, passwordHash, coPrisonerId)
+            ?: throw NotConnectedCoPrisonersException(prisonerId, coPrisonerId)
 
         return CoPrisonerSerializer
             .forVersion(version)

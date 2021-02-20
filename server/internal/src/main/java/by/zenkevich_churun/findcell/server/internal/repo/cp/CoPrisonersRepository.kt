@@ -78,18 +78,20 @@ class CoPrisonersRepository: SviazenRepositiory() {
     }
 
 
+    /** @return [Prisoner] entity with [Prisoner.info] and [Prisoner.contacts]
+      * of the requested [CoPrisoner], or null if the specified [Prisoner]s
+      * are not connected.**/
     fun coPrisoner(
         prisonerId: Int,
         passwordHash: ByteArray,
         coPrisonerId: Int
-    ): Prisoner {
+    ): Prisoner? {
 
         validateCredentials(prisonerId, passwordHash)
 
         val entry = dao.coPrisoner(prisonerId, coPrisonerId)
         if(entry?.relationOrdinal != CoPrisoner.Relation.CONNECTED.ordinal.toShort()) {
-            throw IllegalArgumentException(
-                "Prisoners $prisonerId and $coPrisonerId are not connected" )
+            return null
         }
 
         return prisonerDao.get(coPrisonerId)
