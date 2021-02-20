@@ -8,7 +8,10 @@ import javax.inject.Singleton
 
 @Singleton
 class UnsavedChangesLiveDatasStorage @Inject constructor() {
-    private val mldSchedule = createMutableLiveData()
+
+    private val mldSchedule = MutableLiveData<Boolean>().apply {
+        value = false
+    }
 
 
     val scheduleLD: LiveData<Boolean>
@@ -18,8 +21,4 @@ class UnsavedChangesLiveDatasStorage @Inject constructor() {
     fun setSchedule(hasUnsavedChanges: Boolean) {
         mldSchedule.postValue(hasUnsavedChanges)
     }
-
-
-    private fun createMutableLiveData()
-        = MutableLiveData<Boolean>().apply { value = false }
 }

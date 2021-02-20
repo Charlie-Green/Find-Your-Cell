@@ -89,6 +89,7 @@ class ProfileRepository @Inject constructor(
         autoSyncMan.set(false)
     }
 
+
     fun saveDraft(draft: Prisoner) {
         prisonerStore.prisonerLD.value?.also { extendedPrisoner ->
             prisonerStore.submit(draft, extendedPrisoner.passwordHash)
@@ -123,6 +124,10 @@ class ProfileRepository @Inject constructor(
 
     fun notifyDataChanged() {
         mldUnsavedChanges.postValue(true)
+    }
+
+    fun withdrawUnsavedChanges() {
+        mldUnsavedChanges.value = false
     }
 
 

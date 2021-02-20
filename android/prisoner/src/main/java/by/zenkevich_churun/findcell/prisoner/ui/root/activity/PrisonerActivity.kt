@@ -192,6 +192,10 @@ class PrisonerActivity: SviazenActivity<PrisonerActivityBinding>() {
     private fun interruptAndNavigate(state: EditInterruptState.Confirmed) {
         navMan.doOnce(state.source) {
             vb.cdltRoot.post {  // In order to avoid the FragmentManager-in-Transaction failure.
+                if(state.dest == R.id.actSelectAuthMenu) {
+                    vm.logOut()
+                }
+
                 navigate(state.dest)
                 vm.notifyInterruptConfirmationConsumed()
             }

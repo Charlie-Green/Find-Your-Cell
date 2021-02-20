@@ -17,8 +17,11 @@ class InterruptLiveDataStorage @Inject constructor() {
         get() = mldState
 
 
+    fun navigate(source: Int, dest: Int) {
+        mldState.value = EditInterruptState.Confirmed(source, dest)
+    }
+
     fun interrupt(source: Int, dest: Int) {
-        val state = mldState.value as? EditInterruptState.NotRequested ?: return
         mldState.value = EditInterruptState.Asking(source, dest)
     }
 
@@ -28,12 +31,10 @@ class InterruptLiveDataStorage @Inject constructor() {
     }
 
     fun decline() {
-        val state = mldState.value as? EditInterruptState.Asking ?: return
         mldState.value = EditInterruptState.NotRequested
     }
 
     fun notifyConfirmationConsumed() {
-        val state = mldState.value as? EditInterruptState.Confirmed ?: return
         mldState.value = EditInterruptState.NotRequested
     }
 }

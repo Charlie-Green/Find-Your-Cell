@@ -4,7 +4,6 @@ import androidx.appcompat.widget.Toolbar
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.navigation.NavController
 import by.zenkevich_churun.findcell.core.util.android.AndroidUtil
-import by.zenkevich_churun.findcell.core.util.android.NavigationUtil
 import by.zenkevich_churun.findcell.prisoner.R
 import by.zenkevich_churun.findcell.prisoner.ui.root.vm.PrisonerRootViewModel
 import com.google.android.material.navigation.NavigationView
@@ -65,43 +64,30 @@ internal class PrisonerNavigationManager(
     private fun navigate(itemId: Int): Boolean {
         val currentDest = controller.currentDestination?.id ?: 0
         val unsavedChanges = vm.unsavedChangesLD.value ?: false
-        if(unsavedChanges && itemId != R.id.miProfile) {
-            vm.notifyEditInterrupted(currentDest, R.id.actSelectArestsMenu)
-            return false
-        }
-
-        when(itemId) {
-            R.id.miProfile  -> navigateToDest(R.id.fragmProfile,  R.id.actSelectProfileMenu)
-            R.id.miArests   -> navigateToDest(R.id.fragmArests,   R.id.actSelectArestsMenu)
-            R.id.miCps      -> navigateToDest(R.id.fragmCps,      R.id.actSelectCpsMenu)
-            R.id.miRequests -> navigateToDest(R.id.fragmRequests, R.id.actSelectRequestsMenu)
-
-            R.id.miAuth -> {
-                navigateToDest(R.id.fragmAuth, R.id.actSelectAuthMenu)
-                vm.logOut()
-            }
-
+        val desiredNav = when(itemId) {
+            R.id.miProfile  -> R.id.actSelectProfileMenu
+            R.id.miArests   -> R.id.actSelectArestsMenu
+            R.id.miCps      -> R.id.actSelectCpsMenu
+            R.id.miRequests -> R.id.actSelectRequestsMenu
+            R.id.miAuth     -> R.id.actSelectAuthMenu
             else -> throw NotImplementedError("Unknown menu item $itemId")
         }
 
+        if(unsavedChanges && itemId != R.id.miProfile) {
+            vm.notifyEditInterrupted(currentDest, desiredNav)
+            return false
+        }
+
+        vm.navigateTo(currentDest, desiredNav)
         return true
     }
-
-    private fun navigateToDest(desiredNav: Int, action: Int) {
-        NavigationUtil.navigateIfNotYet(
-            controller,
-            desiredNav,
-            action
-        ) { null }
-    }
-
 
     private fun select(destId: Int) {
         val itemId = when(destId) {
             R.id.fragmProfile  -> R.id.miProfile
             R.id.fragmArests   -> R.id.miArests
-            R.id.fragmCps      -> R.id.fragmCps
-            R.id.fragmRequests -> R.id.fragmRequests
+            R.id.fragmCps      -> R.id.miCps
+            R.id.fragmRequests -> R.id.miRequests
             R.id.fragmAuth     -> R.id.miAuth
             else -> return
         }

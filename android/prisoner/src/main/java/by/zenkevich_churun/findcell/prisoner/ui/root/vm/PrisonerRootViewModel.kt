@@ -67,6 +67,9 @@ class PrisonerRootViewModel @Inject constructor(
     fun notifyInterruptConfirmationConsumed()
         = interruptStore.notifyConfirmationConsumed()
 
+    fun navigateTo(currentDest: Int, desiredDest: Int)
+        = interruptStore.navigate(currentDest, desiredDest)
+
     fun logOut() {
         viewModelScope.launch(Dispatchers.IO) {
             repo.logOut()
