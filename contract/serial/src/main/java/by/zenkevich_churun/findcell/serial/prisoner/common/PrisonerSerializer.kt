@@ -3,6 +3,7 @@ package by.zenkevich_churun.findcell.serial.prisoner.common
 import by.zenkevich_churun.findcell.entity.entity.Prisoner
 import by.zenkevich_churun.findcell.entity.response.LogInResponse
 import by.zenkevich_churun.findcell.entity.response.SignUpResponse
+import by.zenkevich_churun.findcell.serial.common.abstr.Base64Coder
 import by.zenkevich_churun.findcell.serial.prisoner.v1.serial.PrisonerSerializer1
 
 
@@ -13,8 +14,11 @@ interface PrisonerSerializer {
 
 
     companion object {
-        fun forVersion(v: Int): PrisonerSerializer = when(v) {
-            1 -> PrisonerSerializer1()
+        fun forVersion(
+            base64: Base64Coder,
+            v: Int
+        ): PrisonerSerializer = when(v) {
+            1 -> PrisonerSerializer1(base64)
             else -> throw IllegalArgumentException("Unknown version $v")
         }
     }

@@ -5,7 +5,6 @@ import by.zenkevich_churun.findcell.entity.entity.Contact
 import by.zenkevich_churun.findcell.entity.entity.Prisoner
 import by.zenkevich_churun.findcell.serial.prisoner.contract.InternalPrisonerContract1
 import by.zenkevich_churun.findcell.serial.util.prisoner.PrisonerSerialUtil
-import by.zenkevich_churun.findcell.serial.util.protocol.Base64Util
 import com.google.gson.annotations.SerializedName
 
 
@@ -51,17 +50,8 @@ internal class PrisonerPojo1: Prisoner() {
     var contactInstagram: String? = null
 
 
-    override var passwordHash: ByteArray?
-        get() {
-            val base64 = passwordBase64
-                ?: throw NullPointerException("Password hash not specified")
-            return Base64Util.decode(base64)
-        }
-        set(value) {
-            passwordBase64 = value?.let {
-                Base64Util.encode(it)
-            }
-        }
+    override val passwordHash: ByteArray?
+        get() = null
 
 
     override val contacts: List<Contact>
@@ -79,31 +69,36 @@ internal class PrisonerPojo1: Prisoner() {
 
     companion object {
 
-        fun from(p: Prisoner): PrisonerPojo1 {
-            if(p is PrisonerPojo1) {
-                return p
+        fun from(
+            prisoner: Prisoner,
+            passwordBase64: String?
+        ): PrisonerPojo1 {
+
+            if(prisoner is PrisonerPojo1) {
+                return prisoner
             }
 
-            return PrisonerPojo1().apply {
-                id = p.id
-                username = p.username
-                passwordHash = p.passwordHash
-                name = p.name
-                info = p.info
+            val pojo = PrisonerPojo1()
+            pojo.id = prisoner.id
+            pojo.username = prisoner.username
+            pojo.passwordBase64 = passwordBase64
+            pojo.name = prisoner.name
+            pojo.info = prisoner.info
 
-                for(c in p.contacts) {
-                    when(c.type) {
-                        Contact.Type.PHONE     -> { contactPhone     = c.data }
-                        Contact.Type.TELEGRAM  -> { contactTelegram  = c.data }
-                        Contact.Type.VIBER     -> { contactViber     = c.data }
-                        Contact.Type.WHATSAPP  -> { contactWhatsApp  = c.data }
-                        Contact.Type.SKYPE     -> { contactSkype     = c.data }
-                        Contact.Type.VK        -> { contactVk        = c.data }
-                        Contact.Type.FACEBOOK  -> { contactFacebook  = c.data }
-                        Contact.Type.INSTAGRAM -> { contactInstagram = c.data }
-                    }
+            for(c in prisoner.contacts) {
+                when(c.type) {
+                    Contact.Type.PHONE     -> { pojo.contactPhone     = c.data }
+                    Contact.Type.TELEGRAM  -> { pojo.contactTelegram  = c.data }
+                    Contact.Type.VIBER     -> { pojo.contactViber     = c.data }
+                    Contact.Type.WHATSAPP  -> { pojo.contactWhatsApp  = c.data }
+                    Contact.Type.SKYPE     -> { pojo.contactSkype     = c.data }
+                    Contact.Type.VK        -> { pojo.contactVk        = c.data }
+                    Contact.Type.FACEBOOK  -> { pojo.contactFacebook  = c.data }
+                    Contact.Type.INSTAGRAM -> { pojo.contactInstagram = c.data }
                 }
             }
+
+            return pojo
         }
     }
 }

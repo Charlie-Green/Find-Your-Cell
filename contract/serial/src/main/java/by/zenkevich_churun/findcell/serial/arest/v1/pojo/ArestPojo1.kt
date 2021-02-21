@@ -2,7 +2,6 @@ package by.zenkevich_churun.findcell.serial.arest.v1.pojo
 
 import by.zenkevich_churun.findcell.entity.entity.LightArest
 import by.zenkevich_churun.findcell.serial.arest.pojo.ArestPojo
-import by.zenkevich_churun.findcell.serial.util.protocol.Base64Util
 import com.google.gson.annotations.SerializedName
 
 
@@ -39,10 +38,8 @@ class ArestPojo1: ArestPojo() {
         fun from(
             a: LightArest,
             prisonerId: Int?,
-            passwordHash: ByteArray?
+            passwordBase64: String?
         ): ArestPojo1 {
-
-            val passwordBase64 = passwordHash?.let { Base64Util.encode(it) }
 
             if(a is ArestPojo1) {
                 a.prisonerId = prisonerId

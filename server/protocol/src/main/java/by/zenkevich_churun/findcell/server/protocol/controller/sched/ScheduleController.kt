@@ -1,8 +1,8 @@
 package by.zenkevich_churun.findcell.server.protocol.controller.sched
 
+import by.zenkevich_churun.findcell.serial.common.abstr.Base64Coder
 import by.zenkevich_churun.findcell.serial.sched.serial.ScheduleDeserializer
 import by.zenkevich_churun.findcell.serial.sched.serial.ScheduleSerializer
-import by.zenkevich_churun.findcell.serial.util.protocol.Base64Util
 import by.zenkevich_churun.findcell.server.internal.repo.sched.ScheduleRepository
 import by.zenkevich_churun.findcell.server.protocol.controller.sched.map.ScheduleMapper
 import by.zenkevich_churun.findcell.server.protocol.controller.shared.ControllerUtil
@@ -18,6 +18,9 @@ class ScheduleController {
     @Autowired
     private lateinit var repo: ScheduleRepository
 
+    @Autowired
+    private lateinit var base64Coder: Base64Coder
+
 
     @PostMapping("sched/get")
     fun get(
@@ -27,7 +30,7 @@ class ScheduleController {
     ): String {
 
         val pojo = ControllerUtil.catchingIllegalArgument {
-            val passwordHash = Base64Util.decode(passwordBase64)
+            val passwordHash = base64Coder.decode(passwordBase64)
             val view = repo.get(arestId, passwordHash)
             ScheduleMapper.forVersion(version).schedulePojo(view)
         }
@@ -48,7 +51,7 @@ class ScheduleController {
             ?: throw IllegalServerParameterException("Arest ID must be provided")
         val passwordBase64 = pojo.passwordBase64
             ?: throw IllegalServerParameterException("Password must be provided")
-        val passwordHash = Base64Util.decode(passwordBase64)
+        val passwordHash = base64Coder.decode(passwordBase64)
 
         repo.save(arestId, pojo.periods, passwordHash)
 

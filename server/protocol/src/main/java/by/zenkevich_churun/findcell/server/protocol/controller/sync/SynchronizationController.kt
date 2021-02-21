@@ -1,6 +1,6 @@
 package by.zenkevich_churun.findcell.server.protocol.controller.sync
 
-import by.zenkevich_churun.findcell.serial.util.protocol.Base64Util
+import by.zenkevich_churun.findcell.serial.common.abstr.Base64Coder
 import by.zenkevich_churun.findcell.server.internal.repo.sync.SynchronizationRepository
 import by.zenkevich_churun.findcell.server.protocol.controller.shared.ControllerUtil
 import by.zenkevich_churun.findcell.server.protocol.serial.sync.abstr.SynchronizationSerializer
@@ -14,6 +14,9 @@ class SynchronizationController {
     @Autowired
     private lateinit var repo: SynchronizationRepository
 
+    @Autowired
+    private lateinit var base64Coder: Base64Coder
+
 
     @PostMapping("sync")
     fun sync(
@@ -22,7 +25,7 @@ class SynchronizationController {
         @RequestParam("pass") passwordBase64: String
 
     ): String = ControllerUtil.catchingIllegalArgument {
-        val passwordHash =Base64Util.decode(passwordBase64)
+        val passwordHash = base64Coder.decode(passwordBase64)
         val data = repo.synchronizedData(prisonerId, passwordHash)
         val serialer = SynchronizationSerializer.forVersion(version)
         return serialer.serialize(data)

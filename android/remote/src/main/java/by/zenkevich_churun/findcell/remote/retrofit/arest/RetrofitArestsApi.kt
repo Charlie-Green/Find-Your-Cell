@@ -8,7 +8,7 @@ import by.zenkevich_churun.findcell.remote.retrofit.common.RetrofitHolder
 import by.zenkevich_churun.findcell.serial.arest.serial.ArestsDeserializer
 import by.zenkevich_churun.findcell.serial.arest.serial.ArestsSerializer
 import by.zenkevich_churun.findcell.serial.arest.v1.pojo.ArestPojo1
-import by.zenkevich_churun.findcell.serial.util.protocol.Base64Util
+import by.zenkevich_churun.findcell.serial.common.abstr.Base64Coder
 import okhttp3.MediaType
 import okhttp3.RequestBody
 import javax.inject.Inject
@@ -17,7 +17,8 @@ import javax.inject.Singleton
 
 @Singleton
 class RetrofitArestsApi @Inject constructor(
-    private val retrofitHolder: RetrofitHolder
+    private val retrofitHolder: RetrofitHolder,
+    private val base64: Base64Coder
 ): ArestsApi {
 
     override fun create(
@@ -34,7 +35,7 @@ class RetrofitArestsApi @Inject constructor(
         arest.end   = end
 
         val json = ArestsSerializer
-            .forVersion(1)
+            .forVersion(1, base64)
             .serialize(arest, prisonerId, passwordHash)
         val mediaType = MediaType.get("application/json")
         val requestBody = RequestBody.create(mediaType, json)
@@ -54,7 +55,7 @@ class RetrofitArestsApi @Inject constructor(
         passwordHash: ByteArray
     ): List<LightArest> {
 
-        val passwordBase64 = Base64Util.encode(passwordHash)
+        val passwordBase64 = base64.encode(passwordHash)
 
         val service = retrofit.create(ArestsService::class.java)
         val response = service
@@ -75,7 +76,7 @@ class RetrofitArestsApi @Inject constructor(
         newEnd: Long
     ): CreateOrUpdateArestResponse {
 
-        TODO("Not yet implemented")
+        TODO("Not implemented in Sviazeń 1.0")
     }
 
     override fun delete(
@@ -86,7 +87,7 @@ class RetrofitArestsApi @Inject constructor(
         val service = retrofit.create(ArestsService::class.java)
 
         val json = ArestsSerializer
-            .forVersion(1)
+            .forVersion(1, base64)
             .serialize(prisonerId, passwordHash, ids)
         val mediaType = MediaType.get("application/json")
         val request = RequestBody.create(mediaType, json)

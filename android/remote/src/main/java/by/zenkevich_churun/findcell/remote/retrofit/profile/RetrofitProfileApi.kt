@@ -6,9 +6,9 @@ import by.zenkevich_churun.findcell.entity.response.LogInResponse
 import by.zenkevich_churun.findcell.entity.response.SignUpResponse
 import by.zenkevich_churun.findcell.remote.retrofit.common.RetrofitApisUtil
 import by.zenkevich_churun.findcell.remote.retrofit.common.RetrofitHolder
+import by.zenkevich_churun.findcell.serial.common.abstr.Base64Coder
 import by.zenkevich_churun.findcell.serial.prisoner.common.PrisonerDeserializer
 import by.zenkevich_churun.findcell.serial.prisoner.common.PrisonerSerializer
-import by.zenkevich_churun.findcell.serial.util.protocol.Base64Util
 import okhttp3.MediaType
 import okhttp3.RequestBody
 import javax.inject.Inject
@@ -17,7 +17,8 @@ import javax.inject.Singleton
 
 @Singleton
 class RetrofitProfileApi @Inject constructor(
-    private val retrofitHolder: RetrofitHolder
+    private val retrofitHolder: RetrofitHolder,
+    private val base64: Base64Coder
 ): ProfileApi {
 
     override fun logIn(
@@ -25,7 +26,7 @@ class RetrofitProfileApi @Inject constructor(
         passwordHash: ByteArray
     ): LogInResponse {
 
-        val passwordBase64 = Base64Util.encode(passwordHash)
+        val passwordBase64 = base64.encode(passwordHash)
 
         val service = retrofit.create(ProfileService::class.java)
         val response = service.logIn(1, username, passwordBase64).execute()
@@ -43,7 +44,7 @@ class RetrofitProfileApi @Inject constructor(
         passwordHash: ByteArray
     ): SignUpResponse {
 
-        val passwordBase64 = Base64Util.encode(passwordHash)
+        val passwordBase64 = base64.encode(passwordHash)
 
         val service = retrofit.create(ProfileService::class.java)
         val response = service
@@ -59,7 +60,7 @@ class RetrofitProfileApi @Inject constructor(
 
     override fun update(prisoner: Prisoner) {
         val serialized = PrisonerSerializer
-            .forVersion(1)
+            .forVersion(base64, 1)
             .serialize(prisoner)
         val bodyType = MediaType.get("text/plain")
 

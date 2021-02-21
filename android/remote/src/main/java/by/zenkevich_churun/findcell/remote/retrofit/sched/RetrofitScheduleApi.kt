@@ -6,13 +6,12 @@ import by.zenkevich_churun.findcell.entity.entity.Schedule
 import by.zenkevich_churun.findcell.remote.retrofit.common.RetrofitApisUtil
 import by.zenkevich_churun.findcell.remote.retrofit.common.RetrofitHolder
 import by.zenkevich_churun.findcell.remote.retrofit.sched.entity.DeserializedSchedule
+import by.zenkevich_churun.findcell.serial.common.abstr.Base64Coder
 import by.zenkevich_churun.findcell.serial.sched.serial.ScheduleDeserializer
 import by.zenkevich_churun.findcell.serial.sched.serial.ScheduleSerializer
 import by.zenkevich_churun.findcell.serial.sched.v1.pojo.CellEntryPojo1
 import by.zenkevich_churun.findcell.serial.sched.v1.pojo.LightSchedulePojo1
-import by.zenkevich_churun.findcell.serial.sched.v1.pojo.SchedulePojo1
 import by.zenkevich_churun.findcell.serial.sched.v1.pojo.TwoCellEntriesPojo1
-import by.zenkevich_churun.findcell.serial.util.protocol.Base64Util
 import okhttp3.MediaType
 import okhttp3.RequestBody
 import javax.inject.Inject
@@ -22,7 +21,8 @@ import javax.inject.Singleton
 @Singleton
 class RetrofitScheduleApi @Inject constructor(
     private val retrofitHolder: RetrofitHolder,
-    private val props: SchedulePropertiesAccessor
+    private val props: SchedulePropertiesAccessor,
+    private val base64: Base64Coder
 ): ScheduleApi {
 
     override fun get(
@@ -31,7 +31,7 @@ class RetrofitScheduleApi @Inject constructor(
         arestId: Int
     ): Schedule {
 
-        val passwordBase64 = Base64Util.encode(passwordHash)
+        val passwordBase64 = base64.encode(passwordHash)
 
         val response = createService()
             .get(1, arestId, passwordBase64)
@@ -56,7 +56,8 @@ class RetrofitScheduleApi @Inject constructor(
         passwordHash: ByteArray,
         schedule: Schedule ) {
 
-        val pojo = LightSchedulePojo1.from(schedule, passwordHash)
+        val passBase64 = base64.encode(passwordHash)
+        val pojo = LightSchedulePojo1.from(schedule, passBase64)
         val data = ScheduleSerializer
             .forVersion(1)
             .serializeLight(pojo)
@@ -77,7 +78,7 @@ class RetrofitScheduleApi @Inject constructor(
         cellNumber: Short ) {
 
         val pojo = CellEntryPojo1()
-        pojo.passwordBase64 = Base64Util.encode(passwordHash)
+        pojo.passwordBase64 = base64.encode(passwordHash)
         pojo.arestId = arestId
         pojo.jailId = jailId
         pojo.cellNumber = cellNumber
@@ -97,7 +98,7 @@ class RetrofitScheduleApi @Inject constructor(
 
         val pojo = TwoCellEntriesPojo1()
         pojo.arestId = arestId
-        pojo.passwordBase64 = Base64Util.encode(passwordHash)
+        pojo.passwordBase64 = base64.encode(passwordHash)
         pojo.oldJailId     = oldJailId
         pojo.oldCellNumber = oldCellNumber
         pojo.newJailId     = newJailId
@@ -118,7 +119,7 @@ class RetrofitScheduleApi @Inject constructor(
         cellNumber: Short ) {
 
         val pojo = CellEntryPojo1()
-        pojo.passwordBase64 = Base64Util.encode(passwordHash)
+        pojo.passwordBase64 = base64.encode(passwordHash)
         pojo.arestId        = arestId
         pojo.jailId         = jailId
         pojo.cellNumber     = cellNumber

@@ -19,6 +19,7 @@ class AuthorizationRepository: SviazenRepositiory() {
 
         val prisonerView = prisonerDao.get(username, passwordHash)
         if(prisonerView != null) {
+            prisonerView.passwordHash = null  // Don't send back the password hash
             return LogInResponse.Success(prisonerView)
         }
 
@@ -52,10 +53,6 @@ class AuthorizationRepository: SviazenRepositiory() {
 
         val createdPrisoner = PrisonerView()
         createdPrisoner.id         = createdEntity.id
-        createdEntity.username     = createdEntity.username
-        createdEntity.passwordHash = createdEntity.passwordHash
-        createdEntity.name         = createdEntity.name
-        createdEntity.info         = createdEntity.info
 
         return SignUpResponse.Success(createdPrisoner)
     }

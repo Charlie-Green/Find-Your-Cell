@@ -4,10 +4,13 @@ import by.zenkevich_churun.findcell.entity.entity.LightArest
 import by.zenkevich_churun.findcell.entity.response.CreateOrUpdateArestResponse
 import by.zenkevich_churun.findcell.serial.arest.serial.ArestsSerializer
 import by.zenkevich_churun.findcell.serial.arest.v1.pojo.*
+import by.zenkevich_churun.findcell.serial.common.abstr.Base64Coder
 import by.zenkevich_churun.findcell.serial.util.protocol.ProtocolUtil
 
 
-internal class ArestsSerializer1: ArestsSerializer {
+internal class ArestsSerializer1(
+    private val base64: Base64Coder
+): ArestsSerializer {
 
     override fun serialize(arests: List<LightArest>): String {
         val listPojo = ArestsListPojo1.wrap(arests)
@@ -19,7 +22,8 @@ internal class ArestsSerializer1: ArestsSerializer {
         prisonerId: Int,
         passwordHash: ByteArray
     ): String {
-        val pojo = ArestPojo1.from(arest, prisonerId, passwordHash)
+        val passBase64 = base64.encode(passwordHash)
+        val pojo = ArestPojo1.from(arest, prisonerId, passBase64)
         return ProtocolUtil.toJson(pojo, APPROX_BYTES_PER_AREST)
     }
 

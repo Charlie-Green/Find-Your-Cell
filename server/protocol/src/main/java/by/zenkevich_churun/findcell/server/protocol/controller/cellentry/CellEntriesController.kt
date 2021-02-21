@@ -1,7 +1,7 @@
 package by.zenkevich_churun.findcell.server.protocol.controller.cellentry
 
+import by.zenkevich_churun.findcell.serial.common.abstr.Base64Coder
 import by.zenkevich_churun.findcell.serial.sched.pojo.CellEntryPojo
-import by.zenkevich_churun.findcell.serial.util.protocol.Base64Util
 import by.zenkevich_churun.findcell.server.internal.repo.cellentry.CellEntriesRepository
 import by.zenkevich_churun.findcell.server.protocol.exc.IllegalServerParameterException
 import by.zenkevich_churun.findcell.server.protocol.serial.cellentry.abstr.CellEntriesDeserializer
@@ -16,6 +16,9 @@ class CellEntriesController {
 
     @Autowired
     private lateinit var repo: CellEntriesRepository
+
+    @Autowired
+    private lateinit var base64Coder: Base64Coder
 
 
     @PostMapping("cell/add")
@@ -78,6 +81,6 @@ class CellEntriesController {
 
     private fun requirePassword(base64: String?): ByteArray {
         base64 ?: throw IllegalServerParameterException("Missing password")
-        return Base64Util.decode(base64)
+        return base64Coder.decode(base64)
     }
 }

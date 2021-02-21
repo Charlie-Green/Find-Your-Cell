@@ -11,6 +11,7 @@ import by.zenkevich_churun.findcell.entity.response.LogInResponse
 import by.zenkevich_churun.findcell.entity.response.SignUpResponse
 import by.zenkevich_churun.findcell.prisoner.R
 import by.zenkevich_churun.findcell.core.common.prisoner.PrisonerStorage
+import by.zenkevich_churun.findcell.core.injected.common.Hasher
 import by.zenkevich_churun.findcell.core.injected.sync.AutomaticSyncManager
 import by.zenkevich_churun.findcell.prisoner.ui.profile.model.PrisonerDraft
 import dagger.hilt.android.qualifiers.ApplicationContext
@@ -24,7 +25,8 @@ class ProfileRepository @Inject constructor(
     @ApplicationContext private val appContext: Context,
     private val api: ProfileApi,
     private val prisonerStore: PrisonerStorage,
-    private val autoSyncMan: AutomaticSyncManager ) {
+    private val autoSyncMan: AutomaticSyncManager,
+    private val hasher: Hasher ) {
 
     private val authStore = AuthorizationMetadataStorage(appContext)
 
@@ -46,7 +48,7 @@ class ProfileRepository @Inject constructor(
 
 
     fun logIn(username: String, password: String): LogInResponse {
-        val passHash = password.toByteArray()
+        val passHash = hasher.hash(password)
         val response = try {
             api.logIn(username, passHash)
         } catch(exc: IOException) {
@@ -66,7 +68,7 @@ class ProfileRepository @Inject constructor(
         password: String
     ): SignUpResponse {
 
-        val passHash = password.toByteArray(Charsets.UTF_16)
+        val passHash = hasher.hash(password)
         val defaultName = appContext.getString(R.string.prisoner_default_name)
 
         val response = try {

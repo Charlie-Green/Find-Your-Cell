@@ -1,7 +1,5 @@
 package by.zenkevich_churun.findcell.entity.entity
 
-import by.zenkevich_churun.findcell.entity.entity.Contact
-
 
 abstract class Prisoner {
 
@@ -14,7 +12,9 @@ abstract class Prisoner {
       * Not publicly visible. Not modifiable. **/
     abstract val username: String?
 
-    /** Hash of the user's password. Required for authorization. **/
+    /** Hash of the user's password. Required for authorization.
+      * As of Sviazeń 1.0, this is a SHA-512 hash
+      * of UTF-8 representation of the user's password. **/
     abstract val passwordHash: ByteArray?
 
     /** Name created by the user and visible to everyone.

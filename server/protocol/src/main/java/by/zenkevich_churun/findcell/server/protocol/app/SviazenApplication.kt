@@ -23,7 +23,8 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories
 ])
 @Import(
     RepositoryBeans::class,
-    DatabaseBeans::class
+    DatabaseBeans::class,
+    ControllerBeans::class
 )
 open class SviazenApplication: SpringApplication() {
 

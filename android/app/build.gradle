@@ -52,4 +52,5 @@ dependencies {
     implementation project(":result")
     implementation project(":remote")
     implementation project(":core")
+    implementation project(":serial")
 }

@@ -4,7 +4,7 @@ import by.zenkevich_churun.findcell.core.api.sync.SynchronizationApi
 import by.zenkevich_churun.findcell.entity.pojo.SynchronizedPojo
 import by.zenkevich_churun.findcell.remote.retrofit.common.RetrofitApisUtil
 import by.zenkevich_churun.findcell.remote.retrofit.common.RetrofitHolder
-import by.zenkevich_churun.findcell.serial.util.protocol.Base64Util
+import by.zenkevich_churun.findcell.serial.common.abstr.Base64Coder
 import java.io.IOException
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -12,7 +12,8 @@ import javax.inject.Singleton
 
 @Singleton
 class RetrofitSynchronizationApi @Inject constructor(
-    private val retrofitHolder: RetrofitHolder
+    private val retrofitHolder: RetrofitHolder,
+    private val base64: Base64Coder
 ): SynchronizationApi {
 
     override fun fetchData(
@@ -20,7 +21,7 @@ class RetrofitSynchronizationApi @Inject constructor(
         passwordHash: ByteArray
     ): SynchronizedPojo {
 
-        val passBase64 = Base64Util.encode(passwordHash)
+        val passBase64 = base64.encode(passwordHash)
 
         val service = retrofitHolder
             .retrofit

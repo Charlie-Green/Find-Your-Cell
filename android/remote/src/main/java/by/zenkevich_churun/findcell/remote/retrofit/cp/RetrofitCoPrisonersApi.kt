@@ -5,8 +5,8 @@ import by.zenkevich_churun.findcell.entity.entity.CoPrisoner
 import by.zenkevich_churun.findcell.entity.response.GetCoPrisonerResponse
 import by.zenkevich_churun.findcell.remote.retrofit.common.RetrofitApisUtil
 import by.zenkevich_churun.findcell.remote.retrofit.common.RetrofitHolder
+import by.zenkevich_churun.findcell.serial.common.abstr.Base64Coder
 import by.zenkevich_churun.findcell.serial.cp.v1.CoPrisonerContactsPojo1
-import by.zenkevich_churun.findcell.serial.util.protocol.Base64Util
 import by.zenkevich_churun.findcell.serial.util.protocol.ProtocolUtil
 import okhttp3.ResponseBody
 import retrofit2.Response
@@ -15,7 +15,8 @@ import javax.inject.Inject
 
 
 class RetrofitCoPrisonersApi @Inject constructor(
-    private val retrofitHolder: RetrofitHolder
+    private val retrofitHolder: RetrofitHolder,
+    private val base64: Base64Coder
 ): CoPrisonersApi {
 
     override fun connect(
@@ -24,7 +25,7 @@ class RetrofitCoPrisonersApi @Inject constructor(
         coPrisonerId: Int
     ): CoPrisoner.Relation {
 
-        val passwordBase64 = Base64Util.encode(passwordHash)
+        val passwordBase64 = base64.encode(passwordHash)
 
         val response = createService()
             .connect(1, prisonerId, passwordBase64, coPrisonerId)
@@ -40,7 +41,7 @@ class RetrofitCoPrisonersApi @Inject constructor(
         coPrisonerId: Int
     ): CoPrisoner.Relation {
 
-        val passwordBase64 = Base64Util.encode(passwordHash)
+        val passwordBase64 = base64.encode(passwordHash)
 
         val response = createService()
             .disconnect(1, prisonerId, passwordBase64, coPrisonerId)
@@ -56,7 +57,7 @@ class RetrofitCoPrisonersApi @Inject constructor(
         coPrisonerId: Int
     ): GetCoPrisonerResponse {
 
-        val passwordBase64 = Base64Util.encode(passwordHash)
+        val passwordBase64 = base64.encode(passwordHash)
 
         val response = createService()
             .coPrisoner(1, prisonerId, passwordBase64, coPrisonerId)

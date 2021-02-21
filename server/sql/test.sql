@@ -66,8 +66,14 @@ values(3, 4, 10);
 -- ---------------------------------------------
 -- Profile:
 
+-- The password is "111"
 insert into `Prisoners`(`username`, `pass`, `name`, `info`)
-values("charl", "111", "Чарльз", "Я - тестовый пользователь.");
+values(
+    "charl",
+    0xfb131bc57a477c8c9d068f1ee5622ac304195a77164ccc2d75d82dfe1a727ba8d674ed87f96143b2b416aacefb555e3045c356faa23e6d21de72b85822e39fdd,
+    "Чарльз",
+    "Я - тестовый пользователь."
+);
 
 insert into `Contacts`(`prisoner`, `type`, `data`)
 values(1, 1, "t.me/mytelega");

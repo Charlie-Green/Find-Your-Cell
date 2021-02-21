@@ -6,8 +6,14 @@
 -- -------------------------------------------------------------------
 -- Prisoner #2:
 
+-- The password is "222"
 insert into `Prisoners`(`username`, `pass`, `name`, `info`)
-values("simon", "222", "Саймон", "Я второй тестовый пользователь");
+values(
+    "simon",
+    0x5f28f24f5520230fd1e66ea6ac649e9f9637515f516b2ef74fc90622b60f165eafca8f34db8471b85b9b4a2cdf72f75099ae0eb8860c4f339252261778d406eb,
+    "Саймон",
+    "Я второй тестовый пользователь"
+);
 
 insert into `Contacts`(`prisoner`, `type`, `data`)
 values(2, 0, "+370 2 2334455");
@@ -41,8 +47,14 @@ values(3, 1605045600000, 1605650400000, 2, 1);
 -- -------------------------------------------------------------------
 -- Prisoner #3:
 
+-- The password is "333"
 insert into `Prisoners`(`username`, `pass`, `name`, `info`)
-values("john", "333", "Džonas", "Я никакой не Йонас, а тестовый пользователь Джонас!");
+values(
+    "john",
+    0x5e3155774d39d97c5f9e17c108c2b3e0485a43ae34ebd196f61a6f8bf732ef71a49e5710594cfc7391db114edf99f5da3ed96ef1d6ca5e598e85f91bd41e7eeb,
+    "Džonas",
+    "Я никакой не Йонас, а тестовый пользователь Джонас!"
+);
 
 insert into `Contacts`(`prisoner`, `type`, `data`)
 values(3, 2, "+370 60 555443");
@@ -89,11 +101,17 @@ values(5, 1602277200000, 1603314000000, 1, 2);
 -- -------------------------------------------------------------------
 -- Prisoner #4:
 
+-- The password is "444"
 insert into `Prisoners`(`username`, `pass`, `name`, `info`)
-values("kate", "444", "Кацярына", "Бацькауна, але не ябацькауна");
+values(
+    "kate",
+    0xa5e4209e841321ae706ee84b94b38088a18acc7643250e4bb0af543c9d7599a0854c8e08c2283ec0ee338806cca171206340a510c5c406beb6ec3b6f18150c4b,
+    "Кацярына",
+    "Бацькаўна"
+);
 
 insert into `Contacts`(`prisoner`, `type`, `data`)
-values(4, 7, "instagram.com/kateneyabatska");
+values(4, 7, "instagram.com/kateofbatska");
 
 
 -- 16.10.2020 - 26.10.2020

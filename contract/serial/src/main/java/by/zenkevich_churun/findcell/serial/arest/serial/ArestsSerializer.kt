@@ -3,6 +3,7 @@ package by.zenkevich_churun.findcell.serial.arest.serial
 import by.zenkevich_churun.findcell.entity.entity.LightArest
 import by.zenkevich_churun.findcell.entity.response.CreateOrUpdateArestResponse
 import by.zenkevich_churun.findcell.serial.arest.v1.serial.ArestsSerializer1
+import by.zenkevich_churun.findcell.serial.common.abstr.Base64Coder
 
 
 interface ArestsSerializer {
@@ -25,9 +26,13 @@ interface ArestsSerializer {
 
     companion object {
 
-        fun forVersion(v: Int): ArestsSerializer {
+        fun forVersion(
+            v: Int,
+            base64: Base64Coder
+        ): ArestsSerializer {
+
             if(v == 1) {
-                return ArestsSerializer1()
+                return ArestsSerializer1(base64)
             }
             throw IllegalArgumentException("Unknown version $v")
         }
