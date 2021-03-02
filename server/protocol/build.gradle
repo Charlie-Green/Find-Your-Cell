@@ -14,20 +14,15 @@ repositories {
 }
 
 dependencies {
-	def Deps = rootProject.ext
+	def deps = rootProject.ext
 
-	implementation Deps.libKotlin
-	implementation Deps.libKotlinReflect
-
-	implementation Deps.libSpring
-	implementation Deps.libSpringJpa
-
-	implementation Deps.libGson
-
+	implementation deps.libKotlin
+	implementation deps.libKotlinReflect
+	implementation deps.libSpring
+	implementation deps.libSpringJpa
 
 	implementation project(":internal")
-	implementation project(":entity")
-	implementation project(":serial")
+	implementation project(":domain")
 }
 
 
@@ -41,5 +36,5 @@ compileKotlin {
 }
 
 bootJar {
-	mainClassName = "by.zenkevich_churun.findcell.server.protocol.Sviazen_MainKt"
+	mainClassName = "by.zenkevich_churun.findcell.server.protocol.Server_MainKt"
 }

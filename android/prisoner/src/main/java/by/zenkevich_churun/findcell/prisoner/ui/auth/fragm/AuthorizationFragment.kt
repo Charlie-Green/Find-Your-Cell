@@ -1,8 +1,8 @@
 package by.zenkevich_churun.findcell.prisoner.ui.auth.fragm
 
+import android.os.Build
 import android.os.Bundle
 import android.view.*
-import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import by.zenkevich_churun.findcell.core.ui.common.SviazenFragment
 import by.zenkevich_churun.findcell.core.util.android.NavigationUtil
@@ -29,9 +29,9 @@ class AuthorizationFragment: SviazenFragment<AuthorizationFragmBinding>() {
         initFields()
         initLogo()
 
-        vm.stateLD.observe(viewLifecycleOwner, Observer { state ->
+        vm.stateLD.observe(viewLifecycleOwner) { state ->
             renderState(state)
-        })
+        }
 
         vb.buLogIn.setOnClickListener {
             vm.logIn(username, password)

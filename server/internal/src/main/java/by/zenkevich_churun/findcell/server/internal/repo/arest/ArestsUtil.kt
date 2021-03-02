@@ -1,6 +1,6 @@
 package by.zenkevich_churun.findcell.server.internal.repo.arest
 
-import by.zenkevich_churun.findcell.entity.entity.LightArest
+import by.zenkevich_churun.findcell.domain.entity.LightArest
 import by.zenkevich_churun.findcell.server.internal.entity.table.ArestEntity
 import java.util.Calendar
 
@@ -10,8 +10,8 @@ internal object ArestsUtil {
     private val cal = Calendar.getInstance()
 
 
-    fun validate(a: LightArest) {
-        if(a.end < a.start) {
+    fun validate(start: Long, end: Long) {
+        if(end < start) {
             throw IllegalArgumentException("Arest ends before it starts")
         }
     }

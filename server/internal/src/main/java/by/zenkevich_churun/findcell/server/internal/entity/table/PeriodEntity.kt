@@ -1,6 +1,6 @@
 package by.zenkevich_churun.findcell.server.internal.entity.table
 
-import by.zenkevich_churun.findcell.entity.entity.SchedulePeriod
+import by.zenkevich_churun.findcell.domain.entity.SchedulePeriod
 import by.zenkevich_churun.findcell.server.internal.entity.key.PeriodKey
 import javax.persistence.*
 

@@ -1,6 +1,6 @@
 package by.zenkevich_churun.findcell.server.internal.entity.view
 
-import by.zenkevich_churun.findcell.entity.entity.LightArest
+import by.zenkevich_churun.findcell.domain.entity.LightArest
 import by.zenkevich_churun.findcell.server.internal.entity.table.ArestEntity
 import java.util.Calendar
 

@@ -1,7 +1,7 @@
 package by.zenkevich_churun.findcell.server.internal.entity.table
 
-import by.zenkevich_churun.findcell.entity.entity.Arest
-import by.zenkevich_churun.findcell.entity.entity.Cell
+import by.zenkevich_churun.findcell.domain.entity.Arest
+import by.zenkevich_churun.findcell.domain.entity.Cell
 import by.zenkevich_churun.findcell.server.internal.entity.key.ScheduleCellEntryKey
 import javax.persistence.*
 
@@ -12,8 +12,10 @@ import javax.persistence.*
   * into this [Cell] some time during this [Arest] **/
 @Entity
 @Table(name = "ScheduleCellEntries")
-class ScheduleCellEntryEntity {
+class ScheduleCellEntryEntity(
 
     @EmbeddedId
-    var key: ScheduleCellEntryKey? = null
+    var key: ScheduleCellEntryKey ) {
+
+    constructor(): this(ScheduleCellEntryKey())
 }

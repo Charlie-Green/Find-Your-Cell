@@ -1,13 +1,13 @@
 package by.zenkevich_churun.findcell.server.internal.repo.sync
 
-import by.zenkevich_churun.findcell.entity.entity.CoPrisoner
-import by.zenkevich_churun.findcell.entity.pojo.SynchronizedPojo
+import by.zenkevich_churun.findcell.domain.contract.cp.CoPrisonerHeaderPojo
+import by.zenkevich_churun.findcell.domain.contract.jail.JailPojo
+import by.zenkevich_churun.findcell.domain.contract.sync.SynchronizedPojo
+import by.zenkevich_churun.findcell.domain.entity.CoPrisoner
 import by.zenkevich_churun.findcell.server.internal.dao.cp.CoPrisonersDao
 import by.zenkevich_churun.findcell.server.internal.dao.jail.JailsDao
 import by.zenkevich_churun.findcell.server.internal.entity.table.CoPrisonerEntity
 import by.zenkevich_churun.findcell.server.internal.entity.table.JailEntity
-import by.zenkevich_churun.findcell.server.internal.entity.view.CoPrisonerView
-import by.zenkevich_churun.findcell.server.internal.entity.view.SynchronizedDataView
 import by.zenkevich_churun.findcell.server.internal.repo.common.SviazenRepositiory
 import by.zenkevich_churun.findcell.server.internal.repo.cp.RelationResolver
 import org.springframework.beans.factory.annotation.Autowired
@@ -43,9 +43,12 @@ class SynchronizationRepository: SviazenRepositiory() {
             .toMutableList()
             .apply { addAll(suggested) }
 
-        val jails = jailsDao.getFull()
+        val fullJails = jailsDao.getFull()
+        val jailPojos = fullJails.map { j ->
+            JailPojo.from(j)
+        }
 
-        return SynchronizedDataView(coPrisoners, jails)
+        return SynchronizedPojo(coPrisoners, jailPojos)
     }
 
 
@@ -53,7 +56,7 @@ class SynchronizationRepository: SviazenRepositiory() {
     private fun suggestedCoPrisoners(
         prisonerId: Int,
         excludedPrisonerIds: Collection<Int>
-    ): List<CoPrisonerView> {
+    ): List<CoPrisonerHeaderPojo> {
 
         // 1. Get all Periods for the specified Prisoner:
         val myPeriods = coPrisonersDao.periods(prisonerId)
@@ -77,7 +80,7 @@ class SynchronizationRepository: SviazenRepositiory() {
         val jailMap = jailMap(jailIds)
 
         // 4. Get Arest IDs to find potential CoPrisoners:
-        val coPrisoners = hashMapOf<Int, CoPrisonerView>()
+        val coPrisoners = hashMapOf<Int, CoPrisonerHeaderPojo>()
         for(period in myPeriods) {
 
             val arestIds = coPrisonersDao.getCoArestIds(
@@ -95,12 +98,12 @@ class SynchronizationRepository: SviazenRepositiory() {
                     continue
                 }
 
-                val cp = CoPrisonerView(
+                val cp = CoPrisonerHeaderPojo(
                     view.id,
                     view.name,
                     jailMap[period.jailId]!!.name,
                     period.cellNumber,
-                    CoPrisoner.Relation.SUGGESTED
+                    CoPrisoner.Relation.SUGGESTED.ordinal.toShort()
                 )
 
                 coPrisoners[cp.id] = cp
@@ -120,7 +123,7 @@ class SynchronizationRepository: SviazenRepositiory() {
       *            Check for existence within the [Collection] is (in avegare) O(1). **/
     private fun relatedCoPrisoners(
         prisonerId: Int
-    ): Pair< List<CoPrisonerView>, Collection<Int> > {
+    ): Pair< List<CoPrisonerHeaderPojo>, Collection<Int> > {
 
         // 1. Get desired Relation entries:
         val cpEntries = coPrisonersDao.coPrisonerEntries(prisonerId)
@@ -144,12 +147,13 @@ class SynchronizationRepository: SviazenRepositiory() {
             val entry = idToEntryMap[p.id]!!
             val isFirstCurrent = (prisonerId == entry.key.id1)
 
-            CoPrisonerView(
+            val relation = RelationResolver(entry.relationOrdinal).resolve(isFirstCurrent)
+            CoPrisonerHeaderPojo(
                 p.id,
                 p.name,
                 jailMap[entry.commonJailId]!!.name,
                 entry.commonCellNumber,
-                RelationResolver(entry.relationOrdinal).resolve(isFirstCurrent)
+                relation.ordinal.toShort()
             )
         }
 

@@ -1,11 +1,11 @@
 package by.zenkevich_churun.findcell.server.protocol.controller.cp
 
-import by.zenkevich_churun.findcell.entity.entity.CoPrisoner
-import by.zenkevich_churun.findcell.serial.common.abstr.Base64Coder
+import by.zenkevich_churun.findcell.domain.entity.CoPrisoner
+import by.zenkevich_churun.findcell.domain.util.Base64Coder
+import by.zenkevich_churun.findcell.domain.util.Serializer
 import by.zenkevich_churun.findcell.server.internal.repo.cp.CoPrisonersRepository
 import by.zenkevich_churun.findcell.server.protocol.controller.shared.ControllerUtil
 import by.zenkevich_churun.findcell.server.protocol.exc.NotConnectedCoPrisonersException
-import by.zenkevich_churun.findcell.server.protocol.serial.cp.abstr.CoPrisonerSerializer
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.web.bind.annotation.*
 
@@ -59,12 +59,11 @@ class CoPrisonersController {
     ): String {
 
         val passwordHash = base64Coder.decode(passwordBase64)
-        val cp = repo.coPrisoner(prisonerId, passwordHash, coPrisonerId)
+        val cp = repo
+            .coPrisoner(prisonerId, passwordHash, coPrisonerId)
             ?: throw NotConnectedCoPrisonersException(prisonerId, coPrisonerId)
 
-        return CoPrisonerSerializer
-            .forVersion(version)
-            .serialize(cp.info, cp.contacts)
+        return Serializer.toJsonString(cp)
     }
 
 

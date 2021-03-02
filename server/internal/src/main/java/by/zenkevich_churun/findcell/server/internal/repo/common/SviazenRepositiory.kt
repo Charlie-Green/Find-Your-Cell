@@ -1,5 +1,6 @@
 package by.zenkevich_churun.findcell.server.internal.repo.common
 
+import by.zenkevich_churun.findcell.domain.entity.Contact
 import by.zenkevich_churun.findcell.server.internal.dao.prisoner.PrisonerDao
 import by.zenkevich_churun.findcell.server.internal.entity.table.PrisonerEntity
 import org.springframework.beans.factory.annotation.Autowired
@@ -22,4 +23,11 @@ abstract class SviazenRepositiory {
             .get(prisonerId, passwordHash)
             ?: throw IllegalArgumentException("Invalid credentials. prisonerId=$prisonerId")
     }
+
+
+    protected fun ordinalToContactType(ordinal: Short): Contact.Type
+        = Contact.Type.values()[ordinal.toInt()]
+
+    protected fun contactTypeToOrdinal(type: Contact.Type): Short
+        = type.ordinal.toShort()
 }

@@ -1,10 +1,9 @@
 package by.zenkevich_churun.findcell.server.protocol.controller.cellentry
 
-import by.zenkevich_churun.findcell.serial.common.abstr.Base64Coder
-import by.zenkevich_churun.findcell.serial.sched.pojo.CellEntryPojo
+import by.zenkevich_churun.findcell.domain.contract.cellentry.CellEntryPojo
+import by.zenkevich_churun.findcell.domain.util.Base64Coder
+import by.zenkevich_churun.findcell.domain.util.Deserializer
 import by.zenkevich_churun.findcell.server.internal.repo.cellentry.CellEntriesRepository
-import by.zenkevich_churun.findcell.server.protocol.exc.IllegalServerParameterException
-import by.zenkevich_churun.findcell.server.protocol.serial.cellentry.abstr.CellEntriesDeserializer
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RestController
@@ -25,62 +24,30 @@ class CellEntriesController {
     fun add(input: InputStream): String {
 
         val cell = deserializeCell(input)
-        val passwordHash = requirePassword(cell.passwordBase64)
-
-        repo.add(
-            passwordHash,
-            cell.arestId,
-            cell.jailId,
-            cell.cellNumber
-        )
+        val passwordHash = base64Coder.decode(cell.passwordBase64)
+        repo.add(cell, passwordHash)
 
         return ""
     }
 
-
-    @PostMapping("cell/update")
-    fun update(input: InputStream): String {
-
-        val cell = CellEntriesDeserializer
-            .forVersion(1)
-            .deserializeTwo(input)
-
-        repo.update(
-            requirePassword(cell.passwordBase64),
-            cell.arestId,
-            cell.oldJailId, cell.oldCellNumber,
-            cell.newJailId, cell.newCellNumber
-        )
-
-        return ""
-    }
-
+    // TODO: in future versions...
+//    @PostMapping("cell/update")
+//    fun update(input: InputStream): String {
+//
+//    }
 
     @PostMapping("cell/delete")
     fun delete(input: InputStream): String {
 
         val cell = deserializeCell(input)
-        val passwordHash = requirePassword(cell.passwordBase64)
-
-        repo.delete(
-            passwordHash,
-            cell.arestId,
-            cell.jailId,
-            cell.cellNumber
-        )
+        val passwordHash = base64Coder.decode(cell.passwordBase64)
+        repo.delete(cell, passwordHash)
 
         return ""
     }
 
 
-    private fun deserializeCell(input: InputStream): CellEntryPojo {
-        return CellEntriesDeserializer
-            .forVersion(1)
-            .deserialize(input)
-    }
-
-    private fun requirePassword(base64: String?): ByteArray {
-        base64 ?: throw IllegalServerParameterException("Missing password")
-        return base64Coder.decode(base64)
-    }
+    private fun deserializeCell(
+        input: InputStream
+    ) = Deserializer.fromJsonStream(input, CellEntryPojo::class.java)
 }

@@ -1,8 +1,8 @@
 package by.zenkevich_churun.findcell.server.protocol.controller.jail
 
+import by.zenkevich_churun.findcell.domain.util.Serializer
 import by.zenkevich_churun.findcell.server.internal.repo.jail.JailsRepository
 import by.zenkevich_churun.findcell.server.protocol.controller.shared.ControllerUtil
-import by.zenkevich_churun.findcell.server.protocol.serial.jail.abstr.JailsSerializer
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.web.bind.annotation.*
 
@@ -20,7 +20,7 @@ class JailsController {
     ): String {
 
         val jails = repo.getJails()
-        return serializer(version).serializeJails(jails)
+        return Serializer.toJsonString(jails)
     }
 
 
@@ -30,16 +30,7 @@ class JailsController {
         @RequestParam("id") jailId: Int
     ): String {
 
-        val counts = repo
-            .getSeatCounts(jailId)
-            .toShortArray()
-        return serializer(version).serializeCells(counts)
-    }
-
-
-    private fun serializer(version: Int): JailsSerializer {
-        return ControllerUtil.catchingIllegalArgument {
-            JailsSerializer.forVersion(version)
-        }
+        val counts = repo.getSeatCounts(jailId)
+        return Serializer.toJsonString(counts)
     }
 }

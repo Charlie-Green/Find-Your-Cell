@@ -21,7 +21,7 @@ dependencies {
 
 	implementation Deps.libSpringJpa
 
-	implementation project(":entity")
+	implementation project(":domain")
 
 	testImplementation Deps.testJUnit
 	testRuntimeOnly Deps.testRuntimeJunit

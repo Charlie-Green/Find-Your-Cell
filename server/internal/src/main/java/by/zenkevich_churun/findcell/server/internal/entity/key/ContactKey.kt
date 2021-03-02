@@ -1,27 +1,19 @@
 package by.zenkevich_churun.findcell.server.internal.entity.key
 
+import by.zenkevich_churun.findcell.domain.entity.Prisoner
 import java.io.Serializable
 import javax.persistence.Column
 import javax.persistence.Embeddable
 
 
 @Embeddable
-class ContactKey: Serializable {
-
+data class ContactKey(
     @Column(name = "prisoner")
-    var prisonerId: Int = 0
+    var prisonerId: Int,
 
     @Column(name = "type")
-    var type: Short = 0
+    var typeOrdinal: Short
+): Serializable {
 
-
-    override fun equals(other: Any?): Boolean {
-        return (other is ContactKey) &&
-            (prisonerId == other.prisonerId) &&
-            (type == other.type)
-    }
-
-    override fun hashCode(): Int {
-        return prisonerId.hashCode() xor type.hashCode()
-    }
+    constructor(): this(Prisoner.INVALID_ID, 0)
 }

@@ -1,12 +1,10 @@
 package by.zenkevich_churun.findcell.server.internal.repo.auth
 
-import by.zenkevich_churun.findcell.entity.response.LogInResponse
-import by.zenkevich_churun.findcell.entity.response.SignUpResponse
-import by.zenkevich_churun.findcell.server.internal.dao.contact.ContactsDao
+import by.zenkevich_churun.findcell.domain.contract.auth.*
+import by.zenkevich_churun.findcell.domain.entity.Contact
 import by.zenkevich_churun.findcell.server.internal.entity.table.PrisonerEntity
 import by.zenkevich_churun.findcell.server.internal.entity.view.PrisonerView
 import by.zenkevich_churun.findcell.server.internal.repo.common.SviazenRepositiory
-import org.springframework.beans.factory.annotation.Autowired
 import javax.persistence.PersistenceException
 
 
@@ -19,8 +17,7 @@ class AuthorizationRepository: SviazenRepositiory() {
 
         val prisonerView = prisonerDao.get(username, passwordHash)
         if(prisonerView != null) {
-            prisonerView.passwordHash = null  // Don't send back the password hash
-            return LogInResponse.Success(prisonerView)
+            return logInSuccess(prisonerView)
         }
 
         val usernameCount = prisonerDao.countByUsername(username)
@@ -51,9 +48,37 @@ class AuthorizationRepository: SviazenRepositiory() {
             return SignUpResponse.UsernameTaken
         }
 
-        val createdPrisoner = PrisonerView()
-        createdPrisoner.id         = createdEntity.id
+        val pojo = AuthorizedPrisonerPojo()
+        pojo.id = createdEntity.id
+        pojo.name = initialName
 
-        return SignUpResponse.Success(createdPrisoner)
+        return SignUpResponse.Success(pojo)
+    }
+
+
+    private fun logInSuccess(
+        p: PrisonerView
+    ): LogInResponse.Success {
+
+        val pojo = AuthorizedPrisonerPojo()
+
+        pojo.id = p.id
+        pojo.name = p.name
+        pojo.info = p.info
+
+        for(contact in p.contactEntities) {
+            when(ordinalToContactType(contact.key.typeOrdinal)) {
+                Contact.Type.PHONE     -> pojo.phone     = contact.data
+                Contact.Type.TELEGRAM  -> pojo.telegram  = contact.data
+                Contact.Type.VIBER     -> pojo.viber     = contact.data
+                Contact.Type.WHATSAPP  -> pojo.whatsapp  = contact.data
+                Contact.Type.VK        -> pojo.vk        = contact.data
+                Contact.Type.SKYPE     -> pojo.skype     = contact.data
+                Contact.Type.FACEBOOK  -> pojo.facebook  = contact.data
+                Contact.Type.INSTAGRAM -> pojo.instagram = contact.data
+            }
+        }
+
+        return LogInResponse.Success(pojo)
     }
 }

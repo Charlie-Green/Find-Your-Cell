@@ -1,7 +1,8 @@
 package by.zenkevich_churun.findcell.server.internal.repo.arest
 
-import by.zenkevich_churun.findcell.entity.entity.LightArest
-import by.zenkevich_churun.findcell.entity.response.CreateOrUpdateArestResponse
+import by.zenkevich_churun.findcell.domain.entity.Arest
+import by.zenkevich_churun.findcell.domain.contract.arest.AddedArestPojo
+import by.zenkevich_churun.findcell.domain.response.CreateOrUpdateArestResponse
 import by.zenkevich_churun.findcell.server.internal.dao.arest.ArestsDao
 import by.zenkevich_churun.findcell.server.internal.dao.speriod.SchedulePeriodsDao
 import by.zenkevich_churun.findcell.server.internal.entity.table.ArestEntity
@@ -34,19 +35,23 @@ class ArestsRepository: SviazenRepositiory() {
     }
 
     fun addArest(
-        arest: LightArest,
-        prisonerId: Int,
+        data: AddedArestPojo,
         passwordHash: ByteArray
     ): CreateOrUpdateArestResponse {
 
-        validateCredentials(prisonerId, passwordHash)
+        validateCredentials(data.prisonerId, passwordHash)
 
-        ArestsUtil.validate(arest)
-        val entity = ArestEntity.from(arest, prisonerId)
+        ArestsUtil.validate(data.start, data.end)
+        val entity = ArestEntity(
+            Arest.INVALID_ID,
+            data.prisonerId,
+            data.start,
+            data.end
+        )
         ArestsUtil.normalize(entity)
 
         val intersectingArests = arestsDao.intersectingArests(
-            prisonerId,
+            data.prisonerId,
             entity.start,
             entity.end
         )

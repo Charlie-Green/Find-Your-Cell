@@ -2,8 +2,8 @@ package by.zenkevich_churun.findcell.prisoner.ui.root.activity
 
 import android.app.Activity
 import android.graphics.Color
+import android.os.Build
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import androidx.navigation.NavController
 import androidx.navigation.findNavController
@@ -38,6 +38,7 @@ class PrisonerActivity: SviazenActivity<PrisonerActivityBinding>() {
 
     override fun customizeView(v: View) {
         window?.also { AndroidUtil.defaultHideKeyboard(it) }
+
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -75,6 +76,8 @@ class PrisonerActivity: SviazenActivity<PrisonerActivityBinding>() {
         vm.coPrisonerStateLD.observe(this) { state ->
             applyCoPrisonerState(state)
         }
+
+        setupKeyboadAnimation()
     }
 
     override fun onBackPressed() {
@@ -109,6 +112,14 @@ class PrisonerActivity: SviazenActivity<PrisonerActivityBinding>() {
             vb.navDrawer,
             navController
         )
+    }
+
+    private fun setupKeyboadAnimation() {
+        if(Build.VERSION.SDK_INT >= 30) {
+            KeyboardAnimationForPrisonerCallback.setTo(vb.vlltContent)
+        } else {
+            // ???
+        }
     }
 
 

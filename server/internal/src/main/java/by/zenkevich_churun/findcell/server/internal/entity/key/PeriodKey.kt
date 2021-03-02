@@ -1,6 +1,6 @@
 package by.zenkevich_churun.findcell.server.internal.entity.key
 
-import by.zenkevich_churun.findcell.entity.entity.Arest
+import by.zenkevich_churun.findcell.domain.entity.Arest
 import java.io.Serializable
 import javax.persistence.Column
 import javax.persistence.Embeddable

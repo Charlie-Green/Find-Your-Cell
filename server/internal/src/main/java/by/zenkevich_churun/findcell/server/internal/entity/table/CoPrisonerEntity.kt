@@ -1,6 +1,6 @@
 package by.zenkevich_churun.findcell.server.internal.entity.table
 
-import by.zenkevich_churun.findcell.entity.entity.CoPrisoner
+import by.zenkevich_churun.findcell.domain.entity.CoPrisoner
 import by.zenkevich_churun.findcell.server.internal.entity.key.CoPrisonerKey
 import javax.persistence.*
 

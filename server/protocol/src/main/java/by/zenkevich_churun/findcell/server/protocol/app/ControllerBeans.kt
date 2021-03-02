@@ -1,7 +1,7 @@
 package by.zenkevich_churun.findcell.server.protocol.app
 
-import by.zenkevich_churun.findcell.serial.common.abstr.Base64Coder
-import by.zenkevich_churun.findcell.server.protocol.serial.common.Base64ServerCoder
+import by.zenkevich_churun.findcell.domain.util.Base64Coder
+import by.zenkevich_churun.findcell.server.protocol.common.Base64ServerCoder
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 

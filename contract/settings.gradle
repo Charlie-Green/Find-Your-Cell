@@ -1,4 +1,3 @@
 rootProject.name = "contract"
 
-include "entity"
-include "serial"
+include "domain"

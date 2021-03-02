@@ -1,10 +1,8 @@
 package by.zenkevich_churun.findcell.server.protocol.controller.sched
 
-import by.zenkevich_churun.findcell.serial.common.abstr.Base64Coder
-import by.zenkevich_churun.findcell.serial.sched.serial.ScheduleDeserializer
-import by.zenkevich_churun.findcell.serial.sched.serial.ScheduleSerializer
+import by.zenkevich_churun.findcell.domain.contract.sched.UpdatedSchedulePojo
+import by.zenkevich_churun.findcell.domain.util.*
 import by.zenkevich_churun.findcell.server.internal.repo.sched.ScheduleRepository
-import by.zenkevich_churun.findcell.server.protocol.controller.sched.map.ScheduleMapper
 import by.zenkevich_churun.findcell.server.protocol.controller.shared.ControllerUtil
 import by.zenkevich_churun.findcell.server.protocol.exc.IllegalServerParameterException
 import org.springframework.beans.factory.annotation.Autowired
@@ -31,30 +29,18 @@ class ScheduleController {
 
         val pojo = ControllerUtil.catchingIllegalArgument {
             val passwordHash = base64Coder.decode(passwordBase64)
-            val view = repo.get(arestId, passwordHash)
-            ScheduleMapper.forVersion(version).schedulePojo(view)
+            repo.get(arestId, passwordHash)
         }
 
-        return ScheduleSerializer
-            .forVersion(version)
-            .serialize(pojo)
+        return Serializer.toJsonString(pojo)
     }
 
 
     @PostMapping("sched/save")
     fun save(input: InputStream): String {
-        val pojo = ScheduleDeserializer
-            .forVersion(1)
-            .deserializeLight(input)
-
-        val arestId = pojo.arestId
-            ?: throw IllegalServerParameterException("Arest ID must be provided")
-        val passwordBase64 = pojo.passwordBase64
-            ?: throw IllegalServerParameterException("Password must be provided")
-        val passwordHash = base64Coder.decode(passwordBase64)
-
-        repo.save(arestId, pojo.periods, passwordHash)
-
+        val pojo = Deserializer.fromJsonStream(input, UpdatedSchedulePojo::class.java)
+        val passwordHash = base64Coder.decode(pojo.passwordBase64)
+        repo.save(pojo, passwordHash)
         return ""
     }
 }

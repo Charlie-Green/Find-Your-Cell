@@ -1,7 +1,7 @@
 package by.zenkevich_churun.findcell.server.internal.repo.cp
 
-import by.zenkevich_churun.findcell.entity.entity.CoPrisoner
-import by.zenkevich_churun.findcell.entity.entity.Prisoner
+import by.zenkevich_churun.findcell.domain.contract.cp.CoPrisonerDataPojo
+import by.zenkevich_churun.findcell.domain.entity.*
 import by.zenkevich_churun.findcell.server.internal.dao.arest.ArestsDao
 import by.zenkevich_churun.findcell.server.internal.dao.cp.CoPrisonersDao
 import by.zenkevich_churun.findcell.server.internal.entity.key.CellKey
@@ -85,16 +85,34 @@ class CoPrisonersRepository: SviazenRepositiory() {
         prisonerId: Int,
         passwordHash: ByteArray,
         coPrisonerId: Int
-    ): Prisoner? {
+    ): CoPrisonerDataPojo? {
 
         validateCredentials(prisonerId, passwordHash)
 
         val entry = dao.coPrisoner(prisonerId, coPrisonerId)
-        if(entry?.relationOrdinal != CoPrisoner.Relation.CONNECTED.ordinal.toShort()) {
+        if( entry?.relationOrdinal !=
+            CoPrisoner.Relation.CONNECTED.ordinal.toShort()) {
             return null
         }
 
-        return prisonerDao.get(coPrisonerId)
+        val prisoner = prisonerDao.get(coPrisonerId)
+
+        val pojo = CoPrisonerDataPojo()
+        pojo.info = prisoner.info
+        for(contact in prisoner.contactEntities) {
+            when(ordinalToContactType(contact.key.typeOrdinal)) {
+                Contact.Type.PHONE     -> pojo.phone     = contact.data
+                Contact.Type.TELEGRAM  -> pojo.telegram  = contact.data
+                Contact.Type.VIBER     -> pojo.viber     = contact.data
+                Contact.Type.WHATSAPP  -> pojo.whatsapp  = contact.data
+                Contact.Type.VK        -> pojo.vk        = contact.data
+                Contact.Type.SKYPE     -> pojo.skype     = contact.data
+                Contact.Type.FACEBOOK  -> pojo.facebook  = contact.data
+                Contact.Type.INSTAGRAM -> pojo.instagram = contact.data
+            }
+        }
+
+        return pojo
     }
 
 

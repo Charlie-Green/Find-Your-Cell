@@ -1,26 +1,28 @@
 package by.zenkevich_churun.findcell.server.internal.entity.table
 
-import by.zenkevich_churun.findcell.entity.entity.LightArest
+import by.zenkevich_churun.findcell.domain.entity.LightArest
 import javax.persistence.*
 
 
 @Entity
 @Table(name = "Arests")
-class ArestEntity {
+class ArestEntity(
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
-    var id: Int = 0
+    var id: Int,
 
     @Column(name = "prisoner")
-    var prisonerId: Int = 0
+    var prisonerId: Int,
 
     @Column(name = "start")
-    var start: Long = 0L
+    var start: Long,
 
     @Column(name = "end")
-    var end: Long = 0L
+    var end: Long ) {
+
+    constructor(): this(0, 0, 0L, 0L)
 
 
     companion object {

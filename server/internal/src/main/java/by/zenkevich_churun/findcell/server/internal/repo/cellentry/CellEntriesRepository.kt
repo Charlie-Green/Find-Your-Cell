@@ -1,5 +1,6 @@
 package by.zenkevich_churun.findcell.server.internal.repo.cellentry
 
+import by.zenkevich_churun.findcell.domain.contract.cellentry.CellEntryPojo
 import by.zenkevich_churun.findcell.server.internal.dao.arest.ArestsDao
 import by.zenkevich_churun.findcell.server.internal.dao.scell.ScheduleCellsDao
 import by.zenkevich_churun.findcell.server.internal.dao.speriod.SchedulePeriodsDao
@@ -23,15 +24,18 @@ class CellEntriesRepository: SviazenRepositiory() {
 
 
     fun add(
-        passwordHash: ByteArray,
-        arestId: Int,
-        jailId: Int,
-        cellNumber: Short ) {
+        cell: CellEntryPojo,
+        passwordHash: ByteArray ) {
 
-        validateByArestId(arestId, passwordHash)
+        validateByArestId(cell.arestId, passwordHash)
 
         val entity = ScheduleCellEntryEntity()
-        entity.key = createCellKey(arestId, jailId, cellNumber)
+        entity.key = ScheduleCellEntryKey(
+            cell.arestId,
+            cell.jailId,
+            cell.cellNumber
+        )
+
         cellsDao.save(entity)
     }
 
@@ -47,7 +51,7 @@ class CellEntriesRepository: SviazenRepositiory() {
 
         // Insert the new Cell:
         val newCell = ScheduleCellEntryEntity()
-        newCell.key = createCellKey(arestId, newJailId, newCellNumber)
+        newCell.key = ScheduleCellEntryKey(arestId, newJailId, newCellNumber)
         cellsDao.save(newCell)
 
         // Replace references:
@@ -62,20 +66,20 @@ class CellEntriesRepository: SviazenRepositiory() {
     }
 
 
-    fun delete(
-        passwordHash: ByteArray,
-        arestId: Int,
-        jailId: Int,
-        cellNumber: Short ) {
+    fun delete(data: CellEntryPojo, passwordHash: ByteArray) {
 
         // Validate credentials:
-        validateByArestId(arestId, passwordHash)
+        validateByArestId(data.arestId, passwordHash)
 
         // Delete all Periods referencing this ScheduleCellEntry:
-        periodsDao.deleteForCell(arestId, jailId, cellNumber)
+        periodsDao.deleteForCell(
+            data.arestId,
+            data.jailId,
+            data.cellNumber
+        )
 
         // Delete the ScheduleCellEntry itself:
-        deleteCell(arestId, jailId, cellNumber)
+        deleteCell(data.arestId, data.jailId, data.cellNumber)
     }
 
 
@@ -92,7 +96,7 @@ class CellEntriesRepository: SviazenRepositiory() {
         jailId: Int,
         cellNumber: Short ) {
 
-        val cellKey = createCellKey(arestId, jailId, cellNumber)
+        val cellKey = ScheduleCellEntryKey(arestId, jailId, cellNumber)
         try {
             cellsDao.deleteById(cellKey)
         } catch(exc: EmptyResultDataAccessException) {
@@ -101,19 +105,5 @@ class CellEntriesRepository: SviazenRepositiory() {
                 exc
             )
         }
-    }
-
-    private fun createCellKey(
-        arestId: Int,
-        jailId: Int,
-        cellNumber: Short
-    ): ScheduleCellEntryKey {
-
-        val key = ScheduleCellEntryKey()
-        key.arestId    = arestId
-        key.jailId     = jailId
-        key.cellNumber = cellNumber
-
-        return key
     }
 }

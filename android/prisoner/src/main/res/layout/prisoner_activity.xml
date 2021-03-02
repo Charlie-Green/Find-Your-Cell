@@ -9,6 +9,7 @@
     tools:context="by.zenkevich_churun.findcell.prisoner.ui.root.activity.PrisonerActivity" >
 
     <LinearLayout
+        android:id="@+id/vlltContent"
         android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
