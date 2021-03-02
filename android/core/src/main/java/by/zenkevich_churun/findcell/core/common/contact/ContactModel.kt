@@ -1,7 +1,7 @@
 package by.zenkevich_churun.findcell.core.common.contact
 
 import by.zenkevich_churun.findcell.core.R
-import by.zenkevich_churun.findcell.entity.entity.Contact
+import by.zenkevich_churun.findcell.domain.entity.Contact
 
 
 /** Implementation of [Contact] to be used by UI classes. **/

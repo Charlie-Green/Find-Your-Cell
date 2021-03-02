@@ -1,9 +1,7 @@
 package by.zenkevich_churun.findcell.core.api.cp
 
-import by.zenkevich_churun.findcell.entity.entity.CoPrisoner
-import by.zenkevich_churun.findcell.entity.entity.Prisoner
-import by.zenkevich_churun.findcell.core.injected.cp.CoPrisonersRepository
-import by.zenkevich_churun.findcell.entity.response.GetCoPrisonerResponse
+import by.zenkevich_churun.findcell.domain.entity.CoPrisoner
+import by.zenkevich_churun.findcell.domain.response.GetCoPrisonerResponse
 
 
 interface CoPrisonersApi {

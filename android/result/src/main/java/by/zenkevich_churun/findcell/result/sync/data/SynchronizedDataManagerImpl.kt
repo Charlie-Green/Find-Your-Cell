@@ -1,12 +1,12 @@
 package by.zenkevich_churun.findcell.result.sync.data
 
 import android.content.Context
-import android.util.Log
 import by.zenkevich_churun.findcell.core.api.sync.SynchronizationApi
 import by.zenkevich_churun.findcell.core.common.prisoner.PrisonerStorage
 import by.zenkevich_churun.findcell.core.injected.db.JailsCache
 import by.zenkevich_churun.findcell.core.injected.sync.SynchronizedDataManager
-import by.zenkevich_churun.findcell.entity.entity.CoPrisoner
+import by.zenkevich_churun.findcell.domain.contract.cp.CoPrisonerHeaderPojo
+import by.zenkevich_churun.findcell.domain.entity.CoPrisoner
 import by.zenkevich_churun.findcell.result.db.CoPrisonersDatabase
 import by.zenkevich_churun.findcell.result.db.entity.CoPrisonerEntity
 import dagger.hilt.android.qualifiers.ApplicationContext
@@ -24,7 +24,7 @@ class SynchronizedDataManagerImpl @Inject constructor(
 
     override fun sync() {
         val prisoner = prisonerStore.prisonerLD.value ?: return
-        val data = api.fetchData(prisoner.id, prisoner.passwordHash)
+        val data = api.fetchData(prisoner.id, prisoner.passwordHash!!)
         cache(data.coPrisoners)
         jailsCache.cache(data.jails)
     }
@@ -37,7 +37,7 @@ class SynchronizedDataManagerImpl @Inject constructor(
     private val db
         get() = CoPrisonersDatabase.get(appContext)
 
-    private fun cache(coPrisoners: List<CoPrisoner>) {
+    private fun cache(coPrisoners: List<CoPrisonerHeaderPojo>) {
         val dao = db.dao
 
         val coPrisonerEntities = coPrisoners.map { cp ->

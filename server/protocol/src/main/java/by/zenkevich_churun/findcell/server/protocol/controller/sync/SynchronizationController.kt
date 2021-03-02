@@ -27,6 +27,7 @@ class SynchronizationController {
     ): String = ControllerUtil.catchingIllegalArgument {
         val passwordHash = base64.decode(passwordBase64)
         val data = repo.synchronizedData(prisonerId, passwordHash)
-        Serializer.toJsonString(data)
+        val approxSize = 64*data.coPrisoners.size + 396*data.jails.size
+        Serializer.toJsonString(data, approxSize)
     }
 }

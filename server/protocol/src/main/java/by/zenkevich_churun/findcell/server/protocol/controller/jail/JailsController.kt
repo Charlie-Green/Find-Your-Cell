@@ -2,7 +2,6 @@ package by.zenkevich_churun.findcell.server.protocol.controller.jail
 
 import by.zenkevich_churun.findcell.domain.util.Serializer
 import by.zenkevich_churun.findcell.server.internal.repo.jail.JailsRepository
-import by.zenkevich_churun.findcell.server.protocol.controller.shared.ControllerUtil
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.web.bind.annotation.*
 
@@ -19,8 +18,9 @@ class JailsController {
         @RequestParam("v") version: Int
     ): String {
 
-        val jails = repo.getJails()
-        return Serializer.toJsonString(jails)
+        val pojo = repo.getJails()
+        val approxSize = 64*pojo.jails.size
+        return Serializer.toJsonString(pojo, approxSize)
     }
 
 
@@ -31,6 +31,7 @@ class JailsController {
     ): String {
 
         val counts = repo.getSeatCounts(jailId)
-        return Serializer.toJsonString(counts)
+        val approxSize = 4*counts.seatCounts.size + 16
+        return Serializer.toJsonString(counts, approxSize)
     }
 }

@@ -1,6 +1,7 @@
 package by.zenkevich_churun.findcell.server.internal.repo.sync
 
 import by.zenkevich_churun.findcell.domain.contract.cp.CoPrisonerHeaderPojo
+import by.zenkevich_churun.findcell.domain.contract.jail.FullJailPojo
 import by.zenkevich_churun.findcell.domain.contract.jail.JailPojo
 import by.zenkevich_churun.findcell.domain.contract.sync.SynchronizedPojo
 import by.zenkevich_churun.findcell.domain.entity.CoPrisoner
@@ -45,7 +46,8 @@ class SynchronizationRepository: SviazenRepositiory() {
 
         val fullJails = jailsDao.getFull()
         val jailPojos = fullJails.map { j ->
-            JailPojo.from(j)
+            val seatCounts = jailsDao.getSeatCounts(j.id)
+            FullJailPojo(j.id, j.name, seatCounts)
         }
 
         return SynchronizedPojo(coPrisoners, jailPojos)

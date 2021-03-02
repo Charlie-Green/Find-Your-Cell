@@ -63,7 +63,7 @@ class CoPrisonersController {
             .coPrisoner(prisonerId, passwordHash, coPrisonerId)
             ?: throw NotConnectedCoPrisonersException(prisonerId, coPrisonerId)
 
-        return Serializer.toJsonString(cp)
+        return Serializer.toJsonString(cp, 128)
     }
 
 

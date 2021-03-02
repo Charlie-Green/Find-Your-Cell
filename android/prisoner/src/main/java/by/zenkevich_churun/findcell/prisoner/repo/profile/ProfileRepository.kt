@@ -5,15 +5,15 @@ import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import by.zenkevich_churun.findcell.core.api.auth.*
-import by.zenkevich_churun.findcell.entity.entity.Contact
-import by.zenkevich_churun.findcell.entity.entity.Prisoner
-import by.zenkevich_churun.findcell.entity.response.LogInResponse
-import by.zenkevich_churun.findcell.entity.response.SignUpResponse
 import by.zenkevich_churun.findcell.prisoner.R
 import by.zenkevich_churun.findcell.core.common.prisoner.PrisonerStorage
 import by.zenkevich_churun.findcell.core.injected.common.Hasher
 import by.zenkevich_churun.findcell.core.injected.sync.AutomaticSyncManager
-import by.zenkevich_churun.findcell.prisoner.ui.profile.model.PrisonerDraft
+import by.zenkevich_churun.findcell.domain.contract.auth.LogInResponse
+import by.zenkevich_churun.findcell.domain.contract.auth.SignUpResponse
+import by.zenkevich_churun.findcell.domain.entity.Contact
+import by.zenkevich_churun.findcell.domain.entity.Prisoner
+import by.zenkevich_churun.findcell.domain.simpleentity.SimplePrisoner
 import dagger.hilt.android.qualifiers.ApplicationContext
 import java.io.IOException
 import javax.inject.Inject
@@ -93,9 +93,17 @@ class ProfileRepository @Inject constructor(
 
 
     fun saveDraft(draft: Prisoner) {
-        prisonerStore.prisonerLD.value?.also { extendedPrisoner ->
-            prisonerStore.submit(draft, extendedPrisoner.passwordHash)
-        }
+        val original = prisonerLD.value ?: return
+        val draftWithPassword = SimplePrisoner(
+            original.id,
+            original.username,
+            original.passwordHash,
+            draft.name,
+            draft.info,
+            draft.contacts
+        )
+
+        prisonerStore.submit(draftWithPassword)
     }
 
     fun save(data: Prisoner, internet: Boolean) {
@@ -149,12 +157,13 @@ class ProfileRepository @Inject constructor(
             }
         }
 
-        return PrisonerDraft(
+        return SimplePrisoner(
             data.id,
+            data.username,
             data.passwordHash ?: throw NullPointerException("Password must be present"),
             data.name,
+            data.info,
             clearedContacts,
-            data.info
         )
     }
 

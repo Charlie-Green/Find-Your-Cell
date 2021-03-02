@@ -1,6 +1,5 @@
 package by.zenkevich_churun.findcell.prisoner.ui.sched.model
 
-import by.zenkevich_churun.findcell.entity.entity.Schedule
 import by.zenkevich_churun.findcell.prisoner.ui.common.sched.ScheduleLiveDatasStorage
 
 

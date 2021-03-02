@@ -22,4 +22,12 @@ class CellPojo(
 ): Cell() {
 
     constructor(): this(Jail.UNKNOWN_ID, "", 0, 0)
+
+
+    companion object {
+
+        fun from(
+            c: Cell
+        ) = CellPojo(c.jailId, c.jailName, c.number, c.seats)
+    }
 }

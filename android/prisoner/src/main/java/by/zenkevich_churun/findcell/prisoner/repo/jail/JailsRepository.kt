@@ -2,7 +2,7 @@ package by.zenkevich_churun.findcell.prisoner.repo.jail
 
 import android.content.Context
 import by.zenkevich_churun.findcell.core.api.jail.JailsApi
-import by.zenkevich_churun.findcell.entity.entity.Cell
+import by.zenkevich_churun.findcell.domain.entity.Cell
 import by.zenkevich_churun.findcell.prisoner.db.JailsDatabase
 import dagger.hilt.android.qualifiers.ApplicationContext
 import javax.inject.Inject

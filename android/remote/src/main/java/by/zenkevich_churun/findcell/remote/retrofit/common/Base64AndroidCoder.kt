@@ -1,8 +1,7 @@
 package by.zenkevich_churun.findcell.remote.retrofit.common
 
 import android.util.Base64
-import by.zenkevich_churun.findcell.serial.common.abstr.Base64Coder
-import by.zenkevich_churun.findcell.serial.common.v1.CommonContract1
+import by.zenkevich_churun.findcell.domain.util.Base64Coder
 import javax.inject.Inject
 
 
@@ -12,7 +11,7 @@ class Base64AndroidCoder
 
     override fun encode(data: ByteArray): String {
         val bytes = Base64.encode(data, Base64.URL_SAFE)
-        return String(bytes, CommonContract1.ENCODING)
+        return String(bytes, Charsets.UTF_8)
     }
 
     override fun decode(data: String): ByteArray {

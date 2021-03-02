@@ -1,7 +1,7 @@
 package by.zenkevich_churun.findcell.core.injected.sync
 
 import androidx.lifecycle.LiveData
-import by.zenkevich_churun.findcell.entity.entity.CoPrisoner
+import by.zenkevich_churun.findcell.domain.entity.CoPrisoner
 
 
 /** Coordinates [SynchronizationScheduler] and [SynchronizedDataManager]. **/

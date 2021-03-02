@@ -54,5 +54,5 @@ dependencies {
     implementation Deps.libLiveData
     implementation Deps.libHilt
 
-    api project(":entity")
+    implementation project(":domain")
 }

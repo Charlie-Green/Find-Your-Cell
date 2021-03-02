@@ -1,7 +1,7 @@
 package by.zenkevich_churun.findcell.prisoner.ui.arest.fragm
 
 import android.annotation.SuppressLint
-import by.zenkevich_churun.findcell.entity.entity.Jail
+import by.zenkevich_churun.findcell.domain.entity.Jail
 import java.text.DateFormat
 import java.text.SimpleDateFormat
 import java.util.*

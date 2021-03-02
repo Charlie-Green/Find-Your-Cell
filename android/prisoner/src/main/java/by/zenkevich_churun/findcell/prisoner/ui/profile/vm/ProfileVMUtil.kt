@@ -1,7 +1,7 @@
 package by.zenkevich_churun.findcell.prisoner.ui.profile.vm
 
-import by.zenkevich_churun.findcell.entity.entity.Contact
-import by.zenkevich_churun.findcell.prisoner.ui.profile.model.ContactDraft
+import by.zenkevich_churun.findcell.domain.entity.Contact
+import by.zenkevich_churun.findcell.domain.simpleentity.SimpleContact
 
 
 internal object ProfileVMUtil {
@@ -20,7 +20,7 @@ internal object ProfileVMUtil {
             else                   -> ""
         }
 
-        return ContactDraft(type, autofilledData)
+        return SimpleContact(type, autofilledData)
     }
 
     /** Obtains list of [Contact.Type]s the user is suggested to add

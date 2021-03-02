@@ -1,11 +1,10 @@
 package by.zenkevich_churun.findcell.result.ui.contact.vm
 
 import android.content.Context
-import android.util.Log
 import androidx.lifecycle.*
 import by.zenkevich_churun.findcell.core.injected.cp.CoPrisonersRepository
 import by.zenkevich_churun.findcell.core.injected.web.NetworkStateTracker
-import by.zenkevich_churun.findcell.entity.response.GetCoPrisonerResponse
+import by.zenkevich_churun.findcell.domain.response.GetCoPrisonerResponse
 import by.zenkevich_churun.findcell.result.ui.contact.model.GetCoPrisonerState
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch

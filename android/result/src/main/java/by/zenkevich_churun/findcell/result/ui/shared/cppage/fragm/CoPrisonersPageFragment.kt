@@ -7,7 +7,7 @@ import androidx.annotation.CallSuper
 import androidx.core.view.isVisible
 import androidx.lifecycle.LiveData
 import by.zenkevich_churun.findcell.core.ui.common.SviazenFragment
-import by.zenkevich_churun.findcell.entity.entity.CoPrisoner
+import by.zenkevich_churun.findcell.domain.entity.CoPrisoner
 import by.zenkevich_churun.findcell.result.databinding.CoprisonersPageBinding
 import by.zenkevich_churun.findcell.result.ui.shared.cppage.vm.CoPrisonersPageViewModel
 

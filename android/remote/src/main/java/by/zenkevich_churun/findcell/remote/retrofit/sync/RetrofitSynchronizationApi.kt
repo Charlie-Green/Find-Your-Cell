@@ -1,10 +1,9 @@
 package by.zenkevich_churun.findcell.remote.retrofit.sync
 
 import by.zenkevich_churun.findcell.core.api.sync.SynchronizationApi
-import by.zenkevich_churun.findcell.entity.pojo.SynchronizedPojo
-import by.zenkevich_churun.findcell.remote.retrofit.common.RetrofitApisUtil
+import by.zenkevich_churun.findcell.domain.contract.sync.SynchronizedPojo
+import by.zenkevich_churun.findcell.domain.util.Base64Coder
 import by.zenkevich_churun.findcell.remote.retrofit.common.RetrofitHolder
-import by.zenkevich_churun.findcell.serial.common.abstr.Base64Coder
 import java.io.IOException
 import javax.inject.Inject
 import javax.inject.Singleton

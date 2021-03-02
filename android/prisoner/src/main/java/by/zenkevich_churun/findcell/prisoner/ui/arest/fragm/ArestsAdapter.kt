@@ -5,7 +5,7 @@ import android.util.LayoutDirection
 import android.view.*
 import androidx.core.view.updatePadding
 import androidx.recyclerview.widget.RecyclerView
-import by.zenkevich_churun.findcell.entity.entity.Arest
+import by.zenkevich_churun.findcell.domain.entity.Arest
 import by.zenkevich_churun.findcell.prisoner.R
 import by.zenkevich_churun.findcell.prisoner.databinding.ArestItemBinding
 import by.zenkevich_churun.findcell.prisoner.ui.arest.vm.ArestsViewModel

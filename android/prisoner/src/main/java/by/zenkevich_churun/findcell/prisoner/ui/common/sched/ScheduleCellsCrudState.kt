@@ -1,7 +1,6 @@
 package by.zenkevich_churun.findcell.prisoner.ui.common.sched
 
-import by.zenkevich_churun.findcell.entity.entity.Cell
-import by.zenkevich_churun.findcell.entity.entity.Schedule
+import by.zenkevich_churun.findcell.domain.entity.Cell
 
 
 /** CRUD states of [Cell]s within a [Schedule] **/

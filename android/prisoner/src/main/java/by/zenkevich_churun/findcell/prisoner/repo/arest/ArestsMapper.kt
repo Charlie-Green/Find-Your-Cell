@@ -1,8 +1,8 @@
 package by.zenkevich_churun.findcell.prisoner.repo.arest
 
-import by.zenkevich_churun.findcell.entity.entity.Arest
-import by.zenkevich_churun.findcell.entity.entity.Jail
-import by.zenkevich_churun.findcell.entity.entity.LightArest
+import by.zenkevich_churun.findcell.domain.entity.Arest
+import by.zenkevich_churun.findcell.domain.entity.Jail
+import by.zenkevich_churun.findcell.domain.entity.LightArest
 
 
 internal object ArestsMapper {

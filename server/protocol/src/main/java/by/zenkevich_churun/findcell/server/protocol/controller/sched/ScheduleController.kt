@@ -32,7 +32,8 @@ class ScheduleController {
             repo.get(arestId, passwordHash)
         }
 
-        return Serializer.toJsonString(pojo)
+        val approxSize = 64*(pojo.cells.size + pojo.periods.size)
+        return Serializer.toJsonString(pojo, approxSize)
     }
 
 

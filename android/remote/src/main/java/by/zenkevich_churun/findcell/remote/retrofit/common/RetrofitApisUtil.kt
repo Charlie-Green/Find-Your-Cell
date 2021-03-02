@@ -1,6 +1,6 @@
 package by.zenkevich_churun.findcell.remote.retrofit.common
 
-import by.zenkevich_churun.findcell.serial.util.protocol.ProtocolUtil
+import by.zenkevich_churun.findcell.domain.util.Serializer
 import okhttp3.MediaType
 import okhttp3.RequestBody
 import java.io.IOException
@@ -26,7 +26,7 @@ object RetrofitApisUtil {
     ): RequestBody {
 
         val mediaType = MediaType.get("application/json")
-        val json = ProtocolUtil.toJson(pojo, initialBufferSize)
+        val json = Serializer.toJsonString(pojo, initialBufferSize)
         return RequestBody.create(mediaType, json)
     }
 }

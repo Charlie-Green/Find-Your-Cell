@@ -1,6 +1,6 @@
 package by.zenkevich_churun.findcell.prisoner.ui.common.sched
 
-import by.zenkevich_churun.findcell.entity.entity.Jail
+import by.zenkevich_churun.findcell.domain.entity.Jail
 
 
 class JailHeader(

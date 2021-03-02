@@ -11,7 +11,7 @@ class JailPojo(
     @SerializedName("name")
     override val name: String,
 
-    @SerializedName("seats")
+    @SerializedName("cells")
     override val cellCount: Short
 ): Jail() {
 

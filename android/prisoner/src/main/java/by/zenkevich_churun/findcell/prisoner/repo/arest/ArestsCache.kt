@@ -2,8 +2,8 @@ package by.zenkevich_churun.findcell.prisoner.repo.arest
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import by.zenkevich_churun.findcell.entity.entity.Arest
-import by.zenkevich_churun.findcell.entity.entity.LightArest
+import by.zenkevich_churun.findcell.domain.entity.Arest
+import by.zenkevich_churun.findcell.domain.entity.LightArest
 import java.util.LinkedList
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -29,6 +29,12 @@ class ArestsCache @Inject constructor() {
             arests
         }
 
+
+    fun getById(
+        arestId: Int
+    ): Arest? = arestsLD.value?.find { arest ->
+        arest.id == arestId
+    }
 
     fun submit(list: List<Arest>) {
         updateArests {

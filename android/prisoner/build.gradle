@@ -66,6 +66,7 @@ dependencies {
 
     testImplementation Deps.testJUnit
 
-    implementation project(":core")
     implementation project(":result")  // UI only
+    implementation project(":core")
+    implementation project(":domain")
 }

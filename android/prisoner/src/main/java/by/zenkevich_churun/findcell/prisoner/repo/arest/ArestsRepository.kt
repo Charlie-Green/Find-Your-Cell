@@ -5,13 +5,13 @@ import android.util.Log
 import androidx.lifecycle.LiveData
 import by.zenkevich_churun.findcell.core.api.arest.ArestsApi
 import by.zenkevich_churun.findcell.core.api.jail.JailsApi
-import by.zenkevich_churun.findcell.entity.entity.Arest
-import by.zenkevich_churun.findcell.entity.entity.Jail
-import by.zenkevich_churun.findcell.entity.response.CreateOrUpdateArestResponse
 import by.zenkevich_churun.findcell.prisoner.db.JailsDatabase
 import by.zenkevich_churun.findcell.prisoner.db.entity.JailEntity
 import by.zenkevich_churun.findcell.core.common.prisoner.PrisonerStorage
 import by.zenkevich_churun.findcell.core.injected.sync.AutomaticSyncManager
+import by.zenkevich_churun.findcell.domain.entity.Arest
+import by.zenkevich_churun.findcell.domain.entity.Jail
+import by.zenkevich_churun.findcell.domain.response.CreateOrUpdateArestResponse
 import dagger.hilt.android.qualifiers.ApplicationContext
 import java.io.IOException
 import javax.inject.Inject
@@ -40,7 +40,7 @@ class ArestsRepository @Inject constructor(
         var jails = jailsResult.jails ?: return GetArestsResult.NetworkError
 
         val lightArests = try {
-            arestsApi.get(prisoner.id, prisoner.passwordHash)
+            arestsApi.get(prisoner.id, prisoner.passwordHash!!)
         } catch(exc: IOException) {
             Log.w(LOGTAG, "Failed to fetched arests list: ${exc.javaClass.name}: ${exc.message}")
             return GetArestsResult.NetworkError
@@ -76,7 +76,7 @@ class ArestsRepository @Inject constructor(
         val response = try {
             arestsApi.create(
                 prisoner.id,
-                prisoner.passwordHash,
+                prisoner.passwordHash!!,
                 start,
                 end
             )
@@ -105,7 +105,7 @@ class ArestsRepository @Inject constructor(
         val prisoner = prisonerStore.prisonerLD.value ?: return null
 
         try {
-            arestsApi.delete(prisoner.id, prisoner.passwordHash, ids)
+            arestsApi.delete(prisoner.id, prisoner.passwordHash!!, ids)
         } catch(exc: IOException) {
             Log.w(LOGTAG, "Failed to delete arests: ${exc.message}")
             return null

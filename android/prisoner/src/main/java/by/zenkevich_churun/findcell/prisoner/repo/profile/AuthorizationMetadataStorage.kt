@@ -1,7 +1,7 @@
 package by.zenkevich_churun.findcell.prisoner.repo.profile
 
 import android.content.Context
-import by.zenkevich_churun.findcell.entity.entity.Prisoner
+import by.zenkevich_churun.findcell.domain.entity.Prisoner
 import java.io.DataInputStream
 import java.io.DataOutputStream
 import java.io.IOException

@@ -3,11 +3,11 @@ package by.zenkevich_churun.findcell.result.repo.cp
 import android.content.Context
 import android.util.Log
 import by.zenkevich_churun.findcell.core.api.cp.CoPrisonersApi
-import by.zenkevich_churun.findcell.core.common.prisoner.ExtendedPrisoner
 import by.zenkevich_churun.findcell.core.common.prisoner.PrisonerStorage
 import by.zenkevich_churun.findcell.core.injected.cp.CoPrisonersRepository
-import by.zenkevich_churun.findcell.entity.entity.CoPrisoner
-import by.zenkevich_churun.findcell.entity.response.GetCoPrisonerResponse
+import by.zenkevich_churun.findcell.domain.entity.CoPrisoner
+import by.zenkevich_churun.findcell.domain.entity.Prisoner
+import by.zenkevich_churun.findcell.domain.response.GetCoPrisonerResponse
 import by.zenkevich_churun.findcell.result.db.CoPrisonersDatabase
 import by.zenkevich_churun.findcell.result.db.dao.CoPrisonersDao
 import dagger.hilt.android.qualifiers.ApplicationContext
@@ -56,7 +56,7 @@ class CoPrisonersRepositoryImpl @Inject constructor(
 
         cpApi.connect(
             prisoner.id,
-            prisoner.passwordHash,
+            prisoner.passwordHash!!,
             coPrisonerId
         )
     }
@@ -68,7 +68,7 @@ class CoPrisonersRepositoryImpl @Inject constructor(
 
         cpApi.disconnect(
             prisoner.id,
-            prisoner.passwordHash,
+            prisoner.passwordHash!!,
             coPrisonerId
         )
     }
@@ -81,7 +81,7 @@ class CoPrisonersRepositoryImpl @Inject constructor(
         try {
             // TODO: Alter database in case of NotConnected response.
             return cpApi
-                .getCoPrisoner(prisoner.id, prisoner.passwordHash, id)
+                .getCoPrisoner(prisoner.id, prisoner.passwordHash!!, id)
         } catch(exc: IOException) {
             return GetCoPrisonerResponse.NetworkError
         }
@@ -93,7 +93,7 @@ class CoPrisonersRepositoryImpl @Inject constructor(
 
     private inline fun sendRequest(
         cpId: Int,
-        doNetworkCall: (ExtendedPrisoner) -> CoPrisoner.Relation
+        doNetworkCall: (Prisoner) -> CoPrisoner.Relation
     ): CoPrisoner.Relation? {
 
         val prisoner = prisonerStore.prisonerLD.value ?: return null

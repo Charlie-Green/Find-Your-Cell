@@ -2,9 +2,9 @@ package by.zenkevich_churun.findcell.prisoner.ui.auth.vm
 
 import android.content.Context
 import androidx.lifecycle.*
-import by.zenkevich_churun.findcell.entity.response.LogInResponse
-import by.zenkevich_churun.findcell.entity.response.SignUpResponse
 import by.zenkevich_churun.findcell.core.injected.web.NetworkStateTracker
+import by.zenkevich_churun.findcell.domain.contract.auth.LogInResponse
+import by.zenkevich_churun.findcell.domain.contract.auth.SignUpResponse
 import by.zenkevich_churun.findcell.prisoner.repo.profile.ProfileRepository
 import by.zenkevich_churun.findcell.prisoner.ui.auth.model.AuthorizationState
 import by.zenkevich_churun.findcell.prisoner.ui.auth.model.PrisonerCredentials

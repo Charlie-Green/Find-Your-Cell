@@ -1,8 +1,8 @@
 package by.zenkevich_churun.findcell.core.api.auth
 
-import by.zenkevich_churun.findcell.entity.entity.Prisoner
-import by.zenkevich_churun.findcell.entity.response.LogInResponse
-import by.zenkevich_churun.findcell.entity.response.SignUpResponse
+import by.zenkevich_churun.findcell.domain.contract.auth.LogInResponse
+import by.zenkevich_churun.findcell.domain.contract.auth.SignUpResponse
+import by.zenkevich_churun.findcell.domain.entity.Prisoner
 
 
 /** Performs remote CRUD of [Prisoner] data.

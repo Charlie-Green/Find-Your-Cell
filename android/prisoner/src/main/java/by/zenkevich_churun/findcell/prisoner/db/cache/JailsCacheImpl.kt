@@ -2,7 +2,7 @@ package by.zenkevich_churun.findcell.prisoner.db.cache
 
 import android.content.Context
 import by.zenkevich_churun.findcell.core.injected.db.JailsCache
-import by.zenkevich_churun.findcell.entity.pojo.FullJailPojo
+import by.zenkevich_churun.findcell.domain.contract.jail.FullJailPojo
 import by.zenkevich_churun.findcell.prisoner.db.JailsDatabase
 import by.zenkevich_churun.findcell.prisoner.db.entity.CellEntity
 import by.zenkevich_churun.findcell.prisoner.db.entity.JailEntity
@@ -27,8 +27,8 @@ class JailsCacheImpl @Inject constructor(
         val cells = mutableListOf<CellEntity>()
         for(j in jails) {
 
-            for(index in j.cells.indices) {
-                val seatCount = j.cells[index]
+            for(index in j.seatCounts.indices) {
+                val seatCount = j.seatCounts[index]
                 if(seatCount < 0) {
                     // Cell with this number doesn't exist.
                     continue

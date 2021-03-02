@@ -1,6 +1,8 @@
 package by.zenkevich_churun.findcell.domain.contract.cellentry
 
+import by.zenkevich_churun.findcell.domain.entity.Arest
 import by.zenkevich_churun.findcell.domain.entity.Cell
+import by.zenkevich_churun.findcell.domain.entity.Jail
 import by.zenkevich_churun.findcell.domain.entity.Schedule
 import com.google.gson.annotations.SerializedName
 
@@ -18,5 +20,8 @@ class CellEntryPojo(
     var jailId: Int,
 
     @SerializedName("cell")
-    var cellNumber: Short
-)
+    var cellNumber: Short ) {
+
+
+    constructor(): this("", Arest.INVALID_ID, Jail.UNKNOWN_ID, -1)
+}

@@ -1,8 +1,8 @@
 package by.zenkevich_churun.findcell.core.injected.cp
 
 import androidx.lifecycle.LiveData
-import by.zenkevich_churun.findcell.entity.entity.CoPrisoner
-import by.zenkevich_churun.findcell.entity.response.GetCoPrisonerResponse
+import by.zenkevich_churun.findcell.domain.entity.CoPrisoner
+import by.zenkevich_churun.findcell.domain.response.GetCoPrisonerResponse
 
 
 interface CoPrisonersRepository {

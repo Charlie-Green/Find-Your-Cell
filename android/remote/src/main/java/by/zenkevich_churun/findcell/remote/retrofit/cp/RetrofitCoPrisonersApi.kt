@@ -1,13 +1,15 @@
 package by.zenkevich_churun.findcell.remote.retrofit.cp
 
 import by.zenkevich_churun.findcell.core.api.cp.CoPrisonersApi
-import by.zenkevich_churun.findcell.entity.entity.CoPrisoner
-import by.zenkevich_churun.findcell.entity.response.GetCoPrisonerResponse
+import by.zenkevich_churun.findcell.domain.contract.cp.CoPrisonerDataPojo
+import by.zenkevich_churun.findcell.domain.entity.CoPrisoner
+import by.zenkevich_churun.findcell.domain.entity.Contact
+import by.zenkevich_churun.findcell.domain.response.GetCoPrisonerResponse
+import by.zenkevich_churun.findcell.domain.simpleentity.SimpleContact
+import by.zenkevich_churun.findcell.domain.util.Base64Coder
+import by.zenkevich_churun.findcell.domain.util.Deserializer
 import by.zenkevich_churun.findcell.remote.retrofit.common.RetrofitApisUtil
 import by.zenkevich_churun.findcell.remote.retrofit.common.RetrofitHolder
-import by.zenkevich_churun.findcell.serial.common.abstr.Base64Coder
-import by.zenkevich_churun.findcell.serial.cp.v1.CoPrisonerContactsPojo1
-import by.zenkevich_churun.findcell.serial.util.protocol.ProtocolUtil
 import okhttp3.ResponseBody
 import retrofit2.Response
 import java.net.HttpURLConnection
@@ -69,10 +71,22 @@ class RetrofitCoPrisonersApi @Inject constructor(
         RetrofitApisUtil.assertResponseCode(response.code())
 
         val istream = response.body()!!.byteStream()
-        val pojo = ProtocolUtil
-            .fromJson(istream, CoPrisonerContactsPojo1::class.java)
+        val pojo = Deserializer.fromJsonStream(
+            response.body()!!.byteStream(),
+            CoPrisonerDataPojo::class.java
+        )
 
-        return GetCoPrisonerResponse.Success(pojo.collectContacts(), pojo.info)
+        val contacts = mutableListOf<Contact>()
+        addContact(contacts, pojo.phone,     Contact.Type.PHONE)
+        addContact(contacts, pojo.telegram,  Contact.Type.TELEGRAM)
+        addContact(contacts, pojo.viber,     Contact.Type.VIBER)
+        addContact(contacts, pojo.whatsapp,  Contact.Type.WHATSAPP)
+        addContact(contacts, pojo.vk,        Contact.Type.VK)
+        addContact(contacts, pojo.skype,     Contact.Type.SKYPE)
+        addContact(contacts, pojo.facebook,  Contact.Type.FACEBOOK)
+        addContact(contacts, pojo.instagram, Contact.Type.INSTAGRAM)
+
+        return GetCoPrisonerResponse.Success(contacts, pojo.info)
     }
 
 
@@ -87,5 +101,15 @@ class RetrofitCoPrisonersApi @Inject constructor(
     ): CoPrisoner.Relation {
         val ordinal = response.body()!!.string().toInt()
         return CoPrisoner.Relation.values()[ordinal]
+    }
+
+    private fun addContact(
+        target: MutableCollection<Contact>,
+        data: String?,
+        type: Contact.Type ) {
+
+        data ?: return
+        val contact = SimpleContact(type, data)
+        target.add(contact)
     }
 }

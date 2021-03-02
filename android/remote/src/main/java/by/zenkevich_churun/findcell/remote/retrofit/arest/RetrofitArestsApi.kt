@@ -1,14 +1,16 @@
 package by.zenkevich_churun.findcell.remote.retrofit.arest
 
 import by.zenkevich_churun.findcell.core.api.arest.ArestsApi
-import by.zenkevich_churun.findcell.entity.response.CreateOrUpdateArestResponse
-import by.zenkevich_churun.findcell.entity.entity.LightArest
+import by.zenkevich_churun.findcell.domain.contract.arest.AddedArestPojo
+import by.zenkevich_churun.findcell.domain.contract.arest.ArestsListPojo
+import by.zenkevich_churun.findcell.domain.contract.arest.DeletedArestsPojo
+import by.zenkevich_churun.findcell.domain.entity.LightArest
+import by.zenkevich_churun.findcell.domain.response.CreateOrUpdateArestResponse
+import by.zenkevich_churun.findcell.domain.util.Base64Coder
+import by.zenkevich_churun.findcell.domain.util.Deserializer
+import by.zenkevich_churun.findcell.domain.util.Serializer
 import by.zenkevich_churun.findcell.remote.retrofit.common.RetrofitApisUtil
 import by.zenkevich_churun.findcell.remote.retrofit.common.RetrofitHolder
-import by.zenkevich_churun.findcell.serial.arest.serial.ArestsDeserializer
-import by.zenkevich_churun.findcell.serial.arest.serial.ArestsSerializer
-import by.zenkevich_churun.findcell.serial.arest.v1.pojo.ArestPojo1
-import by.zenkevich_churun.findcell.serial.common.abstr.Base64Coder
 import okhttp3.MediaType
 import okhttp3.RequestBody
 import javax.inject.Inject
@@ -30,13 +32,11 @@ class RetrofitArestsApi @Inject constructor(
 
         val service = retrofit.create(ArestsService::class.java)
 
-        val arest = ArestPojo1()
-        arest.start = start
-        arest.end   = end
+        val passwordBase64 = base64.encode(passwordHash)
+        val arest = AddedArestPojo(prisonerId, passwordBase64, start, end)
 
-        val json = ArestsSerializer
-            .forVersion(1, base64)
-            .serialize(arest, prisonerId, passwordHash)
+        val approxSize = arest.passwordBase64.length + 60
+        val json = Serializer.toJsonString(arest, approxSize)
         val mediaType = MediaType.get("application/json")
         val requestBody = RequestBody.create(mediaType, json)
 
@@ -45,9 +45,10 @@ class RetrofitArestsApi @Inject constructor(
             .execute()
         RetrofitApisUtil.assertResponseCode(response.code())
 
-        return ArestsDeserializer
-            .forVersion(1)
-            .deserializeResponse(response.body()!!.byteStream())
+        return Deserializer.fromJsonStream(
+            response.body()!!.byteStream(),
+            CreateOrUpdateArestResponse::class.java
+        )
     }
 
     override fun get(
@@ -63,9 +64,10 @@ class RetrofitArestsApi @Inject constructor(
             .execute()
         RetrofitApisUtil.assertResponseCode(response.code())
 
-        return ArestsDeserializer
-            .forVersion(1)
-            .deserializeList(response.body()!!.byteStream())
+        val istream = response.body()!!.byteStream()
+        return Deserializer
+            .fromJsonStream(istream, ArestsListPojo::class.java)
+            .arests
     }
 
     override fun update(
@@ -86,9 +88,14 @@ class RetrofitArestsApi @Inject constructor(
 
         val service = retrofit.create(ArestsService::class.java)
 
-        val json = ArestsSerializer
-            .forVersion(1, base64)
-            .serialize(prisonerId, passwordHash, ids)
+        val pojo = DeletedArestsPojo(
+            prisonerId,
+            base64.encode(passwordHash),
+            if(ids is List) ids else ids.toList()
+        )
+
+        val approxSize = pojo.passwordBase64.length + 10*pojo.arestIds.size + 32
+        val json = Serializer.toJsonString(pojo, approxSize)
         val mediaType = MediaType.get("application/json")
         val request = RequestBody.create(mediaType, json)
 

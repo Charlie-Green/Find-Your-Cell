@@ -1,7 +1,7 @@
 package by.zenkevich_churun.findcell.core.api.arest
 
-import by.zenkevich_churun.findcell.entity.entity.LightArest
-import by.zenkevich_churun.findcell.entity.response.CreateOrUpdateArestResponse
+import by.zenkevich_churun.findcell.domain.entity.LightArest
+import by.zenkevich_churun.findcell.domain.response.CreateOrUpdateArestResponse
 
 
 interface ArestsApi {

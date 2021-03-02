@@ -1,18 +1,18 @@
 package by.zenkevich_churun.findcell.core.api.sched
 
-import by.zenkevich_churun.findcell.entity.entity.Schedule
+import by.zenkevich_churun.findcell.domain.entity.Schedule
 
 
 /** Performs CRUD operations on user's [Schedule]. **/
 interface ScheduleApi {
     fun get(
-        prisonerId: Int,
+        arestId: Int,
         passwordHash: ByteArray,
-        arestId: Int
+        arestStart: Long,
+        arestEnd: Long
     ): Schedule
 
     fun update(
-        prisonerId: Int,
         passwordHash: ByteArray,
         schedule: Schedule
     )

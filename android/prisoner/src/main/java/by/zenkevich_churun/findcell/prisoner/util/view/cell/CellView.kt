@@ -5,7 +5,7 @@ import android.util.AttributeSet
 import android.view.LayoutInflater
 import android.view.View
 import android.widget.LinearLayout
-import by.zenkevich_churun.findcell.entity.entity.Cell
+import by.zenkevich_churun.findcell.domain.entity.Cell
 import by.zenkevich_churun.findcell.prisoner.R
 import by.zenkevich_churun.findcell.prisoner.databinding.CellViewBinding
 

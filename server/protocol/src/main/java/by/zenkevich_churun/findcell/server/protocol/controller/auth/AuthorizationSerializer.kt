@@ -1,7 +1,6 @@
 package by.zenkevich_churun.findcell.server.protocol.controller.auth
 
-import by.zenkevich_churun.findcell.domain.contract.auth.LogInResponse
-import by.zenkevich_churun.findcell.domain.contract.auth.SignUpResponse
+import by.zenkevich_churun.findcell.domain.contract.auth.*
 import by.zenkevich_churun.findcell.domain.util.Serializer
 
 
@@ -11,7 +10,7 @@ internal object AuthorizationSerializer {
         response: LogInResponse
     ): String = when(response) {
         is LogInResponse.Success ->
-            "S${Serializer.toJsonString(response.prisoner)}"
+            "S${serializePrisoner(response.prisoner)}"
 
         is LogInResponse.WrongUsername ->
             "U"
@@ -28,7 +27,7 @@ internal object AuthorizationSerializer {
         response: SignUpResponse
     ): String = when(response) {
         is SignUpResponse.Success ->
-            "S${Serializer.toJsonString(response.prisoner)}"
+            "S${serializePrisoner(response.prisoner)}"
 
         is SignUpResponse.UsernameTaken ->
             "U"
@@ -36,4 +35,9 @@ internal object AuthorizationSerializer {
         is SignUpResponse.NetworkError ->
             throw IllegalArgumentException("NetworkError response is for client only")
     }
+
+
+    private fun serializePrisoner(
+        prisoner: AuthorizedPrisonerPojo
+    ) = Serializer.toJsonString(prisoner, 128)
 }

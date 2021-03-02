@@ -5,9 +5,7 @@ import androidx.lifecycle.MediatorLiveData
 import by.zenkevich_churun.findcell.core.injected.sync.SyncState
 import by.zenkevich_churun.findcell.core.injected.sync.SynchronizationRepository
 import by.zenkevich_churun.findcell.core.util.android.AndroidUtil
-import by.zenkevich_churun.findcell.entity.entity.CoPrisoner
-import by.zenkevich_churun.findcell.core.injected.cp.CoPrisonersRepository
-import kotlinx.coroutines.CoroutineScope
+import by.zenkevich_churun.findcell.domain.entity.CoPrisoner
 
 
 internal class ShowSyncMediatorLiveData(

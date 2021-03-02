@@ -65,4 +65,5 @@ dependencies {
     kapt Deps.kaptRoom
 
     implementation project(":core")
+    implementation project(":domain")
 }

@@ -1,7 +1,6 @@
 package by.zenkevich_churun.findcell.server.internal.repo.auth
 
 import by.zenkevich_churun.findcell.domain.contract.auth.*
-import by.zenkevich_churun.findcell.domain.entity.Contact
 import by.zenkevich_churun.findcell.server.internal.entity.table.PrisonerEntity
 import by.zenkevich_churun.findcell.server.internal.entity.view.PrisonerView
 import by.zenkevich_churun.findcell.server.internal.repo.common.SviazenRepositiory
@@ -67,16 +66,10 @@ class AuthorizationRepository: SviazenRepositiory() {
         pojo.info = p.info
 
         for(contact in p.contactEntities) {
-            when(ordinalToContactType(contact.key.typeOrdinal)) {
-                Contact.Type.PHONE     -> pojo.phone     = contact.data
-                Contact.Type.TELEGRAM  -> pojo.telegram  = contact.data
-                Contact.Type.VIBER     -> pojo.viber     = contact.data
-                Contact.Type.WHATSAPP  -> pojo.whatsapp  = contact.data
-                Contact.Type.VK        -> pojo.vk        = contact.data
-                Contact.Type.SKYPE     -> pojo.skype     = contact.data
-                Contact.Type.FACEBOOK  -> pojo.facebook  = contact.data
-                Contact.Type.INSTAGRAM -> pojo.instagram = contact.data
-            }
+            pojo.addContact(
+                ordinalToContactType(contact.key.typeOrdinal),
+                contact.data
+            )
         }
 
         return LogInResponse.Success(pojo)

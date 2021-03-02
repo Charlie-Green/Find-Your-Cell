@@ -1,5 +1,6 @@
 package by.zenkevich_churun.findcell.domain.contract.auth
 
+import by.zenkevich_churun.findcell.domain.entity.Contact
 import by.zenkevich_churun.findcell.domain.entity.Prisoner
 import com.google.gson.annotations.SerializedName
 
@@ -43,4 +44,18 @@ open class AuthorizedPrisonerPojo(
 
     constructor(): this(
         Prisoner.INVALID_ID, "", "", null, null, null, null, null, null, null, null )
+
+
+    fun addContact(type: Contact.Type, data: String) {
+        when(type) {
+            Contact.Type.PHONE     -> phone     = data
+            Contact.Type.TELEGRAM  -> telegram  = data
+            Contact.Type.VIBER     -> viber     = data
+            Contact.Type.WHATSAPP  -> whatsapp  = data
+            Contact.Type.VK        -> vk        = data
+            Contact.Type.SKYPE     -> skype     = data
+            Contact.Type.FACEBOOK  -> facebook  = data
+            Contact.Type.INSTAGRAM -> instagram = data
+        }
+    }
 }

@@ -2,11 +2,12 @@ package by.zenkevich_churun.findcell.prisoner.repo.sched
 
 import android.util.Log
 import by.zenkevich_churun.findcell.core.api.sched.ScheduleApi
-import by.zenkevich_churun.findcell.entity.entity.Schedule
 import by.zenkevich_churun.findcell.core.common.prisoner.PrisonerStorage
 import by.zenkevich_churun.findcell.core.injected.sync.AutomaticSyncManager
-import by.zenkevich_churun.findcell.entity.entity.Arest
-import by.zenkevich_churun.findcell.entity.entity.Jail
+import by.zenkevich_churun.findcell.domain.entity.Arest
+import by.zenkevich_churun.findcell.domain.entity.Jail
+import by.zenkevich_churun.findcell.domain.entity.Schedule
+import by.zenkevich_churun.findcell.domain.simpleentity.SimpleJail
 import by.zenkevich_churun.findcell.prisoner.repo.arest.ArestsCache
 import by.zenkevich_churun.findcell.prisoner.repo.sched.result.GetScheduleResult
 import by.zenkevich_churun.findcell.prisoner.repo.sched.result.UpdateScheduleResult
@@ -27,9 +28,12 @@ class ScheduleRepository @Inject constructor(
 
     fun getSchedule(arestId: Int): GetScheduleResult {
         val prisoner = store.prisonerLD.value ?: return GetScheduleResult.NotAuthorized
+        val arest = arestsCache.getById(arestId) ?: return GetScheduleResult.NotAuthorized
 
         return try {
-            val schedule = api.get(prisoner.id, prisoner.passwordHash, arestId).also {
+            val schedule = api.get(
+                arestId,
+                prisoner.passwordHash!!, arest.start, arest.end).also {
                 this.schedule = it
             }
             GetScheduleResult.Success(schedule)
@@ -43,7 +47,7 @@ class ScheduleRepository @Inject constructor(
         val prisoner = store.prisonerLD.value ?: return UpdateScheduleResult.NotAuthorized
 
         try {
-            api.update(prisoner.id, prisoner.passwordHash, schedule)
+            api.update(prisoner.passwordHash!!, schedule)
         } catch(exc: IOException) {
             Log.w(LOGTAG, "Failed to update schedule: ${exc.javaClass.name}: ${exc.message}")
             return UpdateScheduleResult.Failed(exc)
@@ -96,10 +100,16 @@ class ScheduleRepository @Inject constructor(
         val newJailIds = hashSetOf<Int>()
         val newJails = mutableListOf<Jail>()
         for(period in schedule.periods) {
-            val j = JailForArest.from(schedule.cells, period)
-            if(!newJailIds.contains(j.id)) {
-                newJailIds.add(j.id)
-                newJails.add(j)
+            val cell = schedule.cells[period.cellIndex]
+            val jail = SimpleJail(
+                cell.jailId,
+                cell.jailName,
+                0  // Doesn't matter in this case.
+            )
+
+            if(!newJailIds.contains(jail.id)) {
+                newJailIds.add(jail.id)
+                newJails.add(jail)
             }
         }
 
@@ -116,7 +126,7 @@ class ScheduleRepository @Inject constructor(
         val prisoner = store.prisonerLD.value ?: return false
 
         try {
-            performNetworkCall(sched.arestId, prisoner.passwordHash)
+            performNetworkCall(sched.arestId, prisoner.passwordHash!!)
             return true
         } catch(exc: IOException) {
             Log.w(LOGTAG, "Failed to add cell: ${exc.javaClass.name}: ${exc.message}")

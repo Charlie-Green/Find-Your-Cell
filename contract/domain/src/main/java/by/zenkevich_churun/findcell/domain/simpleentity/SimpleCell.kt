@@ -1,9 +1,9 @@
-package by.zenkevich_churun.findcell.prisoner.db.view
+package by.zenkevich_churun.findcell.domain.simpleentity
 
-import by.zenkevich_churun.findcell.entity.entity.Cell
+import by.zenkevich_churun.findcell.domain.entity.Cell
 
 
-class CompositeCellEntity(
+class SimpleCell(
     override val jailId: Int,
     override val jailName: String,
     override val number: Short,

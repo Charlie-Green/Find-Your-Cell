@@ -4,8 +4,8 @@ import androidx.lifecycle.*
 import by.zenkevich_churun.findcell.core.injected.sync.SyncResponse
 import by.zenkevich_churun.findcell.core.injected.sync.SynchronizationRepository
 import by.zenkevich_churun.findcell.core.injected.web.NetworkStateTracker
-import by.zenkevich_churun.findcell.entity.entity.CoPrisoner
 import by.zenkevich_churun.findcell.core.injected.cp.CoPrisonersRepository
+import by.zenkevich_churun.findcell.domain.entity.CoPrisoner
 import by.zenkevich_churun.findcell.result.ui.shared.cpcontainer.model.RefreshState
 import by.zenkevich_churun.findcell.result.ui.shared.cppage.vm.ChangeRelationLiveDataStorage
 import by.zenkevich_churun.findcell.result.ui.shared.cppage.model.ChangeRelationRequestState

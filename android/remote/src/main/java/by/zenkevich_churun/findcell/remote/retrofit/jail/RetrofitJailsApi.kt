@@ -1,11 +1,11 @@
 package by.zenkevich_churun.findcell.remote.retrofit.jail
 
 import by.zenkevich_churun.findcell.core.api.jail.JailsApi
-import by.zenkevich_churun.findcell.entity.entity.Cell
-import by.zenkevich_churun.findcell.entity.entity.Jail
+import by.zenkevich_churun.findcell.domain.entity.Cell
+import by.zenkevich_churun.findcell.domain.entity.Jail
+import by.zenkevich_churun.findcell.domain.simpleentity.SimpleCell
 import by.zenkevich_churun.findcell.remote.retrofit.common.RetrofitApisUtil
 import by.zenkevich_churun.findcell.remote.retrofit.common.RetrofitHolder
-import by.zenkevich_churun.findcell.remote.retrofit.jail.pojo.Cell1
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -36,10 +36,10 @@ class RetrofitJailsApi @Inject constructor(
 
         val seats = response.body()!!.seatCounts
         return seats.mapIndexed { index, seatCount ->
-            Cell1(
+            SimpleCell(
                 jailId,
-                (index + 1).toShort(),
                 jailName,
+                (index + 1).toShort(),
                 seatCount
             )
         }

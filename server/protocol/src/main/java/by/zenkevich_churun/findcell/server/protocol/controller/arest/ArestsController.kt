@@ -1,6 +1,7 @@
 package by.zenkevich_churun.findcell.server.protocol.controller.arest
 
 import by.zenkevich_churun.findcell.domain.contract.arest.*
+import by.zenkevich_churun.findcell.domain.response.CreateOrUpdateArestResponse
 import by.zenkevich_churun.findcell.domain.util.*
 import by.zenkevich_churun.findcell.server.internal.repo.arest.ArestsRepository
 import by.zenkevich_churun.findcell.server.protocol.controller.shared.ControllerUtil
@@ -30,7 +31,16 @@ class ArestsController {
             repo.addArest(arest, passwordHash)
         }
 
-        return Serializer.toJsonString(response)
+        return when(response) {
+            is CreateOrUpdateArestResponse.Success ->
+                "S"
+
+            is CreateOrUpdateArestResponse.ArestsIntersect ->
+                "I${response.intersectedId}"
+
+            is CreateOrUpdateArestResponse.NetworkError ->
+                throw IllegalArgumentException("This is for client only")
+        }
     }
 
 
@@ -47,7 +57,8 @@ class ArestsController {
         }
 
         val listPojo = ArestsListPojo.from(arests)
-        return Serializer.toJsonString(listPojo)
+        val approxSize = 128*listPojo.arests.size
+        return Serializer.toJsonString(listPojo, approxSize)
     }
 
 

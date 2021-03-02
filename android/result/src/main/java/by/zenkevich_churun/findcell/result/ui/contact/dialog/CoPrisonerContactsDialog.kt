@@ -1,7 +1,6 @@
 package by.zenkevich_churun.findcell.result.ui.contact.dialog
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup.LayoutParams.MATCH_PARENT
@@ -10,7 +9,7 @@ import android.widget.LinearLayout
 import androidx.navigation.fragment.findNavController
 import by.zenkevich_churun.findcell.core.ui.common.SviazenDialog
 import by.zenkevich_churun.findcell.core.util.view.contact.ContactView
-import by.zenkevich_churun.findcell.entity.entity.Contact
+import by.zenkevich_churun.findcell.domain.entity.Contact
 import by.zenkevich_churun.findcell.result.R
 import by.zenkevich_churun.findcell.result.databinding.CoprisonerContactsDialogBinding
 import by.zenkevich_churun.findcell.result.ui.contact.model.GetCoPrisonerState

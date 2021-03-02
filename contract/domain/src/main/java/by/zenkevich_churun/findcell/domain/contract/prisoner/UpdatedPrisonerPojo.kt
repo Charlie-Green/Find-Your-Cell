@@ -33,4 +33,28 @@ class UpdatedPrisonerPojo(
 
     instagram: String?
 
-): AuthorizedPrisonerPojo(id, name, info, phone, telegram, viber, whatsapp, vk, skype, facebook, instagram)
+): AuthorizedPrisonerPojo(id, name, info, phone, telegram, viber, whatsapp, vk, skype, facebook, instagram) {
+
+    constructor(): this(
+        Prisoner.INVALID_ID, "", "", "", null, null, null, null, null, null, null, null )
+
+
+    companion object {
+
+        fun from(
+            prisoner: Prisoner,
+            passwordBase64: String
+        ): UpdatedPrisonerPojo {
+
+            val pojo = UpdatedPrisonerPojo()
+            pojo.id = prisoner.id
+            pojo.name = prisoner.name
+            pojo.passwordBase64 = passwordBase64
+            for(contact in prisoner.contacts) {
+                pojo.addContact(contact.type, contact.data)
+            }
+
+            return pojo
+        }
+    }
+}

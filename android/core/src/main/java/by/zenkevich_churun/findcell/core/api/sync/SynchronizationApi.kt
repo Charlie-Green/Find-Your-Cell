@@ -1,6 +1,6 @@
 package by.zenkevich_churun.findcell.core.api.sync
 
-import by.zenkevich_churun.findcell.entity.pojo.SynchronizedPojo
+import by.zenkevich_churun.findcell.domain.contract.sync.SynchronizedPojo
 
 
 interface SynchronizationApi {

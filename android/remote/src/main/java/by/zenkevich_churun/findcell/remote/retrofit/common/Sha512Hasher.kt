@@ -1,7 +1,6 @@
 package by.zenkevich_churun.findcell.remote.retrofit.common
 
 import by.zenkevich_churun.findcell.core.injected.common.Hasher
-import by.zenkevich_churun.findcell.serial.common.v1.CommonContract1
 import java.security.MessageDigest
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -17,7 +16,7 @@ class Sha512Hasher @Inject constructor(): Hasher {
 
 
     override fun hash(data: String): ByteArray {
-        val charset = CommonContract1.ENCODING
+        val charset = Charsets.UTF_8
         return digest.digest( data.toByteArray(charset) )
     }
 }

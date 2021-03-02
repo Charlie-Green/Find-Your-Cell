@@ -1,6 +1,6 @@
 package by.zenkevich_churun.findcell.prisoner.ui.common.arest
 
-import by.zenkevich_churun.findcell.entity.entity.Arest
+import by.zenkevich_churun.findcell.domain.entity.Arest
 
 
 sealed class ArestsListState {

@@ -2,7 +2,7 @@ package by.zenkevich_churun.findcell.result.ui.shared.cppage.vm
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MediatorLiveData
-import by.zenkevich_churun.findcell.entity.entity.CoPrisoner
+import by.zenkevich_churun.findcell.domain.entity.CoPrisoner
 import kotlinx.coroutines.*
 
 

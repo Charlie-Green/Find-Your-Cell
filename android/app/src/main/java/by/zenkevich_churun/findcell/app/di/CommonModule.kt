@@ -1,9 +1,9 @@
 package by.zenkevich_churun.findcell.app.di
 
 import by.zenkevich_churun.findcell.core.injected.common.Hasher
+import by.zenkevich_churun.findcell.domain.util.Base64Coder
 import by.zenkevich_churun.findcell.remote.retrofit.common.Base64AndroidCoder
 import by.zenkevich_churun.findcell.remote.retrofit.common.Sha512Hasher
-import by.zenkevich_churun.findcell.serial.common.abstr.Base64Coder
 import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn

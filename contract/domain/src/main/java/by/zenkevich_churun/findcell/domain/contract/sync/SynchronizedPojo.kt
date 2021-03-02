@@ -1,7 +1,7 @@
 package by.zenkevich_churun.findcell.domain.contract.sync
 
 import by.zenkevich_churun.findcell.domain.contract.cp.CoPrisonerHeaderPojo
-import by.zenkevich_churun.findcell.domain.contract.jail.JailPojo
+import by.zenkevich_churun.findcell.domain.contract.jail.FullJailPojo
 import com.google.gson.annotations.SerializedName
 
 
@@ -12,5 +12,5 @@ class SynchronizedPojo(
     var coPrisoners: List<CoPrisonerHeaderPojo>,
 
     @SerializedName("jails")
-    var jails: List<JailPojo>
+    var jails: List<FullJailPojo>
 )

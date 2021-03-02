@@ -53,5 +53,5 @@ dependencies {
     testImplementation Deps.testJUnit
 
     implementation project(":core")
-    implementation project(":serial")
+    implementation project(":domain")
 }

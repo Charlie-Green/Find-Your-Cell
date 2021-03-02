@@ -2,7 +2,7 @@ package by.zenkevich_churun.findcell.result.ui.shared.cppage.fragm
 
 import android.content.Context
 import androidx.lifecycle.ViewModel
-import by.zenkevich_churun.findcell.entity.entity.CoPrisoner
+import by.zenkevich_churun.findcell.domain.entity.CoPrisoner
 import by.zenkevich_churun.findcell.result.ui.shared.cppage.vm.CoPrisonersPageViewModel
 
 

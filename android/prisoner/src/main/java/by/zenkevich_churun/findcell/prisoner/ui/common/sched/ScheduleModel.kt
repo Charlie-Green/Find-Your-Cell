@@ -1,10 +1,10 @@
 package by.zenkevich_churun.findcell.prisoner.ui.common.sched
 
 import by.zenkevich_churun.findcell.core.util.std.CalendarUtil
-import by.zenkevich_churun.findcell.entity.entity.Cell
-import by.zenkevich_churun.findcell.entity.entity.Jail
-import by.zenkevich_churun.findcell.entity.entity.Schedule
-import by.zenkevich_churun.findcell.entity.entity.SchedulePeriod
+import by.zenkevich_churun.findcell.domain.entity.Cell
+import by.zenkevich_churun.findcell.domain.entity.Jail
+import by.zenkevich_churun.findcell.domain.entity.Schedule
+import by.zenkevich_churun.findcell.domain.entity.SchedulePeriod
 import java.util.Calendar
 import kotlin.collections.HashSet
 

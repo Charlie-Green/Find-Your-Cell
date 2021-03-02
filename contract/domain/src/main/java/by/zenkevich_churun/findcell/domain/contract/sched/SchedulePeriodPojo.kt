@@ -19,4 +19,12 @@ class SchedulePeriodPojo(
 
 
     constructor(): this(-1, 0L, 0L)
+
+
+    companion object {
+
+        fun from(
+            p: SchedulePeriod
+        ) = SchedulePeriodPojo(p.cellIndex, p.start, p.end)
+    }
 }

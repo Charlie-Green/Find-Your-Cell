@@ -5,16 +5,15 @@ import android.view.LayoutInflater
 import android.view.View
 import androidx.core.view.isVisible
 import androidx.core.widget.addTextChangedListener
-import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import by.zenkevich_churun.findcell.core.ui.common.SviazenFragment
 import by.zenkevich_churun.findcell.core.util.std.CollectionUtil
-import by.zenkevich_churun.findcell.entity.entity.Contact
-import by.zenkevich_churun.findcell.entity.entity.Prisoner
+import by.zenkevich_churun.findcell.domain.entity.Contact
+import by.zenkevich_churun.findcell.domain.entity.Prisoner
+import by.zenkevich_churun.findcell.domain.simpleentity.SimplePrisoner
 import by.zenkevich_churun.findcell.prisoner.R
 import by.zenkevich_churun.findcell.prisoner.databinding.ProfileFragmBinding
 import by.zenkevich_churun.findcell.prisoner.repo.profile.SavePrisonerResult
-import by.zenkevich_churun.findcell.prisoner.ui.profile.model.PrisonerDraft
 import by.zenkevich_churun.findcell.prisoner.ui.profile.vm.ProfileViewModel
 
 
@@ -102,12 +101,13 @@ class ProfileFragment: SviazenFragment<ProfileFragmBinding>() {
         val adapter = vb.recyclerView.adapter as ProfileRecyclerAdapter? ?: return null
         val prisoner = this.prisoner ?: return null
 
-        return PrisonerDraft(
+        return SimplePrisoner(
             prisoner.id,
+            prisoner.username,
             prisoner.passwordHash ?: throw NullPointerException("Missing password hash"),
             vb.tietName.text.toString(),
-            adapter.contacts,
-            adapter.prisonerInfo
+            adapter.prisonerInfo,
+            adapter.contacts
         )
     }
 

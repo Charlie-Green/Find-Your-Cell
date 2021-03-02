@@ -10,8 +10,8 @@ import androidx.core.widget.addTextChangedListener
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
 import by.zenkevich_churun.findcell.core.util.view.contact.ContactView
-import by.zenkevich_churun.findcell.entity.entity.Contact
-import by.zenkevich_churun.findcell.entity.entity.Prisoner
+import by.zenkevich_churun.findcell.domain.entity.Contact
+import by.zenkevich_churun.findcell.domain.entity.Prisoner
 import by.zenkevich_churun.findcell.prisoner.R
 import by.zenkevich_churun.findcell.prisoner.databinding.ProfileScrollviewConstpartBinding
 import by.zenkevich_churun.findcell.prisoner.ui.profile.vm.ProfileViewModel

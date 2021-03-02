@@ -1,6 +1,7 @@
 package by.zenkevich_churun.findcell.server.internal.repo.cellentry
 
 import by.zenkevich_churun.findcell.domain.contract.cellentry.CellEntryPojo
+import by.zenkevich_churun.findcell.domain.contract.cellentry.UpdatedCellEntryPojo
 import by.zenkevich_churun.findcell.server.internal.dao.arest.ArestsDao
 import by.zenkevich_churun.findcell.server.internal.dao.scell.ScheduleCellsDao
 import by.zenkevich_churun.findcell.server.internal.dao.speriod.SchedulePeriodsDao
@@ -41,28 +42,27 @@ class CellEntriesRepository: SviazenRepositiory() {
 
 
     fun update(
-        passwordHash: ByteArray,
-        arestId: Int,
-        oldJailId: Int, oldCellNumber: Short,
-        newJailId: Int, newCellNumber: Short ) {
+        data: UpdatedCellEntryPojo,
+        passwordHash: ByteArray ) {
 
         // Validate user credentials:
-        validateByArestId(arestId, passwordHash)
+        validateByArestId(data.arestId, passwordHash)
 
         // Insert the new Cell:
         val newCell = ScheduleCellEntryEntity()
-        newCell.key = ScheduleCellEntryKey(arestId, newJailId, newCellNumber)
+        newCell.key = ScheduleCellEntryKey(
+            data.arestId, data.newJailId, data.newCellNumber)
         cellsDao.save(newCell)
 
         // Replace references:
         periodsDao.replaceCellReferences(
-            arestId,
-            oldJailId, oldCellNumber,
-            newJailId, newCellNumber
+            data.arestId,
+            data.oldJailId, data.oldCellNumber,
+            data.newJailId, data.newCellNumber
         )
 
         // Now delete the oldCell without concern about the foreign key constraint:
-        deleteCell(arestId, oldJailId, oldCellNumber)
+        deleteCell(data.arestId, data. oldJailId, data.oldCellNumber)
     }
 
 

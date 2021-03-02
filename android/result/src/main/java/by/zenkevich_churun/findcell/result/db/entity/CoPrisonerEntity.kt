@@ -1,7 +1,8 @@
 package by.zenkevich_churun.findcell.result.db.entity
 
 import androidx.room.*
-import by.zenkevich_churun.findcell.entity.entity.CoPrisoner
+import by.zenkevich_churun.findcell.domain.contract.cp.CoPrisonerHeaderPojo
+import by.zenkevich_churun.findcell.domain.entity.CoPrisoner
 
 
 @Entity(tableName = "CoPrisoners")
@@ -28,11 +29,11 @@ class CoPrisonerEntity(
 
     companion object {
 
-        fun from(coPrisoner: CoPrisoner): CoPrisonerEntity {
+        fun from(coPrisoner: CoPrisonerHeaderPojo): CoPrisonerEntity {
             return CoPrisonerEntity(
                 coPrisoner.id,
                 coPrisoner.name,
-                coPrisoner.relation,
+                CoPrisoner.Relation.values()[coPrisoner.relationOrdinal.toInt()],
                 coPrisoner.commonJailName,
                 coPrisoner.commonCellNumber
             )

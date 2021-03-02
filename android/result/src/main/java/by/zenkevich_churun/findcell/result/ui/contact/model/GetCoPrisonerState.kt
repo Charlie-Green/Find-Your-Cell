@@ -1,6 +1,6 @@
 package by.zenkevich_churun.findcell.result.ui.contact.model
 
-import by.zenkevich_churun.findcell.entity.entity.Contact
+import by.zenkevich_churun.findcell.domain.entity.Contact
 
 
 sealed class GetCoPrisonerState {

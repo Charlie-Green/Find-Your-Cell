@@ -2,7 +2,7 @@ package by.zenkevich_churun.findcell.result.db.dao
 
 import androidx.lifecycle.LiveData
 import androidx.room.*
-import by.zenkevich_churun.findcell.entity.entity.CoPrisoner
+import by.zenkevich_churun.findcell.domain.entity.CoPrisoner
 import by.zenkevich_churun.findcell.result.db.entity.CoPrisonerEntity
 
 
