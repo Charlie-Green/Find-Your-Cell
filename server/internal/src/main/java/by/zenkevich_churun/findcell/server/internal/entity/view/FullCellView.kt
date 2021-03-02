@@ -18,6 +18,8 @@ class FullCellView(
     var number: Short,
 
     @Column(name = "seats")
-    var seats: Short
+    var seats: Short ) {
 
-)
+
+    constructor(): this(JailEntity(), -1, -1)
+}

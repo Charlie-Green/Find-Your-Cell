@@ -27,7 +27,7 @@ internal object AuthorizationSerializer {
         response: SignUpResponse
     ): String = when(response) {
         is SignUpResponse.Success ->
-            "S${serializePrisoner(response.prisoner)}"
+            "S${response.prisoner.id}"
 
         is SignUpResponse.UsernameTaken ->
             "U"

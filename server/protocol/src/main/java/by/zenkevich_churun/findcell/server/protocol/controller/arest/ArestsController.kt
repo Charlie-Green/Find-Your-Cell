@@ -20,7 +20,7 @@ class ArestsController {
     private lateinit var base64: Base64Coder
 
 
-        @PostMapping("/arest/add")
+    @PostMapping("/arest/add")
     fun addArest(istream: InputStream): String {
 
         val arest = Deserializer

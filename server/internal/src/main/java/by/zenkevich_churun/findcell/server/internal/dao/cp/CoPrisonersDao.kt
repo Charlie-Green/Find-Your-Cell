@@ -82,6 +82,8 @@ interface CoPrisonersDao: Repository<CoPrisonerEntity, CoPrisonerKey> {
 
     fun save(cp: CoPrisonerEntity)
 
+    fun deleteById(key: CoPrisonerKey)
+
 
     companion object {
         /** A piece of JPQL code to check if 2 [PeriodEntity]s,

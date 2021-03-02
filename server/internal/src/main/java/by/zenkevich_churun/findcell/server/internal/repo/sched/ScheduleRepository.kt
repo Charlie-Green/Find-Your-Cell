@@ -4,8 +4,7 @@ import by.zenkevich_churun.findcell.domain.contract.sched.*
 import by.zenkevich_churun.findcell.server.internal.dao.arest.ArestsDao
 import by.zenkevich_churun.findcell.server.internal.dao.scell.ScheduleCellsDao
 import by.zenkevich_churun.findcell.server.internal.dao.speriod.SchedulePeriodsDao
-import by.zenkevich_churun.findcell.server.internal.entity.table.PeriodEntity
-import by.zenkevich_churun.findcell.server.internal.entity.table.ScheduleCellEntryEntity
+import by.zenkevich_churun.findcell.server.internal.entity.table.*
 import by.zenkevich_churun.findcell.server.internal.repo.common.SviazenRepositiory
 import org.springframework.beans.factory.annotation.Autowired
 
@@ -57,11 +56,14 @@ class ScheduleRepository: SviazenRepositiory() {
         data: UpdatedSchedulePojo,
         passwordHash: ByteArray ) {
 
-        validateCredentialsByArestId(data.arestId, passwordHash)
+        val arest = arestsDao
+            .findById(data.arestId)
+            .get()
+        validateCredentials(arest.prisonerId, passwordHash)
 
         val cells = cellsDao.get(data.arestId)
         val entities = data.periods.map { period ->
-            PeriodEntity.from(data.arestId, period, cells)
+            periodEntityFrom(period, arest, cells)
         }
 
         periodsDao.apply {
@@ -74,6 +76,28 @@ class ScheduleRepository: SviazenRepositiory() {
     private fun validateCredentialsByArestId(arestId: Int, passwordHash: ByteArray) {
         val prisonerId = arestsDao.prisonerId(arestId)
         validateCredentials(prisonerId, passwordHash)
+    }
+
+    private fun periodEntityFrom(
+        period: SchedulePeriodPojo,
+        arest: ArestEntity,
+        cells: List<ScheduleCellEntryEntity>
+    ): PeriodEntity {
+        if(period.start > period.end) {
+            throw IllegalArgumentException(
+                "Period.start (${period.start}) is greater than Period.end (${period.end})" )
+        }
+
+        if(period.start < arest.start ||
+            period.end > arest.end ) {
+
+            val periodRange = "${period.start} - ${period.end}"
+            val arestRange = "${arest.start} - ${arest.end}"
+            throw IllegalArgumentException(
+                "Period ($periodRange) is out of its Arest's bounds ($arestRange)" )
+        }
+
+        return PeriodEntity.from(arest.id, period, cells)
     }
 
     private fun cellIndex(

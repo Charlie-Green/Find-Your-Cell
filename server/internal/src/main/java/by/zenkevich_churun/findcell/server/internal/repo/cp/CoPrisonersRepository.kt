@@ -183,7 +183,12 @@ class CoPrisonersRepository: SviazenRepositiory() {
         }
         record.relationOrdinal = relationCode.decode()
 
-        dao.save(record)
+        val suggestedOrdinal = CoPrisoner.Relation.SUGGESTED.ordinal.toShort()
+        if(record.relationOrdinal == suggestedOrdinal) {
+            dao.deleteById(record.key)
+        } else {
+            dao.save(record)
+        }
 
         return RelationResolver(record.relationOrdinal).resolve(firstBreaks)
     }

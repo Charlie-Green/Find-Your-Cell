@@ -4,7 +4,6 @@ import by.zenkevich_churun.findcell.domain.contract.sched.UpdatedSchedulePojo
 import by.zenkevich_churun.findcell.domain.util.*
 import by.zenkevich_churun.findcell.server.internal.repo.sched.ScheduleRepository
 import by.zenkevich_churun.findcell.server.protocol.controller.shared.ControllerUtil
-import by.zenkevich_churun.findcell.server.protocol.exc.IllegalServerParameterException
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.web.bind.annotation.*
 import java.io.InputStream
@@ -39,9 +38,13 @@ class ScheduleController {
 
     @PostMapping("sched/save")
     fun save(input: InputStream): String {
-        val pojo = Deserializer.fromJsonStream(input, UpdatedSchedulePojo::class.java)
-        val passwordHash = base64Coder.decode(pojo.passwordBase64)
-        repo.save(pojo, passwordHash)
+        
+        ControllerUtil.catchingIllegalArgument {
+            val pojo = Deserializer.fromJsonStream(input, UpdatedSchedulePojo::class.java)
+            val passwordHash = base64Coder.decode(pojo.passwordBase64)
+            repo.save(pojo, passwordHash)
+        }
+
         return ""
     }
 }
