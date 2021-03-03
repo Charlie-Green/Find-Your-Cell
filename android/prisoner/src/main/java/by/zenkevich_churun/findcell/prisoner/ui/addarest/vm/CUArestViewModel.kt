@@ -4,7 +4,7 @@ import android.content.Context
 import androidx.lifecycle.*
 import by.zenkevich_churun.findcell.core.injected.web.NetworkStateTracker
 import by.zenkevich_churun.findcell.domain.entity.Arest
-import by.zenkevich_churun.findcell.domain.response.CreateOrUpdateArestResponse
+import by.zenkevich_churun.findcell.domain.contract.arest.CreateOrUpdateArestResponse
 import by.zenkevich_churun.findcell.prisoner.repo.arest.ArestsRepository
 import by.zenkevich_churun.findcell.prisoner.ui.common.arest.ArestLiveDatasHolder
 import by.zenkevich_churun.findcell.prisoner.ui.common.arest.ArestsListState

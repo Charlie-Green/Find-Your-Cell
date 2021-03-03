@@ -1,11 +1,13 @@
-package by.zenkevich_churun.findcell.prisoner.ui.common.sched
+package by.zenkevich_churun.findcell.prisoner.ui.common.sched.period
 
 import by.zenkevich_churun.findcell.core.util.std.CalendarUtil
 import by.zenkevich_churun.findcell.domain.entity.Cell
 import by.zenkevich_churun.findcell.domain.entity.Jail
 import by.zenkevich_churun.findcell.domain.entity.Schedule
 import by.zenkevich_churun.findcell.domain.entity.SchedulePeriod
-import java.util.Calendar
+import by.zenkevich_churun.findcell.prisoner.ui.common.sched.cell.CellModel
+import by.zenkevich_churun.findcell.prisoner.ui.common.sched.util.ScheduleMapper
+import by.zenkevich_churun.findcell.prisoner.ui.common.sched.util.ScheduleModelColorGenerator
 import kotlin.collections.HashSet
 
 
@@ -16,7 +18,7 @@ import kotlin.collections.HashSet
   * stores the data on day-to-day basis.
   * However, this class can be mapped to [Schedule].
   * @see UiSchedule **/
-class ScheduleModel private constructor(
+class ScheduleModel(
     val arestId: Int,
     startTime: Long,
     endTime: Long,
@@ -72,8 +74,8 @@ class ScheduleModel private constructor(
             cellNumber,
             seats,
             backColor,
-            numberBackColor(backColor),
-            textColor(backColor)
+            colorGen.currentNumberBackColor,
+            colorGen.currentTextColor
         )
 
         cells.add(newCell)
@@ -159,7 +161,7 @@ class ScheduleModel private constructor(
 
 
     fun toSchedule(): Schedule
-        = UiSchedule.from(this)
+        = scheduleMapper.toSchedule(this)
 
 
     private fun dayData(cellIndices: HashSet<Int>): String {
@@ -189,85 +191,10 @@ class ScheduleModel private constructor(
 
 
     companion object {
-        private val colorGen = ScheduleModuleColorGenerator()
+        private val colorGen = ScheduleModelColorGenerator()
+        private val scheduleMapper = ScheduleMapper(colorGen)
 
-
-        fun from(schedule: Schedule): ScheduleModel {
-            colorGen.reset()
-            val dayCount = CalendarUtil.daysDifference(schedule.start, schedule.end) + 1
-
-            return ScheduleModel(
-                schedule.arestId,
-                schedule.start,
-                schedule.end,
-                cellModels(schedule.cells),
-                days(schedule.start, dayCount, schedule.periods)
-            )
-        }
-
-
-        private fun cellModels(cells: List<Cell>): MutableList<CellModel> {
-            val models = mutableListOf<CellModel>()
-
-            for(cell in cells) {
-                val backColor = colorGen.next
-                val model = CellModel(
-                    cell.jailId,
-                    cell.jailName,
-                    cell.number,
-                    cell.seats,
-                    backColor,
-                    numberBackColor(backColor),
-                    textColor(backColor)
-                )
-
-                models.add(model)
-            }
-
-            return models
-        }
-
-        private fun days(
-            start: Long,
-            dayCount: Int,
-            periods: List<SchedulePeriod>
-        ): Array< HashSet<Int> > {
-
-            val days = Array< HashSet<Int> >(dayCount) { index ->
-                hashSetOf()
-            }
-
-            for(period in periods) {
-                val startIndex = CalendarUtil.daysDifference(start, period.start)
-                val endIndex = CalendarUtil.daysDifference(start, period.end)
-
-                for(dayIndex in startIndex..endIndex) {
-                    days[dayIndex].add(period.cellIndex)
-                }
-            }
-
-            return days
-        }
-
-
-        private fun numberBackColor(backColor: Int): Int {
-            val r0 = (backColor and 0x00_ff0000.toInt()) shr 16
-            val g0 = (backColor and 0x00_00ff00.toInt()) shr 8
-            val b0 = backColor and 0x00_0000ff.toInt()
-
-            val r = r0/2
-            val g = g0/2
-            val b = b0/2
-
-            val alpha = backColor and 0xff_000000.toInt()
-            return alpha or (r shl 16) or (g shl 8) or b
-        }
-
-        private fun textColor(backColor: Int): Int {
-            val rgb0 = backColor and 0xffffff.toInt()
-            val rgb = 0xffffff - rgb0
-            val alpha = backColor and 0xff_000000.toInt()
-            return alpha or rgb
-        }
+        fun from(schedule: Schedule): ScheduleModel
+            = scheduleMapper.fromSchedule(schedule)
     }
 }

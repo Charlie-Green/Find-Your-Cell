@@ -4,7 +4,7 @@ import by.zenkevich_churun.findcell.core.api.cp.CoPrisonersApi
 import by.zenkevich_churun.findcell.domain.contract.cp.CoPrisonerDataPojo
 import by.zenkevich_churun.findcell.domain.entity.CoPrisoner
 import by.zenkevich_churun.findcell.domain.entity.Contact
-import by.zenkevich_churun.findcell.domain.response.GetCoPrisonerResponse
+import by.zenkevich_churun.findcell.domain.contract.cp.GetCoPrisonerResponse
 import by.zenkevich_churun.findcell.domain.simpleentity.SimpleContact
 import by.zenkevich_churun.findcell.domain.util.Base64Coder
 import by.zenkevich_churun.findcell.domain.util.Deserializer

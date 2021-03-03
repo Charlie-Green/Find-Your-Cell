@@ -1,4 +1,4 @@
-package by.zenkevich_churun.findcell.domain.response
+package by.zenkevich_churun.findcell.domain.contract.cp
 
 import by.zenkevich_churun.findcell.domain.entity.Contact
 import by.zenkevich_churun.findcell.domain.entity.Prisoner

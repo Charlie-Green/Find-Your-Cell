@@ -12,6 +12,7 @@ class Base64AndroidCoder
     override fun encode(data: ByteArray): String {
         val bytes = Base64.encode(data, Base64.URL_SAFE)
         return String(bytes, Charsets.UTF_8)
+            .filter { char -> !char.isWhitespace() }
     }
 
     override fun decode(data: String): ByteArray {

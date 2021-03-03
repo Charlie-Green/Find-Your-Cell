@@ -1,4 +1,4 @@
-package by.zenkevich_churun.findcell.prisoner.ui.common.sched
+package by.zenkevich_churun.findcell.prisoner.ui.common.sched.cell
 
 import by.zenkevich_churun.findcell.domain.entity.Cell
 
@@ -14,7 +14,7 @@ class CellModel(
 ): Cell() {
 
     override fun toString(): String
-        = CellModel.toString(jailName, number)
+        = toString(jailName, number)
 
 
     companion object {

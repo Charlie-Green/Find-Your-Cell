@@ -1,4 +1,4 @@
-package by.zenkevich_churun.findcell.domain.response
+package by.zenkevich_churun.findcell.domain.contract.arest
 
 import by.zenkevich_churun.findcell.domain.entity.Arest
 

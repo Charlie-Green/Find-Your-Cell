@@ -6,8 +6,8 @@ import by.zenkevich_churun.findcell.core.injected.web.NetworkStateTracker
 import by.zenkevich_churun.findcell.domain.entity.Cell
 import by.zenkevich_churun.findcell.prisoner.repo.jail.JailsRepository
 import by.zenkevich_churun.findcell.prisoner.repo.sched.ScheduleRepository
-import by.zenkevich_churun.findcell.prisoner.ui.common.sched.ScheduleCellsCrudState
-import by.zenkevich_churun.findcell.prisoner.ui.common.sched.ScheduleLiveDatasStorage
+import by.zenkevich_churun.findcell.prisoner.ui.common.sched.period.ScheduleCellsCrudState
+import by.zenkevich_churun.findcell.prisoner.ui.common.sched.ld.ScheduleLiveDatasStorage
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -81,7 +81,8 @@ class CellOptionsViewModel @Inject constructor(
 
 
     private inline fun changeState(
-        mapState: (oldState: ScheduleCellsCrudState.ViewingOptions) -> ScheduleCellsCrudState ) {
+        mapState: (oldState: ScheduleCellsCrudState.ViewingOptions) -> ScheduleCellsCrudState
+    ) {
 
         synchronized(scheduleStore) {
             val oldState = crudStateLD.value

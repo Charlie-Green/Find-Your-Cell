@@ -1,15 +1,12 @@
 package by.zenkevich_churun.findcell.remote.retrofit.profile
 
-import android.util.Log
 import by.zenkevich_churun.findcell.core.api.auth.*
 import by.zenkevich_churun.findcell.domain.contract.auth.AuthorizedPrisonerPojo
 import by.zenkevich_churun.findcell.domain.contract.auth.LogInResponse
 import by.zenkevich_churun.findcell.domain.contract.auth.SignUpResponse
 import by.zenkevich_churun.findcell.domain.contract.prisoner.UpdatedPrisonerPojo
 import by.zenkevich_churun.findcell.domain.entity.Prisoner
-import by.zenkevich_churun.findcell.domain.util.Base64Coder
-import by.zenkevich_churun.findcell.domain.util.Deserializer
-import by.zenkevich_churun.findcell.domain.util.Serializer
+import by.zenkevich_churun.findcell.domain.util.*
 import by.zenkevich_churun.findcell.remote.retrofit.common.RetrofitApisUtil
 import by.zenkevich_churun.findcell.remote.retrofit.common.RetrofitHolder
 import okhttp3.MediaType
@@ -38,13 +35,7 @@ class RetrofitProfileApi @Inject constructor(
         RetrofitApisUtil.assertResponseCode(response.code())
 
         val istream = response.body()!!.byteStream()
-        return when(val responseType = istream.read().toChar().also { Log.v("CharlieDebug", "LogInResponse = $it") }) {
-            'S' -> LogInResponse.Success( deserializePrisoner(istream) )
-            'U' -> LogInResponse.WrongUsername
-            'P' -> LogInResponse.WrongPassword
-            else -> throw IOException(
-                "Unknown ${LogInResponse::class.java.simpleName} $responseType" )
-        }
+        return ProfileDeserializer.logIn(istream)
     }
 
     override fun signUp(
@@ -62,12 +53,7 @@ class RetrofitProfileApi @Inject constructor(
         RetrofitApisUtil.assertResponseCode(response.code())
 
         val istream = response.body()!!.byteStream()
-        return when(val responseType = istream.read().toChar()) {
-            'S' -> SignUpResponse.Success( deserializePrisoner(istream) )
-            'U' -> SignUpResponse.UsernameTaken
-            else -> throw IOException(
-                "Unknown ${SignUpResponse::class.java.simpleName} $responseType" )
-        }
+        return ProfileDeserializer.signUp(istream, name)
     }
 
     override fun update(prisoner: Prisoner) {
@@ -89,8 +75,4 @@ class RetrofitProfileApi @Inject constructor(
 
     private val retrofit
         get() = retrofitHolder.retrofit
-
-    private fun deserializePrisoner(
-        istream: InputStream
-    ) = Deserializer.fromJsonStream(istream, AuthorizedPrisonerPojo::class.java)
 }

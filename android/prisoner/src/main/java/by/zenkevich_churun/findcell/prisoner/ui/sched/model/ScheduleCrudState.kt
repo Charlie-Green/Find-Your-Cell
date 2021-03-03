@@ -1,6 +1,6 @@
 package by.zenkevich_churun.findcell.prisoner.ui.sched.model
 
-import by.zenkevich_churun.findcell.prisoner.ui.common.sched.ScheduleLiveDatasStorage
+import by.zenkevich_churun.findcell.prisoner.ui.common.sched.ld.ScheduleLiveDatasStorage
 
 
 sealed class ScheduleCrudState{

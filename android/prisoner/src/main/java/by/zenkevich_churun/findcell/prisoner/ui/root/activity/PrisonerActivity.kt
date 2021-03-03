@@ -14,7 +14,7 @@ import by.zenkevich_churun.findcell.core.util.android.NavigationUtil
 import by.zenkevich_churun.findcell.prisoner.databinding.PrisonerActivityBinding
 import by.zenkevich_churun.findcell.prisoner.repo.profile.SavePrisonerResult
 import by.zenkevich_churun.findcell.prisoner.ui.common.interrupt.EditInterruptState
-import by.zenkevich_churun.findcell.prisoner.ui.common.sched.ScheduleCellsCrudState
+import by.zenkevich_churun.findcell.prisoner.ui.common.sched.period.ScheduleCellsCrudState
 import by.zenkevich_churun.findcell.prisoner.ui.root.vm.PrisonerRootViewModel
 import by.zenkevich_churun.findcell.prisoner.ui.sched.model.ScheduleCrudState
 import by.zenkevich_churun.findcell.result.ui.contact.model.GetCoPrisonerState

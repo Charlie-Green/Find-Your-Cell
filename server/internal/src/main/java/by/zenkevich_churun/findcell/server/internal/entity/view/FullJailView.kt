@@ -23,6 +23,9 @@ class FullJailView(
 
 ): Jail() {
 
+    constructor(): this(Jail.UNKNOWN_ID, "", hashSetOf())
+
+
     override val cellCount: Short
         get() = cellEntitiesSet.size.toShort()
 }

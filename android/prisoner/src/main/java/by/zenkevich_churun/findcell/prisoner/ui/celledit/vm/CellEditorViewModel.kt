@@ -5,13 +5,13 @@ import androidx.lifecycle.*
 import by.zenkevich_churun.findcell.core.injected.web.NetworkStateTracker
 import by.zenkevich_churun.findcell.domain.entity.Cell
 import by.zenkevich_churun.findcell.domain.entity.Jail
-import by.zenkevich_churun.findcell.prisoner.ui.common.sched.ScheduleLiveDatasStorage
+import by.zenkevich_churun.findcell.prisoner.ui.common.sched.ld.ScheduleLiveDatasStorage
 import by.zenkevich_churun.findcell.prisoner.repo.jail.GetJailsResult
 import by.zenkevich_churun.findcell.prisoner.repo.jail.JailsRepository
 import by.zenkevich_churun.findcell.prisoner.repo.sched.ScheduleRepository
-import by.zenkevich_churun.findcell.prisoner.ui.common.sched.CellEditFailureReason
-import by.zenkevich_churun.findcell.prisoner.ui.common.sched.JailHeader
-import by.zenkevich_churun.findcell.prisoner.ui.common.sched.ScheduleCellsCrudState
+import by.zenkevich_churun.findcell.prisoner.ui.common.sched.cell.CellEditFailureReason
+import by.zenkevich_churun.findcell.prisoner.ui.common.sched.cell.JailHeader
+import by.zenkevich_churun.findcell.prisoner.ui.common.sched.period.ScheduleCellsCrudState
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import javax.inject.Inject

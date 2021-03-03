@@ -49,6 +49,7 @@ class UpdatedPrisonerPojo(
             val pojo = UpdatedPrisonerPojo()
             pojo.id = prisoner.id
             pojo.name = prisoner.name
+            pojo.info = prisoner.info
             pojo.passwordBase64 = passwordBase64
             for(contact in prisoner.contacts) {
                 pojo.addContact(contact.type, contact.data)

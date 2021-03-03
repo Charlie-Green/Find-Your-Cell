@@ -9,7 +9,7 @@ import by.zenkevich_churun.findcell.core.util.android.DialogUtil
 import by.zenkevich_churun.findcell.prisoner.R
 import by.zenkevich_churun.findcell.prisoner.databinding.CellOptionsDialogBinding
 import by.zenkevich_churun.findcell.prisoner.ui.cellopt.vm.CellOptionsViewModel
-import by.zenkevich_churun.findcell.prisoner.ui.common.sched.ScheduleCellsCrudState
+import by.zenkevich_churun.findcell.prisoner.ui.common.sched.period.ScheduleCellsCrudState
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 

@@ -7,7 +7,7 @@ import by.zenkevich_churun.findcell.core.common.prisoner.PrisonerStorage
 import by.zenkevich_churun.findcell.core.injected.cp.CoPrisonersRepository
 import by.zenkevich_churun.findcell.domain.entity.CoPrisoner
 import by.zenkevich_churun.findcell.domain.entity.Prisoner
-import by.zenkevich_churun.findcell.domain.response.GetCoPrisonerResponse
+import by.zenkevich_churun.findcell.domain.contract.cp.GetCoPrisonerResponse
 import by.zenkevich_churun.findcell.result.db.CoPrisonersDatabase
 import by.zenkevich_churun.findcell.result.db.dao.CoPrisonersDao
 import dagger.hilt.android.qualifiers.ApplicationContext

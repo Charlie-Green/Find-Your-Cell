@@ -1,6 +1,8 @@
-package by.zenkevich_churun.findcell.prisoner.ui.common.sched
+package by.zenkevich_churun.findcell.prisoner.ui.common.sched.period
 
 import by.zenkevich_churun.findcell.domain.entity.Cell
+import by.zenkevich_churun.findcell.prisoner.ui.common.sched.cell.CellEditFailureReason
+import by.zenkevich_churun.findcell.prisoner.ui.common.sched.cell.JailHeader
 
 
 /** CRUD states of [Cell]s within a [Schedule] **/
@@ -22,14 +24,14 @@ sealed class ScheduleCellsCrudState {
             jails: List<JailHeader>,
             jailIndex: Int,
             cellNumber: Short
-        ): ScheduleCellsCrudState.Editing(jails, jailIndex, cellNumber)
+        ): Editing(jails, jailIndex, cellNumber)
 
         class Updating(
             val original: Cell,
             jails: List<JailHeader>,
             jailIndex: Int,
             cellNumber: Short
-        ): ScheduleCellsCrudState.Editing(jails, jailIndex, cellNumber)
+        ): Editing(jails, jailIndex, cellNumber)
 
 
         class AddFailed(
@@ -37,7 +39,7 @@ sealed class ScheduleCellsCrudState {
             jailIndex: Int,
             cellNumber: Short,
             val reason: CellEditFailureReason
-        ): ScheduleCellsCrudState.Editing(jails, jailIndex, cellNumber) {
+        ): Editing(jails, jailIndex, cellNumber) {
 
             var notified = false
         }
@@ -48,7 +50,7 @@ sealed class ScheduleCellsCrudState {
             jailIndex: Int,
             cellNumber: Short,
             val reason: CellEditFailureReason
-        ): ScheduleCellsCrudState.Editing(jails, jailIndex, cellNumber)
+        ): Editing(jails, jailIndex, cellNumber)
 
 
         val selectedJail: JailHeader?

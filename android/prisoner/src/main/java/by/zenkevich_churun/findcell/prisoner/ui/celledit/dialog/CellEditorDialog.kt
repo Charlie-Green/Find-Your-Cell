@@ -11,9 +11,9 @@ import by.zenkevich_churun.findcell.core.util.android.AndroidUtil
 import by.zenkevich_churun.findcell.prisoner.R
 import by.zenkevich_churun.findcell.prisoner.databinding.CellEditDialogBinding
 import by.zenkevich_churun.findcell.prisoner.ui.celledit.vm.CellEditorViewModel
-import by.zenkevich_churun.findcell.prisoner.ui.common.sched.CellEditFailureReason
-import by.zenkevich_churun.findcell.prisoner.ui.common.sched.CellModel
-import by.zenkevich_churun.findcell.prisoner.ui.common.sched.ScheduleCellsCrudState
+import by.zenkevich_churun.findcell.prisoner.ui.common.sched.cell.CellEditFailureReason
+import by.zenkevich_churun.findcell.prisoner.ui.common.sched.cell.CellModel
+import by.zenkevich_churun.findcell.prisoner.ui.common.sched.period.ScheduleCellsCrudState
 
 
 class CellEditorDialog: SviazenDialog<CellEditDialogBinding>() {

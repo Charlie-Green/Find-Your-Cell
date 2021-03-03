@@ -11,7 +11,7 @@ import by.zenkevich_churun.findcell.core.common.prisoner.PrisonerStorage
 import by.zenkevich_churun.findcell.core.injected.sync.AutomaticSyncManager
 import by.zenkevich_churun.findcell.domain.entity.Arest
 import by.zenkevich_churun.findcell.domain.entity.Jail
-import by.zenkevich_churun.findcell.domain.response.CreateOrUpdateArestResponse
+import by.zenkevich_churun.findcell.domain.contract.arest.CreateOrUpdateArestResponse
 import dagger.hilt.android.qualifiers.ApplicationContext
 import java.io.IOException
 import javax.inject.Inject

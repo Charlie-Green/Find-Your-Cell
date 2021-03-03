@@ -1,5 +1,5 @@
 
-package by.zenkevich_churun.findcell.prisoner.ui.common.sched
+package by.zenkevich_churun.findcell.prisoner.ui.common.sched.period
 
 import android.graphics.Color
 import java.text.SimpleDateFormat

@@ -2,7 +2,7 @@ package by.zenkevich_churun.findcell.server.internal.repo.arest
 
 import by.zenkevich_churun.findcell.domain.entity.Arest
 import by.zenkevich_churun.findcell.domain.contract.arest.AddedArestPojo
-import by.zenkevich_churun.findcell.domain.response.CreateOrUpdateArestResponse
+import by.zenkevich_churun.findcell.domain.contract.arest.CreateOrUpdateArestResponse
 import by.zenkevich_churun.findcell.server.internal.dao.arest.ArestsDao
 import by.zenkevich_churun.findcell.server.internal.dao.speriod.SchedulePeriodsDao
 import by.zenkevich_churun.findcell.server.internal.entity.table.ArestEntity

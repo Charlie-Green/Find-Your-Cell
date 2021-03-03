@@ -15,8 +15,8 @@ import by.zenkevich_churun.findcell.core.util.android.NavigationUtil
 import by.zenkevich_churun.findcell.core.util.recycler.autogrid.AutomaticGridLayoutManager
 import by.zenkevich_churun.findcell.prisoner.R
 import by.zenkevich_churun.findcell.prisoner.databinding.ScheduleFragmBinding
-import by.zenkevich_churun.findcell.prisoner.ui.common.sched.ScheduleCellsCrudState
-import by.zenkevich_churun.findcell.prisoner.ui.common.sched.ScheduleModel
+import by.zenkevich_churun.findcell.prisoner.ui.common.sched.period.ScheduleCellsCrudState
+import by.zenkevich_churun.findcell.prisoner.ui.common.sched.period.ScheduleModel
 import by.zenkevich_churun.findcell.prisoner.ui.sched.model.ScheduleCrudState
 import by.zenkevich_churun.findcell.prisoner.ui.sched.vm.ScheduleViewModel
 import java.text.SimpleDateFormat

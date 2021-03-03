@@ -1,8 +1,10 @@
-package by.zenkevich_churun.findcell.prisoner.ui.common.sched
+package by.zenkevich_churun.findcell.prisoner.ui.common.sched.ld
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import by.zenkevich_churun.findcell.core.util.android.AndroidUtil
+import by.zenkevich_churun.findcell.prisoner.ui.common.sched.period.ScheduleCellsCrudState
+import by.zenkevich_churun.findcell.prisoner.ui.common.sched.period.ScheduleModel
 import by.zenkevich_churun.findcell.prisoner.ui.sched.model.ScheduleCrudState
 import javax.inject.Inject
 import javax.inject.Singleton

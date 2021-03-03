@@ -4,10 +4,9 @@ import android.view.*
 import androidx.core.text.HtmlCompat
 import androidx.recyclerview.widget.RecyclerView
 import by.zenkevich_churun.findcell.core.util.android.AndroidUtil
-import by.zenkevich_churun.findcell.prisoner.R
 import by.zenkevich_churun.findcell.prisoner.databinding.ScheduleDayItemBinding
-import by.zenkevich_churun.findcell.prisoner.ui.common.sched.ScheduleDayModel
-import by.zenkevich_churun.findcell.prisoner.ui.common.sched.ScheduleModel
+import by.zenkevich_churun.findcell.prisoner.ui.common.sched.period.ScheduleDayModel
+import by.zenkevich_churun.findcell.prisoner.ui.common.sched.period.ScheduleModel
 import by.zenkevich_churun.findcell.prisoner.ui.sched.vm.ScheduleViewModel
 import by.zenkevich_churun.findcell.prisoner.util.draw.MultipleColorsDrawable
 

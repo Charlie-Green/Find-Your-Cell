@@ -1,7 +1,6 @@
 package by.zenkevich_churun.findcell.server.protocol.controller.arest
 
 import by.zenkevich_churun.findcell.domain.contract.arest.*
-import by.zenkevich_churun.findcell.domain.response.CreateOrUpdateArestResponse
 import by.zenkevich_churun.findcell.domain.util.*
 import by.zenkevich_churun.findcell.server.internal.repo.arest.ArestsRepository
 import by.zenkevich_churun.findcell.server.protocol.controller.shared.ControllerUtil
@@ -33,7 +32,7 @@ class ArestsController {
 
         return when(response) {
             is CreateOrUpdateArestResponse.Success ->
-                "S"
+                "S${response.arestId}"
 
             is CreateOrUpdateArestResponse.ArestsIntersect ->
                 "I${response.intersectedId}"

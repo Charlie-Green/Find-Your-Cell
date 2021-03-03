@@ -2,7 +2,6 @@ package by.zenkevich_churun.findcell.server.internal.repo.sync
 
 import by.zenkevich_churun.findcell.domain.contract.cp.CoPrisonerHeaderPojo
 import by.zenkevich_churun.findcell.domain.contract.jail.FullJailPojo
-import by.zenkevich_churun.findcell.domain.contract.jail.JailPojo
 import by.zenkevich_churun.findcell.domain.contract.sync.SynchronizedPojo
 import by.zenkevich_churun.findcell.domain.entity.CoPrisoner
 import by.zenkevich_churun.findcell.server.internal.dao.cp.CoPrisonersDao
@@ -38,7 +37,6 @@ class SynchronizationRepository: SviazenRepositiory() {
         val relatedIds = relatedPair.second
 
         val suggested = suggestedCoPrisoners(prisonerId, relatedIds)
-        println("${suggested.size} suggested + ${related.size} related")
 
         val coPrisoners = related
             .toMutableList()

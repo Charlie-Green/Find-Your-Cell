@@ -11,8 +11,8 @@ import by.zenkevich_churun.findcell.prisoner.ui.common.arest.ArestsListState
 import by.zenkevich_churun.findcell.prisoner.ui.common.change.UnsavedChangesLiveDatasStorage
 import by.zenkevich_churun.findcell.prisoner.ui.common.interrupt.InterruptLiveDataStorage
 import by.zenkevich_churun.findcell.prisoner.ui.common.interrupt.EditInterruptState
-import by.zenkevich_churun.findcell.prisoner.ui.common.sched.ScheduleCellsCrudState
-import by.zenkevich_churun.findcell.prisoner.ui.common.sched.ScheduleLiveDatasStorage
+import by.zenkevich_churun.findcell.prisoner.ui.common.sched.period.ScheduleCellsCrudState
+import by.zenkevich_churun.findcell.prisoner.ui.common.sched.ld.ScheduleLiveDatasStorage
 import by.zenkevich_churun.findcell.prisoner.ui.sched.model.ScheduleCrudState
 import by.zenkevich_churun.findcell.result.ui.contact.model.GetCoPrisonerState
 import by.zenkevich_churun.findcell.result.ui.contact.vm.CoPrisonerStateLDStorage

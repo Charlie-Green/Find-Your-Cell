@@ -5,7 +5,7 @@ import by.zenkevich_churun.findcell.domain.contract.arest.AddedArestPojo
 import by.zenkevich_churun.findcell.domain.contract.arest.ArestsListPojo
 import by.zenkevich_churun.findcell.domain.contract.arest.DeletedArestsPojo
 import by.zenkevich_churun.findcell.domain.entity.LightArest
-import by.zenkevich_churun.findcell.domain.response.CreateOrUpdateArestResponse
+import by.zenkevich_churun.findcell.domain.contract.arest.CreateOrUpdateArestResponse
 import by.zenkevich_churun.findcell.domain.util.Base64Coder
 import by.zenkevich_churun.findcell.domain.util.Deserializer
 import by.zenkevich_churun.findcell.domain.util.Serializer
@@ -13,6 +13,8 @@ import by.zenkevich_churun.findcell.remote.retrofit.common.RetrofitApisUtil
 import by.zenkevich_churun.findcell.remote.retrofit.common.RetrofitHolder
 import okhttp3.MediaType
 import okhttp3.RequestBody
+import java.io.IOException
+import java.io.InputStream
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -45,10 +47,12 @@ class RetrofitArestsApi @Inject constructor(
             .execute()
         RetrofitApisUtil.assertResponseCode(response.code())
 
-        return Deserializer.fromJsonStream(
-            response.body()!!.byteStream(),
-            CreateOrUpdateArestResponse::class.java
-        )
+        val istream = response.body()!!.byteStream()
+        return when(val responseType = istream.read().toChar()) {
+            'S' -> CreateOrUpdateArestResponse.Success( readInt(istream) )
+            'I' -> CreateOrUpdateArestResponse.ArestsIntersect( readInt(istream) )
+            else -> throw IOException("Unknown response type $responseType")
+        }
     }
 
     override fun get(
@@ -108,4 +112,8 @@ class RetrofitArestsApi @Inject constructor(
 
     private val retrofit
         get() = retrofitHolder.retrofit
+
+    private fun readInt(
+        istream: InputStream
+    ) = String(istream.readBytes(), Charsets.UTF_8).toInt()
 }
