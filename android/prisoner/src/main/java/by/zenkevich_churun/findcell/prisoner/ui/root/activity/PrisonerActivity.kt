@@ -115,9 +115,7 @@ class PrisonerActivity: SviazenActivity<PrisonerActivityBinding>() {
 
     private fun setupKeyboadAnimation() {
         if(Build.VERSION.SDK_INT >= 30) {
-            KeyboardAnimationForPrisonerCallback.setTo(vb.vlltContent)
-        } else {
-            // ???
+            KeyboardAnimationForPrisonerCallback.setTo(window, vb.root)
         }
     }
 
