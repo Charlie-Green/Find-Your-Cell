@@ -8,7 +8,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content" >
 
-    <by.zenkevich_churun.findcell.prisoner.util.view.add_contact.ContactTypesScrollView
+    <by.sviazen.prisoner.util.view.add_contact.ContactTypesScrollView
         android:id="@+id/addContactView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />

@@ -3,7 +3,7 @@ plugins {
 	id "java"
 }
 
-group = "by.zenkevich_churun.findcell.server.internal"
+group = "by.sviazen.server.internal"
 version = "1.0"
 
 repositories {

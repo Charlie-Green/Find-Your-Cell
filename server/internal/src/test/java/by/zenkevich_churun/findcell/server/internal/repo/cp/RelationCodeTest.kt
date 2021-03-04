@@ -1,7 +1,7 @@
-package by.zenkevich_churun.findcell.server.internal.repo.cp
+package by.sviazen.server.internal.repo.cp
 
-import by.zenkevich_churun.findcell.domain.entity.CoPrisoner
-import by.zenkevich_churun.findcell.server.internal.entity.table.CoPrisonerEntity
+import by.sviazen.domain.entity.CoPrisoner
+import by.sviazen.server.internal.entity.table.CoPrisonerEntity
 import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.Test
 

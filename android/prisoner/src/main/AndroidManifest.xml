@@ -1,13 +1,13 @@
 <manifest
     xmlns:android="http://schemas.android.com/apk/res/android"
-    package="by.zenkevich_churun.findcell.prisoner">
+    package="by.sviazen.prisoner">
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 
     <application>
 
-        <activity android:name="by.zenkevich_churun.findcell.prisoner.ui.root.activity.PrisonerActivity">
+        <activity android:name="by.sviazen.prisoner.ui.root.activity.PrisonerActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />

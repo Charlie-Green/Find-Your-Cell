@@ -1,8 +1,8 @@
-package by.zenkevich_churun.findcell.server.internal.entity
+package by.sviazen.server.internal.entity
 
-import by.zenkevich_churun.findcell.server.internal.entity.key.CellKey
-import by.zenkevich_churun.findcell.server.internal.entity.table.CellEntity
-import by.zenkevich_churun.findcell.server.internal.entity.view.FullJailView
+import by.sviazen.server.internal.entity.key.CellKey
+import by.sviazen.server.internal.entity.table.CellEntity
+import by.sviazen.server.internal.entity.view.FullJailView
 import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.Test
 

@@ -11,7 +11,7 @@
 
         <fragment
             android:id="@+id/fragmPage"
-            android:name="by.zenkevich_churun.findcell.result.ui.request.fragm.ConnectRequestsPage"
+            android:name="by.sviazen.result.ui.request.fragm.ConnectRequestsPage"
             android:layout_width="match_parent"
             android:layout_height="match_parent" />
 

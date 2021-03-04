@@ -5,7 +5,7 @@ plugins {
 	id "java"
 }
 
-group = "by.zenkevich_churun.findcell.server.protocol"
+group = "by.sviazen.server.protocol"
 version = "1.0"
 
 repositories {
@@ -36,5 +36,5 @@ compileKotlin {
 }
 
 bootJar {
-	mainClassName = "by.zenkevich_churun.findcell.server.protocol.Server_MainKt"
+	mainClassName = "by.sviazen.server.protocol.Server_MainKt"
 }

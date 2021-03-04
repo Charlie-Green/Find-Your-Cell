@@ -10,7 +10,7 @@
 
     <fragment
         android:id="@+id/fragmAuth"
-        android:name="by.zenkevich_churun.findcell.prisoner.ui.auth.fragm.AuthorizationFragment"
+        android:name="by.sviazen.prisoner.ui.auth.fragm.AuthorizationFragment"
         android:label="@string/auth_navlabel" >
 
         <action
@@ -25,7 +25,7 @@
 
     <fragment
         android:id="@+id/fragmProfile"
-        android:name="by.zenkevich_churun.findcell.prisoner.ui.profile.fragm.ProfileFragment"
+        android:name="by.sviazen.prisoner.ui.profile.fragm.ProfileFragment"
         android:label="@string/profile_navlabel" >
 
         <action
@@ -38,7 +38,7 @@
 
     <fragment
         android:id="@+id/fragmArests"
-        android:name="by.zenkevich_churun.findcell.prisoner.ui.arest.fragm.ArestsFragment"
+        android:name="by.sviazen.prisoner.ui.arest.fragm.ArestsFragment"
         android:label="@string/arests_navlabel" >
 
         <action
@@ -51,41 +51,41 @@
 
     <fragment
         android:id="@+id/fragmSchedule"
-        android:name="by.zenkevich_churun.findcell.prisoner.ui.sched.fragm.ScheduleFragment"
+        android:name="by.sviazen.prisoner.ui.sched.fragm.ScheduleFragment"
         android:label="@string/schedule_navlabel" />
 
     <dialog
         android:id="@+id/dialogCellEdit"
-        android:name="by.zenkevich_churun.findcell.prisoner.ui.celledit.dialog.CellEditorDialog" />
+        android:name="by.sviazen.prisoner.ui.celledit.dialog.CellEditorDialog" />
 
    <dialog
        android:id="@+id/dialogCellOptions"
-       android:name="by.zenkevich_churun.findcell.prisoner.ui.cellopt.dialog.CellOptionsDialog" />
+       android:name="by.sviazen.prisoner.ui.cellopt.dialog.CellOptionsDialog" />
 
     <dialog
         android:id="@+id/dialogEditInterrupt"
-        android:name="by.zenkevich_churun.findcell.prisoner.ui.interrupt.dialog.EditInterruptDialog" />
+        android:name="by.sviazen.prisoner.ui.interrupt.dialog.EditInterruptDialog" />
 
     <dialog
         android:id="@+id/dialogAddArest"
-        android:name="by.zenkevich_churun.findcell.prisoner.ui.addarest.dialog.CUArestDialog" />
+        android:name="by.sviazen.prisoner.ui.addarest.dialog.CUArestDialog" />
 
 
     <!-- 'result' module: -->
 
     <fragment
         android:id="@+id/fragmCps"
-        android:name="by.zenkevich_churun.findcell.result.ui.general.container.CoPrisonersGeneralFragment"
+        android:name="by.sviazen.result.ui.general.container.CoPrisonersGeneralFragment"
         android:label="@string/cps_navlabel" />
 
     <fragment
         android:id="@+id/fragmRequests"
-        android:name="by.zenkevich_churun.findcell.result.ui.request.container.ConnectRequestsFragment"
+        android:name="by.sviazen.result.ui.request.container.ConnectRequestsFragment"
         android:label="@string/requests_navlabel" />
 
     <dialog
         android:id="@+id/dialogCoPrisonerContacts"
-        android:name="by.zenkevich_churun.findcell.result.ui.contact.dialog.CoPrisonerContactsDialog"
+        android:name="by.sviazen.result.ui.contact.dialog.CoPrisonerContactsDialog"
         android:label="@string/cps_navlabel" />
 
 

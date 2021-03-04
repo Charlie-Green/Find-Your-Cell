@@ -6,14 +6,14 @@
     android:id="@+id/cdltRoot"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="by.zenkevich_churun.findcell.prisoner.ui.root.activity.PrisonerActivity" >
+    tools:context="by.sviazen.prisoner.ui.root.activity.PrisonerActivity" >
 
     <LinearLayout
         android:id="@+id/vlltContent"
         android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        app:layout_behavior="by.zenkevich_churun.findcell.core.util.behave.snackbar.RespectSnackbarBehavior" >
+        app:layout_behavior="by.sviazen.core.util.behave.snackbar.RespectSnackbarBehavior" >
 
         <androidx.appcompat.widget.Toolbar
             android:id="@+id/toolbar"
