@@ -5,13 +5,13 @@ import com.google.gson.annotations.SerializedName
 
 
 /** server -> client to get a [Schedule]. **/
-open class GotSchedulePojo(
+open class ScheduleFetchedPojo(
 
     @SerializedName("cells")
     var cells: List<CellPojo>,
 
     @SerializedName("periods")
-    var periods: List<SchedulePeriodPojo> ) {
+    var periods: List<SchedulePeriodFetchedPojo> ) {
 
 
     constructor(): this(emptyList(), emptyList())

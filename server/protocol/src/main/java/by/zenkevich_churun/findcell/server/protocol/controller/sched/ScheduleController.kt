@@ -1,6 +1,6 @@
 package by.zenkevich_churun.findcell.server.protocol.controller.sched
 
-import by.zenkevich_churun.findcell.domain.contract.sched.UpdatedSchedulePojo
+import by.zenkevich_churun.findcell.domain.contract.sched.ScheduleUpdatedPojo
 import by.zenkevich_churun.findcell.domain.util.*
 import by.zenkevich_churun.findcell.server.internal.repo.sched.ScheduleRepository
 import by.zenkevich_churun.findcell.server.protocol.controller.shared.ControllerUtil
@@ -40,7 +40,7 @@ class ScheduleController {
     fun save(input: InputStream): String {
         
         ControllerUtil.catchingIllegalArgument {
-            val pojo = Deserializer.fromJsonStream(input, UpdatedSchedulePojo::class.java)
+            val pojo = Deserializer.fromJsonStream(input, ScheduleUpdatedPojo::class.java)
             val passwordHash = base64Coder.decode(pojo.passwordBase64)
             repo.save(pojo, passwordHash)
         }

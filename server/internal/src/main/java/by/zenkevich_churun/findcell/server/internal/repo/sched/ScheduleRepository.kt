@@ -4,6 +4,7 @@ import by.zenkevich_churun.findcell.domain.contract.sched.*
 import by.zenkevich_churun.findcell.server.internal.dao.arest.ArestsDao
 import by.zenkevich_churun.findcell.server.internal.dao.scell.ScheduleCellsDao
 import by.zenkevich_churun.findcell.server.internal.dao.speriod.SchedulePeriodsDao
+import by.zenkevich_churun.findcell.server.internal.entity.key.PeriodKey
 import by.zenkevich_churun.findcell.server.internal.entity.table.*
 import by.zenkevich_churun.findcell.server.internal.repo.common.SviazenRepositiory
 import org.springframework.beans.factory.annotation.Autowired
@@ -24,7 +25,7 @@ class ScheduleRepository: SviazenRepositiory() {
     fun get(
         arestId: Int,
         passwordHash: ByteArray
-    ): GotSchedulePojo {
+    ): ScheduleFetchedPojo {
 
         validateCredentialsByArestId(arestId, passwordHash)
 
@@ -41,19 +42,19 @@ class ScheduleRepository: SviazenRepositiory() {
 
         val periodEntities = periodsDao.get(arestId)
         val periodPojos = periodEntities.map { entity ->
-            SchedulePeriodPojo(
+            SchedulePeriodFetchedPojo(
                 cellIndex(cellEntries, entity.jailId, entity.cellNumber),
                 entity.key.start,
                 entity.key.end
             )
         }
 
-        return GotSchedulePojo(cellPojos, periodPojos)
+        return ScheduleFetchedPojo(cellPojos, periodPojos)
     }
 
 
     fun save(
-        data: UpdatedSchedulePojo,
+        data: ScheduleUpdatedPojo,
         passwordHash: ByteArray ) {
 
         val arest = arestsDao
@@ -61,9 +62,8 @@ class ScheduleRepository: SviazenRepositiory() {
             .get()
         validateCredentials(arest.prisonerId, passwordHash)
 
-        val cells = cellsDao.get(data.arestId)
         val entities = data.periods.map { period ->
-            periodEntityFrom(period, arest, cells)
+            periodEntityFrom(period, arest)
         }
 
         periodsDao.apply {
@@ -79,9 +79,8 @@ class ScheduleRepository: SviazenRepositiory() {
     }
 
     private fun periodEntityFrom(
-        period: SchedulePeriodPojo,
-        arest: ArestEntity,
-        cells: List<ScheduleCellEntryEntity>
+        period: SchedulePeriodUpdatedPojo,
+        arest: ArestEntity
     ): PeriodEntity {
         if(period.start > period.end) {
             throw IllegalArgumentException(
@@ -97,7 +96,11 @@ class ScheduleRepository: SviazenRepositiory() {
                 "Period ($periodRange) is out of its Arest's bounds ($arestRange)" )
         }
 
-        return PeriodEntity.from(arest.id, period, cells)
+        return PeriodEntity(
+            PeriodKey(arest.id, period.start, period.end),
+            period.jailId,
+            period.cellNumber
+        )
     }
 
     private fun cellIndex(

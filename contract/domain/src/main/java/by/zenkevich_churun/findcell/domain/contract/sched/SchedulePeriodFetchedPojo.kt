@@ -4,7 +4,7 @@ import by.zenkevich_churun.findcell.domain.entity.SchedulePeriod
 import com.google.gson.annotations.SerializedName
 
 
-class SchedulePeriodPojo(
+class SchedulePeriodFetchedPojo(
 
     @SerializedName("cell")
     override var cellIndex: Int,
@@ -25,6 +25,6 @@ class SchedulePeriodPojo(
 
         fun from(
             p: SchedulePeriod
-        ) = SchedulePeriodPojo(p.cellIndex, p.start, p.end)
+        ) = SchedulePeriodFetchedPojo(p.cellIndex, p.start, p.end)
     }
 }

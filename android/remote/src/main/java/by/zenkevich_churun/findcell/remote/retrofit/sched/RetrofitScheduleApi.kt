@@ -4,13 +4,11 @@ import by.zenkevich_churun.findcell.core.api.sched.ScheduleApi
 import by.zenkevich_churun.findcell.core.api.sched.SchedulePropertiesAccessor
 import by.zenkevich_churun.findcell.domain.contract.cellentry.CellEntryPojo
 import by.zenkevich_churun.findcell.domain.contract.cellentry.UpdatedCellEntryPojo
-import by.zenkevich_churun.findcell.domain.contract.sched.GotSchedulePojo
-import by.zenkevich_churun.findcell.domain.contract.sched.UpdatedSchedulePojo
+import by.zenkevich_churun.findcell.domain.contract.sched.ScheduleFetchedPojo
+import by.zenkevich_churun.findcell.domain.contract.sched.ScheduleUpdatedPojo
 import by.zenkevich_churun.findcell.domain.entity.Schedule
 import by.zenkevich_churun.findcell.domain.simpleentity.SimpleSchedule
-import by.zenkevich_churun.findcell.domain.util.Base64Coder
-import by.zenkevich_churun.findcell.domain.util.Deserializer
-import by.zenkevich_churun.findcell.domain.util.Serializer
+import by.zenkevich_churun.findcell.domain.util.*
 import by.zenkevich_churun.findcell.remote.retrofit.common.RetrofitApisUtil
 import by.zenkevich_churun.findcell.remote.retrofit.common.RetrofitHolder
 import okhttp3.MediaType
@@ -42,7 +40,7 @@ class RetrofitScheduleApi @Inject constructor(
 
         val pojo = Deserializer.fromJsonStream(
             response.body()!!.byteStream(),
-            GotSchedulePojo::class.java
+            ScheduleFetchedPojo::class.java
         )
 
         return SimpleSchedule(
@@ -59,7 +57,7 @@ class RetrofitScheduleApi @Inject constructor(
         schedule: Schedule ) {
 
         val passBase64 = base64.encode(passwordHash)
-        val pojo = UpdatedSchedulePojo.from(schedule, passBase64)
+        val pojo = ScheduleUpdatedPojo.from(schedule, passBase64)
         val approxSize = passBase64.length
             + 64*schedule.cells.size
             + 32*schedule.periods.size

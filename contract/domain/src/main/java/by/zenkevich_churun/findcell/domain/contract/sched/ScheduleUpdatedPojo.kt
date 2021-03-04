@@ -5,7 +5,7 @@ import com.google.gson.annotations.SerializedName
 
 
 /** client -> server to update [SchedulePeriod]s. **/
-class UpdatedSchedulePojo(
+class ScheduleUpdatedPojo(
 
     @SerializedName("arest")
     var arestId: Int,
@@ -14,7 +14,7 @@ class UpdatedSchedulePojo(
     var passwordBase64: String,
 
     @SerializedName("periods")
-    var periods: List<SchedulePeriodPojo> ) {
+    var periods: List<SchedulePeriodUpdatedPojo> ) {
 
 
     companion object {
@@ -22,13 +22,13 @@ class UpdatedSchedulePojo(
         fun from(
             schedule: Schedule,
             passwordBase64: String
-        ): UpdatedSchedulePojo {
+        ): ScheduleUpdatedPojo {
 
             val periodPojos = schedule.periods.map { p ->
-                SchedulePeriodPojo.from(p)
+                SchedulePeriodUpdatedPojo.from(p, schedule.cells)
             }
 
-            return UpdatedSchedulePojo(
+            return ScheduleUpdatedPojo(
                 schedule.arestId,
                 passwordBase64,
                 periodPojos
