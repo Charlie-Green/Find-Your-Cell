@@ -3,6 +3,7 @@ package by.sviazen.prisoner.ui.root.vm
 import android.content.Context
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
+import by.sviazen.app.ui.vm.PrisonerRootViewModel
 import dagger.hilt.EntryPoint
 import dagger.hilt.InstallIn
 import dagger.hilt.android.EntryPointAccessors

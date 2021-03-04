@@ -34,7 +34,7 @@ class RetrofitHolder @Inject constructor(
     /** Configures the [OkHttpClient] to accept the Sviazen server certificate. **/
     private fun OkHttpClient.Builder.configForHttps(): OkHttpClient.Builder {
         val certFact = CertificateFactory.getInstance("X.509")
-        val certificate = appContext.assets.open("crt/findcell.crt").use { istream ->
+        val certificate = appContext.assets.open("crt/sviazen.crt").use { istream ->
             certFact.generateCertificate(istream)
         } as X509Certificate
 

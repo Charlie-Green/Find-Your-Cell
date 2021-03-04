@@ -56,7 +56,7 @@ private class ConnectedPageDescriptor(
         val packName = owner.requireContext().packageName
         return owner
             .resources
-            .getIdentifier("dialogCoPrisonerContacts", "id", packName)
+            .getIdentifier("dialogCpContacts", "id", packName)
     }
 }
 

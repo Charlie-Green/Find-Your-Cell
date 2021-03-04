@@ -11,7 +11,8 @@ sealed class ChangeRelationRequestState {
     }
 
     class Success(
-        val updatedPosition: Int
+        val updatedPosition: Int,
+        val message: String
     ): ChangeRelationRequestState() {
         var notified = false
     }

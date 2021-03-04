@@ -5,7 +5,7 @@ import androidx.drawerlayout.widget.DrawerLayout
 import androidx.navigation.NavController
 import by.sviazen.app.R
 import by.sviazen.core.util.android.AndroidUtil
-import by.sviazen.prisoner.ui.root.vm.PrisonerRootViewModel
+import by.sviazen.app.ui.vm.PrisonerRootViewModel
 import com.google.android.material.navigation.NavigationView
 
 

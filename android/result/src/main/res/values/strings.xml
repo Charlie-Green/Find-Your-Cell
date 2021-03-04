@@ -1,7 +1,27 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <!-- Notifications: -->
+    <!-- Change Relation Success Messages: -->
+    <string name="change_relation_success_general">
+        Изменения сохранены.
+    </string>
+    <string name="change_relation_success_connected">
+        Теперь %s и Вы можете общаться.
+    </string>
+    <string name="change_relation_success_declined">
+        %s не увидит Ваши контакты.
+    </string>
+    <string name="change_relation_success_requested">
+        Совсем скоро %s увидит Ваш запрос!
+    </string>
+    <string name="change_relation_success_canceled">
+        Запрос отмененён.
+    </string>
+    <string name="change_relation_success_disconnected">
+        %s не увидит Ваши контакты, пока вы снова не соединитесь.
+    </string>
+
+    <!-- Other Notifications: -->
     <string name="refresh_failed_title">Обновление не удалось</string>
     <string name="refresh_needs_internet_msg">
         Чтобы отыскать Ваших сокамерников, подключитесь к интернету.

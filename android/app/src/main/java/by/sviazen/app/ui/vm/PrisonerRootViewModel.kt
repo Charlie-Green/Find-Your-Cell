@@ -1,4 +1,4 @@
-package by.sviazen.prisoner.ui.root.vm
+package by.sviazen.app.ui.vm
 
 import android.content.Context
 import androidx.lifecycle.*
@@ -13,9 +13,14 @@ import by.sviazen.prisoner.ui.common.interrupt.InterruptLiveDataStorage
 import by.sviazen.prisoner.ui.common.interrupt.EditInterruptState
 import by.sviazen.prisoner.ui.common.sched.period.ScheduleCellsCrudState
 import by.sviazen.prisoner.ui.common.sched.ld.ScheduleLiveDatasStorage
+import by.sviazen.prisoner.ui.root.vm.PrisonerRootVMFactory
+import by.sviazen.prisoner.ui.root.vm.PrisonerRootVMStorage
+import by.sviazen.prisoner.ui.root.vm.UnsavedPrisonerChangesLiveData
 import by.sviazen.prisoner.ui.sched.model.ScheduleCrudState
 import by.sviazen.result.ui.contact.model.GetCoPrisonerState
 import by.sviazen.result.ui.contact.vm.CoPrisonerStateLDStorage
+import by.sviazen.result.ui.shared.cppage.model.ChangeRelationRequestState
+import by.sviazen.result.ui.shared.cppage.vm.ChangeRelationLiveDataStorage
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -23,12 +28,12 @@ import javax.inject.Inject
 
 class PrisonerRootViewModel @Inject constructor(
     private val repo: ProfileRepository,
-    private val cpRepo: CoPrisonersRepository,
     private val scheduleStore: ScheduleLiveDatasStorage,
     private val interruptStore: InterruptLiveDataStorage,
     unsavedChangesStore: UnsavedChangesLiveDatasStorage,
     private val arestHolder: ArestLiveDatasHolder,
-    private val coPrisonerStore: CoPrisonerStateLDStorage
+    private val coPrisonerStore: CoPrisonerStateLDStorage,
+    private val changeRelationLDStore: ChangeRelationLiveDataStorage
 ): ViewModel() {
 
     val prisonerLD: LiveData<out Prisoner>
@@ -52,9 +57,13 @@ class PrisonerRootViewModel @Inject constructor(
     val coPrisonerStateLD: LiveData<GetCoPrisonerState>
         get() = coPrisonerStore.stateLD
 
+    val changeRelationStateLD: LiveData<ChangeRelationRequestState>
+        get() = changeRelationLDStore.stateLD
+
 
     var lastDestination: Int
-        get() { return PrisonerRootVMStorage.lastDestination }
+        get() { return PrisonerRootVMStorage.lastDestination
+        }
         set(value) { PrisonerRootVMStorage.lastDestination = value }
 
 

@@ -6,12 +6,15 @@ import androidx.lifecycle.ViewModelStoreOwner
 import by.sviazen.core.injected.web.NetworkStateTracker
 import by.sviazen.core.injected.cp.CoPrisonersRepository
 import by.sviazen.domain.entity.CoPrisoner
+import by.sviazen.result.R
 import by.sviazen.result.ui.shared.cppage.vm.ChangeRelationLiveDataStorage
 import by.sviazen.result.ui.shared.cppage.vm.CoPrisonersPageViewModel
+import dagger.hilt.android.qualifiers.ApplicationContext
 import javax.inject.Inject
 
 
 class IncomingRequestsViewModel @Inject constructor(
+    @ApplicationContext private val appContext: Context,
     cpRepo: CoPrisonersRepository,
     netTracker: NetworkStateTracker,
     changeRelationStore: ChangeRelationLiveDataStorage
@@ -26,10 +29,35 @@ class IncomingRequestsViewModel @Inject constructor(
 
 
     fun confirmRequest(position: Int)
-        = connect(position)
+        = connect(position, this::requestConfirmedMessage)
 
     fun declineRequest(position: Int)
-        = disconnect(position)
+        = disconnect(position, this::requestDeclinedMessage)
+
+
+    // ==============================================================================
+
+    private fun requestConfirmedMessage(cp: CoPrisoner): String {
+        if(cp.relation != CoPrisoner.Relation.CONNECTED) {
+            return appContext.getString(R.string.change_relation_success_general)
+        }
+
+        return appContext.getString(
+            R.string.change_relation_success_connected,
+            cp.name
+        )
+    }
+
+    private fun requestDeclinedMessage(cp: CoPrisoner): String {
+        if(cp.relation != CoPrisoner.Relation.REQUEST_DECLINED) {
+            return appContext.getString(R.string.change_relation_success_general)
+        }
+
+        return appContext.getString(
+            R.string.change_relation_success_declined,
+            cp.name
+        )
+    }
 
 
     // ==============================================================================

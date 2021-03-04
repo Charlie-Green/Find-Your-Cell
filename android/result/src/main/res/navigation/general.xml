@@ -10,4 +10,9 @@
         android:name="by.sviazen.result.ui.general.container.CoPrisonersGeneralFragment"
         android:label="@string/cps_navlabel" />
 
+    <dialog
+        android:id="@+id/dialogCpContacts"
+        android:name="by.sviazen.result.ui.contact.dialog.CoPrisonerContactsDialog"
+        android:label="@string/cps_navlabel" />
+
 </navigation>

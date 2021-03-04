@@ -4,6 +4,7 @@ import android.app.Activity
 import android.graphics.Color
 import android.os.Build
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import androidx.navigation.NavController
 import androidx.navigation.findNavController
@@ -15,9 +16,10 @@ import by.sviazen.core.util.android.NavigationUtil
 import by.sviazen.prisoner.repo.profile.SavePrisonerResult
 import by.sviazen.prisoner.ui.common.interrupt.EditInterruptState
 import by.sviazen.prisoner.ui.common.sched.period.ScheduleCellsCrudState
-import by.sviazen.prisoner.ui.root.vm.PrisonerRootViewModel
+import by.sviazen.app.ui.vm.PrisonerRootViewModel
 import by.sviazen.prisoner.ui.sched.model.ScheduleCrudState
 import by.sviazen.result.ui.contact.model.GetCoPrisonerState
+import by.sviazen.result.ui.shared.cppage.model.ChangeRelationRequestState
 import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -46,34 +48,38 @@ class PrisonerActivity: SviazenActivity<PrisonerActivityBinding>() {
         initFields()
         navMan.setup()
 
-        vm.savePrisonerResultLD.observe(this, { result ->
+        vm.savePrisonerResultLD.observe(this) { result ->
             if(result is SavePrisonerResult.Success) {
                 notifySuccess(R.string.save_prisoner_success_msg)
                 vm.notifySaveResultConsumed()
             }
-        })
+        }
 
-        vm.scheduleCrudStateLD.observe(this, { state ->
+        vm.scheduleCrudStateLD.observe(this) { state ->
             applyScheduleCrudState(state)
-        })
+        }
 
-        vm.cellCrudStateLD.observe(this, { state ->
+        vm.cellCrudStateLD.observe(this) { state ->
             applyCellCrudState(state)
-        })
+        }
 
-        vm.editInterruptStateLD.observe(this, { state ->
+        vm.editInterruptStateLD.observe(this) { state ->
             when(state) {
                 is EditInterruptState.Confirmed -> interruptAndNavigate(state)
                 is EditInterruptState.Asking    -> warnEditInterrupt()
             }
-        })
+        }
 
-        vm.unsavedChangesLD.observe(this, { changes ->
+        vm.unsavedChangesLD.observe(this) { changes ->
             thereAreUnsavedChanges = changes
-        })
+        }
 
         vm.coPrisonerStateLD.observe(this) { state ->
             applyCoPrisonerState(state)
+        }
+        
+        vm.changeRelationStateLD.observe(this) { state ->
+            applyChangeRelationState(state)
         }
 
         setupKeyboadAnimation()
@@ -187,6 +193,15 @@ class PrisonerActivity: SviazenActivity<PrisonerActivityBinding>() {
                 notifyError(msg)
             }
         }
+    }
+
+    private fun applyChangeRelationState(state: ChangeRelationRequestState) {
+        if(state !is ChangeRelationRequestState.Success || state.notified) {
+            return
+        }
+        state.notified = true
+
+        notifySuccess(state.message)
     }
 
 

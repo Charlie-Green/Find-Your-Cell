@@ -57,18 +57,20 @@ abstract class CoPrisonersPageViewModel(
     protected open val changeRelationRequestStateLD: LiveData<ChangeRelationRequestState>
         get() = changeRelationStore.stateLD
 
-    protected fun connect(position: Int) {
-        sendRequest(position) { cpId ->
-            val result = cpRepo.connect(cpId)
-            applyConnectRequestResult(cpId, result)
-        }
+    protected fun connect(
+        position: Int,
+        createSuccessMessage: (CoPrisoner) -> String
+    ) = sendRequest(position) { cpId ->
+        val result = cpRepo.connect(cpId)
+        applyConnectRequestResult(cpId, result, createSuccessMessage)
     }
 
-    protected fun disconnect(position: Int) {
-        sendRequest(position) { cpId ->
-            val result = cpRepo.disconnect(cpId)
-            applyConnectRequestResult(cpId, result)
-        }
+    protected fun disconnect(
+        position: Int,
+        createSuccessMessage: (CoPrisoner) -> String
+    ) = sendRequest(position) { cpId ->
+        val result = cpRepo.disconnect(cpId)
+        applyConnectRequestResult(cpId, result, createSuccessMessage)
     }
 
 
@@ -99,20 +101,32 @@ abstract class CoPrisonersPageViewModel(
 
     private fun applyConnectRequestResult(
         coPrisonerId: Int,
-        newRelation: CoPrisoner.Relation? ) {
+        newRelation: CoPrisoner.Relation?,
+        createSuccessMessage: (CoPrisoner) -> String ) {
 
         if(newRelation == null) {
             changeRelationStore.submitState(ChangeRelationRequestState.NetworkError())
             return
         }
 
-        val position = mldData.value?.first?.indexOfFirst { cp ->
+        val coPrisoners = mldData.value?.first
+        val position = coPrisoners?.indexOfFirst { cp ->
             cp.id == coPrisonerId
-        } ?: -1
+        }.let { position ->
+            if(position == null || position !in coPrisoners!!.indices) -1
+            else position
+        }
 
-        val state =
-            if(position >= 0) ChangeRelationRequestState.Success(position)
-            else ChangeRelationRequestState.NetworkError()
+        val state = if(position >= 0) {
+            val legacyCoPrisoner = coPrisoners!![position]
+            val correctCoPrisoner =
+                CoPrisonerWithUpdatedRelation.wrap(legacyCoPrisoner, newRelation)
+            val message = createSuccessMessage(correctCoPrisoner)
+            ChangeRelationRequestState.Success(position, message)
+        } else {
+            ChangeRelationRequestState.NetworkError()
+        }
+
         changeRelationStore.submitState(state)
     }
 
