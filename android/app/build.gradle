@@ -11,7 +11,7 @@ android {
     buildToolsVersion Deps.buildTools
 
     defaultConfig {
-        applicationId "by.zenkevich_churun.findcell"
+        applicationId "by.sviazen"
         minSdkVersion Deps.minSdk
         targetSdkVersion Deps.targetSdk
         versionCode Deps.versionCode
@@ -25,6 +25,10 @@ android {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
+    }
+
+    buildFeatures {
+        viewBinding true
     }
 
     compileOptions {
@@ -44,13 +48,14 @@ dependencies {
     implementation Deps.libKotlin
     implementation Deps.libAppCompat
     implementation Deps.libMaterial
-
+    implementation Deps.libNavigationUi
+    implementation Deps.libNavigationFragm
     implementation Deps.libHilt
     kapt           Deps.kaptHilt
 
     implementation project(":prisoner")
     implementation project(":result")
-    implementation project(":remote")
+    implementation project(":remote")    // DI-only
     implementation project(":core")
     implementation project(":domain")
 }

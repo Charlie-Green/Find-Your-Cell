@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/graphArests"
+    app:startDestination="@id/fragmArests" >
+
+    <fragment
+        android:id="@+id/fragmArests"
+        android:name="by.sviazen.prisoner.ui.arest.fragm.ArestsFragment"
+        android:label="@string/arests_navlabel" >
+
+        <action
+            android:id="@+id/actOpenArest"
+            app:destination="@id/fragmSchedule"
+            app:enterAnim="@anim/fade_in"
+            app:exitAnim="@anim/fade_out" />
+
+    </fragment>
+
+
+    <dialog
+        android:id="@+id/dialogAddArest"
+        android:name="by.sviazen.prisoner.ui.addarest.dialog.CUArestDialog" />
+
+    <fragment
+        android:id="@+id/fragmSchedule"
+        android:name="by.sviazen.prisoner.ui.sched.fragm.ScheduleFragment"
+        android:label="@string/schedule_navlabel" />
+
+    <dialog
+        android:id="@+id/dialogCellEdit"
+        android:name="by.sviazen.prisoner.ui.celledit.dialog.CellEditorDialog" />
+
+    <dialog
+        android:id="@+id/dialogCellOptions"
+        android:name="by.sviazen.prisoner.ui.cellopt.dialog.CellOptionsDialog" />
+
+
+    <dialog
+        android:id="@+id/dialogEditInterrupt"
+        android:name="by.sviazen.prisoner.ui.interrupt.dialog.EditInterruptDialog" />
+
+</navigation>

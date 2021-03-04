@@ -1,10 +1,10 @@
-package by.sviazen.prisoner.ui.root.activity
+package by.sviazen.app.ui.activity
 
 import androidx.appcompat.widget.Toolbar
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.navigation.NavController
+import by.sviazen.app.R
 import by.sviazen.core.util.android.AndroidUtil
-import by.sviazen.prisoner.R
 import by.sviazen.prisoner.ui.root.vm.PrisonerRootViewModel
 import com.google.android.material.navigation.NavigationView
 
@@ -29,7 +29,7 @@ internal class PrisonerNavigationManager(
         }
 
         controller.addOnDestinationChangedListener { _, dest, _ ->
-            select(dest.id)
+            select(dest.parent?.id ?: dest.id)
             setTitle(dest.label)
             setDrawerEnabled()
 
@@ -51,12 +51,12 @@ internal class PrisonerNavigationManager(
 
     private fun inflateGraph() {
         val startDest = when {
-            vm.prisonerLD.value == null            -> R.id.fragmAuth
-            vm.lastDestination == R.id.fragmArests -> R.id.fragmArests
-            else                                   -> R.id.fragmProfile
+            vm.prisonerLD.value == null            -> R.id.graphAuth
+            vm.lastDestination == R.id.fragmArests -> R.id.graphArests
+            else                                   -> R.id.graphProfile
         }
 
-        val prisonerGraph = controller.navInflater.inflate(R.navigation.prisoner)
+        val prisonerGraph = controller.navInflater.inflate(R.navigation.root)
         prisonerGraph.startDestination = startDest
         controller.graph = prisonerGraph
     }
@@ -84,11 +84,11 @@ internal class PrisonerNavigationManager(
 
     private fun select(destId: Int) {
         val itemId = when(destId) {
-            R.id.fragmProfile  -> R.id.miProfile
-            R.id.fragmArests   -> R.id.miArests
-            R.id.fragmCps      -> R.id.miCps
-            R.id.fragmRequests -> R.id.miRequests
-            R.id.fragmAuth     -> R.id.miAuth
+            R.id.graphProfile     -> R.id.miProfile
+            R.id.graphArests      -> R.id.miArests
+            R.id.graphCpsGeneral  -> R.id.miCps
+            R.id.graphCpsRequests -> R.id.miRequests
+            R.id.graphAuth        -> R.id.miAuth
             else -> return
         }
 

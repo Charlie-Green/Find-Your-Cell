@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/graphRoot"
+    app:startDestination="@id/graphAuth" >
+
+
+    <include app:graph="@navigation/auth"     />
+    <include app:graph="@navigation/profile"  />
+    <include app:graph="@navigation/arest"    />
+    <include app:graph="@navigation/general"  />
+    <include app:graph="@navigation/requests" />
+
+
+    <action
+        android:id="@+id/actSelectProfileMenu"
+        app:destination="@id/graphProfile"
+        app:popUpTo="@id/graphProfile"
+        app:popUpToInclusive="true" />
+
+    <action
+        android:id="@+id/actSelectArestsMenu"
+        app:destination="@id/graphArests"
+        app:popUpTo="@id/graphArests"
+        app:popUpToInclusive="true" />
+
+    <action
+        android:id="@+id/actSelectCpsMenu"
+        app:destination="@id/graphCpsGeneral"
+        app:popUpTo="@id/graphCpsGeneral"
+        app:popUpToInclusive="true" />
+
+    <action
+        android:id="@+id/actSelectRequestsMenu"
+        app:destination="@id/graphCpsRequests"
+        app:popUpTo="@id/graphCpsRequests"
+        app:popUpToInclusive="true" />
+
+    <action
+        android:id="@+id/actSelectAuthMenu"
+        app:destination="@id/graphAuth"
+        app:popUpTo="@id/graphAuth"
+        app:popUpToInclusive="true" />
+
+</navigation>

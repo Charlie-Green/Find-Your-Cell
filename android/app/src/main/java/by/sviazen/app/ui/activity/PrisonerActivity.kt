@@ -1,4 +1,4 @@
-package by.sviazen.prisoner.ui.root.activity
+package by.sviazen.app.ui.activity
 
 import android.app.Activity
 import android.graphics.Color
@@ -7,11 +7,11 @@ import android.os.Bundle
 import android.view.View
 import androidx.navigation.NavController
 import androidx.navigation.findNavController
+import by.sviazen.app.R
+import by.sviazen.app.databinding.PrisonerActivityBinding
 import by.sviazen.core.ui.common.SviazenActivity
-import by.sviazen.prisoner.R
 import by.sviazen.core.util.android.AndroidUtil
 import by.sviazen.core.util.android.NavigationUtil
-import by.sviazen.prisoner.databinding.PrisonerActivityBinding
 import by.sviazen.prisoner.repo.profile.SavePrisonerResult
 import by.sviazen.prisoner.ui.common.interrupt.EditInterruptState
 import by.sviazen.prisoner.ui.common.sched.period.ScheduleCellsCrudState
@@ -28,7 +28,7 @@ import dagger.hilt.android.AndroidEntryPoint
 class PrisonerActivity: SviazenActivity<PrisonerActivityBinding>() {
 
     private lateinit var vm: PrisonerRootViewModel
-    private lateinit var navMan: PrisonerNavigationManager
+    private lateinit var navMan: by.sviazen.app.ui.activity.PrisonerNavigationManager
     private var thereAreUnsavedChanges = false
 
 
@@ -105,7 +105,7 @@ class PrisonerActivity: SviazenActivity<PrisonerActivityBinding>() {
 
     private fun initFields() {
         vm = PrisonerRootViewModel.get(applicationContext, this)
-        navMan = PrisonerNavigationManager(
+        navMan = by.sviazen.app.ui.activity.PrisonerNavigationManager(
             vm,
             vb.toolbar,
             vb.navDrawer,

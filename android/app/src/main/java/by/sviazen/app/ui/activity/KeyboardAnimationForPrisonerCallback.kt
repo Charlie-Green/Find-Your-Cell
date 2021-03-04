@@ -1,6 +1,5 @@
-package by.sviazen.prisoner.ui.root.activity
+package by.sviazen.app.ui.activity
 
-import android.util.Log
 import android.view.View
 import android.view.Window
 import android.view.WindowInsets

@@ -6,7 +6,7 @@
     android:id="@+id/cdltRoot"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="by.sviazen.prisoner.ui.root.activity.PrisonerActivity" >
+    tools:context="by.sviazen.app.ui.activity.PrisonerActivity" >
 
     <LinearLayout
         android:id="@+id/vlltContent"

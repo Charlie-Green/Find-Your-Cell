@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Subgraph of authorization screens -->
+<navigation
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/graphAuth"
+    app:startDestination="@id/fragmAuth" >
+
+    <include app:graph="@navigation/profile" />
+
+
+    <fragment
+        android:id="@+id/fragmAuth"
+        android:name="by.sviazen.prisoner.ui.auth.fragm.AuthorizationFragment"
+        android:label="@string/auth_navlabel" >
+
+        <action
+            android:id="@+id/actLogIn"
+            app:destination="@id/graphProfile"
+            app:enterAnim="@anim/enter_from_bottom"
+            app:exitAnim="@anim/exit_to_top"
+            app:popUpTo="@id/fragmAuth"
+            app:popUpToInclusive="true" />
+
+    </fragment>
+
+</navigation>
