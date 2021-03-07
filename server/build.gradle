@@ -1,15 +1,17 @@
 ext {
-    kotlinVersion = "1.4.21"
-
+    kotlinVersion = "1.4.30"
+    springVersion = "2.4.3"
 
     libKotlin        = "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlinVersion"
     libKotlinReflect = "org.jetbrains.kotlin:kotlin-reflect:$kotlinVersion"
 
-    libSpring    = "org.springframework.boot:spring-boot-starter-web"
-    libSpringJpa = "org.springframework.boot:spring-boot-starter-data-jpa:2.4.1"
+    libSpring            = "org.springframework.boot:spring-boot-starter-web"
+    libSpringJpa         = "org.springframework.boot:spring-boot-starter-data-jpa:$springVersion"
+    providedSpringTomcat = "org.springframework.boot:spring-boot-starter-tomcat"
 
-    libHibernate = "org.hibernate:hibernate-gradle-plugin:5.4.26.Final"
-    libMysqlJdbc = "mysql:mysql-connector-java:5.1.6"
+    libHibernateCore   = "org.hibernate:hibernate-core:5.4.29.Final"
+    libHibernateGradle = "org.hibernate:hibernate-gradle-plugin:5.4.26.Final"
+    libMysqlJdbc       = "mysql:mysql-connector-java:8.0.23"
 
     def junitVersion = "5.3.1"
     testJUnit = "org.junit.jupiter:junit-jupiter-api:$junitVersion"

@@ -1,7 +1,8 @@
-package by.sviazen.server.internal.repo.cp
+package by.sviazen.internal.repo.cp
 
 import by.sviazen.domain.entity.CoPrisoner
 import by.sviazen.server.internal.entity.table.CoPrisonerEntity
+import by.sviazen.server.internal.repo.cp.RelationCode
 import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.Test
 

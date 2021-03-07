@@ -6,19 +6,22 @@ plugins {
 group = "by.sviazen.server.internal"
 version = "1.0"
 
+
 repositories {
 	mavenCentral()
 	jcenter()
 }
 
+
 dependencies {
 	def Deps = rootProject.ext
 
 	implementation Deps.libKotlin
+	implementation Deps.libKotlinReflect
 
 	implementation Deps.libMysqlJdbc
-	implementation Deps.libHibernate
-
+	implementation Deps.libHibernateCore
+	implementation Deps.libHibernateGradle
 	implementation Deps.libSpringJpa
 
 	implementation project(":domain")
@@ -26,6 +29,7 @@ dependencies {
 	testImplementation Deps.testJUnit
 	testRuntimeOnly Deps.testRuntimeJunit
 }
+
 
 compileKotlin {
 	sourceCompatibility = JavaVersion.VERSION_1_8
@@ -35,6 +39,7 @@ compileKotlin {
 		jvmTarget = "1.8"
 	}
 }
+
 
 test {
 	useJUnitPlatform()

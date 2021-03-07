@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.*
 import java.io.InputStream
 
 
-@RestController
+@RestController("prisonerProfileController")
 class ProfileController {
 
     @Autowired

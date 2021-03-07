@@ -12,9 +12,9 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories
     PropertySource("classpath:public.properties"),
     PropertySource("classpath:confidential.properties")
 )
-@EntityScan(value = [
+@EntityScan(
     "${SviazenApplication.ROOT_PACKAGE}.internal.entity"
-])
+)
 @EnableJpaRepositories(basePackages = [
     "${SviazenApplication.ROOT_PACKAGE}.internal.dao"
 ])
@@ -23,7 +23,6 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories
 ])
 @Import(
     RepositoryBeans::class,
-    DatabaseBeans::class,
     ControllerBeans::class
 )
 open class SviazenApplication: SpringApplication() {
