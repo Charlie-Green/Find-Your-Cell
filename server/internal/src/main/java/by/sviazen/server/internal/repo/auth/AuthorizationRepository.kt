@@ -4,6 +4,7 @@ import by.sviazen.domain.contract.auth.*
 import by.sviazen.server.internal.entity.table.PrisonerEntity
 import by.sviazen.server.internal.entity.view.PrisonerView
 import by.sviazen.server.internal.repo.common.SviazenRepositiory
+import org.springframework.dao.DataAccessException
 import javax.persistence.PersistenceException
 
 
@@ -42,8 +43,10 @@ class AuthorizationRepository: SviazenRepositiory() {
 
         try {
             prisonerDao.save(createdEntity)
-        } catch(exc: PersistenceException) {
+        } catch(persistenceExc: PersistenceException) {
             // In the database there is a unique constraint on the username field.
+            return SignUpResponse.UsernameTaken
+        } catch(daExc: DataAccessException) {
             return SignUpResponse.UsernameTaken
         }
 
