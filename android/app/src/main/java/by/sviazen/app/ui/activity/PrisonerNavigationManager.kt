@@ -106,12 +106,16 @@ internal class PrisonerNavigationManager(
     }
 
     private fun setDrawerEnabled() {
+        val drawerLayout = drawer.parent as DrawerLayout
         val enabled = (controller.currentDestination?.id != R.id.fragmAuth)
-        val lockMode =
-            if(enabled) DrawerLayout.LOCK_MODE_UNLOCKED
-            else DrawerLayout.LOCK_MODE_LOCKED_CLOSED
 
-        (drawer.parent as DrawerLayout).setDrawerLockMode(lockMode)
+        if(enabled) {
+            drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED)
+            toolbar.setNavigationIcon(R.drawable.ic_open_drawer)
+        } else {
+            drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED)
+            toolbar.navigationIcon = null
+        }
     }
 
     private fun setTitle(title: CharSequence?) {

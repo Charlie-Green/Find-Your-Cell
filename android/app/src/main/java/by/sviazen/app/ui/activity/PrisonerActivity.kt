@@ -4,8 +4,8 @@ import android.app.Activity
 import android.graphics.Color
 import android.os.Build
 import android.os.Bundle
-import android.util.Log
 import android.view.View
+import androidx.drawerlayout.widget.DrawerLayout
 import androidx.navigation.NavController
 import androidx.navigation.findNavController
 import by.sviazen.app.R
@@ -47,6 +47,7 @@ class PrisonerActivity: SviazenActivity<PrisonerActivityBinding>() {
 
         initFields()
         navMan.setup()
+        setupToolbar()
 
         vm.savePrisonerResultLD.observe(this) { result ->
             if(result is SavePrisonerResult.Success) {
@@ -122,6 +123,17 @@ class PrisonerActivity: SviazenActivity<PrisonerActivityBinding>() {
     private fun setupKeyboadAnimation() {
         if(Build.VERSION.SDK_INT >= 30) {
             KeyboardAnimationForPrisonerCallback.setTo(window, vb.root)
+        }
+    }
+
+    private fun setupToolbar() {
+        vb.toolbar.setNavigationOnClickListener {
+            val drawerLayout = vb.navDrawer.parent as DrawerLayout
+            if(drawerLayout.isDrawerOpen(vb.navDrawer)) {
+                drawerLayout.closeDrawer(vb.navDrawer)
+            } else {
+                drawerLayout.openDrawer(vb.navDrawer)
+            }
         }
     }
 

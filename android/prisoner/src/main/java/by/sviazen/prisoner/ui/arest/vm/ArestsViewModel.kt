@@ -41,7 +41,7 @@ class ArestsViewModel @Inject constructor(
 
     init {
         arestsObserver = Observer { arests ->
-            holder.submitState( ArestsListState.Loaded(arests) )
+            submitArests(arests)
         }
         repo.arestsLD.observeForever(arestsObserver)
     }
@@ -163,6 +163,15 @@ class ArestsViewModel @Inject constructor(
         }
     }
 
+
+    private fun submitArests(arests: List<Arest>) {
+        val loadedState = ArestsListState.Loaded(arests)
+
+        // Animate only in case loading progress was showing before:
+        loadedState.animated = holder.listStateLD.value !is ArestsListState.Loading
+
+        holder.submitState(loadedState)
+    }
 
     private fun loadDataInternal() {
         holder.submitState(ArestsListState.Loading)

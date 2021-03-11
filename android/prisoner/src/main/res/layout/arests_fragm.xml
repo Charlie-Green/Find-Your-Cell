@@ -78,6 +78,13 @@
     </LinearLayout>
 
 
+    <TextView
+        android:id="@+id/txtvEmpty"
+        style="@style/empty_label"
+        android:text="@string/arests_empty"
+        android:visibility="gone" />
+
+
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/fabAdd"
         android:layout_width="wrap_content"

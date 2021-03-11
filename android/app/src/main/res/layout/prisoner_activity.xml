@@ -21,7 +21,9 @@
             android:layout_height="@dimen/toolbar_height"
             android:background="?colorPrimary"
             android:elevation="6dp"
-            app:titleTextColor="#f0f0f0" />
+            app:titleTextColor="#f0f0f0"
+            app:theme="@style/ThemeOverlay.AppCompat.DayNight.ActionBar"
+            app:popupTheme="@style/ThemeOverlay.AppCompat.DayNight" />
 
 
         <androidx.drawerlayout.widget.DrawerLayout

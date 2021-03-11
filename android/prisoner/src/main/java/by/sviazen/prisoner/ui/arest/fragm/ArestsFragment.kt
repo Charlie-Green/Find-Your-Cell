@@ -2,14 +2,12 @@ package by.sviazen.prisoner.ui.arest.fragm
 
 import android.content.DialogInterface
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.animation.AnimationUtils
 import androidx.appcompat.app.AlertDialog
 import androidx.core.text.HtmlCompat
 import androidx.core.view.isVisible
-import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import by.sviazen.core.ui.common.SviazenFragment
 import by.sviazen.core.util.android.NavigationUtil
@@ -99,6 +97,9 @@ class ArestsFragment: SviazenFragment<ArestsFragmBinding>() {
 
     private fun renderState(state: ArestsListState) {
         vb.fabAdd.isVisible = state is ArestsListState.Loaded
+        vb.txtvEmpty.isVisible =
+            (state is ArestsListState.Loaded) &&
+            (state.arests.isEmpty())
 
         when(state) {
             is ArestsListState.Loading -> {
@@ -109,7 +110,7 @@ class ArestsFragment: SviazenFragment<ArestsFragmBinding>() {
             is ArestsListState.Loaded -> {
                 vb.vlltError.visibility = View.GONE
 
-                if(!state.animated) {
+                if(!state.animated && !state.arests.isEmpty()) {
                     state.animated = true
                     animateRecycler()
                 }
@@ -173,6 +174,7 @@ class ArestsFragment: SviazenFragment<ArestsFragmBinding>() {
 
             is CreateOrUpdateArestState.Created -> {
                 if(!state.notified) {
+                    vb.txtvEmpty.visibility = View.GONE
                     adapter.notifyItemInserted(state.position)
                     state.notified = true
                 }

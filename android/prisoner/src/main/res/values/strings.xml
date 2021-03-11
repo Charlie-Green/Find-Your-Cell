@@ -71,6 +71,9 @@
     <string name="username_taken_msg">"%s" уже занято. Логин должен быть уникальным.</string>
 
     <!-- Notifications (Arests): -->
+    <string name="arests_empty">
+        Укажите информацию о Ваших задержаниях, чтобы Sviazeń нашёл Ваших сокамерников.
+    </string>
     <string name="add_arest_failed_title">
         Не удалось добавить арест
     </string>
