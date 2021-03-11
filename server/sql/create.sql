@@ -3,19 +3,19 @@
 
 -- -----------------------------------------------
 
-drop table if exists `PrisonersRelations`;
-drop table if exists `Contacts`;
-drop table if exists `Periods`;
-drop table if exists `ScheduleCellEntries`;
-drop table if exists `Arests`;
-drop table if exists `Prisoners`;
-drop table if exists `Cells`;
-drop table if exists `Jails`;
+drop table if exists `prisoners_relations`;
+drop table if exists `contacts`;
+drop table if exists `periods`;
+drop table if exists `schedule_cell_entries`;
+drop table if exists `arests`;
+drop table if exists `prisoners`;
+drop table if exists `cells`;
+drop table if exists `jails`;
 
 
 -- -----------------------------------------------
 
-create table `Prisoners` (
+create table `prisoners` (
   `id` int not null primary key auto_increment,
   `username` varchar(48) not null,
   `pass` blob not null,
@@ -25,7 +25,7 @@ create table `Prisoners` (
   unique(`username`)
 );
 
-create table `PrisonersRelations` (
+create table `prisoners_relations` (
   `p1` int not null,
   `p2` int not null,
   `rel` smallint not null,
@@ -35,7 +35,7 @@ create table `PrisonersRelations` (
   primary key(`p1`, `p2`)
 );
 
-create table `Contacts` (
+create table `contacts` (
   `prisoner` int not null,
   `type` smallint not null,
   `data` text not null,
@@ -43,7 +43,7 @@ create table `Contacts` (
   primary key(`prisoner`, `type`)
 );
 
-create table `Jails` (
+create table `jails` (
   `id` int not null primary key auto_increment,
   `name` varchar(64) not null,
   `cells` smallint not null,
@@ -51,21 +51,21 @@ create table `Jails` (
   unique (`name`)
 );
 
-create table `Cells` (
+create table `cells` (
   `jail` int not null,
   `number` smallint not null,
   `seats` smallint not null,
   primary key (`jail`, `number`)
 );
 
-create table `Arests` (
+create table `arests` (
   `id` int not null primary key auto_increment,
   `prisoner` int not null,
   `start` bigint not null,
   `end` bigint not null
 );
 
-create table `Periods` (
+create table `periods` (
   `arest` int not null,
   `start` bigint not null,
   `end` bigint not null,
@@ -74,7 +74,7 @@ create table `Periods` (
   primary key (`arest`, `start`, `end`)
 );
 
-create table `ScheduleCellEntries` (
+create table `schedule_cell_entries` (
   `arest` int not null,
   `jail` int not null,
   `cell` smallint not null,
@@ -82,21 +82,21 @@ create table `ScheduleCellEntries` (
 );
 
 
-alter table `PrisonersRelations` add foreign key (`p1`)            references `Prisoners` (`id`);
-alter table `PrisonersRelations` add foreign key (`p2`)            references `Prisoners` (`id`);
-alter table `PrisonersRelations` add foreign key (`jail`, `cell`)  references `Cells` (`jail`, `number`);
+alter table `prisoners_relations` add foreign key (`p1`)            references `prisoners` (`id`);
+alter table `prisoners_Relations` add foreign key (`p2`)            references `prisoners` (`id`);
+alter table `prisoners_relations` add foreign key (`jail`, `cell`)  references `cells` (`jail`, `number`);
 
-alter table `Contacts`           add foreign key (`prisoner`)      references `Prisoners` (`id`);
+alter table `contacts`           add foreign key (`prisoner`)      references `prisoners` (`id`);
 
-alter table `Arests`             add foreign key (`prisoner`)      references `Prisoners` (`id`);
+alter table `arests`             add foreign key (`prisoner`)      references `prisoners` (`id`);
 
-alter table `Cells`              add foreign key (`jail`)          references `Jails` (`id`);
+alter table `cells`              add foreign key (`jail`)          references `jails` (`id`);
 
-alter table `ScheduleCellEntries` add foreign key (`arest`)        references `Arests` (`id`);
-alter table `ScheduleCellEntries` add foreign key (`jail`, `cell`) references `Cells` (`jail`, `number`);
+alter table `schedule_cell_entries` add foreign key (`arest`)        references `arests` (`id`);
+alter table `schedule_cell_entries` add foreign key (`jail`, `cell`) references `cells` (`jail`, `number`);
 
-alter table `Periods` add foreign key (
+alter table `periods` add foreign key (
     `arest`,
     `jail`,
     `cell`
-) references `ScheduleCellEntries` (`arest`, `jail`, `cell`);
+) references `schedule_cell_entries` (`arest`, `jail`, `cell`);

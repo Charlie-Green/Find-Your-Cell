@@ -4,7 +4,7 @@ import javax.persistence.*
 
 
 @Entity
-@Table(name = "Prisoners")
+@Table(name = "prisoners")
 class PrisonerEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

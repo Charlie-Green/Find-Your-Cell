@@ -6,7 +6,7 @@ import javax.persistence.*
 
 
 @Entity
-@Table(name = "Contacts")
+@Table(name = "contacts")
 class ContactEntity(
     @EmbeddedId
     var key: ContactKey,

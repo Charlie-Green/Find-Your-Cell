@@ -1,5 +1,6 @@
 # Sviazeń
-Звязваем палітвязняў - connecting political prisoners.
+Звязваем палітвязняў - connecting political prisoners.  
+__ATTENTION:__ Using the app is currently insecure. Please, wait until HTTPS support is added.
   
     
 ### About
@@ -46,7 +47,7 @@ Each project has 1 or more modules as appropriate.
 ##### Security
 The following features make Sviazeń secure:
 - SHA-512 hash for passwords, which is considered the standard de-facto.
-- HTTPS connection between the client and the server, with a custom certificate. The certificate key is obviously *not* published to this repository.
+- HTTPS connection between the client and the server, with a custom certificate. The certificate key is obviously *not* published to this repository. - __PENDING, BUT NOT SUPPORTED YET__
 - The client app does cache some information, but it *never* persists any user-sensitive data.
 - Raw password is not stored even in RAM. The app operates with password hash.
 
@@ -57,24 +58,26 @@ Besides, if you urge to have a deeper look at Sviazeń,
 you may run our server app on your own machine and connect your Android device over a local network.
 
 ##### Create a certificate
-1. Create a certificate and a PKCS 12 file storing its key. The PKCS file name has to be `sviazen.p12`.
-1. Save `sviazen.p12` under `server/protocol/src/main/resources`.
-1. In the same directory, create a file named `confidential.properties` and populate it with the data you used to create the certificate:
-```
-server.ssl.key-store          = classpath:sviazen.p12
-server.ssl.key-store-password = <Replace it with your certificate password>
-server.ssl.keyStoreType       = pkcs12
-server.ssl.keyAlias           = <Replace it with your certificate alias>
-```
-4. Your certificate (`.crt`) file must be named `sviazen.crt`. Replace `android/remote/src/main/assets/crt/sviazen.crt` with your own `sviazen.crt`.
+1. Go to CSR generator: https://decoder.link/csr_generator
+1. Enter the required fields (what you enter in them doesn't matter for local testing).
+1. Copy the certificate into `android/remote/src/main/asset/crt/sviazen.crt` (existing content of the file is to be replaced).
+1. Copy the key into `server/protocol/src/main/resources/sviazen.key`.
+1. Copy the CSR into `server/protocol/src/main/resources/sviazen.csr`.
 
 ##### Prepare the database
 `Sviazen` server app relies on a MySQL database which you have to create and make available before you can run the app on your machine.
-1. Install MySQL server, if haven't yet.
-1. Run MySQL server.
+1. Install MySQL server, if haven't yet, and run it.
 1. Create the database schema. You may find an SQL script creating the correct schema at `server/sql/create.sql`.
 1. (Optional): You may prepopulate the database with test data by running `server/sql/test.sql` on the created schema. It creates a sample account; you will then be able to authorize to that account with credentials found in the script file.
 1. (Optional): Same way, you may add other sample prisoners by running `server/sql/test2.sql`.
+1. Create a file `server/protocol/src/main/resources/confidential.properties` and fill it as follows:
+```
+spring.datasource.username = <Your MySQL username>
+spring.datasource.password = <Your MySQL password>
+```
+6. In the same directory (`server/protocol/src/main/resources/`) but another file (`public.properties`) replace the value of `spring.datasource.url` property with valid JDBC URL to your MySQL schema according to the following pattern:  
+`jdbc:mysql://<Host name>/<Schema name>`  
+Note: your `<Host name>` will most likely be `localhost:3306`.
 
 ##### Run the server
 1. Install Gradle 6.*, if you haven't yet.
@@ -82,7 +85,7 @@ server.ssl.keyAlias           = <Replace it with your certificate alias>
 `gradle bootRun`
 
 ##### Run the client
-1. In code find `RetrofitHolder.IP` constant and replace it with the (private) IP address of your machine.
+1. In code find `RetrofitHolder.IP` constant and replace it with the (private) IP address of your machine. This is the IPv4 address and can be obtained via `ifconfig` (Unix) or `ipconfig` (Windows)
 1. Build APK using Android Studio.
 
 Please note that you cannot use our pre-built APK since your certificate is (99.9% that) different from ours.  

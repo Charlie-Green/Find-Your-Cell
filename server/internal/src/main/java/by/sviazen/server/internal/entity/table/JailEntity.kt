@@ -5,7 +5,7 @@ import javax.persistence.*
 
 
 @Entity
-@Table(name = "Jails")
+@Table(name = "jails")
 class JailEntity: Jail() {
 
     @Id

@@ -1,2 +1,8 @@
 /.gradle
 /dev
+
+#Ignore the SSL certificate key:
+server/protocol/src/main/resources/sviazen.*
+
+#Ignore the database password and other confidential data:
+server/protocol/src/main/resources/confidential.properties

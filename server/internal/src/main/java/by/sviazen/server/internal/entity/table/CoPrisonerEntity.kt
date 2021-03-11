@@ -6,7 +6,7 @@ import javax.persistence.*
 
 
 @Entity
-@Table(name = "PrisonersRelations")
+@Table(name = "prisoners_relations")
 class CoPrisonerEntity {
 
     @EmbeddedId

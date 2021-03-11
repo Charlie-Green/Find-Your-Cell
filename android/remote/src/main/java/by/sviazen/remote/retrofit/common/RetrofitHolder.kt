@@ -20,11 +20,12 @@ class RetrofitHolder @Inject constructor(
     val retrofit by lazy {
         val okhttpClient = OkHttpClient
             .Builder()
-            .configForHttps()
+            // .configForHttps()  // TODO: Unconmment when HTTPS is supported
             .build()
 
+        // TODO: Change to HTTPS when HTTPS is supported
         Retrofit.Builder()
-            .baseUrl("https://$IP:8080/")  // TODO: Replace with real server domain name
+            .baseUrl("http://$HOST/")
             .addConverterFactory(GsonConverterFactory.create())
             .client(okhttpClient)
             .build()
@@ -40,7 +41,7 @@ class RetrofitHolder @Inject constructor(
 
         val keystore = KeyStore.getInstance(KeyStore.getDefaultType())
         keystore.load(null, null)
-        keystore.setCertificateEntry("FindCell", certificate)
+        keystore.setCertificateEntry("sviazen", certificate)
 
         val trustFact = TrustManagerFactory.getInstance(TrustManagerFactory.getDefaultAlgorithm())
         trustFact.init(keystore)
@@ -53,19 +54,17 @@ class RetrofitHolder @Inject constructor(
         val sslContext = SSLContext.getInstance("TLS")
         sslContext.init(null, trustFact.trustManagers, null)
 
+        val defaultVerifier = HttpsURLConnection.getDefaultHostnameVerifier()
         return this
             .sslSocketFactory(sslContext.socketFactory, trustMan)
             .hostnameVerifier { hostname, session ->
-                hostname.contains(IP) ||
-                HttpsURLConnection.getDefaultHostnameVerifier().verify(hostname, session)
+                hostname == HOST ||
+                defaultVerifier.verify(hostname, session)
             }
     }
 
 
     companion object {
-
-        /** IP of the developer's machine within his testing environment.
-          * Should be removed when the app is released to production!!! **/
-        private const val IP = "192.168.1.166"
+        private const val HOST = "sviazen.herokuapp.com"
     }
 }

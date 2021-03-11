@@ -6,7 +6,7 @@ import javax.persistence.*
 
 
 @Entity
-@Table(name = "Periods")
+@Table(name = "periods")
 class PeriodEntity(
 
     @EmbeddedId
