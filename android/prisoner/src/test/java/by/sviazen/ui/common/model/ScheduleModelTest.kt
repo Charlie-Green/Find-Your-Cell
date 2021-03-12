@@ -1,8 +1,8 @@
-package by.sviazen.prisoner.ui.common.model
+package by.sviazen.ui.common.model
 
-import by.sviazen.entity.entity.Cell
-import by.sviazen.entity.entity.SchedulePeriod
-import by.sviazen.prisoner.ui.common.sched.*
+import by.sviazen.domain.entity.Cell
+import by.sviazen.domain.entity.SchedulePeriod
+import by.sviazen.domain.simpleentity.SimpleSchedule
 import by.sviazen.prisoner.ui.common.sched.cell.CellModel
 import by.sviazen.prisoner.ui.common.sched.period.ScheduleModel
 import by.sviazen.prisoner.ui.common.sched.period.SchedulePeriodModel
@@ -13,26 +13,29 @@ import java.util.*
 
 class ScheduleModelTest {
 
+    private val cal = Calendar.getInstance()
+
+
     @Test
     fun fromSchedule() {
         val cell1 = CellModel(1, "Жодино", 7, 0, 0, 0, 0)
         val cell2 = CellModel(2, "Окрестина", 14, 0, 0, 0, 0)
 
-        val schedule = TestSchedule(
+        val schedule = SimpleSchedule(
             1,
-            calendar(2020, 11, 18),
-            calendar(2020, 11, 22),
+            timeMillis(2020, 11, 18),
+            timeMillis(2020, 11, 22),
             listOf(cell1, cell2),
             listOf(
                 SchedulePeriodModel(
-                    calendar(2020, 11, 18),
-                    calendar(2020, 11, 21),
+                    timeMillis(2020, 11, 18),
+                    timeMillis(2020, 11, 21),
                     1
                 ),
 
                 SchedulePeriodModel(
-                    calendar(2020, 11, 21),
-                    calendar(2020, 11, 22),
+                    timeMillis(2020, 11, 21),
+                    timeMillis(2020, 11, 22),
                     0
                 )
             )
@@ -48,18 +51,18 @@ class ScheduleModelTest {
 
     @Test
     fun toSchedule() {
-        val schedule = TestSchedule(
+        val schedule = SimpleSchedule(
             1,
-            calendar(2020, 11, 18),
-            calendar(2020, 11, 22),
+            timeMillis(2020, 11, 18),
+            timeMillis(2020, 11, 22),
             listOf( CellModel(1, "Жодино", 31, 0, 0, 0, 0) ),
             listOf()
         )
 
         val model = ScheduleModel.from(schedule)
-        model.markDayWithCell(0, calendar(2020, 11, 19))
-        model.markDayWithCell(0, calendar(2020, 11, 21))
-        model.markDayWithCell(0, calendar(2020, 11, 22))
+        model.markDayWithCell(0, timeMillis(2020, 11, 19))
+        model.markDayWithCell(0, timeMillis(2020, 11, 21))
+        model.markDayWithCell(0, timeMillis(2020, 11, 22))
 
         val result = model.toSchedule()
         Assertions.assertEquals(2, result.periods.size)
@@ -68,10 +71,10 @@ class ScheduleModelTest {
     }
 
 
-    private fun calendar(year: Int, month: Int, date: Int): Calendar {
-        return Calendar.getInstance().apply {
-            set(year, month, date)
-        }
+    private fun timeMillis(year: Int, month: Int, date: Int): Long {
+        cal.set(year, month, date, 0, 0, 0)
+        cal[Calendar.MILLISECOND] = 0
+        return cal.timeInMillis
     }
 
     private fun assertDay(
@@ -88,7 +91,12 @@ class ScheduleModelTest {
         }
     }
 
-    private fun calendarIs(cal: Calendar, year: Int, month: Int, day: Int): Boolean {
+    private fun timeEquals(
+        millis: Long,
+        year: Int, month: Int, day: Int
+    ): Boolean {
+
+        cal.timeInMillis = millis
         return (cal[Calendar.YEAR] == year) &&
             (cal[Calendar.MONTH] == month) &&
             (cal[Calendar.DATE] == day)
@@ -100,8 +108,8 @@ class ScheduleModelTest {
         year2: Int, month2: Int, date2: Int ) {
 
         val period = periods.find { p ->
-            calendarIs(p.startDate, year1, month1, date1) &&
-            calendarIs(p.endDate, year2, month2, date2)
+            timeEquals(p.start, year1, month1, date1) &&
+            timeEquals(p.end, year2, month2, date2)
         }
 
         Assertions.assertNotNull(period)

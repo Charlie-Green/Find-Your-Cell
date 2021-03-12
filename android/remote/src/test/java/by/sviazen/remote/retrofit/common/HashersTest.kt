@@ -1,7 +1,6 @@
 package by.sviazen.remote.retrofit.common
 
 import by.sviazen.core.injected.common.Hasher
-import by.sviazen.serial.common.v1.CommonContract1
 import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.Test
 
