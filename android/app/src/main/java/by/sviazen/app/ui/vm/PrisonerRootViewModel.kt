@@ -2,10 +2,9 @@ package by.sviazen.app.ui.vm
 
 import android.content.Context
 import androidx.lifecycle.*
-import by.sviazen.core.injected.cp.CoPrisonersRepository
+import by.sviazen.core.repo.profile.ProfileRepository
 import by.sviazen.domain.entity.Prisoner
-import by.sviazen.prisoner.repo.profile.ProfileRepository
-import by.sviazen.prisoner.repo.profile.SavePrisonerResult
+import by.sviazen.core.repo.profile.SavePrisonerResult
 import by.sviazen.prisoner.ui.common.arest.ArestLiveDatasHolder
 import by.sviazen.prisoner.ui.common.arest.ArestsListState
 import by.sviazen.prisoner.ui.common.change.UnsavedChangesLiveDatasStorage
@@ -15,7 +14,7 @@ import by.sviazen.prisoner.ui.common.sched.period.ScheduleCellsCrudState
 import by.sviazen.prisoner.ui.common.sched.ld.ScheduleLiveDatasStorage
 import by.sviazen.prisoner.ui.root.vm.PrisonerRootVMFactory
 import by.sviazen.prisoner.ui.root.vm.PrisonerRootVMStorage
-import by.sviazen.prisoner.ui.root.vm.UnsavedPrisonerChangesLiveData
+import by.sviazen.app.ui.vm.UnsavedPrisonerChangesLiveData
 import by.sviazen.prisoner.ui.sched.model.ScheduleCrudState
 import by.sviazen.result.ui.contact.model.GetCoPrisonerState
 import by.sviazen.result.ui.contact.vm.CoPrisonerStateLDStorage

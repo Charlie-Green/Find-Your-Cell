@@ -4,29 +4,31 @@ import android.util.Log
 import by.sviazen.core.api.sched.ScheduleApi
 import by.sviazen.core.common.prisoner.PrisonerStorage
 import by.sviazen.core.injected.sync.AutomaticSyncManager
+import by.sviazen.core.repo.sched.ScheduleRepository
 import by.sviazen.domain.entity.Arest
 import by.sviazen.domain.entity.Jail
 import by.sviazen.domain.entity.Schedule
 import by.sviazen.domain.simpleentity.SimpleJail
 import by.sviazen.prisoner.repo.arest.ArestsCache
-import by.sviazen.prisoner.repo.sched.result.GetScheduleResult
-import by.sviazen.prisoner.repo.sched.result.UpdateScheduleResult
+import by.sviazen.core.repo.sched.GetScheduleResult
+import by.sviazen.core.repo.sched.UpdateScheduleResult
 import java.io.IOException
 import javax.inject.Inject
 import javax.inject.Singleton
 
 
 @Singleton
-class ScheduleRepository @Inject constructor(
+class ScheduleRepositoryImpl @Inject constructor(
     private val api: ScheduleApi,
     private val store: PrisonerStorage,
     private val arestsCache: ArestsCache,
-    private val autoSyncMan: AutomaticSyncManager ) {
+    private val autoSyncMan: AutomaticSyncManager
+): ScheduleRepository {
 
     private var schedule: Schedule? = null
 
 
-    fun getSchedule(arestId: Int): GetScheduleResult {
+    override fun getSchedule(arestId: Int): GetScheduleResult {
         val prisoner = store.prisonerLD.value ?: return GetScheduleResult.NotAuthorized
         val arest = arestsCache.getById(arestId) ?: return GetScheduleResult.NotAuthorized
 
@@ -43,7 +45,7 @@ class ScheduleRepository @Inject constructor(
         }
     }
 
-    fun updateSchedule(schedule: Schedule): UpdateScheduleResult {
+    override fun updateSchedule(schedule: Schedule): UpdateScheduleResult {
         val prisoner = store.prisonerLD.value ?: return UpdateScheduleResult.NotAuthorized
 
         try {
@@ -63,7 +65,7 @@ class ScheduleRepository @Inject constructor(
     }
 
 
-    fun addCell(
+    override fun addCell(
         jailId: Int,
         cellNumber: Short
 
@@ -71,7 +73,7 @@ class ScheduleRepository @Inject constructor(
         api.addCell(arestId, passwordHash, jailId, cellNumber)
     }
 
-    fun deleteCell(
+    override fun deleteCell(
         jailId: Int,
         cellNumber: Short
 
@@ -79,7 +81,7 @@ class ScheduleRepository @Inject constructor(
         api.deleteCell(arestId, passwordHash, jailId, cellNumber)
     }
 
-    fun updateCell(
+    override fun updateCell(
         oldJailId: Int, oldCellNumber: Short,
         newJailId: Int, newCellNumber: Short
 

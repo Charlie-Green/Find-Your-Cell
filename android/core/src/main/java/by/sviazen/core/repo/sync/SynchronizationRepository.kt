@@ -1,6 +1,8 @@
-package by.sviazen.core.injected.sync
+package by.sviazen.core.repo.sync
 
 import androidx.lifecycle.LiveData
+import by.sviazen.core.injected.sync.SyncResponse
+import by.sviazen.core.injected.sync.SyncState
 import by.sviazen.domain.entity.CoPrisoner
 
 

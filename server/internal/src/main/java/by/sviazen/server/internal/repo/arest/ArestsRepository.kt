@@ -71,8 +71,8 @@ class ArestsRepository: SviazenRepositiory() {
         arestIds: List<Int> ) {
 
         validateCredentials(prisonerId, passwordHash)
-        scheduleDao.deleteCellEntriesForArests(arestIds)
         scheduleDao.deletePeriodsForArests(arestIds)
+        scheduleDao.deleteCellEntriesForArests(arestIds)
         arestsDao.delete(arestIds)
     }
 }

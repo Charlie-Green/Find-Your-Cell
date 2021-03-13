@@ -3,10 +3,10 @@ package by.sviazen.prisoner.ui.profile.vm
 import android.content.Context
 import androidx.lifecycle.*
 import by.sviazen.core.injected.web.NetworkStateTracker
+import by.sviazen.core.repo.profile.ProfileRepository
 import by.sviazen.domain.entity.Contact
 import by.sviazen.domain.entity.Prisoner
-import by.sviazen.prisoner.repo.profile.ProfileRepository
-import by.sviazen.prisoner.repo.profile.SavePrisonerResult
+import by.sviazen.core.repo.profile.SavePrisonerResult
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import javax.inject.Inject

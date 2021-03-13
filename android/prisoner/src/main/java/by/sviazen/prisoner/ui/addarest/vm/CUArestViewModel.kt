@@ -3,9 +3,9 @@ package by.sviazen.prisoner.ui.addarest.vm
 import android.content.Context
 import androidx.lifecycle.*
 import by.sviazen.core.injected.web.NetworkStateTracker
+import by.sviazen.core.repo.arest.AddOrUpdateArestResult
+import by.sviazen.core.repo.arest.ArestsRepository
 import by.sviazen.domain.entity.Arest
-import by.sviazen.domain.contract.arest.CreateOrUpdateArestResponse
-import by.sviazen.prisoner.repo.arest.ArestsRepository
 import by.sviazen.prisoner.ui.common.arest.ArestLiveDatasHolder
 import by.sviazen.prisoner.ui.common.arest.ArestsListState
 import by.sviazen.prisoner.ui.common.arest.CreateOrUpdateArestState
@@ -30,8 +30,8 @@ class CUArestViewModel @Inject constructor(
 
         holder.submitState( CreateOrUpdateArestState.Loading )
         viewModelScope.launch(Dispatchers.IO) {
-            val response = repo.addArest(start, end)
-            applyResponse(arests, response.first, null, response.second)
+            val result = repo.addArest(start, end)
+            applyResponse(arests, -1, result)
         }
     }
 
@@ -44,28 +44,30 @@ class CUArestViewModel @Inject constructor(
 
     private fun applyResponse(
         arests: List<Arest>,
-        response: CreateOrUpdateArestResponse,
-        oldPosition: Int?,
-        newPosition: Int ) {
+        oldPosition: Int,
+        result: AddOrUpdateArestResult ) {
 
-        when(response) {
-            is CreateOrUpdateArestResponse.NetworkError -> {
-                val state = CreateOrUpdateArestState.NetworkError(oldPosition == null)
+        when(result) {
+            is AddOrUpdateArestResult.NetworkError -> {
+                val state = CreateOrUpdateArestState.NetworkError(oldPosition < 0)
                 holder.submitState(state)
             }
 
-            is CreateOrUpdateArestResponse.ArestsIntersect -> {
+            is AddOrUpdateArestResult.ArestsIntersect -> {
                 val intersectedArest = arests.find { a ->
-                    a.id == response.intersectedId
+                    a.id == result.intersectedId
                 }
-                val state = arestsIntersectState(intersectedArest, oldPosition == null)
+                val state = arestsIntersectState(intersectedArest, oldPosition < 0)
                 holder.submitState(state)
             }
 
-            is CreateOrUpdateArestResponse.Success -> {
-                val state = oldPosition?.let {
-                    CreateOrUpdateArestState.Updated(it, newPosition)
-                } ?: CreateOrUpdateArestState.Created(newPosition)
+            is AddOrUpdateArestResult.Success -> {
+                val state = if(oldPosition < 0) {
+                    CreateOrUpdateArestState.Created(result.arestPosition)
+                } else {
+                    CreateOrUpdateArestState.Updated(oldPosition, result.arestPosition)
+                }
+
                 holder.submitState(state)
             }
         }

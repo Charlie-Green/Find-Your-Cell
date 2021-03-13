@@ -82,6 +82,8 @@ create table `schedule_cell_entries` (
 );
 
 
+-- -----------------------------------------------
+
 alter table `prisoners_relations` add foreign key (`p1`)            references `prisoners` (`id`);
 alter table `prisoners_Relations` add foreign key (`p2`)            references `prisoners` (`id`);
 alter table `prisoners_relations` add foreign key (`jail`, `cell`)  references `cells` (`jail`, `number`);
@@ -100,3 +102,102 @@ alter table `periods` add foreign key (
     `jail`,
     `cell`
 ) references `schedule_cell_entries` (`arest`, `jail`, `cell`);
+
+
+-- -----------------------------------------------
+
+-- TODO: Jails' cell counts are not real, neither are cells' seat counts.
+-- Replace with actual numbers!
+
+insert into `jails`(name, cells)
+values("Окрестина ИВС", 4);
+
+insert into `jails`(name, cells)
+values("Окрестина ЦИП", 5);
+
+insert into `jails`(name, cells)
+values("Жодино", 9);
+
+insert into `jails`(name, cells)
+values("Барановичи", 8);
+
+insert into `jails`(name, cells)
+values("Могилёв", 6);
+
+
+-- NOTE: Jail IDs must correspond to those assigned by the server to the Jails inserted before.
+-- Here IDs (1, 11, 21, ...) are as typically assigned by Heroku's ClearDB database.
+
+-- "Окрестина ИВС" Jail:
+insert into `cells`(jail, number, seats)
+values(1, 1, 5);
+insert into `cells`(jail, number, seats)
+values(1, 2, 5);
+insert into `cells`(jail, number, seats)
+values(1, 3, 8);
+insert into `cells`(jail, number, seats)
+values(1, 4, 7);
+
+-- "Окрестина ЦИП" Jail:
+insert into `cells`(jail, number, seats)
+values(11, 1, 2);
+insert into `cells`(jail, number, seats)
+values(11, 2, 2);
+insert into `cells`(jail, number, seats)
+values(11, 3, 4);
+insert into `cells`(jail, number, seats)
+values(11, 4, 4);
+insert into `cells`(jail, number, seats)
+values(11, 5, 2);
+
+-- "Жодино" Jail:
+insert into `cells`(jail, number, seats)
+values(21, 1, 8);
+insert into `cells`(jail, number, seats)
+values(21, 2, 8);
+insert into `cells`(jail, number, seats)
+values(21, 3, 6);
+insert into `cells`(jail, number, seats)
+values(21, 4, 10);
+insert into `cells`(jail, number, seats)
+values(21, 5, 10);
+insert into `cells`(jail, number, seats)
+values(21, 6, 8);
+insert into `cells`(jail, number, seats)
+values(21, 7, 12);
+insert into `cells`(jail, number, seats)
+values(21, 8, 12);
+insert into `cells`(jail, number, seats)
+values(21, 9, 10);
+
+-- "Барановичи" Jail:
+insert into `cells`(jail, number, seats)
+values(31, 1, 4);
+insert into `cells`(jail, number, seats)
+values(31, 2, 4);
+insert into `cells`(jail, number, seats)
+values(31, 3, 10);
+insert into `cells`(jail, number, seats)
+values(31, 4, 10);
+insert into `cells`(jail, number, seats)
+values(31, 5, 10);
+insert into `cells`(jail, number, seats)
+values(31, 6, 8);
+insert into `cells`(jail, number, seats)
+values(31, 7, 8);
+insert into `cells`(jail, number, seats)
+values(31, 8, 10);
+
+-- "Могилёв" Jail:
+insert into `cells`(jail, number, seats)
+values(41, 1, 10);
+insert into `cells`(jail, number, seats)
+values(41, 2, 8);
+insert into `cells`(jail, number, seats)
+values(41, 3, 7);
+insert into `cells`(jail, number, seats)
+values(41, 4, 8);
+insert into `cells`(jail, number, seats)
+values(41, 5, 7);
+insert into `cells`(jail, number, seats)
+values(41, 6, 8);

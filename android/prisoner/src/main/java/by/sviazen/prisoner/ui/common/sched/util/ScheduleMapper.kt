@@ -1,10 +1,10 @@
 package by.sviazen.prisoner.ui.common.sched.util
 
-import by.sviazen.core.util.std.CalendarUtil
 import by.sviazen.domain.entity.Cell
 import by.sviazen.domain.entity.Schedule
 import by.sviazen.domain.entity.SchedulePeriod
 import by.sviazen.domain.simpleentity.SimpleSchedule
+import by.sviazen.domain.util.CalendarUtil
 import by.sviazen.prisoner.ui.common.sched.cell.CellModel
 import by.sviazen.prisoner.ui.common.sched.period.ScheduleModel
 import by.sviazen.prisoner.ui.common.sched.period.SchedulePeriodModel

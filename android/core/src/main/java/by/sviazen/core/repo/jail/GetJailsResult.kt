@@ -1,4 +1,4 @@
-package by.sviazen.prisoner.repo.jail
+package by.sviazen.core.repo.jail
 
 import by.sviazen.domain.entity.Jail
 

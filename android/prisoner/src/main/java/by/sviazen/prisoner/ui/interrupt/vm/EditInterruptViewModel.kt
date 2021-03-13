@@ -2,7 +2,7 @@ package by.sviazen.prisoner.ui.interrupt.vm
 
 import android.content.Context
 import androidx.lifecycle.*
-import by.sviazen.prisoner.repo.profile.ProfileRepository
+import by.sviazen.core.repo.profile.ProfileRepository
 import by.sviazen.prisoner.ui.common.interrupt.InterruptLiveDataStorage
 import javax.inject.Inject
 

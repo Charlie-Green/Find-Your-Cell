@@ -1,7 +1,7 @@
-package by.sviazen.prisoner.ui.root.vm
+package by.sviazen.app.ui.vm
 
 import androidx.lifecycle.MediatorLiveData
-import by.sviazen.prisoner.repo.profile.ProfileRepository
+import by.sviazen.core.repo.profile.ProfileRepository
 import by.sviazen.prisoner.ui.common.change.UnsavedChangesLiveDatasStorage
 
 

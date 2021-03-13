@@ -1,4 +1,4 @@
-package by.sviazen.prisoner.repo.sched.result
+package by.sviazen.core.repo.sched
 
 
 sealed class UpdateScheduleResult {

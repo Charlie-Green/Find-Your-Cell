@@ -2,7 +2,7 @@ package by.sviazen.result.ui.contact.vm
 
 import android.content.Context
 import androidx.lifecycle.*
-import by.sviazen.core.injected.cp.CoPrisonersRepository
+import by.sviazen.core.repo.cp.CoPrisonersRepository
 import by.sviazen.core.injected.web.NetworkStateTracker
 import by.sviazen.domain.contract.cp.GetCoPrisonerResponse
 import by.sviazen.result.ui.contact.model.GetCoPrisonerState

@@ -77,5 +77,11 @@ ext {
 
     // Test:
     def jupiterVersion = "5.3.1"
-    testJUnit = "org.junit.jupiter:junit-jupiter-api:$jupiterVersion"
+    def androidTestVersion = "1.3.0"
+    testJUnit         = "org.junit.jupiter:junit-jupiter-api:$jupiterVersion"
+    testAndroid       = "androidx.test:core:$androidTestVersion"
+    testAndroidRunner = "androidx.test:runner:$androidTestVersion"
+    testAndroidRules  = "androidx.test:rules:$androidTestVersion"
+    testTruth         = "com.google.truth:truth:1.0.1"
+    testTruthExt      = "androidx.test.ext:truth:1.3.0"
 }

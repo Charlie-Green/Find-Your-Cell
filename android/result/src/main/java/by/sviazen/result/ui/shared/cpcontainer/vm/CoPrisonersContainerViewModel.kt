@@ -2,9 +2,9 @@ package by.sviazen.result.ui.shared.cpcontainer.vm
 
 import androidx.lifecycle.*
 import by.sviazen.core.injected.sync.SyncResponse
-import by.sviazen.core.injected.sync.SynchronizationRepository
+import by.sviazen.core.repo.sync.SynchronizationRepository
 import by.sviazen.core.injected.web.NetworkStateTracker
-import by.sviazen.core.injected.cp.CoPrisonersRepository
+import by.sviazen.core.repo.cp.CoPrisonersRepository
 import by.sviazen.domain.entity.CoPrisoner
 import by.sviazen.result.ui.shared.cpcontainer.model.RefreshState
 import by.sviazen.result.ui.shared.cppage.vm.ChangeRelationLiveDataStorage

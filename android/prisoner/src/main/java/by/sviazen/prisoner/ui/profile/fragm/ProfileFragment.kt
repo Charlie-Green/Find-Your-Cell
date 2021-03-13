@@ -13,7 +13,7 @@ import by.sviazen.domain.entity.Prisoner
 import by.sviazen.domain.simpleentity.SimplePrisoner
 import by.sviazen.prisoner.R
 import by.sviazen.prisoner.databinding.ProfileFragmBinding
-import by.sviazen.prisoner.repo.profile.SavePrisonerResult
+import by.sviazen.core.repo.profile.SavePrisonerResult
 import by.sviazen.prisoner.ui.profile.vm.ProfileViewModel
 
 

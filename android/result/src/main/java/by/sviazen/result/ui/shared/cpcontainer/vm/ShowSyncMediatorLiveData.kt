@@ -3,7 +3,7 @@ package by.sviazen.result.ui.shared.cpcontainer.vm
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MediatorLiveData
 import by.sviazen.core.injected.sync.SyncState
-import by.sviazen.core.injected.sync.SynchronizationRepository
+import by.sviazen.core.repo.sync.SynchronizationRepository
 import by.sviazen.core.util.android.AndroidUtil
 import by.sviazen.domain.entity.CoPrisoner
 

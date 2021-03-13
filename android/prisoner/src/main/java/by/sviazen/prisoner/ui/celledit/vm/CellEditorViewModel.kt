@@ -1,14 +1,15 @@
 package by.sviazen.prisoner.ui.celledit.vm
 
 import android.content.Context
+import android.util.Log
 import androidx.lifecycle.*
 import by.sviazen.core.injected.web.NetworkStateTracker
 import by.sviazen.domain.entity.Cell
 import by.sviazen.domain.entity.Jail
 import by.sviazen.prisoner.ui.common.sched.ld.ScheduleLiveDatasStorage
-import by.sviazen.prisoner.repo.jail.GetJailsResult
-import by.sviazen.prisoner.repo.jail.JailsRepository
-import by.sviazen.prisoner.repo.sched.ScheduleRepository
+import by.sviazen.core.repo.jail.GetJailsResult
+import by.sviazen.core.repo.jail.JailsRepository
+import by.sviazen.core.repo.sched.ScheduleRepository
 import by.sviazen.prisoner.ui.common.sched.cell.CellEditFailureReason
 import by.sviazen.prisoner.ui.common.sched.cell.JailHeader
 import by.sviazen.prisoner.ui.common.sched.period.ScheduleCellsCrudState

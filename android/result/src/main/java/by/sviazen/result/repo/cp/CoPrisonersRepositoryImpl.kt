@@ -4,7 +4,7 @@ import android.content.Context
 import android.util.Log
 import by.sviazen.core.api.cp.CoPrisonersApi
 import by.sviazen.core.common.prisoner.PrisonerStorage
-import by.sviazen.core.injected.cp.CoPrisonersRepository
+import by.sviazen.core.repo.cp.CoPrisonersRepository
 import by.sviazen.domain.entity.CoPrisoner
 import by.sviazen.domain.entity.Prisoner
 import by.sviazen.domain.contract.cp.GetCoPrisonerResponse

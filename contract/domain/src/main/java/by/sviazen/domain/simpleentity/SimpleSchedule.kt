@@ -3,7 +3,7 @@ package by.sviazen.domain.simpleentity
 import by.sviazen.domain.entity.Cell
 import by.sviazen.domain.entity.Schedule
 import by.sviazen.domain.entity.SchedulePeriod
-import by.sviazen.domain.util.EntityUtil
+import by.sviazen.domain.util.CalendarUtil
 
 
 class SimpleSchedule(
@@ -19,7 +19,7 @@ class SimpleSchedule(
 
 
     init {
-        start = EntityUtil.midnight(startMillis)
-        end = EntityUtil.midnight(endMillis)
+        start = CalendarUtil.midnight(startMillis)
+        end = CalendarUtil.midnight(endMillis)
     }
 }

@@ -13,7 +13,7 @@ import by.sviazen.app.databinding.PrisonerActivityBinding
 import by.sviazen.core.ui.common.SviazenActivity
 import by.sviazen.core.util.android.AndroidUtil
 import by.sviazen.core.util.android.NavigationUtil
-import by.sviazen.prisoner.repo.profile.SavePrisonerResult
+import by.sviazen.core.repo.profile.SavePrisonerResult
 import by.sviazen.prisoner.ui.common.interrupt.EditInterruptState
 import by.sviazen.prisoner.ui.common.sched.period.ScheduleCellsCrudState
 import by.sviazen.app.ui.vm.PrisonerRootViewModel

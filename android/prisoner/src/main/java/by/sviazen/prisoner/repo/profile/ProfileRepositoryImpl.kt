@@ -9,6 +9,8 @@ import by.sviazen.prisoner.R
 import by.sviazen.core.common.prisoner.PrisonerStorage
 import by.sviazen.core.injected.common.Hasher
 import by.sviazen.core.injected.sync.AutomaticSyncManager
+import by.sviazen.core.repo.profile.ProfileRepository
+import by.sviazen.core.repo.profile.SavePrisonerResult
 import by.sviazen.domain.contract.auth.LogInResponse
 import by.sviazen.domain.contract.auth.SignUpResponse
 import by.sviazen.domain.entity.Contact
@@ -21,12 +23,13 @@ import javax.inject.Singleton
 
 
 @Singleton
-class ProfileRepository @Inject constructor(
+class ProfileRepositoryImpl @Inject constructor(
     @ApplicationContext private val appContext: Context,
     private val api: ProfileApi,
     private val prisonerStore: PrisonerStorage,
     private val autoSyncMan: AutomaticSyncManager,
-    private val hasher: Hasher ) {
+    private val hasher: Hasher
+): ProfileRepository {
 
     private val authStore = AuthorizationMetadataStorage(appContext)
 
@@ -37,17 +40,17 @@ class ProfileRepository @Inject constructor(
     private val mldSaveResult = MutableLiveData<SavePrisonerResult>()
 
 
-    val prisonerLD: LiveData<out Prisoner?>
+    override val prisonerLD: LiveData<out Prisoner?>
         get() = prisonerStore.prisonerLD
 
-    val unsavedChangesLD: LiveData<Boolean>
+    override val unsavedChangesLD: LiveData<Boolean>
         get() = mldUnsavedChanges
 
-    val savePrisonerResultLD: LiveData<SavePrisonerResult>
+    override val savePrisonerResultLD: LiveData<SavePrisonerResult>
         get() = mldSaveResult
 
 
-    fun logIn(username: String, password: String): LogInResponse {
+    override fun logIn(username: String, password: String): LogInResponse {
         val passHash = hasher.hash(password)
         val response = try {
             api.logIn(username, passHash)
@@ -63,7 +66,7 @@ class ProfileRepository @Inject constructor(
         return response
     }
 
-    fun signUp(
+    override fun signUp(
         username: String,
         password: String
     ): SignUpResponse {
@@ -85,14 +88,14 @@ class ProfileRepository @Inject constructor(
         return response
     }
 
-    fun logOut() {
+    override fun logOut() {
         prisonerStore.clear()
         autoSyncMan.clearCoPrisonersCache()
         autoSyncMan.set(false)
     }
 
 
-    fun saveDraft(draft: Prisoner) {
+    override fun saveDraft(draft: Prisoner) {
         val original = prisonerLD.value ?: return
         val draftWithPassword = SimplePrisoner(
             original.id,
@@ -106,7 +109,7 @@ class ProfileRepository @Inject constructor(
         prisonerStore.submit(draftWithPassword)
     }
 
-    fun save(data: Prisoner, internet: Boolean) {
+    override fun save(data: Prisoner, internet: Boolean) {
         if(!internet) {
             mldSaveResult.postValue(SavePrisonerResult.NoInternet)
             return
@@ -128,15 +131,15 @@ class ProfileRepository @Inject constructor(
     }
 
 
-    fun notifySaveResultConsumed() {
+    override fun notifySaveResultConsumed() {
         mldSaveResult.postValue(SavePrisonerResult.Idle)
     }
 
-    fun notifyDataChanged() {
+    override fun notifyDataChanged() {
         mldUnsavedChanges.postValue(true)
     }
 
-    fun withdrawUnsavedChanges() {
+    override fun withdrawUnsavedChanges() {
         mldUnsavedChanges.value = false
     }
 

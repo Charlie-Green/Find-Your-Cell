@@ -1,4 +1,4 @@
-package by.sviazen.prisoner.repo.sched.map
+package by.sviazen.prisoner.repo.sched
 
 import android.content.Context
 import by.sviazen.core.api.jail.JailsApi

@@ -2,6 +2,8 @@ package by.sviazen.prisoner.repo.jail
 
 import android.content.Context
 import by.sviazen.core.api.jail.JailsApi
+import by.sviazen.core.repo.jail.GetJailsResult
+import by.sviazen.core.repo.jail.JailsRepository
 import by.sviazen.domain.entity.Cell
 import by.sviazen.prisoner.db.JailsDatabase
 import dagger.hilt.android.qualifiers.ApplicationContext
@@ -10,11 +12,12 @@ import javax.inject.Singleton
 
 
 @Singleton
-class JailsRepository @Inject constructor(
+class JailsRepositoryImpl @Inject constructor(
     @ApplicationContext private val appContext: Context,
-    private val api: JailsApi ) {
+    private val api: JailsApi
+): JailsRepository {
 
-    fun jailsList(internet: Boolean): GetJailsResult {
+    override fun jailsList(internet: Boolean): GetJailsResult {
         val dao = JailsDatabase.get(appContext).jailsDao
         val cached = dao.jails()
         if(!cached.isEmpty()) {
@@ -33,7 +36,7 @@ class JailsRepository @Inject constructor(
     }
 
 
-    fun cell(
+    override fun cell(
         jailId: Int,
         cellNumber: Short,
         internet: Boolean
@@ -55,10 +58,5 @@ class JailsRepository @Inject constructor(
             cellNumber,
             internet
         )
-    }
-
-
-    companion object {
-        internal const val LOGTAG = "FindCell-Jails"
     }
 }

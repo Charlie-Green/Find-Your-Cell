@@ -9,9 +9,13 @@ import by.sviazen.prisoner.db.JailsDatabase
 import by.sviazen.prisoner.db.entity.JailEntity
 import by.sviazen.core.common.prisoner.PrisonerStorage
 import by.sviazen.core.injected.sync.AutomaticSyncManager
+import by.sviazen.core.repo.arest.AddOrUpdateArestResult
+import by.sviazen.core.repo.arest.ArestsRepository
+import by.sviazen.core.repo.arest.GetArestsResult
 import by.sviazen.domain.entity.Arest
 import by.sviazen.domain.entity.Jail
 import by.sviazen.domain.contract.arest.CreateOrUpdateArestResponse
+import by.sviazen.domain.util.CalendarUtil
 import dagger.hilt.android.qualifiers.ApplicationContext
 import java.io.IOException
 import javax.inject.Inject
@@ -19,20 +23,20 @@ import javax.inject.Singleton
 
 
 @Singleton
-class ArestsRepository @Inject constructor(
+class ArestsRepositoryImpl @Inject constructor(
     @ApplicationContext private val appContext: Context,
     private val arestsApi: ArestsApi,
     private val jailsApi: JailsApi,
     private val cache: ArestsCache,
     private val prisonerStore: PrisonerStorage,
-    private val autoSyncMan: AutomaticSyncManager ) {
+    private val autoSyncMan: AutomaticSyncManager
+): ArestsRepository {
 
-    val arestsLD: LiveData< List<Arest> >
+    override val arestsLD: LiveData< List<Arest> >
         get() = cache.arestsLD
 
 
-    /** In case of success, the new value is emitted by [arestsLD] **/
-    fun arestsList(): GetArestsResult {
+    override fun arestsList(): GetArestsResult {
         val prisoner = prisonerStore.prisonerLD.value
             ?: return GetArestsResult.NotAuthorized
 
@@ -65,10 +69,10 @@ class ArestsRepository @Inject constructor(
       *         - response notifies if the call succeeded;
       *         - int is list position of the newly created [Arest],
       *                 or any integer if the call failed., **/
-    fun addArest(
+    override fun addArest(
         start: Long,
         end: Long
-    ): Pair<CreateOrUpdateArestResponse, Int> {
+    ): AddOrUpdateArestResult {
 
         val prisoner = prisonerStore.prisonerLD.value
             ?: throw IllegalStateException("Not authorized")
@@ -77,31 +81,37 @@ class ArestsRepository @Inject constructor(
             arestsApi.create(
                 prisoner.id,
                 prisoner.passwordHash!!,
-                start,
-                end
+                CalendarUtil.midnight(start),
+                CalendarUtil.midnight(end)
             )
         } catch(exc: IOException) {
-            return Pair(CreateOrUpdateArestResponse.NetworkError, -1)
+            return AddOrUpdateArestResult.NetworkError
         }
 
-        if(response !is CreateOrUpdateArestResponse.Success) {
-            return Pair(response, -1)
+        return when(response) {
+            is CreateOrUpdateArestResponse.NetworkError -> {
+                AddOrUpdateArestResult.NetworkError
+            }
+
+            is CreateOrUpdateArestResponse.ArestsIntersect -> {
+                AddOrUpdateArestResult.ArestsIntersect(response.intersectedId)
+            }
+
+            is CreateOrUpdateArestResponse.Success -> {
+                val arest = Arest(
+                    response.arestId,
+                    start,
+                    end,
+                    listOf()  // Jails list is empty because the Arest was just created.
+                )
+
+                val position = cache.insert(arest)
+                AddOrUpdateArestResult.Success(position)
+            }
         }
-
-        val arest = Arest(
-            response.arestId,
-            start,
-            end,
-            listOf()  // Jails list is empty because the Arest was just created.
-        )
-        val position = cache.insert(arest)
-
-        return Pair(response, position)
     }
 
-    /** @return [Collection] of list positions [Arest]s were deleted from,
-      *         or null if deletion failed. **/
-    fun deleteArests(ids: Collection<Int>): List<Int>? {
+    override fun deleteArests(ids: Collection<Int>): List<Int>? {
         val prisoner = prisonerStore.prisonerLD.value ?: return null
 
         try {
@@ -118,8 +128,7 @@ class ArestsRepository @Inject constructor(
         return cache.delete(ids.toHashSet())
     }
 
-    /** Clears current value of [arestsLD] **/
-    fun clearArests() {
+    override fun clearArests() {
         cache.clear()
     }
 

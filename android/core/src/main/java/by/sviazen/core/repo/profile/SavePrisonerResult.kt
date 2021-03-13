@@ -1,4 +1,4 @@
-package by.sviazen.prisoner.repo.profile
+package by.sviazen.core.repo.profile
 
 
 /** Return type for [ProfileRepository.save] method. **/

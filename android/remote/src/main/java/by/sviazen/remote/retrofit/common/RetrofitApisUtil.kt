@@ -14,6 +14,10 @@ object RetrofitApisUtil {
             throw IOException("Server error")
         }
 
+        if(code == 503) {
+            throw IOException("Code 503. The server is probably shutdown")
+        }
+
         if(code != HttpURLConnection.HTTP_OK) {
             throw RuntimeException("Unexpected response code $code")
         }

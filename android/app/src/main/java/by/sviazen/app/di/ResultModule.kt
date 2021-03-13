@@ -2,9 +2,9 @@ package by.sviazen.app.di
 
 import by.sviazen.core.api.cp.CoPrisonersApi
 import by.sviazen.core.api.sync.SynchronizationApi
-import by.sviazen.core.injected.cp.CoPrisonersRepository
+import by.sviazen.core.repo.cp.CoPrisonersRepository
 import by.sviazen.core.injected.sync.AutomaticSyncManager
-import by.sviazen.core.injected.sync.SynchronizationRepository
+import by.sviazen.core.repo.sync.SynchronizationRepository
 import by.sviazen.core.injected.sync.SynchronizationScheduler
 import by.sviazen.core.injected.sync.SynchronizedDataManager
 import by.sviazen.remote.retrofit.cp.RetrofitCoPrisonersApi

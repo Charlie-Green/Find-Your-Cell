@@ -1,7 +1,7 @@
 package by.sviazen.prisoner.ui.common.sched.period
 
-import by.sviazen.core.util.std.CalendarUtil
 import by.sviazen.domain.entity.SchedulePeriod
+import by.sviazen.domain.util.CalendarUtil
 
 
 class SchedulePeriodModel(

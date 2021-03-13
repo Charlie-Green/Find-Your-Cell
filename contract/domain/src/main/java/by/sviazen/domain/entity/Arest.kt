@@ -1,6 +1,6 @@
 package by.sviazen.domain.entity
 
-import by.sviazen.domain.util.EntityUtil
+import by.sviazen.domain.util.CalendarUtil
 
 
 /** Light information about 1 user arest,
@@ -12,8 +12,8 @@ class Arest(
     val jails: List<Jail>
 ): LightArest() {
 
-    override val start = EntityUtil.midnight(startMillis)
-    override val end: Long = EntityUtil.midnight(endMillis)
+    override val start = CalendarUtil.midnight(startMillis)
+    override val end: Long = CalendarUtil.midnight(endMillis)
 
     override val jailsCount: Int
         get() = jails.size

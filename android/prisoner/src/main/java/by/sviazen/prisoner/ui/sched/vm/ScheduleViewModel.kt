@@ -6,9 +6,9 @@ import by.sviazen.core.injected.web.NetworkStateTracker
 import by.sviazen.domain.entity.Arest
 import by.sviazen.domain.entity.Schedule
 import by.sviazen.prisoner.ui.common.sched.ld.ScheduleLiveDatasStorage
-import by.sviazen.prisoner.repo.sched.*
-import by.sviazen.prisoner.repo.sched.result.GetScheduleResult
-import by.sviazen.prisoner.repo.sched.result.UpdateScheduleResult
+import by.sviazen.core.repo.sched.GetScheduleResult
+import by.sviazen.core.repo.sched.ScheduleRepository
+import by.sviazen.core.repo.sched.UpdateScheduleResult
 import by.sviazen.prisoner.ui.common.change.UnsavedChangesLiveDatasStorage
 import by.sviazen.prisoner.ui.common.sched.period.ScheduleCellsCrudState
 import by.sviazen.prisoner.ui.common.sched.period.ScheduleModel

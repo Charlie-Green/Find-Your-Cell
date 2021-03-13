@@ -14,6 +14,9 @@ import java.io.IOException
 
 internal object JailsRepositoryInternal {
 
+    val LOGTAG = "FindCell-Jails"
+
+
     fun fetchJailsList(
         api: JailsApi,
         dao: JailsDao
@@ -22,7 +25,7 @@ internal object JailsRepositoryInternal {
         val fetched = try {
             api.jailsList()
         } catch(exc: IOException) {
-            Log.w(JailsRepository.LOGTAG, "Failed to fetch jails")
+            Log.w(LOGTAG, "Failed to fetch jails")
             return null
         }
 
@@ -76,7 +79,7 @@ internal object JailsRepositoryInternal {
         val cells = try {
             api.cells(jailId, jailName)
         } catch(exc: IOException) {
-            Log.e(JailsRepository.LOGTAG, "Failed to fetch Cell: ${exc.javaClass.name}: ${exc.message}")
+            Log.e(LOGTAG, "Failed to fetch Cell: ${exc.javaClass.name}: ${exc.message}")
             return null
         }
 

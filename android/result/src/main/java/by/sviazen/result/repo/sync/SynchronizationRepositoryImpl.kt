@@ -3,6 +3,7 @@ package by.sviazen.result.repo.sync
 import android.util.Log
 import androidx.lifecycle.LiveData
 import by.sviazen.core.injected.sync.*
+import by.sviazen.core.repo.sync.SynchronizationRepository
 import java.io.IOException
 import javax.inject.Inject
 import javax.inject.Singleton

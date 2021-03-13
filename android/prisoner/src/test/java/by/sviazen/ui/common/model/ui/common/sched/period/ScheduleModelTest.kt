@@ -1,4 +1,4 @@
-package by.sviazen.ui.common.model
+package by.sviazen.ui.common.model.ui.common.sched.period
 
 import by.sviazen.domain.entity.Cell
 import by.sviazen.domain.entity.SchedulePeriod
@@ -6,14 +6,14 @@ import by.sviazen.domain.simpleentity.SimpleSchedule
 import by.sviazen.prisoner.ui.common.sched.cell.CellModel
 import by.sviazen.prisoner.ui.common.sched.period.ScheduleModel
 import by.sviazen.prisoner.ui.common.sched.period.SchedulePeriodModel
-import org.junit.jupiter.api.Assertions
-import org.junit.jupiter.api.Test
+import com.google.common.truth.Truth.assertThat
+import org.junit.Test
 import java.util.*
 
 
 class ScheduleModelTest {
 
-    private val cal = Calendar.getInstance()
+    private val cal = Calendar.getInstance( TimeZone.getTimeZone("UTC") )
 
 
     @Test
@@ -65,7 +65,7 @@ class ScheduleModelTest {
         model.markDayWithCell(0, timeMillis(2020, 11, 22))
 
         val result = model.toSchedule()
-        Assertions.assertEquals(2, result.periods.size)
+        assertThat(result.periods.size).isEqualTo(2)
         assertPeriodExists(result.periods, 2020, 11, 19, 2020, 11, 19)
         assertPeriodExists(result.periods, 2020, 11, 21, 2020, 11, 22)
     }
@@ -84,10 +84,10 @@ class ScheduleModelTest {
 
         val day = where.dayAt(dayIndex)
         val actualCellCount = day.dayData.count { it == '.' } + 1
-        Assertions.assertEquals(cells.size, actualCellCount)
+        assertThat(actualCellCount).isEqualTo(cells.size)
 
         for(cell in cells) {
-            Assertions.assertTrue( day.dayData.contains(cell.toString()) )
+            assertThat(day.dayData).contains(cell.toString())
         }
     }
 
@@ -99,7 +99,11 @@ class ScheduleModelTest {
         cal.timeInMillis = millis
         return (cal[Calendar.YEAR] == year) &&
             (cal[Calendar.MONTH] == month) &&
-            (cal[Calendar.DATE] == day)
+            (cal[Calendar.DATE] == day) &&
+            (cal[Calendar.HOUR_OF_DAY] == 0) &&
+            (cal[Calendar.MINUTE] == 0) &&
+            (cal[Calendar.SECOND] == 0) &&
+            (cal[Calendar.MILLISECOND] == 0)
     }
 
     private fun assertPeriodExists(
@@ -112,6 +116,6 @@ class ScheduleModelTest {
             timeEquals(p.end, year2, month2, date2)
         }
 
-        Assertions.assertNotNull(period)
+        assertThat(period).isNotNull()
     }
 }

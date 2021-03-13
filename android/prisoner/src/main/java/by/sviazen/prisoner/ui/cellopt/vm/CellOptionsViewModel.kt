@@ -3,9 +3,9 @@ package by.sviazen.prisoner.ui.cellopt.vm
 import android.content.Context
 import androidx.lifecycle.*
 import by.sviazen.core.injected.web.NetworkStateTracker
+import by.sviazen.core.repo.jail.JailsRepository
+import by.sviazen.core.repo.sched.ScheduleRepository
 import by.sviazen.domain.entity.Cell
-import by.sviazen.prisoner.repo.jail.JailsRepository
-import by.sviazen.prisoner.repo.sched.ScheduleRepository
 import by.sviazen.prisoner.ui.common.sched.period.ScheduleCellsCrudState
 import by.sviazen.prisoner.ui.common.sched.ld.ScheduleLiveDatasStorage
 import kotlinx.coroutines.Dispatchers

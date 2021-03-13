@@ -3,9 +3,9 @@ package by.sviazen.prisoner.ui.auth.vm
 import android.content.Context
 import androidx.lifecycle.*
 import by.sviazen.core.injected.web.NetworkStateTracker
+import by.sviazen.core.repo.profile.ProfileRepository
 import by.sviazen.domain.contract.auth.LogInResponse
 import by.sviazen.domain.contract.auth.SignUpResponse
-import by.sviazen.prisoner.repo.profile.ProfileRepository
 import by.sviazen.prisoner.ui.auth.model.AuthorizationState
 import by.sviazen.prisoner.ui.auth.model.PrisonerCredentials
 import kotlinx.coroutines.Dispatchers

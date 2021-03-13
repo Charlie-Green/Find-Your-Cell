@@ -6,8 +6,16 @@ import by.sviazen.core.api.auth.ProfileApi
 import by.sviazen.core.api.sched.ScheduleApi
 import by.sviazen.core.api.sched.SchedulePropertiesAccessor
 import by.sviazen.core.injected.db.JailsCache
+import by.sviazen.core.repo.arest.ArestsRepository
+import by.sviazen.core.repo.jail.JailsRepository
+import by.sviazen.core.repo.profile.ProfileRepository
+import by.sviazen.core.repo.sched.ScheduleRepository
 import by.sviazen.prisoner.db.cache.JailsCacheImpl
-import by.sviazen.prisoner.repo.sched.map.SchedulePropertiesAccessorImpl
+import by.sviazen.prisoner.repo.arest.ArestsRepositoryImpl
+import by.sviazen.prisoner.repo.jail.JailsRepositoryImpl
+import by.sviazen.prisoner.repo.profile.ProfileRepositoryImpl
+import by.sviazen.prisoner.repo.sched.SchedulePropertiesAccessorImpl
+import by.sviazen.prisoner.repo.sched.ScheduleRepositoryImpl
 import by.sviazen.remote.retrofit.arest.RetrofitArestsApi
 import by.sviazen.remote.retrofit.jail.RetrofitJailsApi
 import by.sviazen.remote.retrofit.profile.RetrofitProfileApi
@@ -46,6 +54,32 @@ interface PrisonerModule {
     fun arestsApi(
         impl: RetrofitArestsApi
     ): ArestsApi
+
+
+    @Singleton
+    @Binds
+    fun profileRepository(
+        impl: ProfileRepositoryImpl
+    ): ProfileRepository
+
+    @Singleton
+    @Binds
+    fun jailsRepository(
+        impl: JailsRepositoryImpl
+    ): JailsRepository
+
+    @Singleton
+    @Binds
+    fun arestsRepository(
+        impl: ArestsRepositoryImpl
+    ): ArestsRepository
+
+    @Singleton
+    @Binds
+    fun scheduleRepository(
+        impl: ScheduleRepositoryImpl
+    ): ScheduleRepository
+
 
     @Singleton
     @Binds

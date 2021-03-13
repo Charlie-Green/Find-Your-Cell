@@ -2,7 +2,7 @@ package by.sviazen.result.sync.scheduler
 
 import android.content.Context
 import androidx.work.*
-import by.sviazen.core.injected.sync.SynchronizationRepository
+import by.sviazen.core.repo.sync.SynchronizationRepository
 import by.sviazen.core.injected.web.NetworkStateTracker
 import dagger.hilt.EntryPoint
 import dagger.hilt.InstallIn

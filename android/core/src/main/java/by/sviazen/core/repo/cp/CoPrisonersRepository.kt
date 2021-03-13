@@ -1,4 +1,4 @@
-package by.sviazen.core.injected.cp
+package by.sviazen.core.repo.cp
 
 import androidx.lifecycle.LiveData
 import by.sviazen.domain.entity.CoPrisoner

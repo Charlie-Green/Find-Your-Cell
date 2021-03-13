@@ -1,4 +1,4 @@
-package by.sviazen.prisoner.repo.arest
+package by.sviazen.core.repo.arest
 
 
 sealed class GetArestsResult {

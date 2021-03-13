@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.*
 import by.sviazen.core.ui.common.SviazenDialog
 import by.sviazen.core.util.party3.CalendarPickerUtil
+import by.sviazen.domain.util.CalendarUtil
 import by.sviazen.prisoner.databinding.AddArestDialogBinding
 import by.sviazen.prisoner.ui.addarest.vm.CUArestViewModel
 import com.savvi.rangedatepicker.CalendarPickerView
@@ -43,12 +44,12 @@ class CUArestDialog: SviazenDialog<AddArestDialogBinding>() {
         val picker = vb.calpicker.root
 
         picker.init(
-            date(1994, Calendar.JULY, 10),
-            date(),
+            dateOn(1994, Calendar.JULY, 10),
+            Date(),
             SimpleDateFormat("MMMM yyyy", Locale.getDefault())
         ).inMode( CalendarPickerView.SelectionMode.RANGE )
 
-        picker.scrollToDate( date(2020, Calendar.AUGUST, 9) )
+        picker.scrollToDate( dateOn(2020, Calendar.AUGUST, 9) )
     }
 
     private fun initFields() {
@@ -67,18 +68,9 @@ class CUArestDialog: SviazenDialog<AddArestDialogBinding>() {
     }
 
 
-    private fun date(): Date {
-        cal.timeInMillis = System.currentTimeMillis()
-        return cal.time
-    }
-
-    private fun date(year: Int, month: Int, date: Int): Date {
-        cal.set(year, month, date)
-        return cal.time
-    }
-
-
-    companion object {
-        private val cal by lazy { Calendar.getInstance() }
-    }
+    private fun dateOn(
+        year: Int,
+        month: Int,
+        day: Int
+    ): Date = Date( CalendarUtil.date(year, month, day) )
 }

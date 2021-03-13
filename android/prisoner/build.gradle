@@ -64,7 +64,11 @@ dependencies {
     implementation Deps.libNavigationFragm
     implementation Deps.libNavigationUi
 
-    testImplementation Deps.testJUnit
+    testImplementation Deps.testTruth
+    androidTestImplementation Deps.testAndroid
+    androidTestImplementation Deps.testAndroidRunner
+    androidTestImplementation Deps.testTruth
+    androidTestImplementation Deps.testTruthExt
 
     implementation project(":core")
     implementation project(":domain")
