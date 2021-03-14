@@ -85,6 +85,7 @@
         android:visibility="gone" />
 
 
+    <!-- TODO: Set scale to 0 and animate scale -->
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/fabAdd"
         android:layout_width="wrap_content"
@@ -94,7 +95,8 @@
         app:fabCustomSize="48dp"
         android:src="@drawable/ic_add"
         android:tint="#f0f0f0"
-        android:alpha="0" />
+        android:scaleX="1"
+        android:scaleY="1" />
 
     <ProgressBar
         android:id="@+id/prBar"

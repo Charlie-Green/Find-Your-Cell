@@ -81,7 +81,7 @@ class PrisonerRootViewModel @Inject constructor(
     fun logOut() {
         viewModelScope.launch(Dispatchers.IO) {
             repo.logOut()
-            arestHolder.submitState(ArestsListState.Idle)
+            arestHolder.submitList(ArestsListState.Idle)
             scheduleStore.clearSchedule()
         }
     }

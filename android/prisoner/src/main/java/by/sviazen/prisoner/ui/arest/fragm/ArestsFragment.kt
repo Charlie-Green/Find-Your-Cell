@@ -2,8 +2,7 @@ package by.sviazen.prisoner.ui.arest.fragm
 
 import android.content.DialogInterface
 import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
+import android.view.*
 import android.view.animation.AnimationUtils
 import androidx.appcompat.app.AlertDialog
 import androidx.core.text.HtmlCompat
@@ -26,7 +25,7 @@ class ArestsFragment: SviazenFragment<ArestsFragmBinding>() {
     @Inject
     lateinit var vm: ArestsViewModel
 
-    private lateinit var checksAnimer: ArestsCheckableStateAnimator
+    private var actionMode: ActionMode? = null
 
 
     override fun inflateViewBinding(
@@ -73,8 +72,6 @@ class ArestsFragment: SviazenFragment<ArestsFragmBinding>() {
     private fun initFields() {
         val appContext = requireContext().applicationContext
         vm = ArestsViewModel.get(appContext, this)
-        checksAnimer = ArestsCheckableStateAnimator(
-            vb.recvArests, vb.fabAdd, vb.buDelete, vb.buCancel )
     }
 
     private fun initRecycler() {
@@ -88,9 +85,16 @@ class ArestsFragment: SviazenFragment<ArestsFragmBinding>() {
 
 
     private fun setCheckable(checkable: Boolean) {
-        checksAnimer.setCheckable(checkable)  // Animate buttons in the bottom.
+        actionMode?.finish()
+        if(checkable) {
+            val actionCallback = ArestsActionCallback(requireContext(), vm, adapter)
+            actionMode = activity?.startActionMode(actionCallback)
+        } else {
+            actionMode = null
+        }
+
         vb.recvArests.post {
-            adapter.isCheckable = checkable       // Animate item checkboxes.
+            adapter.isCheckable = checkable    // Animate item checkboxes.
         }
     }
 

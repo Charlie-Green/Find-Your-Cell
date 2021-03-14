@@ -32,7 +32,7 @@ internal class ArestsAdapter(
             }
 
             itemView.setOnLongClickListener {
-                vm.makeCheckable()
+                vm.setCheckable(true)
                 true
             }
 

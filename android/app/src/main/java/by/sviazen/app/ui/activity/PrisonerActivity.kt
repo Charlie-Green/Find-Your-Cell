@@ -4,6 +4,7 @@ import android.app.Activity
 import android.graphics.Color
 import android.os.Build
 import android.os.Bundle
+import android.view.ActionMode
 import android.view.View
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.navigation.NavController
@@ -11,12 +12,13 @@ import androidx.navigation.findNavController
 import by.sviazen.app.R
 import by.sviazen.app.databinding.PrisonerActivityBinding
 import by.sviazen.core.ui.common.SviazenActivity
-import by.sviazen.core.util.android.AndroidUtil
 import by.sviazen.core.util.android.NavigationUtil
 import by.sviazen.core.repo.profile.SavePrisonerResult
 import by.sviazen.prisoner.ui.common.interrupt.EditInterruptState
 import by.sviazen.prisoner.ui.common.sched.period.ScheduleCellsCrudState
 import by.sviazen.app.ui.vm.PrisonerRootViewModel
+import by.sviazen.core.util.android.AndroidUtil
+import by.sviazen.core.util.android.RespectStatusBarInsetsListener
 import by.sviazen.prisoner.ui.sched.model.ScheduleCrudState
 import by.sviazen.result.ui.contact.model.GetCoPrisonerState
 import by.sviazen.result.ui.shared.cppage.model.ChangeRelationRequestState
@@ -28,18 +30,24 @@ import dagger.hilt.android.AndroidEntryPoint
   * [Prisoner]'s schedule and profile. **/
 @AndroidEntryPoint
 class PrisonerActivity: SviazenActivity<PrisonerActivityBinding>() {
+    // ==============================================================================
+    // Fields:
 
     private lateinit var vm: PrisonerRootViewModel
-    private lateinit var navMan: by.sviazen.app.ui.activity.PrisonerNavigationManager
+    private lateinit var navMan: PrisonerNavigationManager
     private var thereAreUnsavedChanges = false
 
+
+    // ==============================================================================
+    // Lifecycle:
 
     override fun inflateViewBinding()
         = PrisonerActivityBinding.inflate(layoutInflater)
 
     override fun customizeView(v: View) {
-        window?.also { AndroidUtil.defaultHideKeyboard(it) }
-
+        window?.also { win ->
+            AndroidUtil.defaultHideKeyboard(win)
+        }
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -48,6 +56,8 @@ class PrisonerActivity: SviazenActivity<PrisonerActivityBinding>() {
         initFields()
         navMan.setup()
         setupToolbar()
+        setupKeyboadAnimation()
+        handleInsets()
 
         vm.savePrisonerResultLD.observe(this) { result ->
             if(result is SavePrisonerResult.Success) {
@@ -82,8 +92,6 @@ class PrisonerActivity: SviazenActivity<PrisonerActivityBinding>() {
         vm.changeRelationStateLD.observe(this) { state ->
             applyChangeRelationState(state)
         }
-
-        setupKeyboadAnimation()
     }
 
     override fun onBackPressed() {
@@ -95,24 +103,23 @@ class PrisonerActivity: SviazenActivity<PrisonerActivityBinding>() {
         }
     }
 
+    override fun onActionModeStarted(mode: ActionMode) {
+        super.onActionModeStarted(mode)
+        vb.toolbar.visibility = View.GONE
+    }
 
-    private val navController: NavController
-        get() = findNavController(R.id.navHost)
+    override fun onActionModeFinished(mode: ActionMode) {
+        super.onActionModeFinished(mode)
+        vb.toolbar.visibility = View.VISIBLE
+    }
 
-    private val interruptingEdit: Boolean
-        get() {
-            if(!thereAreUnsavedChanges) {
-                return false
-            }
 
-            val destId = navController.currentDestination?.id ?: 0
-            return (destId == R.id.fragmProfile || destId == R.id.fragmSchedule)
-        }
-
+    // ==============================================================================
+    // Private (Initialization):
 
     private fun initFields() {
         vm = PrisonerRootViewModel.get(applicationContext, this)
-        navMan = by.sviazen.app.ui.activity.PrisonerNavigationManager(
+        navMan = PrisonerNavigationManager(
             vm,
             vb.toolbar,
             vb.navDrawer,
@@ -137,6 +144,16 @@ class PrisonerActivity: SviazenActivity<PrisonerActivityBinding>() {
         }
     }
 
+    private fun handleInsets() {
+        if(Build.VERSION.SDK_INT >= 30) {
+            val insetsListener = RespectStatusBarInsetsListener(vb.toolbar)
+            vb.toolbar.setOnApplyWindowInsetsListener(insetsListener)
+        }
+    }
+
+
+    // ==============================================================================
+    // Private (States):
 
     private fun applyScheduleCrudState(state: ScheduleCrudState) {
         when(state) {
@@ -217,6 +234,9 @@ class PrisonerActivity: SviazenActivity<PrisonerActivityBinding>() {
     }
 
 
+    // ==============================================================================
+    // Private (Edit Interript):
+
     private fun warnEditInterrupt() {
         NavigationUtil.navigateIfNotYet(
             navController,
@@ -246,6 +266,9 @@ class PrisonerActivity: SviazenActivity<PrisonerActivityBinding>() {
     }
 
 
+    // ==============================================================================
+    // Private (Notifications):
+
     private fun notifySuccess(message: String) {
         Snackbar.make(vb.cdltRoot, message, 2000).apply {
             setTextColor(Color.WHITE)
@@ -265,4 +288,21 @@ class PrisonerActivity: SviazenActivity<PrisonerActivityBinding>() {
 
     private fun notifyError(messageRes: Int)
         = notifyError( getString(messageRes) )
+
+
+    // ==============================================================================
+    // Private (Help):
+
+    private val navController: NavController
+        get() = findNavController(R.id.navHost)
+
+    private val interruptingEdit: Boolean
+        get() {
+            if(!thereAreUnsavedChanges) {
+                return false
+            }
+
+            val destId = navController.currentDestination?.id ?: 0
+            return (destId == R.id.fragmProfile || destId == R.id.fragmSchedule)
+        }
 }

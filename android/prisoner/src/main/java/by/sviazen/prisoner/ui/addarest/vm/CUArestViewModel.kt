@@ -24,11 +24,11 @@ class CUArestViewModel @Inject constructor(
         val arests = this.arests ?: return
 
         if(!netTracker.isInternetAvailable) {
-            holder.submitState( CreateOrUpdateArestState.NoInternet() )
+            holder.submitCU( CreateOrUpdateArestState.NoInternet() )
             return
         }
 
-        holder.submitState( CreateOrUpdateArestState.Loading )
+        holder.submitCU( CreateOrUpdateArestState.Loading )
         viewModelScope.launch(Dispatchers.IO) {
             val result = repo.addArest(start, end)
             applyResponse(arests, -1, result)
@@ -50,7 +50,7 @@ class CUArestViewModel @Inject constructor(
         when(result) {
             is AddOrUpdateArestResult.NetworkError -> {
                 val state = CreateOrUpdateArestState.NetworkError(oldPosition < 0)
-                holder.submitState(state)
+                holder.submitCU(state)
             }
 
             is AddOrUpdateArestResult.ArestsIntersect -> {
@@ -58,7 +58,7 @@ class CUArestViewModel @Inject constructor(
                     a.id == result.intersectedId
                 }
                 val state = arestsIntersectState(intersectedArest, oldPosition < 0)
-                holder.submitState(state)
+                holder.submitCU(state)
             }
 
             is AddOrUpdateArestResult.Success -> {
@@ -68,7 +68,7 @@ class CUArestViewModel @Inject constructor(
                     CreateOrUpdateArestState.Updated(oldPosition, result.arestPosition)
                 }
 
-                holder.submitState(state)
+                holder.submitCU(state)
             }
         }
     }

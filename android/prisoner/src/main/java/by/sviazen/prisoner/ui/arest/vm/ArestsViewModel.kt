@@ -23,6 +23,8 @@ class ArestsViewModel @Inject constructor(
     private val netTracker: NetworkStateTracker,
     private val holder: ArestLiveDatasHolder
 ): ViewModel() {
+    // ===============================================================================
+    // Fields:
 
     private val mldDeleteState = MutableLiveData<DeleteArestsState>().apply {
         value = DeleteArestsState.Idle
@@ -34,27 +36,26 @@ class ArestsViewModel @Inject constructor(
         value = false
     }
 
-    private val arestsObserver: Observer< List<Arest> >
-
     private var lastPrisonerId = Prisoner.INVALID_ID
 
 
-    init {
-        arestsObserver = Observer { arests ->
-            submitArests(arests)
-        }
-        repo.arestsLD.observeForever(arestsObserver)
-    }
+    // ===============================================================================
+    // Lifecycle:
 
+    init {
+        holder.mediatorSubmitList(repo.arestsLD, this::listToState)
+    }
 
     override fun onCleared() {
         // Next time the screen is opened, the Arests are re-fetched.
         // Thus, the current arests list will no longer be used, so remove it.
-
+        holder.clear()
         repo.clearArests()
-        repo.arestsLD.removeObserver(arestsObserver)
     }
 
+
+    // ===============================================================================
+    // API:
 
     val listStateLD: LiveData<ArestsListState>
         get() = holder.listStateLD
@@ -79,7 +80,7 @@ class ArestsViewModel @Inject constructor(
         val prisonerId = profileRepo.prisonerLD.value?.id!! ?: return
         if(prisonerId != lastPrisonerId) {
             lastPrisonerId = prisonerId
-            holder.submitState(ArestsListState.Idle)
+            holder.submitList(ArestsListState.Idle)
         }
 
         if( !isStateAppropriateToLoadData(isRetrying) ) {
@@ -87,7 +88,7 @@ class ArestsViewModel @Inject constructor(
         }
 
         if(!netTracker.isInternetAvailable) {
-            holder.submitState( ArestsListState.NoInternet() )
+            holder.submitList( ArestsListState.NoInternet() )
         }
         netTracker.doOnAvailable(this::loadDataInternal)
     }
@@ -104,8 +105,10 @@ class ArestsViewModel @Inject constructor(
     }
 
 
-    fun makeCheckable() {
-        mldCheckable.value = true
+    fun setCheckable(checkable: Boolean) {
+        if(mldCheckable.value != checkable) {
+            mldCheckable.value = checkable
+        }
     }
 
     fun delete() {
@@ -131,6 +134,9 @@ class ArestsViewModel @Inject constructor(
         mldCheckable.value = false
     }
 
+
+    // ===============================================================================
+    // Help:
 
     private val arests: List<Arest>?
         get() {
@@ -164,17 +170,15 @@ class ArestsViewModel @Inject constructor(
     }
 
 
-    private fun submitArests(arests: List<Arest>) {
-        val loadedState = ArestsListState.Loaded(arests)
-
+    private fun listToState(
+        arests: List<Arest>
+    ): ArestsListState = ArestsListState.Loaded(arests).apply {
         // Animate only in case loading progress was showing before:
-        loadedState.animated = holder.listStateLD.value !is ArestsListState.Loading
-
-        holder.submitState(loadedState)
+        animated = holder.listStateLD.value !is ArestsListState.Loading
     }
 
     private fun loadDataInternal() {
-        holder.submitState(ArestsListState.Loading)
+        holder.submitList(ArestsListState.Loading)
 
         viewModelScope.launch(Dispatchers.IO) {
             val result = repo.arestsList()
@@ -185,12 +189,12 @@ class ArestsViewModel @Inject constructor(
     private fun applyResult(result: GetArestsResult) {
         when(result) {
             is GetArestsResult.NetworkError -> {
-                holder.submitState( ArestsListState.NetworkError() )
+                holder.submitList( ArestsListState.NetworkError() )
             }
 
             is GetArestsResult.NotAuthorized -> {
                 // TODO: Navigate to authorization screen.
-                holder.submitState(ArestsListState.Idle)
+                holder.submitList(ArestsListState.Idle)
             }
         }
     }
@@ -215,6 +219,9 @@ class ArestsViewModel @Inject constructor(
         mldDeleteState.postValue(state)
     }
 
+
+    // ===============================================================================
+    // Companion:
 
     companion object {
 

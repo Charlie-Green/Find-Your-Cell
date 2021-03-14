@@ -6,10 +6,10 @@
     android:id="@+id/cdltRoot"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    tools:fitsSystemWindows="true"
     tools:context="by.sviazen.app.ui.activity.PrisonerActivity" >
 
     <LinearLayout
-        android:id="@+id/vlltContent"
         android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -51,5 +51,6 @@
         </androidx.drawerlayout.widget.DrawerLayout>
 
     </LinearLayout>
+
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
