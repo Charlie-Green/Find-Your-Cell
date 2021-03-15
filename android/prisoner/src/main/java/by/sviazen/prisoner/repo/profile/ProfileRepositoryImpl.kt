@@ -11,6 +11,7 @@ import by.sviazen.core.injected.common.Hasher
 import by.sviazen.core.injected.sync.AutomaticSyncManager
 import by.sviazen.core.repo.profile.ProfileRepository
 import by.sviazen.core.repo.profile.SavePrisonerResult
+import by.sviazen.core.repo.profile.SignUpResult
 import by.sviazen.domain.contract.auth.LogInResponse
 import by.sviazen.domain.contract.auth.SignUpResponse
 import by.sviazen.domain.entity.Contact
@@ -68,8 +69,13 @@ class ProfileRepositoryImpl @Inject constructor(
 
     override fun signUp(
         username: String,
-        password: String
-    ): SignUpResponse {
+        password: String,
+        confirmedPassword: String
+    ): SignUpResult {
+
+        if(password != confirmedPassword) {
+            return SignUpResult.wrongConfirmedPassword()
+        }
 
         val passHash = hasher.hash(password)
         val defaultName = appContext.getString(R.string.prisoner_default_name)
@@ -78,14 +84,14 @@ class ProfileRepositoryImpl @Inject constructor(
             api.signUp(username, defaultName, passHash)
         } catch(exc: IOException) {
             Log.w(LOGTAG, "Failed to sign up: ${exc.javaClass.name}: ${exc.message}")
-            SignUpResponse.NetworkError
+            return SignUpResult.networkError()
         }
 
         if(response is SignUpResponse.Success) {
             prisonerStore.submit(response.prisoner, passHash)
         }
 
-        return response
+        return SignUpResult.fromServerResponse(response)
     }
 
     override fun logOut() {

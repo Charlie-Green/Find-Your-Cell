@@ -15,7 +15,12 @@
         android:label="@string/auth_navlabel" >
 
         <action
-            android:id="@+id/actLogIn"
+            android:id="@+id/actConfirmPassword"
+            app:destination="@id/dialogConfirmPassword"
+            app:enterAnim="@anim/enter_from_bottom" />
+
+        <action
+            android:id="@+id/actAuth"
             app:destination="@id/graphProfile"
             app:enterAnim="@anim/enter_from_bottom"
             app:exitAnim="@anim/exit_to_top"
@@ -23,5 +28,9 @@
             app:popUpToInclusive="true" />
 
     </fragment>
+
+    <dialog
+        android:id="@+id/dialogConfirmPassword"
+        android:name="by.sviazen.prisoner.ui.confirmpass.dialog.ConfirmPasswordDialog" />
 
 </navigation>

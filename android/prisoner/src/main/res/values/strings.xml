@@ -7,6 +7,7 @@
     <string name="prisoner_name_label">Имя</string>
     <string name="prisoner_username_label">Логин</string>
     <string name="prisoner_password_label">Пароль</string>
+    <string name="confirm_password_label">Повторите пароль</string>
     <string name="prisoner_info_label">Любая другая информация:</string>
     <string name="jail_label">Тюрьма:\u0020</string>
     <string name="cell_number_label">№ камеры:\u0020</string>
@@ -69,6 +70,7 @@
     <string name="username_not_exist_msg">Имя пользователя введено неверно.</string>
     <string name="password_not_match_msg">Пароль введён неверно.</string>
     <string name="username_taken_msg">"%s" уже занято. Логин должен быть уникальным.</string>
+    <string name="password_not_confirmed_msg">Пароли не совпадаюют.</string>
 
     <!-- Notifications (Arests): -->
     <string name="arests_empty">

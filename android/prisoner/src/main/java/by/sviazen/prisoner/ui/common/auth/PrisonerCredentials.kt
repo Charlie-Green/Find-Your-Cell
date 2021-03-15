@@ -1,4 +1,4 @@
-package by.sviazen.prisoner.ui.auth.model
+package by.sviazen.prisoner.ui.common.auth
 
 
 class PrisonerCredentials(

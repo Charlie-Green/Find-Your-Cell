@@ -1,6 +1,5 @@
 package by.sviazen.prisoner.ui.auth.fragm
 
-import android.os.Build
 import android.os.Bundle
 import android.view.*
 import androidx.navigation.fragment.findNavController
@@ -37,7 +36,7 @@ class AuthorizationFragment: SviazenFragment<AuthorizationFragmBinding>() {
             vm.logIn(username, password)
         }
         vb.buSignUp.setOnClickListener {
-            vm.signUp(username, password)
+            handleSignUp()
         }
         onClickShowInfo(vb.imgvUsernameInfo, R.string.username_info)
         onClickShowInfo(vb.imgvPasswordInfo, R.string.password_info)
@@ -106,14 +105,14 @@ class AuthorizationFragment: SviazenFragment<AuthorizationFragmBinding>() {
                 ) { vm.notifyStateConsumed() }
             }
 
-            is AuthorizationState.UsernameNotExist -> {
+            is AuthorizationState.WrongUsername -> {
                 showErrorDialog(
                     R.string.wrong_credentials_title,
                     R.string.username_not_exist_msg
                 ) { vm.notifyStateConsumed() }
             }
 
-            is AuthorizationState.PasswordNotMatch -> {
+            is AuthorizationState.WrongPassword -> {
                 showErrorDialog(
                     R.string.wrong_credentials_title,
                     R.string.password_not_match_msg
@@ -127,18 +126,31 @@ class AuthorizationFragment: SviazenFragment<AuthorizationFragmBinding>() {
                 ) { vm.notifyStateConsumed() }
             }
 
+            is AuthorizationState.PasswordNotConfirmed -> {
+                showErrorDialog(
+                    R.string.wrong_credentials_title,
+                    R.string.password_not_confirmed_msg
+                ) { vm.notifyStateConsumed() }
+            }
+
             is AuthorizationState.Success -> {
                 NavigationUtil.safeNavigate(
                     findNavController(),
                     R.id.fragmAuth,
-                    R.id.actLogIn
+                    R.id.actAuth
                 ) { null }
             }
         }
     }
 
 
-    
+    private fun handleSignUp() {
+        val preconditionsPassed = vm.awaitPasswordConfirm(username, password)
+        if(preconditionsPassed) {
+            findNavController().navigate(R.id.actConfirmPassword)
+        }
+    }
+
     private fun onClickShowInfo(clickedView: View, infoStringRes: Int) {
         val listener = ShowInfoOnClickListener(infoStringRes)
         clickedView.setOnClickListener(listener)

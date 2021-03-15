@@ -2,7 +2,6 @@ package by.sviazen.core.repo.profile
 
 import androidx.lifecycle.LiveData
 import by.sviazen.domain.contract.auth.LogInResponse
-import by.sviazen.domain.contract.auth.SignUpResponse
 import by.sviazen.domain.entity.Prisoner
 
 
@@ -18,8 +17,9 @@ interface ProfileRepository {
 
     fun signUp(
         username: String,
-        password: String
-    ): SignUpResponse
+        password: String,
+        confirmedPassword: String
+    ): SignUpResult
 
     fun logOut()
 
